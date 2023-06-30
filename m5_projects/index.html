@@ -550,6 +550,55 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#how-to-create-real-time-systems-good-frameworks-for-the-different-fields-and-project-proposals" class="md-nav__link">
+    How to create real time systems, good frameworks for the different fields and project proposals
+  </a>
+  
+    <nav class="md-nav" aria-label="How to create real time systems, good frameworks for the different fields and project proposals">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tips-and-tricks-in-real-time-systems" class="md-nav__link">
+    Tips and tricks in real time systems
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#components-librariesframeworks" class="md-nav__link">
+    Components - libraries/frameworks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#specializations-project-proposals" class="md-nav__link">
+    Specializations - Project proposals
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-makes-for-a-good-project" class="md-nav__link">
+    What makes for a good project?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -567,6 +616,80 @@
 
 
 <h1 id="projects">Projects</h1>
+<h2 id="how-to-create-real-time-systems-good-frameworks-for-the-different-fields-and-project-proposals">How to create real time systems, good frameworks for the different fields and project proposals</h2>
+<ul>
+<li>Starting with a simple prototype</li>
+<li>Identify your components</li>
+<li>Single threaded correct implementation -&gt; Testing to avoid regression</li>
+<li>Optimize</li>
+</ul>
+<h3 id="tips-and-tricks-in-real-time-systems">Tips and tricks in real time systems</h3>
+<ul>
+<li>(memcpy)</li>
+<li>(Hot loops, event loops)</li>
+<li>(Allocations in a hot loop)</li>
+<li>(System calls - hoist out of the hot loop)</li>
+<li>(Logging and printing)</li>
+<li>(Bindings - PyO3 and cxx)</li>
+<li>(Walk, don't run, testing for correctness before optimization)</li>
+<li>(Don't use abbreviations)</li>
+<li>(Don't use postfix incrementation++)</li>
+<li>(When to care about software engineering and when to care about performance)</li>
+<li>(Don't use a string key/identifier or integer, when a type safe enum will do the job)</li>
+<li>(Hard coding types)</li>
+<li>(Cognitive load, and delaying errors to after the first draft - deliberate development vs. debugging)</li>
+<li>(Prefer stateless programming, minimize stateful programming (functional inspiration))</li>
+<li>(Implicit casting)</li>
+<li>(Compression)</li>
+<li>(Know your system - mobile, laptop, desktop, integrated memory, which GPU)</li>
+<li>(Use version control even for solo development)</li>
+<li>(Am I copying/cloning things that don't need to be copied?)</li>
+<li>(Check/validate everything before the hot loop)</li>
+<li>(Anything that can be immutable, should be immutable - aliasing!)</li>
+<li>(Testing and Seeding RNG's)</li>
+<li>(Timing real-time systems and how to escape or offload compute)</li>
+</ul>
+<h3 id="components-librariesframeworks">Components - libraries/frameworks</h3>
+<p><a href="https://blessed.rs/crates">blessed</a><br />
+<a href="https://github.com/rayon-rs/rayon">rayon</a><br />
+<a href="https://github.com/emilk/egui">egui</a><br />
+<a href="https://github.com/webonnx/wonnx">wonnx</a><br />
+<a href="https://github.com/LaurentMazare/tch-rs">tch</a><br />
+<a href="https://github.com/rust-windowing/winit">winit</a><br />
+<a href="https://github.com/rust-cv/cv">cv</a><br />
+<a href="https://github.com/fu5ha/ultraviolet">ultraviolet</a><br />
+<a href="https://www.arewelearningyet.com/neural-networks/">arewelearningyet</a><br />
+<a href="https://github.com/burn-rs/burn">burn</a>  </p>
+<h3 id="specializations-project-proposals">Specializations - Project proposals</h3>
+<ul>
+<li>Virtual 3D scanner for a point cloud dataset</li>
+<li>EEG system</li>
+<li>Change the latent variables in a network using GUI, optimize the network</li>
+<li>Point cloud renderer</li>
+<li>Real-time style transfer on a web cam feed</li>
+<li>Rendering fractals influenced by a web cam feed</li>
+<li>Eye tracking -&gt; Present to screen and read from web cam -&gt;
+feature extraction -&gt; classifier -&gt; intervention signal -&gt;
+reading app (Wolfgang Fuhl, PISTOL, fixation detection)</li>
+<li>Bird classification from sound / Real-time classification of sound (Xeno-canto database)</li>
+<li>Who is talking? Real-time classification of sound</li>
+<li>Are you dyslexic? Eye tracking classifier</li>
+<li>Cognitive load tracker - Eyes &amp; pupil dilation and online estimation of
+signal strength (pupils vs. sound for the hearing impaired)</li>
+</ul>
+<h3 id="what-makes-for-a-good-project">What makes for a good project?</h3>
+<ul>
+<li>What is your concept/project?</li>
+<li>Which concepts from the previous material do you think
+are relevant to your project and why?</li>
+<li>Preprocessing your data?</li>
+<li>How do you adapt to your chosen/available platform?</li>
+<li>Which libraries did you choose for this problem?</li>
+<li>How fast did you get to your minimum viable product?</li>
+<li>Which steps did you take from there and why?</li>
+<li>How did you determine which parts of your system to optimize?</li>
+<li>What else would you like to do with your system?</li>
+</ul>
 
   <hr>
 <div class="md-source-file">

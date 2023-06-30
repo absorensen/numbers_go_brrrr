@@ -552,6 +552,35 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#parallelism-interactivity-events-and-guis" class="md-nav__link">
+    Parallelism, interactivity, events and GUIs
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#specializationsexercise-pick-items-worth-a-total-of-3-points-or-more-write-a-10-lines-interpretation-of-each-item" class="md-nav__link">
+    (Specializations/Exercise - Pick items worth a total of 3 points or more, write a 10+ lines interpretation of each item)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exercise" class="md-nav__link">
+    (Exercise)
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -569,6 +598,53 @@
 
 
 <h1 id="concepts-in-parallelism">Concepts in Parallelism</h1>
+<h2 id="parallelism-interactivity-events-and-guis">Parallelism, interactivity, events and GUIs</h2>
+<ul>
+<li>Data parallelism, work stealing - rayon</li>
+<li>Data parallelism, non-work stealing - crossbeam</li>
+<li>Mutex</li>
+<li>Async</li>
+<li>Atomic</li>
+<li>Threads</li>
+<li>GPU</li>
+<li>(Sparsity)</li>
+<li>(Random Access and Monte Carlo (Gyro Dropout))</li>
+<li>(Branchless programming)</li>
+<li>(SIMD)</li>
+<li>(Sorting)</li>
+<li>Channels</li>
+<li>Events</li>
+<li>Key and Mouse events</li>
+<li>Event Loops</li>
+<li>(GUIs &amp; egui)</li>
+<li>(Examine egui-winit-wgpu template)</li>
+<li>(Graph representations - pointers and indices)</li>
+<li>(Trees using indices)</li>
+<li>(Parallel work on graphs)</li>
+</ul>
+<h2 id="specializationsexercise-pick-items-worth-a-total-of-3-points-or-more-write-a-10-lines-interpretation-of-each-item">(Specializations/Exercise - Pick items worth a total of 3 points or more, write a 10+ lines interpretation of each item)</h2>
+<ul>
+<li>(1 - Data-oriented design - Entity component systems)</li>
+<li>(1 - Array of Structs, Structs of Arrays, Auto-Vectorization)</li>
+<li>(1 - Linearized octrees)</li>
+<li>(2 - Sorting kernels in divergent workloads - Wavefront path tracing)</li>
+<li>(4 - ORB-SLAM - design and a warning about trying to code it)</li>
+<li>(4 - Nanite)</li>
+<li>(1 - PyTorch - Data-Distributed-Parallelism)</li>
+<li>(1 - PyTorch - Model-Distributed-Parallelism)</li>
+<li>(2 - Shadertoy)</li>
+<li>(1 - Gyro Dropout - MLSys 2022)</li>
+<li>(1 - Hierarchical Frustum Culling)</li>
+<li>(2 - Flash Attention)</li>
+<li>(2 - Custom memory allocators)</li>
+<li>(2 - <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX</a>)</li>
+</ul>
+<h2 id="exercise">(Exercise)</h2>
+<ul>
+<li>Describe the base architecture of the egui-winit-wgpu template.
+Expand on the template and program some things (needs suggestions)
+using some of the primitives introduced in the module</li>
+</ul>
 
   <hr>
 <div class="md-source-file">
