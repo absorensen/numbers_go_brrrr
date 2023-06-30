@@ -318,8 +318,6 @@ fn graph_benchmarks(config: &Configuration, gpu_handles: &GPUHandles) {
         measure_depth,
     );
 
-    println!("size measurements: {:?}", all_measurements);
-
     draw_benchmark_plot(
         format!(
             "Benchmark - Graphs - Size(x) - Depth {}",
@@ -344,8 +342,6 @@ fn graph_benchmarks(config: &Configuration, gpu_handles: &GPUHandles) {
         &mut all_measurements,
         measure_depth,
     );
-
-    println!("depth measurements: {:?}", all_measurements);
 
     draw_benchmark_plot(
         format!(

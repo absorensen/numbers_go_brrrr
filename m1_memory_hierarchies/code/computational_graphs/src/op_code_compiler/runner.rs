@@ -181,10 +181,5 @@ pub fn compile_linear_shader(gpu_handles: &GPUHandles, with_relu: bool) -> Shade
         string_builder.push_str(op_code.1.as_str());
     }
 
-    println!(
-        "op_code_compiler::compile_linear_shader before sending to compiler: {}",
-        string_builder
-    );
-
     create_shader_module(gpu_handles, string_builder.as_str())
 }
