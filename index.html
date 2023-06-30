@@ -1,0 +1,1254 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+        <link rel="next" href="m0_introduction/">
+      
+      <link rel="icon" href="figures/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.17">
+    
+    
+      
+        <title>The Real-Timers Guide to the Computational Galaxy</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.26e3688c.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ecc896b0.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+   <link href="assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+        html.glightbox-open { overflow: initial; height: 100%; }
+        .gslide-title { margin-top: 0px; user-select: text; }
+        .gslide-desc { color: #666; user-select: text; }
+        .gslide-image img { background: white; }
+        
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+            </style> <script src="assets/javascripts/glightbox.min.js"></script></head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent="indigo">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-real-timers-guide-to-the-computational-galaxy" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="." title="The Real-Timers Guide to the Computational Galaxy" class="md-header__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
+      
+  <img src="figures/mlops_cycle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            The Real-Timers Guide to the Computational Galaxy
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Home
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="light-blue" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+            
+              <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+            
+            
+            
+            <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+            
+              <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+              </label>
+            
+          
+        </form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="." title="The Real-Timers Guide to the Computational Galaxy" class="md-nav__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
+      
+  <img src="figures/mlops_cycle.png" alt="logo">
+
+    </a>
+    The Real-Timers Guide to the Computational Galaxy
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Home
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="." class="md-nav__link md-nav__link--active">
+        Home
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    TODO
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    Modules
+  </a>
+  
+    <nav class="md-nav" aria-label="Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intro" class="md-nav__link">
+    Intro
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-hierarchies-and-computational-graphs" class="md-nav__link">
+    Memory Hierarchies and Computational Graphs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parallelism-interactivity-events-and-guis" class="md-nav__link">
+    Parallelism, interactivity, events and GUIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#types-energy-usage-and-inference-quantization-sparsity-and-pruning-of-neural-networks" class="md-nav__link">
+    Types, energy usage and inference, quantization, sparsity and pruning of neural networks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introduction-to-profiling-optimization-use-cases" class="md-nav__link">
+    Introduction to profiling, Optimization use cases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-create-real-time-systems-good-frameworks-for-the-different-fields-and-project-proposals" class="md-nav__link">
+    How to create real time systems, good frameworks for the different fields and project proposals
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references-and-additional-reading" class="md-nav__link">
+    References and additional reading
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="m0_introduction/">M0 - Introduction</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          M0 - Introduction
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="m1_memory_hierarchies/">M1 - Memory Hierarchies</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          M1 - Memory Hierarchies
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="m2_concepts_in_parallelism/">M2 - Concepts in Parallelism</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_4">
+          <span class="md-nav__icon md-icon"></span>
+          M2 - Concepts in Parallelism
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="m3_types/">M3 - Types</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          M3 - Types
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="m4_profilers/">M4 - Profilers and Case Studies</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_6">
+          <span class="md-nav__icon md-icon"></span>
+          M4 - Profilers and Case Studies
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+      
+      
+        
+          
+            
+          
+        
+      
+      
+        
+        
+        <div class="md-nav__link md-nav__link--index ">
+          <a href="m5_projects/">M5 - Projects</a>
+          
+        </div>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_7">
+          <span class="md-nav__icon md-icon"></span>
+          M5 - Projects
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#todo" class="md-nav__link">
+    TODO
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing" class="md-nav__link">
+    Testing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modules" class="md-nav__link">
+    Modules
+  </a>
+  
+    <nav class="md-nav" aria-label="Modules">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intro" class="md-nav__link">
+    Intro
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-hierarchies-and-computational-graphs" class="md-nav__link">
+    Memory Hierarchies and Computational Graphs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#parallelism-interactivity-events-and-guis" class="md-nav__link">
+    Parallelism, interactivity, events and GUIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#types-energy-usage-and-inference-quantization-sparsity-and-pruning-of-neural-networks" class="md-nav__link">
+    Types, energy usage and inference, quantization, sparsity and pruning of neural networks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#introduction-to-profiling-optimization-use-cases" class="md-nav__link">
+    Introduction to profiling, Optimization use cases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-create-real-time-systems-good-frameworks-for-the-different-fields-and-project-proposals" class="md-nav__link">
+    How to create real time systems, good frameworks for the different fields and project proposals
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references-and-additional-reading" class="md-nav__link">
+    References and additional reading
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="the-real-timers-guide-to-the-computational-galaxy">The Real-Timers Guide to the Computational Galaxy</h1>
+<p>A guide designed for both deep learners and systems programmers. Meant to be followed several times at
+deepening levels.
+The material is comprised of 6 modules.</p>
+<ul>
+<li>Intro to the course, the different ways to use the material, intro to Rust and wgpu.</li>
+<li>Memory hierarchies and computational graphs</li>
+<li>Parallelization, interactivity, events and GUIs</li>
+<li>Types, energy usage and inference, quantization, sparsity and pruning of neural networks</li>
+<li>Introduction to profiling, optimization use cases on topics such as model
+training and quantization, graphics, computer vision</li>
+<li>How to create real time systems, frameworks for the different fields and project proposals</li>
+</ul>
+<h2 id="todo">TODO</h2>
+<ul>
+<li>Try rust-nexttest to solve the testing issue</li>
+<li>Find the right benchmarking and performance tools (blessed.rs)</li>
+<li>Look into friendlier error handling? Perhaps logging instead of panicing to
+get students used to logging. Introduce anyhow for better error handling?</li>
+<li><a href="https://docs.rs/loom/latest/loom/">Loom</a></li>
+</ul>
+<h2 id="installation">Installation</h2>
+<ul>
+<li><a href="https://www.rust-lang.org/tools/install">Install Rust</a>. A version of Rust supporting edition 2021 is needed.</li>
+<li>git clone this code</li>
+<li>In the command line write <code>cargo run --release</code>. This might take a while.</li>
+<li>For IDE, I prefere VS Code with the extensions rust-analyzer, CodeLLDB, Rust Syntax,
+WGSL, wgsl-analyzer and optionally Dracula For Rust Theme.</li>
+</ul>
+<h2 id="testing">Testing</h2>
+<p>On some computers the GPU tests will currently fail unless being run with <code>cargo test -- --test-threads=1</code>
+Even then it might fail. You can just try a few more times or try to run tests individually.
+It is because of the queue and device being acquired several times.
+This is likely to happen less on bigger GPU's.</p>
+<h2 id="modules">Modules</h2>
+<h3 id="intro">Intro</h3>
+<details>
+
+* Why should you use this material
+* How to use the materials as a student and a teacher.
+* Which level is for who and what does it require
+
+#### Intro to Rust
+
+* Project setup
+* How to compile
+* What are types
+* Borrow checker - shared and mutable references
+* Move, Copy and Clone
+* Iterators
+* (Iterators - slightly more detailed)
+* Option, Result - everywhere
+* Enums & Match statements
+* (Smart pointers)
+* (Traits)
+* (Clippy)
+* (fmt)
+
+</details>
+
+<h3 id="memory-hierarchies-and-computational-graphs">Memory Hierarchies and Computational Graphs</h3>
+<details>
+
+#### Intro and Getting Started
+
+* Intro to the code framework
+* Compilers
+* Frequent commands and FAQ
+
+#### The CPU and memory hierarchies
+
+* Intro to memory hierarchies
+* (Virtualized memory)
+* Pointers, Heap and Stack, Dynamic Arrays
+* The CPU-side memory hierarchies
+* Pipelines and branch prediction
+* Inlining
+* (Pointers and smart pointers)
+* (Garbage collectors)
+
+#### Computational Graphs (Low code)
+
+* Intro to computational graphs - overview of immediate, graph and compiled graph
+* The network we want to support
+* What's in a tensor
+* Data dependencies and control dependencies
+* (Intermediate representations)
+* (Compiler verifications and the restrict keyword)
+* Testing the correctness of the nodes
+* (Graph representations)
+* (Perspective to render graphs)
+
+#### Intro to GPU's
+
+* Brief intro to GPU's
+* (Shared memory, warp shuffling and distributed shared memory)
+* (Synchronization)
+* (SPIR-V & GLSL/HLSL)
+* Intro to wgpu
+* (Setup of wgpu)
+
+#### Immediate GPU computation
+
+* Building the first compute node
+* GPU's in greater detail
+* Pipelining, Warp Divergence, Occupancy and Overlap
+* Building the remaining compute nodes
+* Testing the whole thing in immediate mode
+* (Caching shaders)
+
+#### Building a Computational Graph
+
+* Seeing the CPU-GPU memory hierarchies
+* Transfers
+* Building a computational graph
+* Testing the computational graph
+
+#### Building a Computational Graph Compiler
+
+* Seeing the GPU memory hierarchy - caches, shared memory and RAM
+* Graph compilers and OP codes
+* Swapping operators for fused versions
+* Building a graph compiler
+* Testing the graph compiler
+* (Metaprogramming - Shaders are just strings!)
+* (Decomposing to OP codes)
+* (A toy example with OP codes)
+* (Additional ideas for compiler optimization, buffer reusage, matrix reusage)
+
+#### Closing Remarks
+
+* Comparing CPU, immediate, immediate with shader caching, computational graph and compiled computational graph.
+* How does this relate to torch.compile?
+* Where to go from here?
+
+#### (Exercises - do at least 1)
+
+* (Implement a version of the linear layer functions which uses shared memory and tiling)
+* (Implement the tree reduction version of the sum function and add it to the softmax function.
+Also compare the single pass and the tree reduction performance graphs. [Reference](https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf))
+* (Implement a max pooling operator in all levels and implement tests)
+* (Implement a convolution operator in all levels and implement tests)
+* (Add reusable buffers to the computational graph system)
+* (Extend the computational graph with inplace operation for the ReLU operator)
+
+</details>
+
+<h3 id="parallelism-interactivity-events-and-guis">Parallelism, interactivity, events and GUIs</h3>
+<details>
+
+* Data parallelism, work stealing - rayon
+* Data parallelism, non-work stealing - crossbeam
+* Mutex
+* Async
+* Atomic
+* Threads
+* GPU
+* (Sparsity)
+* (Random Access and Monte Carlo (Gyro Dropout))
+* (Branchless programming)
+* (SIMD)
+* (Sorting)
+* Channels
+* Events
+* Key and Mouse events
+* Event Loops
+* (GUIs & egui)
+* (Examine egui-winit-wgpu template)
+* (Graph representations - pointers and indices)
+* (Trees using indices)
+* (Parallel work on graphs)
+
+#### (Specializations/Exercise - Pick items worth a total of 3 points or more, write a 10+ lines interpretation of each item)
+
+* (1 - Data-oriented design - Entity component systems)
+* (1 - Array of Structs, Structs of Arrays, Auto-Vectorization)
+* (1 - Linearized octrees)
+* (2 - Sorting kernels in divergent workloads - Wavefront path tracing)
+* (4 - ORB-SLAM - design and a warning about trying to code it)
+* (4 - Nanite)
+* (1 - PyTorch - Data-Distributed-Parallelism)
+* (1 - PyTorch - Model-Distributed-Parallelism)
+* (2 - Shadertoy)
+* (1 - Gyro Dropout - MLSys 2022)
+* (1 - Hierarchical Frustum Culling)
+* (2 - Flash Attention)
+* (2 - Custom memory allocators)
+* (2 - [JAX](https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html))
+
+#### (Exercise)
+
+* Describe the base architecture of the egui-winit-wgpu template.
+Expand on the template and program some things (needs suggestions)
+using some of the primitives introduced in the module
+
+</details>
+
+<h3 id="types-energy-usage-and-inference-quantization-sparsity-and-pruning-of-neural-networks">Types, energy usage and inference, quantization, sparsity and pruning of neural networks</h3>
+<details>
+
+* Floats
+* Float precision
+* (Fast inverse square root)
+* Integers
+* (Bit tricks)
+* (Basic compression)
+* Energy usage
+* (Batch based data processing)
+* Inference
+* Quantization
+* Sparsity
+* Pruning
+* (Tensor Cores)
+* (Using integers instead of strings in hash tables)
+
+#### (Specializations - Group discussion and presentation)
+
+* (Packing bits for atomic operators)
+* (Inverse depth buffers)
+* (Bittricks, packing normals and colors)
+* (Morton codes / Z-order curves, tiling and GPU textures)
+* (Calculating compression precision in a lossy point cloud compression scheme)
+* (DLSS)
+* (Real-Time Texture Decompression and Upsampling)
+* (2:4 sparsity with Tensor Cores)
+
+#### (Exercise)
+
+* (Find a suitable model and inference library.
+Perform inference.
+Optimize the model and inference process.
+Can you do inferencing on one thread,
+training on another and swap in the new model?
+ADD SUGGESTED MODELS)
+
+</details>
+
+<h3 id="introduction-to-profiling-optimization-use-cases">Introduction to profiling, Optimization use cases</h3>
+<details>
+
+* Profilers (PyTorch, web, GPU, general)
+
+#### Specializations
+
+* Training a neural network
+* Optimizing a neural network for inference
+* Running Yolo
+* Optimizing a point cloud renderer
+* Optimizing a path tracer
+
+#### (Exercise)
+
+* (Try out the profilers relevant to your own system with some sample programs.)
+
+</details>
+
+<h3 id="how-to-create-real-time-systems-good-frameworks-for-the-different-fields-and-project-proposals">How to create real time systems, good frameworks for the different fields and project proposals</h3>
+<details>
+
+* Starting with a simple prototype
+* Identify your components
+* Single threaded correct implementation -> Testing to avoid regression
+* Optimize
+
+#### Tips and tricks in real time systems
+
+* (memcpy)
+* (Hot loops, event loops)
+* (Allocations in a hot loop)
+* (System calls - hoist out of the hot loop)
+* (Logging and printing)
+* (Bindings - PyO3 and cxx)
+* (Walk, don't run, testing for correctness before optimization)
+* (Don't use abbreviations)
+* (Don't use postfix incrementation++)
+* (When to care about software engineering and when to care about performance)
+* (Don't use a string key/identifier or integer, when a type safe enum will do the job)
+* (Hard coding types)
+* (Cognitive load, and delaying errors to after the first draft - deliberate development vs. debugging)
+* (Prefer stateless programming, minimize stateful programming (functional inspiration))
+* (Implicit casting)
+* (Compression)
+* (Know your system - mobile, laptop, desktop, integrated memory, which GPU)
+* (Use version control even for solo development)
+* (Am I copying/cloning things that don't need to be copied?)
+* (Check/validate everything before the hot loop)
+* (Anything that can be immutable, should be immutable - aliasing!)
+* (Testing and Seeding RNG's)
+* (Timing real-time systems and how to escape or offload compute)
+
+#### Components - libraries/frameworks
+
+[blessed](https://blessed.rs/crates)  
+[rayon](https://github.com/rayon-rs/rayon)  
+[egui](https://github.com/emilk/egui)  
+[wonnx](https://github.com/webonnx/wonnx)  
+[tch](https://github.com/LaurentMazare/tch-rs)  
+[winit](https://github.com/rust-windowing/winit)  
+[cv](https://github.com/rust-cv/cv)  
+[ultraviolet](https://github.com/fu5ha/ultraviolet)  
+[arewelearningyet](https://www.arewelearningyet.com/neural-networks/)  
+[burn](https://github.com/burn-rs/burn)  
+
+#### Specializations - Project proposals
+
+* Virtual 3D scanner for a point cloud dataset
+* EEG system
+* Change the latent variables in a network using GUI, optimize the network
+* Point cloud renderer
+* Real-time style transfer on a web cam feed
+* Rendering fractals influenced by a web cam feed
+* Eye tracking -> Present to screen and read from web cam ->
+feature extraction -> classifier -> intervention signal ->
+reading app (Wolfgang Fuhl, PISTOL, fixation detection)
+* Bird classification from sound / Real-time classification of sound (Xeno-canto database)
+* Who is talking? Real-time classification of sound
+* Are you dyslexic? Eye tracking classifier
+* Cognitive load tracker - Eyes & pupil dilation and online estimation of
+signal strength (pupils vs. sound for the hearing impaired)
+
+#### What makes for a good project?
+
+* What is your concept/project?
+* Which concepts from the previous material do you think
+are relevant to your project and why?
+* Preprocessing your data?
+* How do you adapt to your chosen/available platform?
+* Which libraries did you choose for this problem?
+* How fast did you get to your minimum viable product?
+* Which steps did you take from there and why?
+* How did you determine which parts of your system to optimize?
+* What else would you like to do with your system?
+
+</details>
+
+<h2 id="references-and-additional-reading">References and additional reading</h2>
+<details>
+
+[High Performance Machine Learning](https://engineering.nyu.edu/sites/default/files/2022-01/ECE_GY_9143_S22.pdf)  
+[High Performance Machine Learning](https://www.cs.columbia.edu/wp-content/uploads/2022/08/HPML-Fall2022-columbia.pdf)  
+[Flash Attention](https://github.com/HazyResearch/flash-attention)  
+[Branchless Programming](https://www.youtube.com/watch?v=g-WPhYREFjk)  
+[The Rust Programming Language](https://doc.rust-lang.org/book/title-page.html)  
+[Learn wgpu](https://sotrh.github.io/learn-wgpu/)  
+[Install Rust](https://www.rust-lang.org/tools/install)  
+[wgpu](https://wgpu.rs/)  
+[ShaderToy](https://www.shadertoy.com/)  
+[Inigo Quilez](https://iquilezles.org/articles/)  
+[ORB-SLAM](https://arxiv.org/abs/1502.00956)  
+[ORB-SLAM2](https://arxiv.org/abs/1610.06475)  
+[Z-order curves](https://www.nocentino.com/Nocentino10.pdf)  
+[Linearised Trees on the GPU](https://developer.nvidia.com/blog/thinking-parallel-part-iii-tree-construction-gpu/)  
+[Vivienne Sze - Energy Efficient AI](https://www.youtube.com/watch?v=WbLQqPw_n88)  
+[Visual Computing - Stanford](https://gfxcourses.stanford.edu/cs348k/spring23)  
+[Parallel Computing - Stanford](https://gfxcourses.stanford.edu/cs149/fall21)  
+[Rust Profiling](https://nnethercote.github.io/perf-book/profiling.html)  
+[RenderDoc](https://renderdoc.org/)  
+[Book of Shaders](https://thebookofshaders.com/)  
+[Scratchapixel](https://www.scratchapixel.com/)  
+[Ray Tracing in One Weekend](https://raytracing.github.io/)
+[Physically Based Rendering](https://www.pbrt.org/)
+[Crafting Interpreters](https://craftinginterpreters.com/)
+</details>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 30, 2023</span>
+      
+        <br>
+        Created:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">April 7, 2021</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+        
+          
+          <a href="m0_introduction/" class="md-footer__link md-footer__link--next" aria-label="Next: Introduction" rel="next">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Introduction
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="mailto:anders-soerensen@hotmail.com" target="_blank" rel="noopener" title="" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m20 8-8 5-8-5V6l8 5 8-5m0-2H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/absorensen" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/anders-bo-sorensen/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="assets/javascripts/bundle.b425cdc4.min.js"></script>
+      
+    
+  <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
+</html>
