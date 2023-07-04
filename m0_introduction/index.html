@@ -350,7 +350,7 @@
   
     <li class="md-nav__item">
       <a href="s0_intro_to_computing/" class="md-nav__link">
-        S0 - Intro to Computing
+        S0 - Introduction to the Computing Landscape
       </a>
     </li>
   
@@ -364,7 +364,7 @@
   
     <li class="md-nav__item">
       <a href="s1_intro_to_rust/" class="md-nav__link">
-        S1 - Intro to Rust
+        S1 - Introduction to Rust
       </a>
     </li>
   
@@ -392,7 +392,7 @@
   
     <li class="md-nav__item">
       <a href="s3_less_basic_concepts_in_rust/" class="md-nav__link">
-        S3 - +Less Basic Concepts in Rust
+        S3 - *-Less Basic Concepts in Rust
       </a>
     </li>
   
@@ -473,7 +473,7 @@
   
     <li class="md-nav__item">
       <a href="../m1_memory_hierarchies/s0_intro/" class="md-nav__link">
-        S0 - Intro
+        S0 - Introduction
       </a>
     </li>
   
@@ -515,7 +515,7 @@
   
     <li class="md-nav__item">
       <a href="../m1_memory_hierarchies/s3_intro_to_gpus/" class="md-nav__link">
-        S3 - Intro To GPU's
+        S3 - Introduction To GPU's
       </a>
     </li>
   
@@ -585,7 +585,7 @@
   
     <li class="md-nav__item">
       <a href="../m1_memory_hierarchies/s8_exercises/" class="md-nav__link">
-        S8 - +Exercises
+        S8 - *-Exercises
       </a>
     </li>
   
@@ -759,14 +759,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../m5_projects/">M5 - +Projects</a>
+          <a href="../m5_projects/">M5 - *-Projects</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
-          M5 - +Projects
+          M5 - *-Projects
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -805,15 +805,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#why-should-you-use-this-material" class="md-nav__link">
-    Why should you use this material
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-to-use-the-materials-as-a-teacher" class="md-nav__link">
-    How to use the materials as a teacher
+  <a href="#specializations" class="md-nav__link">
+    Specializations
   </a>
   
 </li>
@@ -859,6 +852,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#how-to-use-the-materials-as-a-teacher" class="md-nav__link">
+    How to use the materials as a teacher
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -878,81 +878,112 @@
 
 
 <h1 id="introduction">Introduction</h1>
-<p>Had to find material specifically suited for python people.<br />
-There are so many things to keep track of and most systems hide these things from the user.
-It can be hard to reason about what is going on.
-You either have to be a systems programmer or be a python person spoken to as
-if you are a systems programmer.
-The guide has been optimized to be an iterative process, taking you by the hand,
-speaking to you at the level at which you are following it and trying not to overwhelm the user.<br />
-The guide will give you enough context that you can hopefully be motivated as
-to why you should care about learning what is in the guide.
-The guide tries to not make you panic or be overburdened by iteratively expanding the content.<br />
+<p>Hello there!<br />
+If you are reading this you might have been enticed by promises of performance and other some such advanced black magic, but first, a digression...  </p>
+<p>There are so many things to keep track of as a modern day programmer and most systems hide these things from the user.
+You call something called... <code>?numba?</code> and annotate a few functions and it magically makes your code faster.
+You use something caled <code>?Py?...?Torch?...</code> and it seems really slow for some reason.
+It has something called a profiler, but you don't know how it works and you don't
+know what the hell <code>HtoDMemCpy</code> even is.
+It can be hard to reason about what is going on inside these black boxes.
+On top of that you might not be able to find a tutorial or a guide to talk you through all of the
+stuff you don't know that you don't know.
+As scary as it can sometimes seem to get your hands dirty and take on what might
+seem an insurmountable obstacle, not doing so can have wide reaching consequences.</p>
+<p>With the recent mainstreamification (is that a real word?) of AI systems it used to be an elephant in the room
+that no one seemed to talk about, as the overlap in the Venn diagram between people interested
+in making computers do stuff real fast and the people doing deep learning was quite small.
+That overlap is getting bigger, but not swiftly enough.</p>
+<p>The speed of execution of a program is approximately correlated to the energy consumption of that program.
+Until we use 100% green, renewable, energy in all of computing we have a shared responsibility to at the very least
+practice some modicum of restraint and sensibility in our resource consumption. Taken to the limit by putting
+large scale machine learning, with its massive energy consumption for both training and inference, in
+everything, without necessarily generating value comensurate to the expended resources, is an irresponsible use of resources.</p>
+<figure>
+<p><a class="glightbox" href="../figures/chatgpt-is-so.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/chatgpt-is-so.jpg" width="500" /></a></p>
+<figcaption>
+<a href="https://makeameme.org/meme/chatgpt-is-so"> Image credit </a>
+</figcaption>
+</figure>
+<p>If someone trains a deep learning model for two weeks on eight huge data center GPUS in a cluster, it is their
+responsibility that that training process is fairly well optimized, and that all data is responsibly retrieved,
+such that that training does not have to run again for no reason other than sloppiness.</p>
+<p>And thus stops the finger pointing!</p>
+<p>Optimizing code, especially on systems you might share with others both means that you can get your results faster,
+but that others can have use of the system in a reasonable time as well.
+If you are making large models, optimizing them to be smaller also results in corporations with profits less
+than the GDP of a small country can actually train and run inference with your model, 
+increasing the democratization of your work and its reach. If its able to run on a consumer grade desktop - even better!</p>
+<p>This guide was made to be an iterative process, taking you by the hand,
+speaking to you at the level at which you are following it, trying not to overwhelm you. 
+Reading that back, it could sound a bit condescending, but it basically means that the 
+types of concepts you are assumed to know about will gradually increase with each level.<br />
+Due to the guide gradually introducing certain concepts, jumping around the material
+is not recommended.
 The guide also acknowledges that some people have different interests.<br />
 As such, portions of the guide will be tailored to people who like deep learning,
-people who like computer vision, or computer graphics or some such.
-You are more than welcome to read and do all of it, but no one says you have to do anything.
-If you just follow along the path that is relevant to you, that is fine too.
-In any case, the guide tries to maximize the return-on-investment of your time vs. how much you learn.</p>
-<p>You should take the leap and learn about these complex systems as it can have wide reaching consequences.<br />
-Lower CO2 emissions, especially important at scale or if you are training machine learning models for a long time.<br />
-Faster code, get your results faster, make more interactive systems.<br />
-Easier to understand, reason and strategize about systems and other peoples' code.  </p>
-<p>Code will also be provided. This will be mostly in Rust with wgpu and a bit of python where needed.</p>
-<p>It is assumed that the user does not jump throughout the guide, as some details are spaced
-out along the way, to not overwhelm the user.</p>
-<h2 id="why-should-you-use-this-material">Why should you use this material</h2>
-<p>How to reason about the black box.<br />
-A testing session, a cooking course.<br />
-An assortment of tricks for the performance minded adventurer.</p>
+people who like computer vision, or computer graphics or other some such.<br />
+You are more than welcome to read and do all of it, but no one says you have to do anything.<br />
+If you just follow along the path that is most relevant to you, you will be just fine.<br />
+The guide does contain code, sometimes just small snippets, but also frameworks in
+which most of a module will take place. </p>
+<p>Most importantly - Don't Panic! The guide is here for you! And now for something completely different... practicalities!</p>
+<h2 id="specializations">Specializations</h2>
+<p>Throughout the guide there are sections and exercises prefixed by 'S'. These exercises and topics are meant to be up to you to follow. If you are mostly interested in deep learning, by all means only read and do the sections and exercises which are relevant to deep learning. Which section and exercise is relevant to which specialization will be explained in the each section. The currently supported specializations are deep learning, computer graphics, computer vision and cognitive signal processing.</p>
+<h2 id="levels">Levels</h2>
+<p>The guide's way of doing things is to iteratively expand the curriculum and the depth
+at which concepts are described. You can follow the guide iteratively by doing it
+multiple times, each time advancing in level or you can jump right in to the relevant level.</p>
+<h3 id="level-1">Level 1</h3>
+<p>This level is for people unsure about investing the time and effort to do level 2.
+People are busy, and inherently looking to maximize the value given their invested time.
+Just for those people each module has beem boiled down to approximately 2 pages of reading.
+Reading all of the material should take at most an afternoon and is comprised of the bottom of the main page of each module. Basically, you could stop reading once you are done with this "Level 1" header and just click each "MX - XXXX" on the left, read that page until the end, then click on the next "MX - XXXX" title and read that until the end and you would be done. That does not include "*M5 - Projects", that one is only relevant for levels 3 and 4. Happy reading!</p>
+<h3 id="level-2">Level 2</h3>
+<p>At this level you might be a comfortable programmer in Python, you might be a researcher, or you might just be
+warming up for level 3. In most cases you might not be all that comfortable with lower level languages, such as
+C, C++ or Rust.
+It is expected that you checkout the repository and try out the code on your own laptop.
+It is expected that you might change a few variables here and there, but not much more than that.
+Don't worry, it does not require an Nvidia GPU to run on your laptop.
+There will be Rust code, but it will be as simplified Rust code as possible to just focus on making your learning as easy as possible.
+If you are a systems programmer, you should be able to move through this level rapidly.
+This level does not take into account any module, section, page or info box with a '*' in front of the name.<br />
+These constitute level 3. You are still welcome to read them of course, but
+the language and code are a bit more advanced and it might be a bit too much if you are still working on the basics.</p>
+<h3 id="level-3">Level 3</h3>
+<p>This level is made up of all the material from level 2, all of the sections with a title prefixed by a '*' and
+the relevant section to your specialization in any section prefixed by 'S'.
+The only thing not in level 3, is any exercise section.
+At this level it is expected that you have experience with C/C++/Rust and that you have tried
+programming a GPU or that you have previously done level 2 and are up for a challenge.<br />
+If you haven't done any of these things, you'll be ok, but it might take significant effort on your part.</p>
+<h3 id="level-4">Level 4</h3>
+<p>At this level everything at level 3 is expected, as well as you doing most or
+all of the exercises. This is for doing a course version or if you
+REALLY want to learn all the guide has to offer.</p>
 <h2 id="how-to-use-the-materials-as-a-teacher">How to use the materials as a teacher</h2>
 <p>If you are a teacher who wants to make use of this material, feel free to use the
-<a href="https://absorensen.github.io/real-time-visual-and-machine-learning-systems/">course site</a>.<br />
-The course in site focuses teaching real-time systems for deep learners and visual systems programmers.<br />
+<a href="https://absorensen.github.io/real-time-visual-and-machine-learning-systems/">course site</a>.
+The course focuses on teaching real-time systems for deep learners and visual systems programmers.<br />
 It allocates half of 15 days to going through the material in the guide and the
-other half to making a project relevant to the students' specialization.<br />
+other half to making a project relevant to the students' specialization, which is the contents of module 5.<br />
 It is designed to move through lots of different topics very quickly with a
 handful of varying exercises.
 The student is to then reach back and explore the topics relevant to their
-project in greater detail.<br />
-The breadth of topics is quite wide, and each student should be expected to
-pass an exam in each topic.<br />
-In most cases they might remember that a thing exists and that they can
-search for it.<br />
+project in greater detail.
+The breadth of topics is quite wide, and each student shouldn't be expected to
+pass an exam in every topic.
+In most cases they might remember that a thing exists and that they can search for it.
 The thing they hopefully all learn is how to reason about performance, systems
-design and that getting your hands dirty can be fun and invigorating.</p>
-<h2 id="levels">Levels</h2>
-<p>Which level is for who and what does it require</p>
-<h3 id="level-1">Level 1</h3>
-<p>Unsure whether to invest the time and effort.
-Each module is boiled down to approximately 2 pages of reading.<br />
-Reading all of the material should take at most an afternoon.</p>
-<h3 id="level-2">Level 2</h3>
-<p>At this level you might be a comfortable programmer in Python.
-It is expected that you checkout the repository and try out the code on your own laptop.
-Don't worry, it does not require an Nvidia GPU to run on your laptop.
-There will be Rust code, but it will be simplified Rust code exactly for teaching<br />
-people who have never programmed C/C++ or Rust before.
-You are expected to run the code and perhaps change a few variables.<br />
-If you are a systems programmer, you should be able to move through this level quite quickly.<br />
-This level does not take into account any module, section, page or info box with a '+' in front of the name.<br />
-These constitute level 3. You are still welcome to read them of course, but<br />
-the language and code are a bit more advanced and it might overwhelm you.</p>
-<h3 id="level-3">Level 3</h3>
-<p>At this level it is expected that you have experience with C/C++/Rust and that you have tried programming a GPU.<br />
-If you haven't done any of these things, that is perfectly fine, but it might take some more significant effort on your part.
-If you have previously done level 2, you should be ok.</p>
-<h3 id="level-4">Level 4</h3>
-<p>At this level everything expected at level 3 is expected, as well as you doing most or
-all of the exercises. This is mostly for people doing a course version or who
-REALLY want to learn all the guide has to offer.</p>
+design and that getting your hands dirty can be both fun and invigorating.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 3, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 4, 2023</span>
       
         <br>
         Created:
@@ -998,13 +1029,13 @@ REALLY want to learn all the guide has to offer.</p>
         
         
           
-          <a href="s0_intro_to_computing/" class="md-footer__link md-footer__link--next" aria-label="Next: S0 - Intro to Computing" rel="next">
+          <a href="s0_intro_to_computing/" class="md-footer__link md-footer__link--next" aria-label="Next: S0 - Introduction to the Computing Landscape" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S0 - Intro to Computing
+                S0 - Introduction to the Computing Landscape
               </div>
             </div>
             <div class="md-footer__button md-icon">

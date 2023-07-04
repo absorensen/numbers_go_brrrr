@@ -19,7 +19,7 @@
     
     
       
-        <title>S0 - Intro to Computing - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S0 - Introduction to the Computing Landscape - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#intro-to-computing" class="md-skip">
+        <a href="#introduction-to-the-computing-landscape" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S0 - Intro to Computing
+              S0 - Introduction to the Computing Landscape
             
           </span>
         </div>
@@ -359,12 +359,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          S0 - Intro to Computing
+          S0 - Introduction to the Computing Landscape
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        S0 - Intro to Computing
+        S0 - Introduction to the Computing Landscape
       </a>
       
         
@@ -383,6 +383,41 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#scripting-languages" class="md-nav__link">
+    Scripting Languages
+  </a>
+  
+    <nav class="md-nav" aria-label="Scripting Languages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    Python
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript" class="md-nav__link">
+    Javascript
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compiled-languages" class="md-nav__link">
+    Compiled Languages
+  </a>
+  
+    <nav class="md-nav" aria-label="Compiled Languages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#compilers" class="md-nav__link">
     Compilers
   </a>
@@ -404,10 +439,8 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#limitations-and-the-bigger-picture" class="md-nav__link">
-    Limitations and the bigger picture
-  </a>
+      </ul>
+    </nav>
   
 </li>
         
@@ -417,30 +450,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#scripting-languages" class="md-nav__link">
-    Scripting Languages
+  <a href="#-gpu-specific-languages-and-apis" class="md-nav__link">
+    *-GPU Specific Languages and APIs
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#compiled-languages" class="md-nav__link">
-    Compiled Languages
-  </a>
-  
-    <nav class="md-nav" aria-label="Compiled Languages">
+    <nav class="md-nav" aria-label="*-GPU Specific Languages and APIs">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#memory-managedgarbage-collected" class="md-nav__link">
-    Memory Managed/Garbage Collected
+  <a href="#cuda" class="md-nav__link">
+    CUDA
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#systems-languages" class="md-nav__link">
-    Systems Languages
+  <a href="#opengl" class="md-nav__link">
+    OpenGL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webgl" class="md-nav__link">
+    WebGL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#directx11directx12metal" class="md-nav__link">
+    DirectX11/DirectX12/Metal
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glslhlslwgsl" class="md-nav__link">
+    GLSL/HLSL/WGSL
   </a>
   
 </li>
@@ -466,21 +513,35 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#halide" class="md-nav__link">
-    +Halide
+  <a href="#-taichi" class="md-nav__link">
+    *-Taichi
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#futhark" class="md-nav__link">
-    +Futhark
+  <a href="#-halide" class="md-nav__link">
+    *-Halide
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-futhark" class="md-nav__link">
+    *-Futhark
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-guide-and-languages" class="md-nav__link">
+    The guide and languages
+  </a>
   
 </li>
       
@@ -500,7 +561,7 @@
   
     <li class="md-nav__item">
       <a href="../s1_intro_to_rust/" class="md-nav__link">
-        S1 - Intro to Rust
+        S1 - Introduction to Rust
       </a>
     </li>
   
@@ -528,7 +589,7 @@
   
     <li class="md-nav__item">
       <a href="../s3_less_basic_concepts_in_rust/" class="md-nav__link">
-        S3 - +Less Basic Concepts in Rust
+        S3 - *-Less Basic Concepts in Rust
       </a>
     </li>
   
@@ -609,7 +670,7 @@
   
     <li class="md-nav__item">
       <a href="../../m1_memory_hierarchies/s0_intro/" class="md-nav__link">
-        S0 - Intro
+        S0 - Introduction
       </a>
     </li>
   
@@ -651,7 +712,7 @@
   
     <li class="md-nav__item">
       <a href="../../m1_memory_hierarchies/s3_intro_to_gpus/" class="md-nav__link">
-        S3 - Intro To GPU's
+        S3 - Introduction To GPU's
       </a>
     </li>
   
@@ -721,7 +782,7 @@
   
     <li class="md-nav__item">
       <a href="../../m1_memory_hierarchies/s8_exercises/" class="md-nav__link">
-        S8 - +Exercises
+        S8 - *-Exercises
       </a>
     </li>
   
@@ -895,14 +956,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../m5_projects/">M5 - +Projects</a>
+          <a href="../../m5_projects/">M5 - *-Projects</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
-          M5 - +Projects
+          M5 - *-Projects
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -941,6 +1002,41 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#scripting-languages" class="md-nav__link">
+    Scripting Languages
+  </a>
+  
+    <nav class="md-nav" aria-label="Scripting Languages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python" class="md-nav__link">
+    Python
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#javascript" class="md-nav__link">
+    Javascript
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compiled-languages" class="md-nav__link">
+    Compiled Languages
+  </a>
+  
+    <nav class="md-nav" aria-label="Compiled Languages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
   <a href="#compilers" class="md-nav__link">
     Compilers
   </a>
@@ -962,10 +1058,8 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#limitations-and-the-bigger-picture" class="md-nav__link">
-    Limitations and the bigger picture
-  </a>
+      </ul>
+    </nav>
   
 </li>
         
@@ -975,30 +1069,44 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#scripting-languages" class="md-nav__link">
-    Scripting Languages
+  <a href="#-gpu-specific-languages-and-apis" class="md-nav__link">
+    *-GPU Specific Languages and APIs
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#compiled-languages" class="md-nav__link">
-    Compiled Languages
-  </a>
-  
-    <nav class="md-nav" aria-label="Compiled Languages">
+    <nav class="md-nav" aria-label="*-GPU Specific Languages and APIs">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#memory-managedgarbage-collected" class="md-nav__link">
-    Memory Managed/Garbage Collected
+  <a href="#cuda" class="md-nav__link">
+    CUDA
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#systems-languages" class="md-nav__link">
-    Systems Languages
+  <a href="#opengl" class="md-nav__link">
+    OpenGL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webgl" class="md-nav__link">
+    WebGL
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#directx11directx12metal" class="md-nav__link">
+    DirectX11/DirectX12/Metal
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#glslhlslwgsl" class="md-nav__link">
+    GLSL/HLSL/WGSL
   </a>
   
 </li>
@@ -1024,21 +1132,35 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#halide" class="md-nav__link">
-    +Halide
+  <a href="#-taichi" class="md-nav__link">
+    *-Taichi
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#futhark" class="md-nav__link">
-    +Futhark
+  <a href="#-halide" class="md-nav__link">
+    *-Halide
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#-futhark" class="md-nav__link">
+    *-Futhark
   </a>
   
 </li>
         
       </ul>
     </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#the-guide-and-languages" class="md-nav__link">
+    The guide and languages
+  </a>
   
 </li>
       
@@ -1060,33 +1182,94 @@
   
 
 
-<h1 id="intro-to-computing">Intro to Computing</h1>
-<p>Setting limitations  </p>
-<h2 id="compilers">Compilers</h2>
-<h3 id="ahead-of-time-aot">Ahead-of-Time (AOT)</h3>
-<h3 id="just-in-time-jit">Just-in-Time (JIT)</h3>
-<h3 id="limitations-and-the-bigger-picture">Limitations and the bigger picture</h3>
+<h1 id="introduction-to-the-computing-landscape">Introduction to the Computing Landscape</h1>
+<p>What are programs.<br />
+How do we use them.<br />
+Choosing the right tools for the job.<br />
+Why do some programs produce faster and safer code than others.<br />
+Limitations, while usually carrying a negative connotation, is a wonderful thing to have and set in computing.<br />
+Will be briefly introducing some languages and concepts.<br />
+By no means an expert, but planting seeds for later.  </p>
 <h2 id="scripting-languages">Scripting Languages</h2>
-<p>Python<br />
-Javascript</p>
+<p>Chill out, take things one line of code at a time.<br />
+We are left without the ability to look beyond the current line of code.<br />
+Easy to write things at first, but the lack of a compiler can leave your long running code to fail<br />
+just at the moment it is about to save the results because your forgot you were trying to save the<br />
+wrong type.  </p>
+<h3 id="python">Python</h3>
+<p>The one you are most likely to be familiar with.<br />
+Very popular due to its apparent ease-of-use.  Quite slow in its raw form.<br />
+The main advantage of vanilla python is the ability to glue together a number of libraries<br />
+written in other languages. In time, improvements have been made, such as putting type hints<br />
+into your code SUCH AS, which helps catch errors and gives more informative function definitions.<br />
+In general, if other people reading your code must read the high-quality comments, that you definitely remembered to write... right?,<br />
+then you are laying the foundation of a codebase that will frustrate people, probably including yourself.</p>
+<h3 id="javascript">Javascript</h3>
+<p>The one running on most web pages.<br />
+Can occassionally have a reasonable speed due to the optimizing runtime.<br />
+Heavy development has tuned the V8 runtime.<br />
+Writing Javascript can seem easy, but the amount of things you are allowed to do,<br />
+but shouldn't can make it an arduous experience, once the errors start piling up.<br />
+The advantage is highly portable code, because everything is essentially just a string... including numbers.
+The guide won't concern itself too much with Javascript.  </p>
 <h2 id="compiled-languages">Compiled Languages</h2>
-<h3 id="memory-managedgarbage-collected">Memory Managed/Garbage Collected</h3>
-<p>Java
-C#
-Go</p>
-<h3 id="systems-languages">Systems Languages</h3>
-<p>C/C++/Rust  </p>
+<p>Java, Go, C#, C, C++, Rust</p>
+<h3 id="compilers">Compilers</h3>
+<p>Most of them require additional constraints to transform and improve your code.<br />
+They are not allowed to guess in a way that might functionally alter your code, such<br />
+as reducing the level of precision.</p>
+<h4 id="ahead-of-time-aot">Ahead-of-Time (AOT)</h4>
+<p>The languages in the compiled languages are all designed with at least one compiler, usually<br />
+compiling to byte code or machine code.<br />
+However, it is possible to write a compiler after the fact. <a href="https://cython.org/">Cython</a> is one such compiler.<br />
+It benefits quite a bit by having the user perform additional annotations of their python code,<br />
+allowing for a decent speedup.  </p>
+<h4 id="just-in-time-jit">Just-in-Time (JIT)</h4>
+<p>Start-up time, compilation artifacts may be saved
+If allowed to become a long-running process it may optimize the code while running<br />
+and substitute the function for a new optimized version.
+Numba<br />
+Java  </p>
+<h2 id="-gpu-specific-languages-and-apis">*-GPU Specific Languages and APIs</h2>
+<p>CUDA/OpenCL
+Older APIs
+Web languages
+Modern APIs (D12, Metal, Vulkan, WebGPU(wgpu))</p>
+<h3 id="cuda">CUDA</h3>
+<p>Haha! Surprise! CUDA is actually programmed in C++ with some additional functions and decorators available.</p>
+<h3 id="opengl">OpenGL</h3>
+<h3 id="webgl">WebGL</h3>
+<h3 id="directx11directx12metal">DirectX11/DirectX12/Metal</h3>
+<p>Platform specific stuff</p>
+<h3 id="glslhlslwgsl">GLSL/HLSL/WGSL</h3>
+<p>Graphics and compute code. Specifically for the 
+Can be compiled to SPIR-V, an intermediate representation, sort of like the byte code we discussed earlier.<br />
+This allows the platform independent SPIR-V to be translated to the specific instructions the GPU the code is actually run on. </p>
 <h2 id="domain-specific-languages-and-frameworks">Domain Specific Languages and Frameworks</h2>
+<p>We can take this concept of setting limitations even further<br />
+Including GPU programming</p>
 <h3 id="pytorch">Pytorch</h3>
-<h3 id="halide">+Halide</h3>
-<h3 id="futhark">+Futhark</h3>
+<p><a href="https://pytorch.org/">Pytorch</a><br />
+Has its own compiler from <a href="https://pytorch.org/get-started/pytorch-2.0/">2.0</a>.  </p>
+<h3 id="-taichi">*-Taichi</h3>
+<p><a href="https://www.taichi-lang.org/">taichi</a></p>
+<h3 id="-halide">*-Halide</h3>
+<p><a href="https://halide-lang.org/">Halide</a></p>
+<h3 id="-futhark">*-Futhark</h3>
+<p><a href="https://futhark-lang.org/">Futhark</a></p>
+<h2 id="the-guide-and-languages">The guide and languages</h2>
+<p>As you can probably see in the column on the left... the guide will be using Rust from here on out. If you read the section on GPU programming, you will see there are no easy, one-size-fits-all, solutions. Thankfully, the guide has clear goals and limitations. 
+To help you get familiar with new topics, we only need reasonable performance and for all the code to be runnable on most laptops.<br />
+After all, it's not much fun playing around with things on someone else's computer.<br />
+Most importantly, the setup process should be easy and not make you want to stress-eat the contents of your entire fridge when going through the installation process. 
+As such the guide will mainly use Rust and wgpu.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 3, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 4, 2023</span>
       
         <br>
         Created:
@@ -1132,13 +1315,13 @@ Go</p>
         
         
           
-          <a href="../s1_intro_to_rust/" class="md-footer__link md-footer__link--next" aria-label="Next: S1 - Intro to Rust" rel="next">
+          <a href="../s1_intro_to_rust/" class="md-footer__link md-footer__link--next" aria-label="Next: S1 - Introduction to Rust" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S1 - Intro to Rust
+                S1 - Introduction to Rust
               </div>
             </div>
             <div class="md-footer__button md-icon">
