@@ -450,11 +450,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#-gpu-specific-languages-and-apis" class="md-nav__link">
-    *-GPU Specific Languages and APIs
+  <a href="#gpu-specific-languages-and-apis" class="md-nav__link">
+    *GPU Specific Languages and APIs
   </a>
   
-    <nav class="md-nav" aria-label="*-GPU Specific Languages and APIs">
+    <nav class="md-nav" aria-label="*GPU Specific Languages and APIs">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -513,22 +513,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#-taichi" class="md-nav__link">
-    *-Taichi
+  <a href="#taichi" class="md-nav__link">
+    *Taichi
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#-halide" class="md-nav__link">
-    *-Halide
+  <a href="#halide" class="md-nav__link">
+    *Halide
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#-futhark" class="md-nav__link">
-    *-Futhark
+  <a href="#futhark" class="md-nav__link">
+    *Futhark
   </a>
   
 </li>
@@ -589,7 +589,7 @@
   
     <li class="md-nav__item">
       <a href="../s3_less_basic_concepts_in_rust/" class="md-nav__link">
-        S3 - *-Less Basic Concepts in Rust
+        S3 - \*Less Basic Concepts in Rust
       </a>
     </li>
   
@@ -782,7 +782,7 @@
   
     <li class="md-nav__item">
       <a href="../../m1_memory_hierarchies/s8_exercises/" class="md-nav__link">
-        S8 - *-Exercises
+        S8 - \*Exercises
       </a>
     </li>
   
@@ -956,14 +956,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../m5_projects/">M5 - *-Projects</a>
+          <a href="../../m5_projects/">M5 - \*Projects</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
-          M5 - *-Projects
+          M5 - \*Projects
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -1069,11 +1069,11 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#-gpu-specific-languages-and-apis" class="md-nav__link">
-    *-GPU Specific Languages and APIs
+  <a href="#gpu-specific-languages-and-apis" class="md-nav__link">
+    *GPU Specific Languages and APIs
   </a>
   
-    <nav class="md-nav" aria-label="*-GPU Specific Languages and APIs">
+    <nav class="md-nav" aria-label="*GPU Specific Languages and APIs">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1132,22 +1132,22 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#-taichi" class="md-nav__link">
-    *-Taichi
+  <a href="#taichi" class="md-nav__link">
+    *Taichi
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#-halide" class="md-nav__link">
-    *-Halide
+  <a href="#halide" class="md-nav__link">
+    *Halide
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#-futhark" class="md-nav__link">
-    *-Futhark
+  <a href="#futhark" class="md-nav__link">
+    *Futhark
   </a>
   
 </li>
@@ -1202,8 +1202,9 @@ Very popular due to its apparent ease-of-use.  Quite slow in its raw form.<br />
 The main advantage of vanilla python is the ability to glue together a number of libraries<br />
 written in other languages. In time, improvements have been made, such as putting type hints<br />
 into your code SUCH AS, which helps catch errors and gives more informative function definitions.<br />
-In general, if other people reading your code must read the high-quality comments, that you definitely remembered to write... right?,<br />
-then you are laying the foundation of a codebase that will frustrate people, probably including yourself.</p>
+In general, if other people reading your code must read the high-quality comments,
+that you definitely remembered to write... right?, then you are laying the foundation of a
+codebase that will frustrate people, probably including yourself.</p>
 <h3 id="javascript">Javascript</h3>
 <p>The one running on most web pages.<br />
 Can occassionally have a reasonable speed due to the optimizing runtime.<br />
@@ -1230,7 +1231,7 @@ If allowed to become a long-running process it may optimize the code while runni
 and substitute the function for a new optimized version.
 Numba<br />
 Java  </p>
-<h2 id="-gpu-specific-languages-and-apis">*-GPU Specific Languages and APIs</h2>
+<h2 id="gpu-specific-languages-and-apis">*GPU Specific Languages and APIs</h2>
 <p>CUDA/OpenCL
 Older APIs
 Web languages
@@ -1242,26 +1243,31 @@ Modern APIs (D12, Metal, Vulkan, WebGPU(wgpu))</p>
 <h3 id="directx11directx12metal">DirectX11/DirectX12/Metal</h3>
 <p>Platform specific stuff</p>
 <h3 id="glslhlslwgsl">GLSL/HLSL/WGSL</h3>
-<p>Graphics and compute code. Specifically for the 
+<p>Graphics and compute code. Specifically for the
 Can be compiled to SPIR-V, an intermediate representation, sort of like the byte code we discussed earlier.<br />
-This allows the platform independent SPIR-V to be translated to the specific instructions the GPU the code is actually run on. </p>
+This allows the platform independent SPIR-V to be translated to the specific instructions the GPU
+the code is actually run on.</p>
 <h2 id="domain-specific-languages-and-frameworks">Domain Specific Languages and Frameworks</h2>
 <p>We can take this concept of setting limitations even further<br />
 Including GPU programming</p>
 <h3 id="pytorch">Pytorch</h3>
 <p><a href="https://pytorch.org/">Pytorch</a><br />
 Has its own compiler from <a href="https://pytorch.org/get-started/pytorch-2.0/">2.0</a>.  </p>
-<h3 id="-taichi">*-Taichi</h3>
+<h3 id="taichi">*Taichi</h3>
 <p><a href="https://www.taichi-lang.org/">taichi</a></p>
-<h3 id="-halide">*-Halide</h3>
+<h3 id="halide">*Halide</h3>
 <p><a href="https://halide-lang.org/">Halide</a></p>
-<h3 id="-futhark">*-Futhark</h3>
+<h3 id="futhark">*Futhark</h3>
 <p><a href="https://futhark-lang.org/">Futhark</a></p>
 <h2 id="the-guide-and-languages">The guide and languages</h2>
-<p>As you can probably see in the column on the left... the guide will be using Rust from here on out. If you read the section on GPU programming, you will see there are no easy, one-size-fits-all, solutions. Thankfully, the guide has clear goals and limitations. 
-To help you get familiar with new topics, we only need reasonable performance and for all the code to be runnable on most laptops.<br />
+<p>As you can probably see in the column on the left... the guide will be using Rust from here on out.
+If you read the section on GPU programming, you will see there are no easy, one-size-fits-all,
+solutions. Thankfully, the guide has clear goals and limitations.
+To help you get familiar with new topics, we only need reasonable performance and for all
+the code to be runnable on most laptops.<br />
 After all, it's not much fun playing around with things on someone else's computer.<br />
-Most importantly, the setup process should be easy and not make you want to stress-eat the contents of your entire fridge when going through the installation process. 
+Most importantly, the setup process should be easy and not make you want to stress-eat
+the contents of your entire fridge when going through the installation process. 
 As such the guide will mainly use Rust and wgpu.</p>
 
   <hr>
