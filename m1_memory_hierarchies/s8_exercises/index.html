@@ -19,7 +19,7 @@
     
     
       
-        <title>S8 - \*Exercises - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S8 - *Exercises - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#exercises-do-at-least-1" class="md-skip">
+        <a href="#exercises" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S8 - \*Exercises
+              S8 - *Exercises
             
           </span>
         </div>
@@ -319,6 +319,8 @@
         
           
         
+          
+        
       
       
         
@@ -390,7 +392,21 @@
   
     <li class="md-nav__item">
       <a href="../../m0_introduction/s3_less_basic_concepts_in_rust/" class="md-nav__link">
-        S3 - \*Less Basic Concepts in Rust
+        S3 - *Less Basic Concepts in Rust
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m0_introduction/s4_exercises/" class="md-nav__link">
+        S4 - *Exercises
       </a>
     </li>
   
@@ -594,7 +610,7 @@
       
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        S8 - \*Exercises
+        S8 - *Exercises
       </a>
       
     </li>
@@ -769,14 +785,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../m5_projects/">M5 - \*Projects</a>
+          <a href="../../m5_projects/">M5 - *Projects</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
-          M5 - \*Projects
+          M5 - *Projects
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -824,15 +840,17 @@
   
 
 
-<h1 id="exercises-do-at-least-1">*Exercises - do at least 1</h1>
+<h1 id="exercises">*Exercises</h1>
+<p>Pen and paper exercises to come. Speak to a classmate about your solutions.</p>
+<p>Extend the computational graph with an inplace operation for the ReLU operator (only for the non-fused ReLU)</p>
+<p>The following list is sorted by expected complexity - do at least 1</p>
 <ul>
 <li>Implement a version of the linear layer functions which uses shared memory and tiling</li>
+<li>Add reusable buffers to the computational graph system</li>
 <li>Implement the tree reduction version of the sum function and add it to the softmax function.
 Also compare the single pass and the tree reduction performance graphs. <a href="https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf">Reference</a></li>
-<li>Implement a max pooling operator in all levels and implement tests</li>
-<li>Implement a convolution operator in all levels and implement tests</li>
-<li>Add reusable buffers to the computational graph system</li>
-<li>Extend the computational graph with inplace operation for the ReLU operator</li>
+<li>Implement a max pooling operator, as well as fusing with ReLU, in all levels and implement tests</li>
+<li>Implement a convolution operator, as well as fusing with ReLU, in all levels and implement tests</li>
 </ul>
 
   <hr>
@@ -840,7 +858,7 @@ Also compare the single pass and the tree reduction performance graphs. <a href=
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 4, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 5, 2023</span>
       
         <br>
         Created:
