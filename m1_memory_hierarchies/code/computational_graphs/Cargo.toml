@@ -1,5 +1,5 @@
 [package]
-name = "intro-hpml"
+name = "computational-graphs"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,7 +7,7 @@ edition = "2021"
 crate-type = ["cdylib", "rlib"]
 
 [[bin]]
-name = "intro-hpml-app"
+name = "computational-graphs-app"
 path = "src/main.rs"
 
 [dependencies]
