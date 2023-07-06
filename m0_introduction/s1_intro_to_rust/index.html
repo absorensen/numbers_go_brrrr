@@ -892,8 +892,11 @@ which will be empty to begin with. But if you write some dependencies, next time
 <code>cargo build</code> or <code>cargo run</code>, with or without the <code>--release</code> flag, cargo will download and build all
 of the dependencies. By default cargo will look in the <code>src</code> directory. All of the files with the
 <code>.rs</code> suffix are Rust source files.</p>
-<h2 id="how-to-compile">How to compile</h2>
-<h2 id="frequent-commands-and-faq">Frequent commands and FAQ</h2>
+<p>Entering <code>cargo run</code> will compile and run your code in debug mode, which means it will be easier to step
+through the code and getting better error messages. It will also result in significantly less compilation
+time, but slower run time. If you add <code>cargo run --release</code> it will compile in release mode.
+Compilation will take longer, the code will run faster, but debugging will be harder.</p>
+<h2 id="frequent-commands">Frequent commands</h2>
 <p>To save on space, especially for some of the smaller projects where you just need to run a command or two,
 write <code>cargo clean</code> once you are done to remove all of the relevant dependencies.</p>
 <h1 id="testing">Testing</h1>
@@ -918,7 +921,26 @@ Sometimes you need more info as to what went wrong with the test. There's a
 as the tests are running concurrently. All of the tests requiring GPU access will try to grab the GPU without
 sharing resources. Even then it might fail. You can just try a few more times or try to run tests individually.  </p>
 <h1 id="clippy">*Clippy</h1>
-<h1 id="fmt">*fmt</h1>
+<p><a href="https://doc.rust-lang.org/stable/clippy/index.html">Clippy</a> is cargo's tool for giving suggestions for improving
+your code and making it more akin to idiomatic Rust. The guide has most code conformant to Clippy's suggestions,
+however the guide chooses to diverge where making the code simpler and easier to understand for people who have
+never programmed Rust before is a priority. Clippy's messages are very informative and a good learning experience.
+It is recommended that you use Clippy in your own code. It is as simple as calling <code>cargo clippy</code>.</p>
+<p>Running it on the <code>how_to_test</code> project, Clippy returns the following message -</p>
+<figure>
+<p><a class="glightbox" href="../../figures/clippy.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/clippy.png" width="500" /></a></p>
+<figcaption>
+The guide elects not to fix this, because the return statement was put there to make a point.
+</figcaption>
+</figure>
+<h1 id="rustfmt">*rustfmt</h1>
+<p><a href="https://github.com/rust-lang/rustfmt">rustfmt</a> is a formatter for Rust. Surprise!
+You can install it by running <code>rustup component add rustfmt</code> in a terminal. From then on you can run commands
+like <code>cargo fmt</code>, which automatically changes the code in your current crate (subproject, or the entire project if you are standing in the root). </p>
+<h1 id="fix">*fix</h1>
+<p><a href="https://doc.rust-lang.org/book/appendix-04-useful-development-tools.html#fix-your-code-with-rustfix">fix</a> is
+a tool for taking as many of those pesky compiler warnings as possible, and fixing your code for you. You just
+enter <code>cargo fix</code>.</p>
 
   <hr>
 <div class="md-source-file">
