@@ -1,4 +1,7 @@
-pub fn types() {
+// Don't worry about &'static str right now
+// It is a level 3/4 thing. str will be introduced
+// in a bit.
+pub fn types() -> Result<i32, &'static str> {
     // Types can be inferred
     let inferred_int32 = 5;
     let explicit_u32: u32 = 5;
@@ -8,6 +11,9 @@ pub fn types() {
     // Genuinely! It's a major source of bugs.
     // Try changing the '5.0' to '5' and see what happens!
     let my_float: f32 = 5.0;
+
+    // What you can do instead is explicit casting
+    let my_int: i32 = my_float as i32;
 
     // Trying to change the value of 'my_float' is not
     // allowed by the compiler, as the it is declared as immutable.
@@ -20,7 +26,9 @@ pub fn types() {
     mutable_float = mutable_float * 3.0;
     // Change mutable_float's value to '7.2'
     mutable_float += 1.2;
-
+    // We can also call math functions directly on the 
+    // variable.
+    mutable_float /= mutable_float.sin();
 
 
     // Tuples allows you to combine several values in neat little anonymous packages. 
@@ -45,7 +53,7 @@ pub fn types() {
     let more_values: f32 = mother_of_all_tuples.0.1;
     let even_more_values: u32 = mother_of_all_tuples.1.1;
 
-    // Read more about tuples here: https://doc.rust-lang.org/std/primitive.tuple.html
+    // Read more about tuples: https://doc.rust-lang.org/std/primitive.tuple.html
 
 
 
@@ -79,50 +87,43 @@ pub fn types() {
     // an image, such as the path to the image, 
     // the size of the dimensions, etc., but then have an Option<RawPixels>
     // field for the big payload we may or may not want to carry around.
-    // Read more about Option here: https://doc.rust-lang.org/std/option/
+
+    // One cool thing Options and Results have is the ability to
+    // return early if a value is None or Err. If the encompassing
+    // function has the matching return type, you can write
+    //
+    // let value: u32 = other_option?;
+    //
+    // This doesn't result in a panic like .expect will.
+
+    // Read more about Option: https://doc.rust-lang.org/std/option/
 
 
 
     // Result is another widely used construct.
-    let good_result: Result<i32, i32> = Ok(10);
-    let bad_result: Result<i32, i32> = Err(10);
+    // It always carries a value, unlike Option,
+    // but the type of value can be different,
+    // depending on whether it contains and Ok
+    // or an Err
+    let good_result: Result<i32, &str> = Ok(10);
+    let bad_result: Result<i32, &str> = Err("I am an error message!");
 
     // Results have similar functions to is_some and is_none
     let is_ok: bool = good_result.is_ok(); // is true
     let is_error: bool = bad_result.is_err(); // is true
 
-    // Read more about Result here: https://doc.rust-lang.org/std/result/
+    // One nifty property of Result is that it has a shorthand for
+    // returning an erroneous result early from a function.
+    // We are allowed to do this if the function we are in has the 
+    // matching return value (Result<i32, &str> in this case)
+    let good_value: i32 = good_result?;
+    // The line below would result in immediate return from the function
+    // let bad_value: i32 = bad_result?;
 
-
-
-    // slices
-
-
-    // Read more about slices here: https://doc.rust-lang.org/std/primitive.slice.html
-
-
-
-    // str
-
-
-    // Read more about str here: https://doc.rust-lang.org/std/primitive.str.html
-
-
-
-    // Vec
-
-    // Read more about Vec here: https://doc.rust-lang.org/std/vec/struct.Vec.html
-
-
-
-    // String
-
-    // Read more about String here: https://doc.rust-lang.org/std/string/struct.String.html
-
-
-
-    // HashMap
-
-    // Read more about HashMap here: https://doc.rust-lang.org/std/collections/struct.HashMap.html
+    Ok(1)
+    // Another nifty property of the Result type is that the compiler
+    // will complain if you don't use a Result. It will remind you
+    // that you probably forgot something important.
+    // Read more about Result: https://doc.rust-lang.org/std/result/
 
 }
