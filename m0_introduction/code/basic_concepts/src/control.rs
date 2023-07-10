@@ -53,7 +53,7 @@ pub fn control () {
     // Rust does not have the classic C/C++ for-loop:
     // for(int i = 0; i < vector.size(); ++i)
     // instead it has range based for-loops and iterators.
-    let our_vector: Vec<u32> = vec![1, 2, 3, 4, 5];
+    let mut our_vector: Vec<u32> = vec![1, 2, 3, 4, 5];
 
     // Note the reference in front of our_vector
     // otherwise the for-loop takes ownership of
@@ -62,10 +62,17 @@ pub fn control () {
         // values will be &1, &2, &3, &4, &5
     } 
 
+    // We can also do this with mutable references
+    for mutable_value in &mut our_vector {
+        // Remember to dereference to get to the 
+        // underlying value
+        *mutable_value *= 2;
+    }
+
     // Another possibility would be
     for index in 0..our_vector.len() {
         // index will be 0, 1, 2, 3, 4
-        // Values will be 1, 2, 3, 4, 5
+        // Values will be 2, 4, 6, 8, 10
         our_vector[index];
     }
 
