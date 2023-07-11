@@ -855,7 +855,7 @@ specific language construct, but some concepts it might help to know.</p>
 <h2 id="aliasing">Aliasing</h2>
 <p>Aliasing is a term for when two pointers or references refer to the same place in memory.
 That might not sound like much of a problem at first, but it allows the compiler to make optimizations.
-Take a look at this code
+Take a look at this code -</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">fn</span> <span class="nf">compute</span><span class="p">(</span><span class="n">input</span>: <span class="kp">&amp;</span><span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">output</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="kt">u32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">*</span><span class="n">input</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="o">*</span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
@@ -877,7 +877,7 @@ Take a look at this code
 </span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">        </span><span class="o">*</span><span class="n">output</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 </span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="p">}</span>
-</span></code></pre></div></p>
+</span></code></pre></div>
 <p>You can also check the Rustonomicon for a
 <a href="https://doc.rust-lang.org/nomicon/aliasing.html">better explanation of aliasing</a>.
 It is where the code snippets above are from. The code has been reformatted to preference.
@@ -895,16 +895,16 @@ just get a program behaving "weird". In another case it would also mean you coul
 and save that value in a local variable to do a bunch of operations before writing it somewhere. It already
 sounds very headscratching and like you should only ever do single threaded programs. But thankfully,
 the borrow checker is there to keep things in check for you. One recommendation, you should try
-to minimize the time that a mutable reference to a value will exist. </p>
+to minimize the time that a mutable reference to a value will exist.</p>
 <h2 id="multiple-function-definitions-not-allowed">Multiple Function Definitions Not Allowed</h2>
 <p>As opposed to languages like C++, you cannot have multiple functions with the same name in Rust.
 In C++ this is perfectly legal, and the compiler will attempt to deduce which one you mean based
-on the way you are calling function().
+on the way you are calling function().</p>
 <div class="language-c++ highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argument_a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">argument_b</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argument_a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">argument_b</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">argument_c</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argument_a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">argument_b</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">argument_c</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </span></code></pre></div>
-Rust seems to be designed in a way as to minimize the amount of ambiguity faced by the compiler (and you too).
+<p>Rust seems to be designed in a way as to minimize the amount of ambiguity faced by the compiler (and you too).
 Sometimes in Rust code you will see several different constructor functions, such as build, build_from_ints,
 new and default. In one way, that is a pain in the ass. In another way, it's quite nice.
 It forces the programmer to be explicit about how the functions are different, instead of being unwritten,
@@ -912,28 +912,28 @@ implicit, or 'well, you can just read the code, it's not that complicated'. If y
 that. Remember this... <em>ahem</em> RED FLAG! Fix your stuff so people don't have to guess, it will
 probably make the next person to read your code hate you slightly less. Which is a good thing!</p>
 <h2 id="index-checking">Index Checking</h2>
-<p>Whenever you access an element in an indexed collection such as a Vec: 
+<p>Whenever you access an element in an indexed collection such as a Vec:</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span>
 </span></code></pre></div>
-Whenever you do this in Rust, there is a runtime check to make sure this index is not outside of the
+<p>Whenever you do this in Rust, there is a runtime check to make sure this index is not outside of the
 memory of the vector. This does have some performance cost, but unless you are absolutely sure this processing
 is happening in a hot region (a region of your code where a lot of time is spent), it is not recommended to try
-and circumvent this. 
+and circumvent this.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">        </span><span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">get_unchecked</span><span class="p">(</span><span class="n">index</span><span class="p">));</span>
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">}</span>
 </span></code></pre></div>
-It requires an unsafe region, which is a region in your code where you tell the compiler
+<p>It requires an unsafe region, which is a region in your code where you tell the compiler
 to allow you to do some things it would otherwise not allow you to, and call the function get_unchecked(index).
 An unsafe region does not turn off all checking, but in general, if you are at the level of reading the guide,
 you don't need it and we won't be talking about it more. If you really want to read more about unsafe,
 the <a href="https://doc.rust-lang.org/nomicon/intro.html">Rustonomicon</a> is the defacto standard
-introduction to unsafe in Rust. </p>
-<p>The two above functions are equivalent to 
+introduction to unsafe in Rust.</p>
+<p>The two above functions are equivalent to</p>
 <div class="language-c++ highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">));</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">}</span>
@@ -942,7 +942,7 @@ introduction to unsafe in Rust. </p>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">}</span>
 </span></code></pre></div>
-Note however, that square bracket indexing is the defacto standard way of accessing an array element in both
+<p>Note however, that square bracket indexing is the defacto standard way of accessing an array element in both
 languages. This showcases a core difference between the two languages. One being safety opt-out, and
 another being safety opt-in.</p>
 
