@@ -35,9 +35,6 @@ use crate::control::control;
 mod iterators;
 use crate::iterators::iterators;
 
-mod errors;
-use crate::errors::errors;
-
 fn main() {
     println!("Hello, basic concepts in Rust!");
 
@@ -50,6 +47,5 @@ fn main() {
     enums_and_match();
     control();
     iterators();
-    errors();
 
 }

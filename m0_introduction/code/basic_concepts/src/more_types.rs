@@ -160,4 +160,7 @@ pub fn more_types() {
     // In general the HashMap can be a little bit more finicky to 
     // work with compared to a Vector as values may or may not be there. 
     // Read more about HashMap here: https://doc.rust-lang.org/std/collections/struct.HashMap.html
+
+    // HIGHLY RECOMMENDED:
+    // Read more about Collections here: https://doc.rust-lang.org/std/collections/
 }
