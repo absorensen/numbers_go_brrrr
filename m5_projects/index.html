@@ -17,7 +17,7 @@
     
     
       
-        <title>\*Projects - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>Tips and Tricks in Real-Time Systems - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -80,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#projects" class="md-skip">
+        <a href="#tips-and-tricks-in-real-time-systems" class="md-skip">
           Skip to content
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              \*Projects
+              Tips and Tricks in Real-Time Systems
             
           </span>
         </div>
@@ -812,55 +812,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#how-to-create-real-time-systems-good-frameworks-for-the-different-fields-and-project-proposals" class="md-nav__link">
-    How to create real time systems, good frameworks for the different fields and project proposals
-  </a>
-  
-    <nav class="md-nav" aria-label="How to create real time systems, good frameworks for the different fields and project proposals">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#tips-and-tricks-in-real-time-systems" class="md-nav__link">
-    Tips and tricks in real time systems
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#components-librariesframeworks" class="md-nav__link">
-    Components - libraries/frameworks
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#s-project-proposals" class="md-nav__link">
-    S Project proposals
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#what-makes-for-a-good-project" class="md-nav__link">
-    What makes for a good project?
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -877,25 +828,17 @@
   
 
 
-<h1 id="projects">*Projects</h1>
-<p>This whole module is for levels 3 and 4.
-Specifically, all of the tips and tracks are for level 3, where the projects themselves are meant for level 4.</p>
-<h2 id="how-to-create-real-time-systems-good-frameworks-for-the-different-fields-and-project-proposals">How to create real time systems, good frameworks for the different fields and project proposals</h2>
-<ul>
-<li>Starting with a simple prototype</li>
-<li>Identify your components</li>
-<li>Single threaded correct implementation -&gt; Testing to avoid regression</li>
-<li>Optimize</li>
-</ul>
-<h3 id="tips-and-tricks-in-real-time-systems">Tips and tricks in real time systems</h3>
+<h1 id="tips-and-tricks-in-real-time-systems">Tips and Tricks in Real-Time Systems</h1>
 <ul>
 <li>Events</li>
 <li>Key and Mouse events</li>
 <li>Event Loops</li>
 <li>GUIs &amp; egui</li>
 <li>memcpy</li>
+<li>Check/validate everything before the hot loop</li>
 <li>Hot loops, event loops</li>
 <li>Allocations in a hot loop</li>
+<li>Object Pools</li>
 <li>System calls - hoist out of the hot loop</li>
 <li>Logging and printing</li>
 <li>Bindings - PyO3 and cxx</li>
@@ -912,26 +855,41 @@ Specifically, all of the tips and tracks are for level 3, where the projects the
 <li>Know your system - mobile, laptop, desktop, integrated memory, which GPU</li>
 <li>Use version control even for solo development</li>
 <li>Am I copying/cloning things that don't need to be copied?</li>
-<li>Check/validate everything before the hot loop</li>
 <li>Anything that can be immutable, should be immutable - aliasing!</li>
 <li>Testing and Seeding RNG's</li>
 <li><a href="https://youtu.be/5_RAHZQCPjE">Faster RNG</a></li>
 <li>Timing real-time systems and how to escape or offload compute</li>
 <li>Multi-resolution computing for making your real-time target</li>
 <li>Pressure testing and worst cases</li>
+<li>Static/Dynamic Dispatch - dyn, enum, trait</li>
+<li>The Markov Chain</li>
+<li>If using recursion and risking stack overflow, use a loop and a queue</li>
+<li>If you can, always prefer ana array over more complicated structures</li>
 </ul>
-<h3 id="components-librariesframeworks">Components - libraries/frameworks</h3>
-<p><a href="https://blessed.rs/crates">blessed</a><br />
-<a href="https://github.com/rayon-rs/rayon">rayon</a><br />
-<a href="https://github.com/emilk/egui">egui</a><br />
-<a href="https://github.com/webonnx/wonnx">wonnx</a><br />
-<a href="https://github.com/LaurentMazare/tch-rs">tch</a><br />
-<a href="https://github.com/rust-windowing/winit">winit</a><br />
-<a href="https://github.com/rust-cv/cv">cv</a><br />
-<a href="https://github.com/fu5ha/ultraviolet">ultraviolet</a><br />
-<a href="https://www.arewelearningyet.com/neural-networks/">arewelearningyet</a><br />
-<a href="https://github.com/burn-rs/burn">burn</a>  </p>
-<h3 id="s-project-proposals">S Project proposals</h3>
+<h1 id="sprojects">S*Projects</h1>
+<p>This whole module is for levels 3 and 4.
+Specifically, all of the tips and tracks are for level 3, where the projects themselves are meant for level 4.</p>
+<h2 id="how-to-create-real-time-systems-good-frameworks-for-the-different-fields-and-project-proposals">How to create real time systems, good frameworks for the different fields and project proposals</h2>
+<ul>
+<li>Starting with a simple prototype</li>
+<li>Identify your components</li>
+<li>Single threaded correct implementation -&gt; Testing to avoid regression</li>
+<li>Optimize</li>
+</ul>
+<h2 id="what-makes-for-a-good-project">What makes for a good project?</h2>
+<ul>
+<li>What is your concept/project?</li>
+<li>Which concepts from the previous material do you think
+are relevant to your project and why?</li>
+<li>Preprocessing your data?</li>
+<li>How do you adapt to your chosen/available platform?</li>
+<li>Which libraries did you choose for this problem?</li>
+<li>How fast did you get to your minimum viable product?</li>
+<li>Which steps did you take from there and why?</li>
+<li>How did you determine which parts of your system to optimize?</li>
+<li>What else would you like to do with your system?</li>
+</ul>
+<h2 id="sproject-proposals">SProject Proposals</h2>
 <ul>
 <li>Virtual 3D scanner for a point cloud dataset</li>
 <li>EEG system</li>
@@ -948,26 +906,27 @@ reading app (Wolfgang Fuhl, PISTOL, fixation detection)</li>
 <li>Cognitive load tracker - Eyes &amp; pupil dilation and online estimation of
 signal strength (pupils vs. sound for the hearing impaired)</li>
 </ul>
-<h3 id="what-makes-for-a-good-project">What makes for a good project?</h3>
-<ul>
-<li>What is your concept/project?</li>
-<li>Which concepts from the previous material do you think
-are relevant to your project and why?</li>
-<li>Preprocessing your data?</li>
-<li>How do you adapt to your chosen/available platform?</li>
-<li>Which libraries did you choose for this problem?</li>
-<li>How fast did you get to your minimum viable product?</li>
-<li>Which steps did you take from there and why?</li>
-<li>How did you determine which parts of your system to optimize?</li>
-<li>What else would you like to do with your system?</li>
-</ul>
+<h2 id="components-librariesframeworks">Components - libraries/frameworks</h2>
+<p><a href="https://blessed.rs/crates">blessed</a><br />
+<a href="https://github.com/rayon-rs/rayon">rayon</a><br />
+<a href="https://github.com/emilk/egui">egui</a><br />
+<a href="https://github.com/webonnx/wonnx">wonnx</a><br />
+<a href="https://github.com/LaurentMazare/tch-rs">tch</a><br />
+<a href="https://github.com/rust-windowing/winit">winit</a><br />
+<a href="https://github.com/rust-cv/cv">cv</a><br />
+<a href="https://github.com/fu5ha/ultraviolet">ultraviolet</a><br />
+<a href="https://www.arewelearningyet.com/neural-networks/">arewelearningyet</a><br />
+<a href="https://github.com/burn-rs/burn">burn</a><br />
+<a href="">time</a><br />
+<a href="">chrono</a><br />
+<a href="https://github.com/nyx-space/hifitime">hifitime</a>  </p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 4, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 17, 2023</span>
       
         <br>
         Created:

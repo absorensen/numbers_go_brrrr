@@ -537,7 +537,7 @@
       
         <li class="md-nav__item">
   <a href="#introduction-to-memory-hierarchies" class="md-nav__link">
-    Introduction  to memory hierarchies
+    Introduction to memory hierarchies
   </a>
   
 </li>
@@ -547,32 +547,45 @@
     Pointers, Heap and Stack, Dynamic Arrays
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pipelines-and-branch-prediction" class="md-nav__link">
-    Pipelines and branch prediction
+    <nav class="md-nav" aria-label="Pointers, Heap and Stack, Dynamic Arrays">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pointers-and-allocations" class="md-nav__link">
+    Pointers and Allocations
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#heap-and-stack" class="md-nav__link">
+    Heap and Stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-vector" class="md-nav__link">
+    The Vector
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#inlining" class="md-nav__link">
-    Inlining
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-cpu-side-memory-hierarchy" class="md-nav__link">
-    The CPU-side memory hierarchy
+  <a href="#move-copy-clone-soldier-spy" class="md-nav__link">
+    Move, Copy, Clone, Soldier, Spy
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#virtualized-memory-hierarchy" class="md-nav__link">
-    *Virtualized memory hierarchy
+    *Virtualized Memory Hierarchy
   </a>
   
 </li>
@@ -587,6 +600,13 @@
         <li class="md-nav__item">
   <a href="#garbage-collectors" class="md-nav__link">
     *Garbage collectors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    *Further Reading
   </a>
   
 </li>
@@ -912,7 +932,7 @@
       
         <li class="md-nav__item">
   <a href="#introduction-to-memory-hierarchies" class="md-nav__link">
-    Introduction  to memory hierarchies
+    Introduction to memory hierarchies
   </a>
   
 </li>
@@ -922,32 +942,45 @@
     Pointers, Heap and Stack, Dynamic Arrays
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#pipelines-and-branch-prediction" class="md-nav__link">
-    Pipelines and branch prediction
+    <nav class="md-nav" aria-label="Pointers, Heap and Stack, Dynamic Arrays">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pointers-and-allocations" class="md-nav__link">
+    Pointers and Allocations
   </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#heap-and-stack" class="md-nav__link">
+    Heap and Stack
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-vector" class="md-nav__link">
+    The Vector
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#inlining" class="md-nav__link">
-    Inlining
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#the-cpu-side-memory-hierarchy" class="md-nav__link">
-    The CPU-side memory hierarchy
+  <a href="#move-copy-clone-soldier-spy" class="md-nav__link">
+    Move, Copy, Clone, Soldier, Spy
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#virtualized-memory-hierarchy" class="md-nav__link">
-    *Virtualized memory hierarchy
+    *Virtualized Memory Hierarchy
   </a>
   
 </li>
@@ -962,6 +995,13 @@
         <li class="md-nav__item">
   <a href="#garbage-collectors" class="md-nav__link">
     *Garbage collectors
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#further-reading" class="md-nav__link">
+    *Further Reading
   </a>
   
 </li>
@@ -985,21 +1025,61 @@
 
 
 <h1 id="memory-hierarchies-and-the-cpu">Memory Hierarchies and the CPU</h1>
-<h2 id="introduction-to-memory-hierarchies">Introduction  to memory hierarchies</h2>
+<h2 id="introduction-to-memory-hierarchies">Introduction to memory hierarchies</h2>
+<p>Computer diagram
+Register
+Cache
+RAM</p>
 <h2 id="pointers-heap-and-stack-dynamic-arrays">Pointers, Heap and Stack, Dynamic Arrays</h2>
-<h2 id="pipelines-and-branch-prediction">Pipelines and branch prediction</h2>
-<h2 id="inlining">Inlining</h2>
-<h2 id="the-cpu-side-memory-hierarchy">The CPU-side memory hierarchy</h2>
-<h2 id="virtualized-memory-hierarchy">*Virtualized memory hierarchy</h2>
+<h3 id="pointers-and-allocations">Pointers and Allocations</h3>
+<p>What is a pointer<br />
+What is an allocation<br />
+What is freeing  </p>
+<h3 id="heap-and-stack">Heap and Stack</h3>
+<p>Remember the more detailed description in the level 3 section Virtualized Memory Hierarchy.
+Confusingly, there is also a data structure called heap. This heap is not the same.</p>
+<h3 id="the-vector">The Vector</h3>
+<p>Column-major, row-major. We can index however we want if we keep track of it ourselves and use 1D allocations.
+Keep size, allocated and pointer
+What happens when moving
+What happens when cloning
+Look at Programming Rust</p>
+<h2 id="move-copy-clone-soldier-spy">Move, Copy, Clone, Soldier, Spy</h2>
+<p>Relating to Vector
+Move
+Copy
+Clone</p>
+<h2 id="virtualized-memory-hierarchy">*Virtualized Memory Hierarchy</h2>
+<p>The process' own virtual memory space (the stack and heap share the same memory)
+Disk
+Internet
+Fat nodes
+Paylod missing?</p>
 <h2 id="pointers-and-smart-pointers">*Pointers and smart pointers</h2>
+<p>What's the deal
+What's the problem
+Smart pointers use cases
+Graphs
+Trees</p>
 <h2 id="garbage-collectors">*Garbage collectors</h2>
+<p>Reference counting
+Object Pools</p>
+<h2 id="further-reading">*Further Reading</h2>
+<p>An explanation of memory allocation, stack and heap
+<a href="https://cs2461-2020.github.io/lectures/dynamic.pdf">in C</a></p>
+<p>A more rigorous <a href="http://eceweb.ucsd.edu/~gert/ece30/CN5.pdf">explanation</a>
+of the register, cache, main memory and virtual memory parts of the memory hierarchy.</p>
+<p>For more about
+<a href="https://devguide.python.org/internals/garbage-collector/">garbage collection in Python</a>,
+<a href="https://stackify.com/python-garbage-collection/">more basic garbage collection in Pyton</a> or 
+<a href="https://blogs.oracle.com/javamagazine/post/understanding-garbage-collectors">garbage collection in Java</a>. </p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 5, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 17, 2023</span>
       
         <br>
         Created:

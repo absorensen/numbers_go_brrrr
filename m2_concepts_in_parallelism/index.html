@@ -832,19 +832,19 @@
 
 <h1 id="concepts-in-parallelism">Concepts in Parallelism</h1>
 <ul>
+<li>Threads</li>
+<li>Async</li>
+<li>Events</li>
+<li>Mutex</li>
+<li>Atomic</li>
+<li>Channels</li>
 <li>Data parallelism, work stealing - rayon</li>
 <li>Data parallelism, non-work stealing - crossbeam</li>
-<li>Mutex</li>
-<li>Async</li>
-<li>Atomic</li>
-<li>Threads</li>
 <li>GPU</li>
-<li>Channels</li>
-<li>Events</li>
+<li>*Branchless programming, branch prediction and pipelines</li>
+<li>*SIMD</li>
 <li>*Sparsity</li>
 <li>*Random Access and Monte Carlo (Gyro Dropout)</li>
-<li>*Branchless programming</li>
-<li>*SIMD</li>
 <li>*Sorting</li>
 <li>*Graph representations - pointers and indices</li>
 <li>*Trees using indices</li>
@@ -855,7 +855,7 @@
 Expand on the template and program some things (needs suggestions)<br />
 using some of the primitives introduced in the module</p>
 <h1 id="sexercise">S*Exercise</h1>
-<p>Pick items worth a total of 3 points or more, write a 10+ lines interpretation of each item</p>
+<p>Pick items worth a total of 3 points or more, write am interpretation of each item of at least 10 times the number of points lines.</p>
 <ul>
 <li>1 - Data-oriented design - Entity component systems</li>
 <li>1 - Array of Structs, Structs of Arrays, Auto-Vectorization</li>
@@ -865,12 +865,15 @@ using some of the primitives introduced in the module</p>
 <li>4 - Nanite</li>
 <li>1 - PyTorch - Data-Distributed-Parallelism</li>
 <li>1 - PyTorch - Model-Distributed-Parallelism</li>
+<li>1 - PyTorch - <a href="https://pytorch.org/blog/optimizing-libtorch/?hss_channel=lcp-78618366">Optimizing inference</a></li>
 <li>2 - Shadertoy</li>
 <li>1 - Gyro Dropout - MLSys 2022</li>
 <li>1 - Hierarchical Frustum Culling</li>
+<li>1 - <a href="https://ipthomas.com/blog/2023/07/n-times-faster-than-c-where-n-128/">SIMD optimization</a></li>
 <li>2 - Flash Attention</li>
 <li>2 - Custom memory allocators</li>
 <li>2 - <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX</a></li>
+<li>1 - <a href="https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array">Branch Prediction</a></li>
 </ul>
 
   <hr>
@@ -878,7 +881,7 @@ using some of the primitives introduced in the module</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 4, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 17, 2023</span>
       
         <br>
         Created:
