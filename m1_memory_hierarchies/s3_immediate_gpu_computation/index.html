@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../s0_intro/">
+        <link rel="prev" href="../s2_intro_to_gpus/">
       
       
-        <link rel="next" href="../s2_computational_graphs/">
+        <link rel="next" href="../s4_building_a_computational_graph/">
       
       <link rel="icon" href="../../figures/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
     
     
       
-        <title>S1 - Memory Hierarchies and the CPU - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S3 - Immediate GPU Computation - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#memory-hierarchies-and-the-cpu" class="md-skip">
+        <a href="#immediate-gpu-computation" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S1 - Memory Hierarchies and the CPU
+              S3 - Immediate GPU Computation
             
           </span>
         </div>
@@ -458,8 +458,6 @@
         
           
         
-          
-        
       
       
         
@@ -488,8 +486,36 @@
   
   
     <li class="md-nav__item">
-      <a href="../s0_intro/" class="md-nav__link">
-        S0 - Introduction
+      <a href="../s0_memory_hierarchies_and_the_cpu/" class="md-nav__link">
+        S0 - Memory Hierarchies and the CPU
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s1_computational_graphs/" class="md-nav__link">
+        S1 - Computational Graphs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s2_intro_to_gpus/" class="md-nav__link">
+        S2 - Introduction to GPU's
       </a>
     </li>
   
@@ -512,12 +538,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          S1 - Memory Hierarchies and the CPU
+          S3 - Immediate GPU Computation
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        S1 - Memory Hierarchies and the CPU
+        S3 - Immediate GPU Computation
       </a>
       
         
@@ -536,77 +562,43 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#introduction-to-memory-hierarchies" class="md-nav__link">
-    Introduction to memory hierarchies
+  <a href="#building-the-first-compute-node" class="md-nav__link">
+    Building the first compute node
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pointers-heap-and-stack-dynamic-arrays" class="md-nav__link">
-    Pointers, Heap and Stack, Dynamic Arrays
-  </a>
-  
-    <nav class="md-nav" aria-label="Pointers, Heap and Stack, Dynamic Arrays">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pointers-and-allocations" class="md-nav__link">
-    Pointers and Allocations
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#heap-and-stack" class="md-nav__link">
-    Heap and Stack
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#the-vector" class="md-nav__link">
-    The Vector
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#move-copy-clone-soldier-spy" class="md-nav__link">
-    Move, Copy, Clone, Soldier, Spy
+  <a href="#gpus-in-greater-detail" class="md-nav__link">
+    GPU's in greater detail
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#virtualized-memory-hierarchy" class="md-nav__link">
-    *Virtualized Memory Hierarchy
+  <a href="#pipelining-warp-divergence-occupancy-and-overlap" class="md-nav__link">
+    Pipelining, Warp Divergence, Occupancy and Overlap
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pointers-and-smart-pointers" class="md-nav__link">
-    *Pointers and smart pointers
+  <a href="#building-the-remaining-compute-nodes" class="md-nav__link">
+    Building the remaining compute nodes
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#garbage-collectors" class="md-nav__link">
-    *Garbage collectors
+  <a href="#testing-the-whole-thing-in-immediate-mode" class="md-nav__link">
+    Testing the whole thing in immediate mode
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#further-reading" class="md-nav__link">
-    *Further Reading
+  <a href="#caching-shaders" class="md-nav__link">
+    *Caching shaders
   </a>
   
 </li>
@@ -626,8 +618,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s2_computational_graphs/" class="md-nav__link">
-        S2 - Computational Graphs
+      <a href="../s4_building_a_computational_graph/" class="md-nav__link">
+        S4 - Building a Computational Graph
       </a>
     </li>
   
@@ -640,8 +632,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s3_intro_to_gpus/" class="md-nav__link">
-        S3 - Introduction To GPU's
+      <a href="../s5_computational_graph_compilers/" class="md-nav__link">
+        S5 - Computational Graph Compilers
       </a>
     </li>
   
@@ -654,8 +646,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s4_immediate_gpu_computation/" class="md-nav__link">
-        S4 - Immediate GPU Computation
+      <a href="../s6_outro/" class="md-nav__link">
+        S6 - Outro
       </a>
     </li>
   
@@ -668,50 +660,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s5_building_a_computational_graph/" class="md-nav__link">
-        S5 - Building a Computational Graph
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s6_computational_graph_compilers/" class="md-nav__link">
-        S6 - Computational Graph Compilers
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s7_outro/" class="md-nav__link">
-        S7 - Outro
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s8_exercises/" class="md-nav__link">
-        S8 - *Exercises
+      <a href="../s7_exercises/" class="md-nav__link">
+        S7 - *Exercises
       </a>
     </li>
   
@@ -931,77 +881,43 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#introduction-to-memory-hierarchies" class="md-nav__link">
-    Introduction to memory hierarchies
+  <a href="#building-the-first-compute-node" class="md-nav__link">
+    Building the first compute node
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pointers-heap-and-stack-dynamic-arrays" class="md-nav__link">
-    Pointers, Heap and Stack, Dynamic Arrays
-  </a>
-  
-    <nav class="md-nav" aria-label="Pointers, Heap and Stack, Dynamic Arrays">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#pointers-and-allocations" class="md-nav__link">
-    Pointers and Allocations
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#heap-and-stack" class="md-nav__link">
-    Heap and Stack
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#the-vector" class="md-nav__link">
-    The Vector
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#move-copy-clone-soldier-spy" class="md-nav__link">
-    Move, Copy, Clone, Soldier, Spy
+  <a href="#gpus-in-greater-detail" class="md-nav__link">
+    GPU's in greater detail
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#virtualized-memory-hierarchy" class="md-nav__link">
-    *Virtualized Memory Hierarchy
+  <a href="#pipelining-warp-divergence-occupancy-and-overlap" class="md-nav__link">
+    Pipelining, Warp Divergence, Occupancy and Overlap
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pointers-and-smart-pointers" class="md-nav__link">
-    *Pointers and smart pointers
+  <a href="#building-the-remaining-compute-nodes" class="md-nav__link">
+    Building the remaining compute nodes
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#garbage-collectors" class="md-nav__link">
-    *Garbage collectors
+  <a href="#testing-the-whole-thing-in-immediate-mode" class="md-nav__link">
+    Testing the whole thing in immediate mode
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#further-reading" class="md-nav__link">
-    *Further Reading
+  <a href="#caching-shaders" class="md-nav__link">
+    *Caching shaders
   </a>
   
 </li>
@@ -1024,62 +940,20 @@
   
 
 
-<h1 id="memory-hierarchies-and-the-cpu">Memory Hierarchies and the CPU</h1>
-<h2 id="introduction-to-memory-hierarchies">Introduction to memory hierarchies</h2>
-<p>Computer diagram
-Register
-Cache
-RAM</p>
-<h2 id="pointers-heap-and-stack-dynamic-arrays">Pointers, Heap and Stack, Dynamic Arrays</h2>
-<h3 id="pointers-and-allocations">Pointers and Allocations</h3>
-<p>What is a pointer<br />
-What is an allocation<br />
-What is freeing  </p>
-<h3 id="heap-and-stack">Heap and Stack</h3>
-<p>Remember the more detailed description in the level 3 section Virtualized Memory Hierarchy.
-Confusingly, there is also a data structure called heap. This heap is not the same.</p>
-<h3 id="the-vector">The Vector</h3>
-<p>Column-major, row-major. We can index however we want if we keep track of it ourselves and use 1D allocations.
-Keep size, allocated and pointer
-What happens when moving
-What happens when cloning
-Look at Programming Rust</p>
-<h2 id="move-copy-clone-soldier-spy">Move, Copy, Clone, Soldier, Spy</h2>
-<p>Relating to Vector
-Move
-Copy
-Clone</p>
-<h2 id="virtualized-memory-hierarchy">*Virtualized Memory Hierarchy</h2>
-<p>The process' own virtual memory space (the stack and heap share the same memory)
-Disk
-Internet
-Fat nodes
-Paylod missing?</p>
-<h2 id="pointers-and-smart-pointers">*Pointers and smart pointers</h2>
-<p>What's the deal
-What's the problem
-Smart pointers use cases
-Graphs
-Trees</p>
-<h2 id="garbage-collectors">*Garbage collectors</h2>
-<p>Reference counting
-Object Pools</p>
-<h2 id="further-reading">*Further Reading</h2>
-<p>An explanation of memory allocation, stack and heap
-<a href="https://cs2461-2020.github.io/lectures/dynamic.pdf">in C</a></p>
-<p>A more rigorous <a href="http://eceweb.ucsd.edu/~gert/ece30/CN5.pdf">explanation</a>
-of the register, cache, main memory and virtual memory parts of the memory hierarchy.</p>
-<p>For more about
-<a href="https://devguide.python.org/internals/garbage-collector/">garbage collection in Python</a>,
-<a href="https://stackify.com/python-garbage-collection/">more basic garbage collection in Pyton</a> or
-<a href="https://blogs.oracle.com/javamagazine/post/understanding-garbage-collectors">garbage collection in Java</a>.</p>
+<h1 id="immediate-gpu-computation">Immediate GPU computation</h1>
+<h2 id="building-the-first-compute-node">Building the first compute node</h2>
+<h2 id="gpus-in-greater-detail">GPU's in greater detail</h2>
+<h2 id="pipelining-warp-divergence-occupancy-and-overlap">Pipelining, Warp Divergence, Occupancy and Overlap</h2>
+<h2 id="building-the-remaining-compute-nodes">Building the remaining compute nodes</h2>
+<h2 id="testing-the-whole-thing-in-immediate-mode">Testing the whole thing in immediate mode</h2>
+<h2 id="caching-shaders">*Caching shaders</h2>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 17, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 18, 2023</span>
       
         <br>
         Created:
@@ -1109,7 +983,7 @@ of the register, cache, main memory and virtual memory parts of the memory hiera
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../s0_intro/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S0 - Introduction" rel="prev">
+          <a href="../s2_intro_to_gpus/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S2 - Introduction to GPU&#39;s" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -1118,20 +992,20 @@ of the register, cache, main memory and virtual memory parts of the memory hiera
                 Previous
               </span>
               <div class="md-ellipsis">
-                S0 - Introduction
+                S2 - Introduction to GPU's
               </div>
             </div>
           </a>
         
         
           
-          <a href="../s2_computational_graphs/" class="md-footer__link md-footer__link--next" aria-label="Next: S2 - Computational Graphs" rel="next">
+          <a href="../s4_building_a_computational_graph/" class="md-footer__link md-footer__link--next" aria-label="Next: S4 - Building a Computational Graph" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S2 - Computational Graphs
+                S4 - Building a Computational Graph
               </div>
             </div>
             <div class="md-footer__button md-icon">

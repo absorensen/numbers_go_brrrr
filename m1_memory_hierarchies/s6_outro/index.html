@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../s3_intro_to_gpus/">
+        <link rel="prev" href="../s5_computational_graph_compilers/">
       
       
-        <link rel="next" href="../s5_building_a_computational_graph/">
+        <link rel="next" href="../s7_exercises/">
       
       <link rel="icon" href="../../figures/favicon.png">
       <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
     
     
       
-        <title>S4 - Immediate GPU Computation - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S6 - Outro - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#immediate-gpu-computation" class="md-skip">
+        <a href="#outro" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S4 - Immediate GPU Computation
+              S6 - Outro
             
           </span>
         </div>
@@ -458,8 +458,6 @@
         
           
         
-          
-        
       
       
         
@@ -488,8 +486,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s0_intro/" class="md-nav__link">
-        S0 - Introduction
+      <a href="../s0_memory_hierarchies_and_the_cpu/" class="md-nav__link">
+        S0 - Memory Hierarchies and the CPU
       </a>
     </li>
   
@@ -502,8 +500,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s1_memory_hierarchies_and_the_cpu/" class="md-nav__link">
-        S1 - Memory Hierarchies and the CPU
+      <a href="../s1_computational_graphs/" class="md-nav__link">
+        S1 - Computational Graphs
       </a>
     </li>
   
@@ -516,8 +514,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s2_computational_graphs/" class="md-nav__link">
-        S2 - Computational Graphs
+      <a href="../s2_intro_to_gpus/" class="md-nav__link">
+        S2 - Introduction to GPU's
       </a>
     </li>
   
@@ -530,8 +528,36 @@
   
   
     <li class="md-nav__item">
-      <a href="../s3_intro_to_gpus/" class="md-nav__link">
-        S3 - Introduction To GPU's
+      <a href="../s3_immediate_gpu_computation/" class="md-nav__link">
+        S3 - Immediate GPU Computation
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s4_building_a_computational_graph/" class="md-nav__link">
+        S4 - Building a Computational Graph
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s5_computational_graph_compilers/" class="md-nav__link">
+        S5 - Computational Graph Compilers
       </a>
     </li>
   
@@ -554,12 +580,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          S4 - Immediate GPU Computation
+          S6 - Outro
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        S4 - Immediate GPU Computation
+        S6 - Outro
       </a>
       
         
@@ -578,43 +604,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-the-first-compute-node" class="md-nav__link">
-    Building the first compute node
+  <a href="#comparing-the-work" class="md-nav__link">
+    Comparing the work
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#gpus-in-greater-detail" class="md-nav__link">
-    GPU's in greater detail
+  <a href="#how-does-this-relate-to-torchcompile" class="md-nav__link">
+    How does this relate to torch.compile?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pipelining-warp-divergence-occupancy-and-overlap" class="md-nav__link">
-    Pipelining, Warp Divergence, Occupancy and Overlap
+  <a href="#where-to-go-from-here" class="md-nav__link">
+    Where to go from here?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#building-the-remaining-compute-nodes" class="md-nav__link">
-    Building the remaining compute nodes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-the-whole-thing-in-immediate-mode" class="md-nav__link">
-    Testing the whole thing in immediate mode
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#caching-shaders" class="md-nav__link">
-    *Caching shaders
+  <a href="#further-reading" class="md-nav__link">
+    *Further reading
   </a>
   
 </li>
@@ -634,50 +646,8 @@
   
   
     <li class="md-nav__item">
-      <a href="../s5_building_a_computational_graph/" class="md-nav__link">
-        S5 - Building a Computational Graph
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s6_computational_graph_compilers/" class="md-nav__link">
-        S6 - Computational Graph Compilers
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s7_outro/" class="md-nav__link">
-        S7 - Outro
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s8_exercises/" class="md-nav__link">
-        S8 - *Exercises
+      <a href="../s7_exercises/" class="md-nav__link">
+        S7 - *Exercises
       </a>
     </li>
   
@@ -897,43 +867,29 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-the-first-compute-node" class="md-nav__link">
-    Building the first compute node
+  <a href="#comparing-the-work" class="md-nav__link">
+    Comparing the work
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#gpus-in-greater-detail" class="md-nav__link">
-    GPU's in greater detail
+  <a href="#how-does-this-relate-to-torchcompile" class="md-nav__link">
+    How does this relate to torch.compile?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#pipelining-warp-divergence-occupancy-and-overlap" class="md-nav__link">
-    Pipelining, Warp Divergence, Occupancy and Overlap
+  <a href="#where-to-go-from-here" class="md-nav__link">
+    Where to go from here?
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#building-the-remaining-compute-nodes" class="md-nav__link">
-    Building the remaining compute nodes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-the-whole-thing-in-immediate-mode" class="md-nav__link">
-    Testing the whole thing in immediate mode
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#caching-shaders" class="md-nav__link">
-    *Caching shaders
+  <a href="#further-reading" class="md-nav__link">
+    *Further reading
   </a>
   
 </li>
@@ -956,20 +912,22 @@
   
 
 
-<h1 id="immediate-gpu-computation">Immediate GPU computation</h1>
-<h2 id="building-the-first-compute-node">Building the first compute node</h2>
-<h2 id="gpus-in-greater-detail">GPU's in greater detail</h2>
-<h2 id="pipelining-warp-divergence-occupancy-and-overlap">Pipelining, Warp Divergence, Occupancy and Overlap</h2>
-<h2 id="building-the-remaining-compute-nodes">Building the remaining compute nodes</h2>
-<h2 id="testing-the-whole-thing-in-immediate-mode">Testing the whole thing in immediate mode</h2>
-<h2 id="caching-shaders">*Caching shaders</h2>
+<h1 id="outro">Outro</h1>
+<h2 id="comparing-the-work">Comparing the work</h2>
+<p>CPU, immediate, immediate with shader caching, computational graph and compiled computational graph</p>
+<h2 id="how-does-this-relate-to-torchcompile">How does this relate to torch.compile?</h2>
+<h2 id="where-to-go-from-here">Where to go from here?</h2>
+<h2 id="further-reading">*Further reading</h2>
+<p><a href="https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust">Fun and hackable tensors in Rust</a><br />
+<a href="https://getcode.substack.com/p/massively-parallel-fun-with-gpus">Massively Parallel Fun with GPUs: Accelerating Tensors in Rust</a>
+<a href="https://github.com/googlefonts/compute-shader-101/blob/main/docs/glossary.md">Compute Shader Glossary</a></p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 17, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 18, 2023</span>
       
         <br>
         Created:
@@ -999,7 +957,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../s3_intro_to_gpus/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S3 - Introduction To GPU&#39;s" rel="prev">
+          <a href="../s5_computational_graph_compilers/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S5 - Computational Graph Compilers" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -1008,20 +966,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                S3 - Introduction To GPU's
+                S5 - Computational Graph Compilers
               </div>
             </div>
           </a>
         
         
           
-          <a href="../s5_building_a_computational_graph/" class="md-footer__link md-footer__link--next" aria-label="Next: S5 - Building a Computational Graph" rel="next">
+          <a href="../s7_exercises/" class="md-footer__link md-footer__link--next" aria-label="Next: S7 - *Exercises" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S5 - Building a Computational Graph
+                S7 - *Exercises
               </div>
             </div>
             <div class="md-footer__button md-icon">
