@@ -916,12 +916,13 @@ the L2 cache with a few other CPUs.
 We are also at risk of each core not just reading from the same values, but what if some of them modified
 one or more of the 5 values? At any point in time a value loaded from memory, to L3 cache, to L2 cache, to L1 cache,
 to the registers of thread A, might be invalid because thread B wrote to that value. This may have updated
-the value in memory and in thread B's registers, L1 and L2 caches, hopefully, it also updated it in an L2 and/or L3 cache it
-shared with thread A, but even then we would still need to move the value from L2/L3, to thread A's L1 cache and registers for it to
-be valid. Which is probably not happening. Multiple threads reading from a piece of data, which one or more threads are
-writing to is also known as a 
+the value in memory and in thread B's registers, L1 and L2 caches, hopefully, it also updated it in an
+L2 and/or L3 cache it shared with thread A, but even then we would still need to move the value from
+L2/L3, to thread A's L1 cache and registers for it to be valid. Which is probably not happening.
+Multiple threads reading from a piece of data, which one or more threads are writing to is also known as a 
 <a href="https://www.brainkart.com/article/Data-Races_9445/">data race</a>.
-Most likely thread A will end up with a stale version of the data and will continue as if the value had never been modified.
+Most likely thread A will end up with a stale version of the data and will continue as if the value
+had never been modified.
 Thread A will then write its own new version of the value, or just be working off an old version, resulting in
 incorrect results.</p>
 <p>Nudging the programmer (that's you!), to better define your program, not just line-by-line, but as a whole,
@@ -930,12 +931,13 @@ frameworks like Pytorch can greatly speed up your code, if you help it along.</p
 <p>For a more in-depth explanation on the memory hierarchy see this chapter on
 <a href="https://www.cs.umd.edu/~meesh/411/CA-online/chapter/memory-hierarchy-design-basics/index.html">Memory Hierarchy Design</a>.</p>
 <h2 id="expanding-the-memory-hierarchy">Expanding the Memory Hierarchy</h2>
-<p>To top it off we can expand this memory hierarchy with additional components, such as accelerators, networking and the internet!
-Let's start off with the GPU. It is an accelerator originally made for just computing graphics as fast as 
-possible. It has a whole bunch of threads in it, meaning it can do very parallel work, like making every pixel 
-of an image slightly darker. At the end of the 2000's, Nvidia saw a bunch of academics hacking the GPU to do 
+<p>To top it off we can expand this memory hierarchy with additional components, such as accelerators, networking
+and the internet!
+Let's start off with the GPU. It is an accelerator originally made for just computing graphics as fast as
+possible. It has a whole bunch of threads in it, meaning it can do very parallel work, like making every pixel
+of an image slightly darker. At the end of the 2000's, Nvidia saw a bunch of academics hacking the GPU to do
 stuff like fast fourier transforms using the fragment shader. Don't worry about what that is, but shader
-basically means GPU program. So Nvidia releases CUDA as a pure compute (no graphics) API for using your GPU. 
+basically means GPU program. So Nvidia releases CUDA as a pure compute (no graphics) API for using your GPU.
 It only runs on Nvidia GPU's though. Transfering memory from the CPU to the GPU and back, can be a
 quite explicit process. Not only does the CPU need to reserve some memory for copying to the GPU,
 the CPU and GPU have to be synchronized which can take a while, and then the data is usually transferred
