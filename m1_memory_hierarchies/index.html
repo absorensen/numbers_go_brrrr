@@ -884,13 +884,15 @@ Or the functional programming style used by
 <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX</a> in conjunction with
 the <a href="https://www.tensorflow.org/xla">XLA compiler</a>.</p>
 <h2 id="memory-hierarchies">Memory Hierarchies</h2>
-<p>So what is memory anyways? Memory in a compute context is represented in several stages, all having their own capacity and speed.
-In order from smallest capacity and highest speed to largest capacity and lowest speed we have the registers, the
-L1-L3 caches, the main memory (RAM) and the disks.
-The registers are the fastest and smallest of the bunch. They reside right next to the parts of the CPU that does the computations.
-As a rule of thumb, most of the variables you declare in the scope of your function, unless there is A LOT of variables,
-will be kept in registers. The caches and the main memory all work in conjunction with each other as an invisible
-way of speeding up the accesses to the main memory.</p>
+<p>So what is memory anyways? Memory in a compute context is represented in several stages, all having
+their own capacity and speed.
+In order from smallest capacity and highest speed to largest capacity and lowest speed we have
+the registers, the L1-L3 caches, the main memory (RAM) and the disks.
+The registers are the fastest and smallest of the bunch. They reside right next to the parts of
+the CPU that does the computations.
+As a rule of thumb, most of the variables you declare in the scope of your function, unless
+there is A LOT of variables, will be kept in registers. The caches and the main memory all work
+in conjunction with each other as an invisible way of speeding up the accesses to the main memory.</p>
 <figure>
 <p><a class="glightbox" href="../figures/memory_hierarchy_PLACEHOLDER.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/memory_hierarchy_PLACEHOLDER.png" width="500" /></a></p>
 <figcaption>
@@ -929,15 +931,17 @@ frameworks like Pytorch can greatly speed up your code, if you help it along.</p
 <a href="https://www.cs.umd.edu/~meesh/411/CA-online/chapter/memory-hierarchy-design-basics/index.html">Memory Hierarchy Design</a>.</p>
 <h2 id="expanding-the-memory-hierarchy">Expanding the Memory Hierarchy</h2>
 <p>To top it off we can expand this memory hierarchy with additional components, such as accelerators, networking and the internet!
-Let's start off with the GPU. It is an accelerator originally made for just computing graphics as fast as possible. It has a
-whole bunch of threads in it, meaning it can do very parallel work, like making every pixel of an image slightly darker.
-At the end of the 2000's, Nvidia saw a bunch of academics hacking the GPU to do stuff like fast fourier transforms using the fragment shader.
-Don't worry about what that is, but shader basically means GPU program. So Nvidia releases CUDA as a pure compute (no graphics) API
-for using your GPU. It only runs on Nvidia GPU's though. Transfering memory from the CPU to the GPU and back, can be a quite explicit
-process. Not only does the CPU need to reserve some memory for copying to the GPU, the CPU and GPU have to be synchronized which
-can take a while, and then the data is usually transferred across the slower (compared to memory and cache) PCIe bus. It is
-certainly one you should always be thinking about if you are using a GPU for your program. Neglecting transfers is one
-of the fastest ways to your code the slowest. The GPU also has its
+Let's start off with the GPU. It is an accelerator originally made for just computing graphics as fast as 
+possible. It has a whole bunch of threads in it, meaning it can do very parallel work, like making every pixel 
+of an image slightly darker. At the end of the 2000's, Nvidia saw a bunch of academics hacking the GPU to do 
+stuff like fast fourier transforms using the fragment shader. Don't worry about what that is, but shader
+basically means GPU program. So Nvidia releases CUDA as a pure compute (no graphics) API for using your GPU. 
+It only runs on Nvidia GPU's though. Transfering memory from the CPU to the GPU and back, can be a
+quite explicit process. Not only does the CPU need to reserve some memory for copying to the GPU,
+the CPU and GPU have to be synchronized which can take a while, and then the data is usually transferred
+across the slower (compared to memory and cache) PCIe bus. It is certainly one you should always be thinking
+about if you are using a GPU for your program. Neglecting transfers is one of the fastest ways to your code
+the slowest. The GPU also has its
 <a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">own memory hierarchy</a>.</p>
 <figure>
 <p><a class="glightbox" href="../figures/Full-H100-GPU-with-144-SMs-1024x457.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/Full-H100-GPU-with-144-SMs-1024x457.png" width="500" /></a></p>
@@ -946,8 +950,8 @@ of the fastest ways to your code the slowest. The GPU also has its
 Image credit </a>
 </figcaption>
 </figure>
-<p>As you can see, this being representative of the Nvidia H100, there are 2 L2 caches and a whole bunch of smaller sections.
-Each of these smaller sections are a streaming multiprocessor (SM).</p>
+<p>As you can see, this being representative of the Nvidia H100, there are 2 L2 caches and a
+whole bunch of smaller sections. Each of these smaller sections are a streaming multiprocessor (SM).</p>
 <figure>
 <p><a class="glightbox" href="../figures/H100-Streaming-Multiprocessor-SM-625x869.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/H100-Streaming-Multiprocessor-SM-625x869.png" width="500" /></a></p>
 <figcaption>
@@ -956,12 +960,16 @@ Image credit </a>
 </figcaption>
 </figure>
 <p>Here we have an L1 data cache and shared memory (more on shared memory later), shared between 128 threads.
-Each of these warps, Nvidia terminology for one of these four sections, have 32 threads with an L0 instruction cache, which is not matched for data. Additional accelerators exist, such as the neural engine featured in quite a lot of Apple products, and dedicated image and video processing hardware.</p>
-<p>Finally, you can even go outside of your current system. Two CPU's and eight GPU's could be tightly interconnected in a node, such
-as in the <a href="https://www.nvidia.com/en-us/data-center/dgx-a100/">Nvidia DGX system</a>. In the case of a DGX system everything is tightly
-interconnected with specialized hardware to minimize the time it takes to transfer data from one component to the other.</p>
-<p>Taking things even further we could be sending data between more than one node, requiring yet another layer of communication, which
-is going to be slower than communicating internally in your CPU or in your node.
+Each of these warps, Nvidia terminology for one of these four sections, have 32 threads with an L0 instruction
+cache, which is not matched for data. Additional accelerators exist, such as the neural engine featured in
+quite a lot of Apple products, and dedicated image and video processing hardware.</p>
+<p>Finally, you can even go outside of your current system. Two CPU's and eight GPU's could be tightly
+interconnected in a node, such as in the
+<a href="https://www.nvidia.com/en-us/data-center/dgx-a100/">Nvidia DGX system</a>. In the case of a DGX system
+everything is tightly interconnected with specialized hardware to minimize the time it takes to
+transfer data from one component to the other.</p>
+<p>Taking things even further we could be sending data between more than one node, requiring yet another layer of
+communication, which is going to be slower than communicating internally in your CPU or in your node.
 When running on clusters with multiple nodes, the data you work from might have to be fetched from one
 or more storage nodes, which keeps your data between batch jobs. Taking neural network training as an example,
 if your data set is small enough to keep fully on the compute node you only need to load the dataset to the
