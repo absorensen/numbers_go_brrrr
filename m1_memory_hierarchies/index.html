@@ -12,10 +12,10 @@
         <link rel="prev" href="../m0_introduction/s4_exercises/">
       
       
-        <link rel="next" href="s0_memory_hierarchies_and_the_cpu/">
+        <link rel="next" href="s0_soft_memory_hierarchies/">
       
       <link rel="icon" href="../figures/favicon.png">
-      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.18">
+      <meta name="generator" content="mkdocs-1.4.3, mkdocs-material-9.1.19">
     
     
       
@@ -23,7 +23,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.26e3688c.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.eebd395e.min.css">
       
         
         <link rel="stylesheet" href="../assets/stylesheets/palette.ecc896b0.min.css">
@@ -486,8 +486,8 @@
   
   
     <li class="md-nav__item">
-      <a href="s0_memory_hierarchies_and_the_cpu/" class="md-nav__link">
-        S0 - Memory Hierarchies and the CPU
+      <a href="s0_soft_memory_hierarchies/" class="md-nav__link">
+        S0 - Soft Memory Hierarchies
       </a>
     </li>
   
@@ -870,14 +870,14 @@ Image credit</a>
 <p>The further you move from simple, albeit heavy, problems such as a matrix-matrix problem to more heterogenous
 problems, such as training a neural network, the harder it can be to get good performance. How do you know or
 reason about what is where when in complex systems like
-<a href="https://pytorch.org/">Pytorch</a>, <a href="https://www.tensorflow.org/">Tensorflow</a>,
+<a href="https://pytorch.org/">PyTorch</a>, <a href="https://www.tensorflow.org/">Tensorflow</a>,
 <a href="https://jax.readthedocs.io/en/latest/">JAX</a>, <a href="https://numba.pydata.org/">Numba</a> and
 <a href="https://www.taichi-lang.org/">Taichi</a>. All of these frameworks, compilers and domain specific languages have to
 nudge you in different directions to give them the restrictions and hints needed to let them run your code
 as efficiently as possible. Nudges like defining your neural network as a computational graph. If you're unsure
 about what a computational graph is, the basic version is that you define a bunch of operations and how they relate
 to each other. Like input layer, followed by linear layer, followed by ReLU. But more on that later! Other advances
-include Pytorch, after several attempts with various degrees of success, finally introducing a
+include PyTorch, after several attempts with various degrees of success, finally introducing a
 <a href="https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html">compiler</a> for optimizing the
 neural network you just defined.
 Or the functional programming style used by
@@ -938,7 +938,7 @@ An example view of what CPU memory hierarchy can look like with 8 cores.
 </figure>
 <p>Nudging the programmer (that's you!), to better define your program, not just line-by-line, but as a whole,
 to constrain these sorts of contentions, is one of the myriad reasons why
-frameworks like Pytorch can greatly speed up your code, if you help it along.</p>
+frameworks like PyTorch can greatly speed up your code, if you help it along.</p>
 <p>For a more in-depth explanation on the memory hierarchy see this chapter on
 <a href="https://www.cs.umd.edu/~meesh/411/CA-online/chapter/memory-hierarchy-design-basics/index.html">Memory Hierarchy Design</a>.</p>
 <h2 id="expanding-the-memory-hierarchy">Expanding the Memory Hierarchy</h2>
@@ -1010,7 +1010,7 @@ all programs and it is worth spending some time on having at least a tenuous gra
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 18, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 19, 2023</span>
       
         <br>
         Created:
@@ -1056,13 +1056,13 @@ all programs and it is worth spending some time on having at least a tenuous gra
         
         
           
-          <a href="s0_memory_hierarchies_and_the_cpu/" class="md-footer__link md-footer__link--next" aria-label="Next: S0 - Memory Hierarchies and the CPU" rel="next">
+          <a href="s0_soft_memory_hierarchies/" class="md-footer__link md-footer__link--next" aria-label="Next: S0 - Soft Memory Hierarchies" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S0 - Memory Hierarchies and the CPU
+                S0 - Soft Memory Hierarchies
               </div>
             </div>
             <div class="md-footer__button md-icon">

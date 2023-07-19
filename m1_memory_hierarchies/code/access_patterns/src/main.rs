@@ -1,0 +1,90 @@
+use std::time::{Instant, Duration};
+
+use rand::rngs::ThreadRng;
+use rand::Rng;
+
+fn main() {
+    run_access_tests();
+}
+
+fn run_access_tests() {
+    let iteration_count: usize = 100_000;
+    let data_count: i32 = 100;
+    run_access_test(iteration_count, data_count);
+
+    let iteration_count: usize = 100_000;
+    let data_count: i32 = 1000;
+    run_access_test(iteration_count, data_count);
+
+    let iteration_count: usize = 100_000;
+    let data_count: i32 = 10_000;
+    run_access_test(iteration_count, data_count);
+
+    let iteration_count: usize = 100_000;
+    let data_count: i32 = 100_000;
+    run_access_test(iteration_count, data_count);
+}
+
+fn run_access_test(iteration_count: usize, data_count: i32) {
+    let mut data: Vec<i32> = (0..data_count).collect();
+    let mut sum: Vec<i32> = vec![0; 1];
+
+    println!("RUNNING ACCESS TESTS WITH {} data elements for {} iterations!", data_count, iteration_count);
+    println!("=============================================================");
+    println!("Sequential access: {} ms", sequential(&mut data, &mut sum, iteration_count));
+
+    let stride: usize = 5;
+    println!("Strided access ({}): {} ms", stride, strided(&mut data, &mut sum, iteration_count, stride));
+
+    let stride: usize = 17;// We do this to have the stride be more than the size of a cache line
+    println!("Strided access ({}): {} ms", stride, strided(&mut data, &mut sum, iteration_count, stride));
+
+    let stride: usize = 1; // And once just to prove that this is just about equal to sequential, despite a bit more work.
+    println!("Strided access ({}): {} ms", stride, strided(&mut data, &mut sum, iteration_count, stride));
+
+    println!("Random access: {} ms", random(&mut data, &mut sum, iteration_count));
+
+    println!("");
+}
+
+fn sequential(data: &mut Vec<i32>, sum: &mut Vec<i32>, iteration_count: usize) -> f64 {
+    let now: Instant = Instant::now();
+    for _ in 0..iteration_count {
+        sum[0] = 0;
+        for index in 0..data.len() {
+            sum[0] += data[index];
+            data[index] *= 3;
+        }   
+    }
+    let elapsed_time: Duration = now.elapsed();
+    elapsed_time.as_millis() as f64
+}
+
+fn strided(data: &mut Vec<i32>, sum: &mut Vec<i32>, iteration_count: usize, stride: usize) -> f64 {
+    let now: Instant = Instant::now();
+    for _ in 0..iteration_count {
+        sum[0] = 0;
+        for index in 0..data.len() {
+            let index: usize = (index * stride) % data.len(); 
+            sum[0] += data[index];
+            data[index] *= 3;
+        }    
+    }
+    let elapsed_time: Duration = now.elapsed();
+    elapsed_time.as_millis() as f64
+}
+
+fn random(data: &mut Vec<i32>, sum: &mut Vec<i32>, iteration_count: usize) -> f64 {
+    let mut rng: ThreadRng = rand::thread_rng();
+    let now: Instant = Instant::now();
+    for _ in 0..iteration_count {
+        sum[0] = 0;
+        for _ in 0..data.len() {
+            let index: usize = rng.gen_range(0..data.len()); 
+            sum[0] += data[index];
+            data[index] *= 3;
+        }    
+    }
+    let elapsed_time: Duration = now.elapsed();
+    elapsed_time.as_millis() as f64
+}
