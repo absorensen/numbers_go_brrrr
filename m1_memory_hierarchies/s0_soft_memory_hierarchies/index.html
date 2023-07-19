@@ -1122,7 +1122,7 @@
 <figure>
 <p><a class="glightbox" href="../../figures/amd_athlon_hierarchy.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/amd_athlon_hierarchy.png" width="600" /></a></p>
 <figcaption>
-Memory hierarchy of the AMD Athlon. 
+Memory hierarchy of the AMD Athlon.
 <a href="https://en.wikipedia.org/wiki/File:Hwloc.png">
 Image credit </a>
 </figcaption>
@@ -1137,31 +1137,31 @@ First off we will start bridging hardware and software.</p>
 Why? Because a pointer is basically just an address. Anti-climactic, I know, but as one of the core building
 blocks of computing, we need to take a bit of time to look at what it is.
 If you have ever tried programming in C, you will invariably have been introduced to the pointer.
-The examples in this heading will be in C, but don't worry, we won't even define an entire function. 
+The examples in this heading will be in C, but don't worry, we won't even define an entire function.
 It is rife with opportunities for making trouble, to a degree where in Rust, which is made to be a
 reasonably safe language, you can't directly interact with a pointer unless you have an unsafe region
 around the pointer interaction. Yikes! On the other hand, you can get some of the most extreme performance
 by using raw pointers. So let's take a look!</p>
 <h3 id="allocation">Allocation</h3>
 <p>First of all, how do we get a pointer? Please note that checks for whether we have been given a valid pointer
-have been omitted. In the example below we get a pointer to a piece of memory which can hold up to 42 elements.
+have been omitted. In the example below we get a pointer to a piece of memory which can hold up to 42 elements.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">integer_array</span><span class="p">;</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span></code></pre></div>
-Let's break it down! 
+<p>Let's break it down!</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span></code></pre></div>
-We assign the number of elements to a variable in order to not have magic numbers.
+<p>We assign the number of elements to a variable in order to not have magic numbers.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">integer_array</span><span class="p">;</span>
 </span></code></pre></div>
-This is actually bad practice. We have an uninitialized variable here. We could try and dereference the pointer,
+<p>This is actually bad practice. We have an uninitialized variable here. We could try and dereference the pointer,
 more on that in just a second, and try to access memory which we either don't have the right to access
 or which doesn't exist. The pointer at this point is likely to either be 0 or complete garbage.
-<code>int*</code> reads as "a pointer to integers" or "address of one or more integers".
+<code>int*</code> reads as "a pointer to integers" or "address of one or more integers".</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span></code></pre></div>
-We ask for a memory allocation (<a href="https://en.cppreference.com/w/c/memory/malloc">malloc</a>) from the
+<p>We ask for a memory allocation (<a href="https://en.cppreference.com/w/c/memory/malloc">malloc</a>) from the
 operating system. What we get back is just a runtime dependent address.
 The address itself is what is known as a <a href="https://en.wikipedia.org/wiki/Word_(computer_architecture)">word</a>.
 The size of the word dictates how much memory you can address in a system. If you have a 32-bit, 4 bytes, word
@@ -1181,7 +1181,7 @@ It is an address where 168 bytes allocated for us begins. What changes from <cod
 how we dereference the pointer and what happens when we do.</p>
 <h3 id="dereferencing">Dereferencing</h3>
 <p>A pointer is a reference to another place in memory. Quite literally it is just a number.
-Dereferencing is a term for following the address to what it points to.
+Dereferencing is a term for following the address to what it points to.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">integer_array</span><span class="p">;</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
@@ -1192,16 +1192,16 @@ Dereferencing is a term for following the address to what it points to.
 </span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">integer_array</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="o">*</span><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span></code></pre></div>
-In this example there's three different ways of dereferencing shown.
+<p>In this example there's three different ways of dereferencing shown.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="o">*</span><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span></code></pre></div>
-In C, we use the <code>*</code> operator in front of the pointer to follow the address to the memory.
+<p>In C, we use the <code>*</code> operator in front of the pointer to follow the address to the memory.
 The base pointer we got from <code>malloc</code> is the address of the first of the 42 elements in our memory.
 Another way of seeing it is that <code>integer_array</code> holds an address, let's say... 42. Our program
-now asks the CPU to write to the address 42, the number 0. So far so good. But then this happens.
+now asks the CPU to write to the address 42, the number 0. So far so good. But then this happens.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="o">*</span><span class="p">(</span><span class="n">integer_array</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </span></code></pre></div>
-This is one of the myriad reasons why we needed to have an <code>int*</code>. If the address in <code>integer_array</code> is
+<p>This is one of the myriad reasons why we needed to have an <code>int*</code>. If the address in <code>integer_array</code> is
 42, to get the next integer element, we don't go to the address 43, which would just be the second byte of the
 first element. No, we want to go to the address 46, where the second element in the array begins. Since
 <code>integer_array</code> has the type <code>int*</code>, we have defined that each element is 4 bytes and we now have a
@@ -1211,17 +1211,17 @@ as trying to access an element outside of our allocation will be catastrophic, a
 <a href="https://en.wikipedia.org/wiki/Segmentation_fault">segmentation fault</a>. So, no <code>integer_array[42]</code>.
 Back to the line on hand. We put our <code>integer_array</code> in a parentheses to make sure the
 dereferencing doesn't happen until after we have changed the address. So we increment the base pointer (42)
-with a stride of 4 (46), and then dereference (*) to assign a value of 1 to the second element in our array.
+with a stride of 4 (46), and then dereference (*) to assign a value of 1 to the second element in our array.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">integer_array</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 </span></code></pre></div>
-A short hand for the previous line, is this line. <code>integer_array[2]</code> is shorthand
-for <code>*(integer_array + 2)</code>.
+<p>A short hand for the previous line, is this line. <code>integer_array[2]</code> is shorthand
+for <code>*(integer_array + 2)</code>.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">integer_array</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="o">*</span><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span></code></pre></div>
-With these lines we manipulate the base pointer itself, by reassigning a value of the base address (42), incremented by 3 (54), before doing a simple dereferencing and assigning a value of 3. This is not a recommended
+<p>With these lines we manipulate the base pointer itself, by reassigning a value of the base address (42), incremented by 3 (54), before doing a simple dereferencing and assigning a value of 3. This is not a recommended
 way of doing things. How do we ensure that we always have the pointer to the base address?
-The least you can do is to copy the base pointer and increment that. Why?
+The least you can do is to copy the base pointer and increment that. Why?</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
@@ -1233,13 +1233,13 @@ The least you can do is to copy the base pointer and increment that. Why?
 </span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="o">*</span><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="n">integer_array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 </span></code></pre></div>
-Because we need the address to give the memory back to the operating system.</p>
+<p>Because we need the address to give the memory back to the operating system.</p>
 <h3 id="deallocation">Deallocation</h3>
 <p>Once we are done with the section of memory we have so graciously been granted by the operating system,
 we should remember to return it to the operating system. If we don't we might get a memory leak,
 which is when our program uses more and more memory until the program is stopped or crashes.
 The operating system might keep track of the memory though and clean up once our less than stellar code terminates.</p>
-<p>In C, we can return our memory like this, using the <a href="https://en.cppreference.com/w/c/memory/free">free</a> function.
+<p>In C, we can return our memory like this, using the <a href="https://en.cppreference.com/w/c/memory/free">free</a> function.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
@@ -1253,11 +1253,11 @@ The operating system might keep track of the memory though and clean up once our
 </span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
 </span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="n">free</span><span class="p">(</span><span class="n">integer_array</span><span class="p">);</span>
 </span></code></pre></div>
-Spot the error?</p>
+<p>Spot the error?</p>
 <p>We had two pointers and forgot to <code>free</code> using the base pointer, <code>base_integer_array</code>.
 This is <a href="https://en.wikipedia.org/wiki/Undefined_behavior">undefined behavior</a>,
 which means that there are literally no definitions of what will happen.
-It is really bad. What we should have done was this.
+It is really bad. What we should have done was this.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
@@ -1271,7 +1271,7 @@ It is really bad. What we should have done was this.
 </span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
 </span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="n">free</span><span class="p">(</span><span class="n">base_integer_array</span><span class="p">);</span>
 </span></code></pre></div>
-Note that <code>free</code> takes a <code>void*</code>. Our <code>int*</code> is cast, without us asking explicitly, to a <code>void*</code>.
+<p>Note that <code>free</code> takes a <code>void*</code>. Our <code>int*</code> is cast, without us asking explicitly, to a <code>void*</code>.
 The operating system just wants an address. This allows the operating system to mark the section,
 denoted by the start of the section, and probably by its own record of the length.
 Note also that the address (42) held by <code>base_integer_array</code> is still in play.
@@ -1279,7 +1279,7 @@ It is what is known as a 'dangling pointer'.
 We could try to dereference it after giving it to <code>free</code>, which is the notorious use after free.
 This is also undefined behavior as we try to access memory that is no longer accessible by our program.
 What we could do is to set <code>base_integer_array</code> and <code>integer_array</code> to new values to denote
-that they were invalid.
+that they were invalid.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
@@ -1295,13 +1295,13 @@ that they were invalid.
 </span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
 </span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
 </span></code></pre></div>
-This does not however, stop us from trying to dereference those pointers, but it does allow for a more
-general check to see whether the pointers are still valid.
+<p>This does not however, stop us from trying to dereference those pointers, but it does allow for a more
+general check to see whether the pointers are still valid.</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">){</span>
 </span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">base_integer_array</span><span class="p">);</span>
 </span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">}</span>
 </span></code></pre></div>
-If this all seems a bit scary, that's because it is.
+<p>If this all seems a bit scary, that's because it is.
 Anytime a system depends on humans just not making any errors and being
 rockstars at everything, it's a dangerous system and you should be on guard.</p>
 <h2 id="access-patterns">Access Patterns</h2>
@@ -1314,20 +1314,20 @@ As in, the L3, L2 and L1 cache all receive an entire cache line. That cache line
 <p>What is in the cache line is dictated by
 <a href="https://en.algorithmica.org/hpc/cpu-cache/alignment/">cache line alignment</a>.
 If for example you had made a struct (it's like an object, but just the data) like the one below
-and you elected to turn off the auto-alignment with <code>__attribute__ ((packed))</code>
+and you elected to turn off the auto-alignment with <code>__attribute__ ((packed))</code></p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__attribute__</span><span class="w"> </span><span class="p">((</span><span class="n">packed</span><span class="p">))</span><span class="w"> </span><span class="n">my_struct</span>
 </span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="p">{</span><span class="w"> </span>
 </span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">first</span><span class="p">;</span><span class="w"> </span><span class="c1">// 2 bytes </span>
 </span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">second</span><span class="p">;</span><span class="w"> </span><span class="c1">// 4 bytes</span>
 </span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="p">}</span>
 </span></code></pre></div>
-and you made allocated an array of <code>my_struct</code> like so
+<p>and you made allocated an array of <code>my_struct</code> like so</p>
 <div class="language-c highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 </span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">my_struct</span><span class="o">*</span><span class="w"> </span><span class="n">structs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_struct</span><span class="p">));</span><span class="w"> </span><span class="c1">// 4 * 6</span>
 </span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span></code></pre></div>
-if you had an alignment of say, 8 bytes, the last two lines would result in 2 cache lines being retrieved.</p>
+<p>if you had an alignment of say, 8 bytes, the last two lines would result in 2 cache lines being retrieved.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/cache_alignment.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment.png" width="600" /></a></p>
 <figcaption>
@@ -1336,7 +1336,7 @@ Bad cache alignment.
 </figure>
 <p>Which is not good. What we could do instead would be to pad our struct a little bit,
 which is the default behavior in C.</p>
-<p><div class="language-c highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">my_struct</span>
+<div class="language-c highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">my_struct</span>
 </span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="p">{</span><span class="w"> </span>
 </span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">first</span><span class="p">;</span><span class="w"> </span><span class="c1">// 2 bytes </span>
 </span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">_pad</span><span class="p">;</span><span class="w"> </span><span class="c1">// 2 bytes</span>
@@ -1351,7 +1351,7 @@ which is the default behavior in C.</p>
 </span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span></code></pre></div>
-Then our alignment becomes this.</p>
+<p>Then our alignment becomes this.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/cache_alignment_fixed.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment_fixed.png" width="600" /></a></p>
 <figcaption>
