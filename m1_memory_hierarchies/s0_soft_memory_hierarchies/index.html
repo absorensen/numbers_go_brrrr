@@ -1584,7 +1584,7 @@ can even dynamically decide to see the matrix in a different way, for example by
 to swap the number of columns and rows. The formula to access each element is to multiply
 the index by the dimensions that come after it and add it to the next index.
 For example with three dimensions <code>x</code>, <code>y</code> and <code>z</code>, the index would be
-calculated by </p>
+calculated by</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">x_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">z_size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">z_size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">z_index</span>
 </span></code></pre></div>
 <p>and for the two dimensions <code>x</code> and <code>y</code>, we would access the 2-dimensional matrix with</p>
