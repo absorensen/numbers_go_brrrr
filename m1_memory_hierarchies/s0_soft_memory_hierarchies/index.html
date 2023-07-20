@@ -561,29 +561,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#a-heap-of-trouble" class="md-nav__link">
-    A Heap of Trouble
+  <a href="#stacking-heaps-of-trouble" class="md-nav__link">
+    Stacking Heaps of Trouble
   </a>
-  
-    <nav class="md-nav" aria-label="A Heap of Trouble">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#stack" class="md-nav__link">
-    Stack
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#heap" class="md-nav__link">
-    Heap
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1011,29 +991,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#a-heap-of-trouble" class="md-nav__link">
-    A Heap of Trouble
+  <a href="#stacking-heaps-of-trouble" class="md-nav__link">
+    Stacking Heaps of Trouble
   </a>
-  
-    <nav class="md-nav" aria-label="A Heap of Trouble">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#stack" class="md-nav__link">
-    Stack
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#heap" class="md-nav__link">
-    Heap
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -1306,8 +1266,9 @@ general check to see whether the pointers are still valid.</p>
 Anytime a system depends on humans just not making any errors and being
 rockstars at everything, it's a dangerous system and you should be on guard.</p>
 <h2 id="access-patterns">Access Patterns</h2>
-<p>One important part of you understanding memory is increasing your understanding of what it takes to get valid,
-predictable, boring code. Which is the best kind. The other is for you to get performant code. An absolutely
+<p>While it is import that you increase your understanding of what it takes to get valid,
+predictable, boring code. Which is the best kind. What the guide is most interested in
+is for you to write more performant code. An absolutely
 essential part of getting performant code is how we access the underlying memory. Yes, we can address
 memory a single byte at a time with <a href="https://en.wikipedia.org/wiki/Byte_addressing">byte addressing</a>.
 But, whenever we ask for a byte, the memory is transported as a cache line through the memory hierarchy.
@@ -1362,39 +1323,294 @@ Better cache alignment.
 <p>And we now only involve a single cache line. Which to remind you, is quite a bit smaller than the
 more standard 64 byte cache line. Now that we have that in place, let's take a look at some of the ways we can
 run through an array of values.</p>
-<p>Sequential, Strided, Random
-Some code located at <code>m1_memory_hierarchies/code/access_patterns/</code> or
+<p>Now that we have learned a bit about cache lines, we are equipped to talk actually talk about access patterns.
+I have made some Rust code for you which is located at <code>m1_memory_hierarchies/code/access_patterns/</code> or
 <a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/tree/main/m1_memory_hierarchies/code/access_patterns">online</a>.</p>
+<p>First off is sequential access. It is the one we usually strive for. We start at one end and go through every
+element until the end, from index 0 to the end.
+If everything is cache aligned, great! If not, the cost of not being aligned will
+probably be as low as it can be, when we aren't reusing any retrieved elements. If a value, say a
+4-byte integer is spread across two cache lines, that specific value may have to be reconstructed
+which can be expensive.</p>
+<p>Next up is strided access. With strided access we only read every N elements. Based on the size of the stride
+and the size of the elements, it might result in each cache line only being used for a single element.
+In the implementations in the code there is both a non-wrapping and a wrapping stride implementation, 
+meaning once we step over the end we wrap back around using a modulo operator.
+This is to ensure that it accesses the same amount of elements as the sequential access.
+With the non-wrapping stride we only access every N elements, but we also end up doing
+much less work.</p>
+<p>Finally, we have random access. This is basically the worst case scenario. We randomly select an element
+to access the same amount of times as the number of elements in the array.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/access_patterns.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/access_patterns.png" width="600" /></a></p>
+<p><a class="glightbox" href="../../figures/access_patterns.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/access_patterns.png" width="400" /></a></p>
 <figcaption>
 Timing access patterns in Rust.
 </figcaption>
 </figure>
-<h2 id="a-heap-of-trouble">A Heap of Trouble</h2>
-<h3 id="stack">Stack</h3>
-<ul>
-<li>Function Call -&gt; Capture local variables</li>
-<li>Recursion -&gt; Stack Overflow</li>
-</ul>
-<h3 id="heap">Heap</h3>
+<p>Given that we just talked about cache lines, most of these numbers make good sense.
+Random access is catastrophic, wrapping strided access is bad, but most interestingly
+non-wrapping strided access, which actually accesses less elements than the others,
+is slower than sequential access for strides 2 and 3. With stride 4, where we are
+only accessing one fourth the elements of the sequential access pattern, we begin to
+get faster. But what do you know, sometimes the nice and predictable path,
+which might seem like we are doing more work actually runs faster. What a time to be alive!</p>
+<h2 id="stacking-heaps-of-trouble">Stacking Heaps of Trouble</h2>
+<p>If you aren't familiar with the <a href="https://en.wikibooks.org/wiki/Data_Structures/Stacks_and_Queues">stack and queue</a>
+data structure types, this would be a good time to follow the link and familiarize yourself.</p>
+<p>The stack is not just a data structure, but also a core part of how all of the variables
+in your local scope are kept track of when the program enters into a function. The stack
+is a designated part of the memory allocated to your program. It starts at size 0.
+Once you enter a function, each local variable is pushed unto the stack. The stack
+generally requires that sizes are known at compile time. Once you call a function
+from within your function, the local variables are no longer accessible to the function
+you just entered, but once you return from that function, they are.
+When you enter that function, a pointer to where you called the function from is added
+to the stack and that function has its own local variables.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/call_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/call_stack.png" width="500" /></a></p>
+<figcaption>
+The call stack.
+<a href="https://en.wikipedia.org/wiki/Stack-based_memory_allocation">
+Image credit </a>
+</figcaption>
+</figure>
+<p>If you push enough of these frames unto the stack, you can get a stack overflow.
+This can for example happen if you write a recursive program that doesn't terminate.
+In general, using variables from the stack will be much faster than using variables
+from the heap. But we also can't return pointers to a stack variable as it might disappear
+or be overwritten at any moment.</p>
+<p>The heap, in this context, is not the actual data structure known as a heap.
+Instead it is a bunch of unstructured memory living in the
+<a href="https://courses.grainger.illinois.edu/cs225/fa2021/resources/stack-heap/">same reserved space</a>
+as the stack. </p>
+<figure>
+<p><a class="glightbox" href="../../figures/stack_and_heap.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/stack_and_heap.png" width="500" /></a></p>
+<figcaption>
+The stack and the heap sharing memory.
+<a href="https://courses.grainger.illinois.edu/cs225/fa2021/resources/stack-heap/">
+Image credit </a>
+</figcaption>
+</figure>
+<p>Thus if either one becomes too big they begin encroaching on the other.
+Everytime you ask for dynamically sized memory, it is allocated on the heap.
+This is a slow process and you have to remember to deallocate the memory to not
+get a memory leak. But the memory survives across functions now.
+If you remember the pointer examples from earlier - the memory segment we asked for
+lived on the heap, whereas the pointer (address) itself lived on the stack.
+We are allowed to keep the pointer on the stack because a pointer is a known size
+at compile time. We can also have arrays on the stack, but they generally need to
+have a size known at compile time. Moving a pointer from place to place, is also
+a lot cheaper than copying every single element of a large array every time
+ownership changes hands.</p>
 <h2 id="dynamic-array">Dynamic Array</h2>
-<p>A bit like a stack
-Maybe some of this should be moved to vector games  </p>
-<ul>
-<li>The struct</li>
-<li>Allocation</li>
-<li>Pop -&gt; Rust doesn't shrink, but .shrink_to_fit(), does C++ shrink?</li>
-<li>Reallocate</li>
-<li>Free</li>
-</ul>
-<p>Remember the more detailed description in the level 3 section Virtualized Memory Hierarchy.<br />
-Confusingly, there is also a data structure called heap. This heap is not the same.  </p>
+<p>The dynamic array is ubiquitous in C++ and Rust. It is quite often what we think
+about, when we think of arrays in those languages. C++ has
+<a href="https://en.cppreference.com/w/cpp/container/vector"><code>std::vector&lt;T&gt;</code></a>
+and Rust has <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html"><code>Vec&lt;T&gt;</code></a>.
+I highly recommend reading the first parts of the Rust Vec page.
+They are basically the same though and I will refer to them as vector from here on out.
+A dynamic array bundles up the behavior we saw earlier with the pointers,
+allocations and deallocations, but adds the ability to automatically create
+a new array that is larger (usually by a factor of 2) than the old array and move the
+old values over to the new array. The vector has three values. How much memory is in
+its allocation, <code>capacity</code>, how much of the memory is currently in use, <code>length</code>, and a pointer to
+the data which lives on the heap.
+The vector itself can live on the stack and make sure to free the memory it points to
+once the vector is dropped from the stack.
+The vector supports quite a few operations, but the core ones are <code>push</code>,
+<code>pop</code>, array access <code>[]</code>, <code>reserve</code> and <code>shrink_to_fit</code>.</p>
+<p>Let's start off though with how we allocate a vector (in Rust).</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
+</span></code></pre></div>
+<p>In this case we should get a completely empty vector. It will have a default <code>capacity</code>, because
+we didn't specify any capacity it should start with. Let's just say this <code>capacity</code> is 4.
+However, if we want to print the current size</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">());</span>
+</span></code></pre></div>
+<p>we would get an output of 0! We have a <code>capacity</code> of 4, but a <code>size</code> of 0. Meaning,
+we have 4 integers of 4 bytes each on the heap, but they are unitialized (containing garbage values),
+and we have not used any of them. If we however use <code>push</code> to add some actual data and then print </p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">());</span>
+</span></code></pre></div>
+<p>we would print the number 2. Now we have live, initialized values on the heap at indices 0 and 1.
+We can print them by accessing the values directly.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">());</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></code></pre></div>
+<p>In this case we print 2, 0 and 1. Push finds the first unused index, which is conveniently indicated
+by the <code>size</code> value, increments <code>size</code> and puts the value into the designated index. If we pushed
+5 values however, once we reached the 5th push, assuming the default capacity was 4, we would see the 
+5th push taking a lot of time compared to the other 4 pushes. In this case the vector would allocate
+a new memory segment on the heap with a size of 8, copy all of the values from elements 0-3 and then add
+the 5th value to the vector. Conversely, we can also use the <code>pop</code> function.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="n">data</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">());</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+</span></code></pre></div>
+<p>Now we end up printing the values 1 and 0. In theory, a dynamic array should move to a smaller array at some point.
+Such as, when at a quarter of the reserved capacity. But in practice, Rust doesn't move to a smaller array
+unless explicitly asked to do so using the ´´´shrink_to_fit´´´ function. In that case it will allocate and move
+to an array that is exactly the size of <code>size</code>, thus also making <code>capacity</code> the same. In practice,
+you should only do this for large arrays which are unlikely to see more elements added to it.</p>
+<p>But, in the case of knowing how many elements we actually we want to put in our vector, or at least an expcected
+minimum amount, we can just create the vector in a way where it has already reserved that amount of capcity.
+If you can at all do this, it is one of the easiest ways to get better performance as you remove a whole
+bunch of allocations, deallocations and copying.
+There's a variety of ways to control how allocation happens. The simplest one, if you know how
+many elements you want in your vector in advance, is to just create the vector with that capacity.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">with_capacity</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
+</span></code></pre></div>
+<p>In this case, we have been unambigously upfront about how many elements we will put in the vector.
+It was created with a <code>capacity</code> of 5 and a <code>size</code> of 0. We can also tell the vector to make sure we
+have a <code>capacity</code> of at least N. If it already has <code>capacity</code> to meet the minimum, nothing happens.
+If it doesn't it will allocate, copy and deallocate.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">element_count</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="n">data</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">element_count</span><span class="p">);</span>
+</span><span id="__span-23-4"><a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">element_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">i32</span><span class="p">);</span>
+</span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>There are more idiomatic ways to do this in Rust, which might also be faster, but you get the gist!</p>
 <h2 id="the-vector">The Vector</h2>
-<p>Column major -&gt; Fortran, Matlab<br />
-Row Major -&gt; C, C++, Rust, Python (when do they actually allocate memory like this?)<br />
-Vec<Vec\<T>> -&gt; Double Pointer<br />
-Vec<T> and linearized memory  </p>
+<p>But, we aren't just interested in single lists of numbers, sometimes, we would even like a matrix.
+In Rust we can have fixed size, arrays defined like so:</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
+</span></code></pre></div>
+<p>If the sizes given to the array definition are constants, known at compile time, the array will be
+stack allocated. 
+From what we have learned previously, the elements will be stored in memory in the order of 0 and 1.
+But what if we create a two-dimensional array?</p>
+<p><div class="language-rust highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]];</span>
+</span></code></pre></div>
+In Rust the elements will be ordered in memory 0, 1, 2, 3. But that is not a universal truth.
+This is called row-major ordering and is the standard layout in C, C++, Rust, Python and
+most modern languages.
+The alternative is column-major which is seen in Fortran and Matlab.
+In column-major ordering the elements would be ordered in memory as 0, 2, 1, 3.
+Basically, the memory will be most tightly packed in the innermost dimension.
+To iterate through a 3 dimensional vector, this triple for-loop would access the memory
+in order.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+</span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">                            </span><span class="p">[</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">]]</span>
+</span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">                            </span><span class="p">];</span>
+</span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>
+</span><span id="__span-26-7"><a id="__codelineno-26-7" name="__codelineno-26-7" href="#__codelineno-26-7"></a><span class="kd">let</span><span class="w"> </span><span class="n">x_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-26-8"><a id="__codelineno-26-8" name="__codelineno-26-8" href="#__codelineno-26-8"></a><span class="kd">let</span><span class="w"> </span><span class="n">y_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-26-9"><a id="__codelineno-26-9" name="__codelineno-26-9" href="#__codelineno-26-9"></a><span class="kd">let</span><span class="w"> </span><span class="n">z_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-26-10"><a id="__codelineno-26-10" name="__codelineno-26-10" href="#__codelineno-26-10"></a>
+</span><span id="__span-26-11"><a id="__codelineno-26-11" name="__codelineno-26-11" href="#__codelineno-26-11"></a><span class="k">for</span><span class="w"> </span><span class="n">x_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">x_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-26-12"><a id="__codelineno-26-12" name="__codelineno-26-12" href="#__codelineno-26-12"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">y_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">y_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-26-13"><a id="__codelineno-26-13" name="__codelineno-26-13" href="#__codelineno-26-13"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">z_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">z_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-26-14"><a id="__codelineno-26-14" name="__codelineno-26-14" href="#__codelineno-26-14"></a><span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">x_index</span><span class="p">][</span><span class="n">y_index</span><span class="p">][</span><span class="n">z_index</span><span class="p">]);</span>
+</span><span id="__span-26-15"><a id="__codelineno-26-15" name="__codelineno-26-15" href="#__codelineno-26-15"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-26-16"><a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-26-17"><a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Where as if Rust was favored column-major ordering the in-memory-order traversal would be</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">                            </span><span class="p">[</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">]]</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">                            </span><span class="p">];</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="kd">let</span><span class="w"> </span><span class="n">x_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="kd">let</span><span class="w"> </span><span class="n">y_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="kd">let</span><span class="w"> </span><span class="n">z_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>
+</span><span id="__span-27-11"><a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="k">for</span><span class="w"> </span><span class="n">z_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">z_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-12"><a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">y_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">y_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-13"><a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">x_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">x_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-14"><a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a><span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">x_index</span><span class="p">][</span><span class="n">y_index</span><span class="p">][</span><span class="n">z_index</span><span class="p">]);</span>
+</span><span id="__span-27-15"><a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-27-16"><a id="__codelineno-27-16" name="__codelineno-27-16" href="#__codelineno-27-16"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-27-17"><a id="__codelineno-27-17" name="__codelineno-27-17" href="#__codelineno-27-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>If you think back to stride and cache lines, traversing our 3-dimensional array like the above
+in the actual case, where Rust is row-major, would be like the stride access we looked at earlier.
+We could also do this with nested vectors. </p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;&gt;</span>::<span class="n">new</span><span class="p">();</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]);</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]);</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="kd">let</span><span class="w"> </span><span class="n">x_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="kd">let</span><span class="w"> </span><span class="n">y_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="k">for</span><span class="w"> </span><span class="n">x_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">x_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-10"><a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">y_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">y_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-28-11"><a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">x_index</span><span class="p">][</span><span class="n">y_index</span><span class="p">]);</span>
+</span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-28-13"><a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>This is even worse though. We now have a 2-dimensional array, which is highly flexible, but we
+have to dereference two pointers for every access.</p>
+<p>There is another way of doing this with a vector, which is the way I will be using
+multi-dimensional arrays in this module. It involves using a single dimensional vector
+as if it had more dimensions.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]);</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="kd">let</span><span class="w"> </span><span class="n">column_count</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a><span class="kd">let</span><span class="w"> </span><span class="n">row_count</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="k">for</span><span class="w"> </span><span class="n">x_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">row_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">y_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">column_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">x_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">column_count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y_index</span><span class="p">]);</span>
+</span><span id="__span-29-10"><a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-29-11"><a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>We just create a vector with as much room as we need and then access it with a bit of calculation.
+We've flattened our matrix and can now both have it dynamic and with arbitrary dimensions. We
+can even dynamically decide to see the matrix in a different way, for example by deciding
+to swap the number of columns and rows. The formula to access each element is to multiply
+the index by the dimensions that come after it and add it to the next index. 
+For example with three dimensions <code>x</code>, <code>y</code> and <code>z</code>, the index would be
+calculated by <code>x_index * y_size * z_size + y_index * z_size + z_index</code> and for
+the two dimensions <code>x</code> and <code>y</code>, we would access the 2-dimensional matrix with
+<code>x_index * y_size + y_index</code>. I really hope this makes sense. Once it clicks
+it is a very simple formula, if a bit wordy.
+Usually libraries will work like this under the surface but wrap it in an interface
+for you to simply access it like it was a multi-dimensional array.</p>
+<p>To wrap it up I have made a performance test of these approaches. The code
+doesn't match completely as we need bigger dimensions to get a good test.
+The code is at <code>m1_memory_hierarchies/code/the_vector/</code> or
+<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/tree/main/m1_memory_hierarchies/code/the_vector">online</a>.</p>
+<p>Implementing all of the methods described above in both row-major and column-major form,
+as well as an element-wise version, where we flatten the multidimensionality to save
+the administration of two of the for-loops, so we just get one for-loop running across
+a vector, we get the following numbers.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/the_multidimensional_vector.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/the_multidimensional_vector.png" width="500" /></a></p>
+<figcaption>
+Access times for multidimensional arrays.
+</figcaption>
+</figure>
+<p>The functions named Multi-Array are stack allocated instead of heap, which is why
+they are that fast. I was however unable to run them for 64x64x64 and 128x128x128.
+Rust refused citing a stack overflow. Interestingly as well, the element-wise function
+can be quite fast as it saves two of the for-loops. So, if you can, use element-wise.
+Otherwise, the row-major single vector function seemed to work the best. How much
+is saved by not having the two extra for-loops depends on how much work you are
+actually doing in each iteration. In this benchmark we do pretty much nothing.</p>
 <h2 id="move-copy-clone-soldier-spy">Move, Copy, Clone, Soldier, Spy</h2>
 <p>Clone<br />
 Copy<br />
@@ -1451,7 +1667,7 @@ of the register, cache, main memory and virtual memory parts of the memory hiera
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 19, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 20, 2023</span>
       
         <br>
         Created:

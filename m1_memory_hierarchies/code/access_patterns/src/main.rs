@@ -31,17 +31,41 @@ fn run_access_test(iteration_count: usize, data_count: i32) {
 
     println!("RUNNING ACCESS TESTS WITH {} data elements for {} iterations!", data_count, iteration_count);
     println!("=============================================================");
+    
+    //
+    // Sequential
+    //
     println!("Sequential access: {} ms", sequential(&mut data, &mut sum, iteration_count));
 
-    let stride: usize = 5;
+    //
+    // Non-wrapping strided (actually skipping work)
+    //
+    let stride: usize = 2;
+    println!("Non-wrapping strided access ({}): {} ms", stride, non_wrapping_strided(&mut data, &mut sum, iteration_count, stride));
+
+    let stride: usize = 3;
+    println!("Non-wrapping strided access ({}): {} ms", stride, non_wrapping_strided(&mut data, &mut sum, iteration_count, stride));
+
+    let stride: usize = 4;
+    println!("Non-wrapping strided access ({}): {} ms", stride, non_wrapping_strided(&mut data, &mut sum, iteration_count, stride));
+
+
+    //
+    // Wrapping strided
+    //
+    let stride: usize = 1; // And once just to prove that this is just about equal to sequential, despite a bit more work.
+    println!("Strided access ({}): {} ms", stride, strided(&mut data, &mut sum, iteration_count, stride));
+
+    let stride: usize = 5; // And once just to prove that this is just about equal to sequential, despite a bit more work.
     println!("Strided access ({}): {} ms", stride, strided(&mut data, &mut sum, iteration_count, stride));
 
     let stride: usize = 17;// We do this to have the stride be more than the size of a cache line
     println!("Strided access ({}): {} ms", stride, strided(&mut data, &mut sum, iteration_count, stride));
 
-    let stride: usize = 1; // And once just to prove that this is just about equal to sequential, despite a bit more work.
-    println!("Strided access ({}): {} ms", stride, strided(&mut data, &mut sum, iteration_count, stride));
 
+    //
+    // Random access
+    //
     println!("Random access: {} ms", random(&mut data, &mut sum, iteration_count));
 
     println!("");
@@ -55,6 +79,21 @@ fn sequential(data: &mut Vec<i32>, sum: &mut Vec<i32>, iteration_count: usize) -
             sum[0] += data[index];
             data[index] *= 3;
         }   
+    }
+    let elapsed_time: Duration = now.elapsed();
+    elapsed_time.as_millis() as f64
+}
+
+fn non_wrapping_strided(data: &mut Vec<i32>, sum: &mut Vec<i32>, iteration_count: usize, stride: usize) -> f64 {
+    let now: Instant = Instant::now();
+    for _ in 0..iteration_count {
+        sum[0] = 0;
+        let mut index: usize = 0;
+        while index < data.len() {
+            sum[0] += data[index];
+            data[index] *= 3;
+            index += stride;
+        }
     }
     let elapsed_time: Duration = now.elapsed();
     elapsed_time.as_millis() as f64
