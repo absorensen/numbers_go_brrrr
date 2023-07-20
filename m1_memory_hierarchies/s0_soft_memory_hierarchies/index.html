@@ -1334,7 +1334,7 @@ probably be as low as it can be, when we aren't reusing any retrieved elements. 
 which can be expensive.</p>
 <p>Next up is strided access. With strided access we only read every N elements. Based on the size of the stride
 and the size of the elements, it might result in each cache line only being used for a single element.
-In the implementations in the code there is both a non-wrapping and a wrapping stride implementation, 
+In the implementations in the code there is both a non-wrapping and a wrapping stride implementation,
 meaning once we step over the end we wrap back around using a modulo operator.
 This is to ensure that it accesses the same amount of elements as the sequential access.
 With the non-wrapping stride we only access every N elements, but we also end up doing
@@ -1382,7 +1382,7 @@ or be overwritten at any moment.</p>
 <p>The heap, in this context, is not the actual data structure known as a heap.
 Instead it is a bunch of unstructured memory living in the
 <a href="https://courses.grainger.illinois.edu/cs225/fa2021/resources/stack-heap/">same reserved space</a>
-as the stack. </p>
+as the stack.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/stack_and_heap.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/stack_and_heap.png" width="500" /></a></p>
 <figcaption>
@@ -1430,7 +1430,7 @@ However, if we want to print the current size</p>
 </span></code></pre></div>
 <p>we would get an output of 0! We have a <code>capacity</code> of 4, but a <code>size</code> of 0. Meaning,
 we have 4 integers of 4 bytes each on the heap, but they are unitialized (containing garbage values),
-and we have not used any of them. If we however use <code>push</code> to add some actual data and then print </p>
+and we have not used any of them. If we however use <code>push</code> to add some actual data and then print</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
@@ -1447,7 +1447,7 @@ We can print them by accessing the values directly.</p>
 </span></code></pre></div>
 <p>In this case we print 2, 0 and 1. Push finds the first unused index, which is conveniently indicated
 by the <code>size</code> value, increments <code>size</code> and puts the value into the designated index. If we pushed
-5 values however, once we reached the 5th push, assuming the default capacity was 4, we would see the 
+5 values however, once we reached the 5th push, assuming the default capacity was 4, we would see the
 5th push taking a lot of time compared to the other 4 pushes. In this case the vector would allocate
 a new memory segment on the heap with a size of 8, copy all of the values from elements 0-3 and then add
 the 5th value to the vector. Conversely, we can also use the <code>pop</code> function.</p>
@@ -1494,12 +1494,12 @@ In Rust we can have fixed size, arrays defined like so:</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
 </span></code></pre></div>
 <p>If the sizes given to the array definition are constants, known at compile time, the array will be
-stack allocated. 
+stack allocated.
 From what we have learned previously, the elements will be stored in memory in the order of 0 and 1.
 But what if we create a two-dimensional array?</p>
-<p><div class="language-rust highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]];</span>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]];</span>
 </span></code></pre></div>
-In Rust the elements will be ordered in memory 0, 1, 2, 3. But that is not a universal truth.
+<p>In Rust the elements will be ordered in memory 0, 1, 2, 3. But that is not a universal truth.
 This is called row-major ordering and is the standard layout in C, C++, Rust, Python and
 most modern languages.
 The alternative is column-major which is seen in Fortran and Matlab.
@@ -1546,7 +1546,7 @@ in order.</p>
 </span></code></pre></div>
 <p>If you think back to stride and cache lines, traversing our 3-dimensional array like the above
 in the actual case, where Rust is row-major, would be like the stride access we looked at earlier.
-We could also do this with nested vectors. </p>
+We could also do this with nested vectors.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]);</span>
 </span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]);</span>
@@ -1582,12 +1582,15 @@ as if it had more dimensions.</p>
 We've flattened our matrix and can now both have it dynamic and with arbitrary dimensions. We
 can even dynamically decide to see the matrix in a different way, for example by deciding
 to swap the number of columns and rows. The formula to access each element is to multiply
-the index by the dimensions that come after it and add it to the next index. 
+the index by the dimensions that come after it and add it to the next index.
 For example with three dimensions <code>x</code>, <code>y</code> and <code>z</code>, the index would be
-calculated by <code>x_index * y_size * z_size + y_index * z_size + z_index</code> and for
-the two dimensions <code>x</code> and <code>y</code>, we would access the 2-dimensional matrix with
-<code>x_index * y_size + y_index</code>. I really hope this makes sense. Once it clicks
-it is a very simple formula, if a bit wordy.
+calculated by </p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">x_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">z_size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">z_size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">z_index</span>
+</span></code></pre></div>
+<p>and for the two dimensions <code>x</code> and <code>y</code>, we would access the 2-dimensional matrix with</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">x_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y_size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y_index</span>
+</span></code></pre></div>
+<p>I really hope this makes sense. Once it clicks it is a very simple formula, if a bit wordy.
 Usually libraries will work like this under the surface but wrap it in an interface
 for you to simply access it like it was a multi-dimensional array.</p>
 <p>To wrap it up I have made a performance test of these approaches. The code
