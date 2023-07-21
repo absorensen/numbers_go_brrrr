@@ -568,8 +568,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dynamic-array" class="md-nav__link">
-    Dynamic Array
+  <a href="#the-dynamic-array" class="md-nav__link">
+    The Dynamic Array
   </a>
   
 </li>
@@ -589,15 +589,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-vector-reloaded" class="md-nav__link">
-    *The Vector Reloaded
+  <a href="#smart-pointers" class="md-nav__link">
+    *Smart pointers
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#smart-pointers" class="md-nav__link">
-    *Smart pointers
+  <a href="#the-vector-reloaded" class="md-nav__link">
+    *The Vector Reloaded
   </a>
   
 </li>
@@ -610,15 +610,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#virtualized-memory-hierarchy" class="md-nav__link">
-    *Virtualized Memory Hierarchy
+  <a href="#garbage-collectors" class="md-nav__link">
+    *Garbage collectors
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#garbage-collectors" class="md-nav__link">
-    *Garbage collectors
+  <a href="#virtualized-memory-hierarchy" class="md-nav__link">
+    *Virtualized Memory Hierarchy
   </a>
   
 </li>
@@ -998,8 +998,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#dynamic-array" class="md-nav__link">
-    Dynamic Array
+  <a href="#the-dynamic-array" class="md-nav__link">
+    The Dynamic Array
   </a>
   
 </li>
@@ -1019,15 +1019,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-vector-reloaded" class="md-nav__link">
-    *The Vector Reloaded
+  <a href="#smart-pointers" class="md-nav__link">
+    *Smart pointers
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#smart-pointers" class="md-nav__link">
-    *Smart pointers
+  <a href="#the-vector-reloaded" class="md-nav__link">
+    *The Vector Reloaded
   </a>
   
 </li>
@@ -1040,15 +1040,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#virtualized-memory-hierarchy" class="md-nav__link">
-    *Virtualized Memory Hierarchy
+  <a href="#garbage-collectors" class="md-nav__link">
+    *Garbage collectors
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#garbage-collectors" class="md-nav__link">
-    *Garbage collectors
+  <a href="#virtualized-memory-hierarchy" class="md-nav__link">
+    *Virtualized Memory Hierarchy
   </a>
   
 </li>
@@ -1402,7 +1402,7 @@ at compile time. We can also have arrays on the stack, but they generally need t
 have a size known at compile time. Moving a pointer from place to place, is also
 a lot cheaper than copying every single element of a large array every time
 ownership changes hands.</p>
-<h2 id="dynamic-array">Dynamic Array</h2>
+<h2 id="the-dynamic-array">The Dynamic Array</h2>
 <p>The dynamic array is ubiquitous in C++ and Rust. It is quite often what we think
 about, when we think of arrays in those languages. C++ has
 <a href="https://en.cppreference.com/w/cpp/container/vector"><code>std::vector&lt;T&gt;</code></a>
@@ -1509,7 +1509,7 @@ To iterate through a 3 dimensional vector, this triple for-loop would access the
 in order.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
 </span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">                            </span><span class="p">[</span>
-</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">]],</span>
 </span><span id="__span-26-4"><a id="__codelineno-26-4" name="__codelineno-26-4" href="#__codelineno-26-4"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">]]</span>
 </span><span id="__span-26-5"><a id="__codelineno-26-5" name="__codelineno-26-5" href="#__codelineno-26-5"></a><span class="w">                            </span><span class="p">];</span>
 </span><span id="__span-26-6"><a id="__codelineno-26-6" name="__codelineno-26-6" href="#__codelineno-26-6"></a>
@@ -1615,24 +1615,232 @@ Otherwise, the row-major single vector function seemed to work the best. How muc
 is saved by not having the two extra for-loops depends on how much work you are
 actually doing in each iteration. In this benchmark we do pretty much nothing.</p>
 <h2 id="move-copy-clone-soldier-spy">Move, Copy, Clone, Soldier, Spy</h2>
-<p>Clone<br />
-Copy<br />
-Move<br />
-Vector Games  </p>
+<p>Now that we have examined how we can deal with a more expensive type,
+compared to the simpler integer or float, let's expand the scope a little bit.
+How do we actually move around these vectors as data? In each language there are
+some implicit rules, which can have wide reaching consequences, both in terms of
+correctness and performance.</p>
+<p>In Python, variables are all references to an underlying object, which is freed
+when there are no longer any references to said object. Don't worry about it too
+much, it is a level 3 concept I will introduce further down the page.
+But, it does have consequences when this happens</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">42</span><span class="p">]</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+</span></code></pre></div>
+<p>There aren't actually two lists, but two references to a list which has
+some data on the heap.
+This can be a bit problematic, as you now have two variables, which can
+both write to the same list without the other knowing.
+Once both <code>x</code> and <code>y</code> go out of scope, the list on the heap will be
+deallocated (eventually).</p>
+<p>In C and C++, the following actually results in two different lists on the
+heap, kept by two different variables.</p>
+<div class="language-c++ highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">};</span>
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span></code></pre></div>
+<p>C++ is copy by default, and this is a deep copy. Which is what Rust would
+call a clone. Rust however, is move by default.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
+</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Once the values in <code>x</code>, the <code>capacity</code>, <code>size</code> and the pointer
+to the memory on the heap, have been moved from <code>x</code> into <code>y</code>,
+<code>x</code> is no longer accessible. The Rust compiler will complain.
+We can however, move it right back.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Now, <code>y</code> is inaccessible at the end. We could also create a scope,
+after which <code>y</code> is dropped, but the ownership is not moved back to <code>x</code>.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="p">{</span>
+</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-36-4"><a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Unless we move the values back ourselves.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="p">{</span>
+</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-37-4"><a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a>
+</span><span id="__span-37-5"><a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span>
+</span><span id="__span-37-6"><a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>To actually create two lists, like we did in the C++ example, we have to
+explicitly ask for a deep copy - a clone in Rust terminology.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
+</span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span>
+</span></code></pre></div>
+<p>Usually, in Rust at least, adding lots of clones everywhere is the way
+to get around the borrow checker and have everything be correct. But
+once your first prototype is finished, one of the easiest improvements
+to your performance will be to search for all instances of .clone() and
+see whether there is some other solution that might work better.
+Rust isn't fighting you in this case, even if it can be strict,
+it is trying to protect you from having multiple write-enabled
+references to the same data, as in the Python example, which could make for incorrect code.
+C++ does have these <a href="https://en.cppreference.com/w/cpp/utility/move">move operations</a>
+as well, it is even highly recommended a lot of the time. It is however,
+not the default behavior of the language.</p>
+<p>Rust does however have something called traits (don't worry about it).
+One of these traits is the <code>Copy</code> trait. If a type implements
+the <code>Copy</code> trait, it will be
+<a href="https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/">copied rather than moved</a>
+when assigned to a new value or passed as an argument to a function.
+It is sort of like an implicit version of <code>.clone()</code>, except
+in the case of deeper structures, such as <code>Vec&lt;T&gt;</code>, in that case,
+it would copy all of the stack values, <code>capacity</code>, <code>size</code>
+and the pointer to the memory on the heap.</p>
+<p>But hold on a minute! That is illegal! We would have two pointers with
+full write rights. Which is illegal in Rust! Which is also why <code>Vec&lt;T&gt;</code>
+doesn't implement <code>Copy</code> and this has all been a ruse, for your edification.</p>
+<h2 id="smart-pointers">*Smart pointers</h2>
+<p>Ok, so I promised previously, that I would explain how Python, and most other
+garbage collected languages, deal with assigning one variable to another.
+If you recall the previous example</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">42</span><span class="p">]</span>
+</span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
+</span></code></pre></div>
+<p>We start by making a list and assigning a reference to <code>x</code>. In this case
+<code>x</code> is not the actual owner of the list. Instead, the system takes
+ownership of the list, and <code>x</code> is a live reference to that list.
+The system keeps track of how many live references there are to the list.
+Once <code>x</code> goes out of scope, the live reference count for the list
+decreases by one. Once the live reference count reaches 0, it is deallocated.</p>
+<p>Until we hit the end of the scope, and <code>x</code> and <code>y</code> disappear, there
+are two live references to the the list created at line 1. While a fine enough
+solution at first glance, sometimes, answering the question "what is alive"
+can be quite difficult. More on that in the
+<a href="https://absorensen.github.io/the-real-timers-guide-to-the-computational-galaxy/m1_memory_hierarchies/s0_soft_memory_hierarchies/#garbage-collectors">garbage collectors section</a>.</p>
+<p>When dealing with raw pointers, like we saw earlier, once a system grows
+beyond absolute simplicity, sharing multiple pointers to the same object
+becomes a bit complex. If you have 5 pointers to the same object floating about
+how do you ensure it isn't used after freeing? Who deallocates the pointer
+and who ensures that the pointers are no longer valid? This at the absolute
+crux of safety and your program not blowing up in C and C++.</p>
+<p>In C++11+ and Rust, we can elect to use something called smart pointers. Which
+can handle some of the intricacies for us.
+First off there is the <a href="https://en.cppreference.com/w/cpp/memory/unique_ptr">unique_ptr<T></a>,
+as in C++, or the <a href="https://doc.rust-lang.org/std/boxed/index.html">Box<T></a> in Rust.
+I will just refer to <code>Box</code> from here on out, their behaviors seem to be more or less the same.
+<code>Box&lt;T&gt;</code> is like a <code>T *</code> in C (pointer to object of type T). 
+With two notable exceptions. It cannot be copied. As in, you cannot have multiple
+instances of <code>Box</code> pointing to the same underlying object. Thus <code>Box</code> in Rust,
+as well as in C++, requires that ownership is moved, and not copied.
+The other notable difference from a raw pointer is that once the ´´´Box´´´ goes out of scope,
+the object on the heap that it is pointing to is deallocated.  </p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">box_variable</span>: <span class="nb">Box</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Box</span>::<span class="n">new</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
+</span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">other_box</span>: <span class="nb">Box</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">box_variable</span><span class="p">;</span><span class="w"> </span><span class="c1">// box_variable no longer accesible due to move</span>
+</span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="kd">let</span><span class="w"> </span><span class="n">copied_variable</span>: <span class="kt">i32</span> <span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">other_box</span><span class="p">;</span><span class="w"> </span><span class="c1">// Dereference and copy the underlying value, this is not a move</span>
+</span><span id="__span-40-4"><a id="__codelineno-40-4" name="__codelineno-40-4" href="#__codelineno-40-4"></a><span class="o">*</span><span class="n">other_box</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-40-5"><a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">copied_variable</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-40-6"><a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">other_box</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 43</span>
+</span></code></pre></div>
+<p>Next up are the shared pointers. They are essentially what Python is using in the example
+from earlier. In C++ it is called <a href="https://en.cppreference.com/w/cpp/memory/shared_ptr">shared_ptr<T></a>,
+in Rust it actually comes in two versions;
+<a href="https://doc.rust-lang.org/std/rc/index.html">Rc<T></a> and
+<a href="https://doc.rust-lang.org/std/sync/struct.Arc.html">Arc<T></a>.
+<code>Rc</code> stands for reference counted. It is only made for single threaded usage as the
+reference count itself is susceptible to a data race, which you may recall, is several
+reads and/or writes to the same value. This could result in the count of live references
+being incorrect and the underlying value never being deallocated.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Rc</span><span class="p">;</span>
+</span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference_a</span>: <span class="nc">Rc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">new</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// Live references = 1</span>
+</span><span id="__span-41-4"><a id="__codelineno-41-4" name="__codelineno-41-4" href="#__codelineno-41-4"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">strong_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference_a</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 1</span>
+</span><span id="__span-41-5"><a id="__codelineno-41-5" name="__codelineno-41-5" href="#__codelineno-41-5"></a>
+</span><span id="__span-41-6"><a id="__codelineno-41-6" name="__codelineno-41-6" href="#__codelineno-41-6"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference_b</span>: <span class="nc">Rc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shared_reference_a</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span><span class="w"> </span><span class="c1">// Live references = 2</span>
+</span><span id="__span-41-7"><a id="__codelineno-41-7" name="__codelineno-41-7" href="#__codelineno-41-7"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">strong_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference_b</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 2</span>
+</span><span id="__span-41-8"><a id="__codelineno-41-8" name="__codelineno-41-8" href="#__codelineno-41-8"></a>
+</span><span id="__span-41-9"><a id="__codelineno-41-9" name="__codelineno-41-9" href="#__codelineno-41-9"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-41-10"><a id="__codelineno-41-10" name="__codelineno-41-10" href="#__codelineno-41-10"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference_c</span>: <span class="nc">Rc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shared_reference_a</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span><span class="w"> </span><span class="c1">// Live references = 3</span>
+</span><span id="__span-41-11"><a id="__codelineno-41-11" name="__codelineno-41-11" href="#__codelineno-41-11"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference_d</span>: <span class="nc">Rc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shared_reference_b</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span><span class="w"> </span><span class="c1">// Live references = 4</span>
+</span><span id="__span-41-12"><a id="__codelineno-41-12" name="__codelineno-41-12" href="#__codelineno-41-12"></a>
+</span><span id="__span-41-13"><a id="__codelineno-41-13" name="__codelineno-41-13" href="#__codelineno-41-13"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_c</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-41-14"><a id="__codelineno-41-14" name="__codelineno-41-14" href="#__codelineno-41-14"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">strong_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference_a</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 4</span>
+</span><span id="__span-41-15"><a id="__codelineno-41-15" name="__codelineno-41-15" href="#__codelineno-41-15"></a>
+</span><span id="__span-41-16"><a id="__codelineno-41-16" name="__codelineno-41-16" href="#__codelineno-41-16"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_d</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-41-17"><a id="__codelineno-41-17" name="__codelineno-41-17" href="#__codelineno-41-17"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">strong_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference_d</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 4</span>
+</span><span id="__span-41-18"><a id="__codelineno-41-18" name="__codelineno-41-18" href="#__codelineno-41-18"></a>
+</span><span id="__span-41-19"><a id="__codelineno-41-19" name="__codelineno-41-19" href="#__codelineno-41-19"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-41-20"><a id="__codelineno-41-20" name="__codelineno-41-20" href="#__codelineno-41-20"></a><span class="w">        </span><span class="c1">// shared_reference_c and shared_reference_d are now dropped</span>
+</span><span id="__span-41-21"><a id="__codelineno-41-21" name="__codelineno-41-21" href="#__codelineno-41-21"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">strong_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference_b</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 2</span>
+</span><span id="__span-41-22"><a id="__codelineno-41-22" name="__codelineno-41-22" href="#__codelineno-41-22"></a>
+</span><span id="__span-41-23"><a id="__codelineno-41-23" name="__codelineno-41-23" href="#__codelineno-41-23"></a><span class="w">        </span><span class="c1">// Live references = 2</span>
+</span><span id="__span-41-24"><a id="__codelineno-41-24" name="__codelineno-41-24" href="#__codelineno-41-24"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_a</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-41-25"><a id="__codelineno-41-25" name="__codelineno-41-25" href="#__codelineno-41-25"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_b</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-41-26"><a id="__codelineno-41-26" name="__codelineno-41-26" href="#__codelineno-41-26"></a><span class="p">}</span>
+</span></code></pre></div>
+<p><code>Arc&lt;T&gt;</code> is here to solve exactly that issue.
+It uses atomic reference counting. Atomics will be introduced in the
+<a href="https://absorensen.github.io/the-real-timers-guide-to-the-computational-galaxy/m2_concepts_in_parallelism/">Concepts in Parallelism</a>
+module. But in this context, it means that the reference counting is thread-safe, but a bit slower. </p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">sync</span>::<span class="n">Arc</span><span class="p">;</span>
+</span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
+</span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-42-4"><a id="__codelineno-42-4" name="__codelineno-42-4" href="#__codelineno-42-4"></a><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference_a</span>: <span class="nc">Arc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arc</span>::<span class="n">new</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// Live references = 1</span>
+</span><span id="__span-42-5"><a id="__codelineno-42-5" name="__codelineno-42-5" href="#__codelineno-42-5"></a><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference_b</span>: <span class="nc">Arc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shared_reference_a</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span><span class="w"> </span><span class="c1">// Live references = 2</span>
+</span><span id="__span-42-6"><a id="__codelineno-42-6" name="__codelineno-42-6" href="#__codelineno-42-6"></a>
+</span><span id="__span-42-7"><a id="__codelineno-42-7" name="__codelineno-42-7" href="#__codelineno-42-7"></a><span class="p">{</span>
+</span><span id="__span-42-8"><a id="__codelineno-42-8" name="__codelineno-42-8" href="#__codelineno-42-8"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference_c</span>: <span class="nc">Arc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shared_reference_a</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span><span class="w"> </span><span class="c1">// Live references = 3</span>
+</span><span id="__span-42-9"><a id="__codelineno-42-9" name="__codelineno-42-9" href="#__codelineno-42-9"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference_d</span>: <span class="nc">Arc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">shared_reference_b</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span><span class="w"> </span><span class="c1">// Live references = 4</span>
+</span><span id="__span-42-10"><a id="__codelineno-42-10" name="__codelineno-42-10" href="#__codelineno-42-10"></a>
+</span><span id="__span-42-11"><a id="__codelineno-42-11" name="__codelineno-42-11" href="#__codelineno-42-11"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_c</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-42-12"><a id="__codelineno-42-12" name="__codelineno-42-12" href="#__codelineno-42-12"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_d</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-42-13"><a id="__codelineno-42-13" name="__codelineno-42-13" href="#__codelineno-42-13"></a><span class="p">}</span>
+</span><span id="__span-42-14"><a id="__codelineno-42-14" name="__codelineno-42-14" href="#__codelineno-42-14"></a><span class="w">    </span><span class="c1">// shared_reference_c and shared_reference_d are now dropped</span>
+</span><span id="__span-42-15"><a id="__codelineno-42-15" name="__codelineno-42-15" href="#__codelineno-42-15"></a>
+</span><span id="__span-42-16"><a id="__codelineno-42-16" name="__codelineno-42-16" href="#__codelineno-42-16"></a><span class="w">    </span><span class="c1">// Live references = 2</span>
+</span><span id="__span-42-17"><a id="__codelineno-42-17" name="__codelineno-42-17" href="#__codelineno-42-17"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_a</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-42-18"><a id="__codelineno-42-18" name="__codelineno-42-18" href="#__codelineno-42-18"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_b</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-42-19"><a id="__codelineno-42-19" name="__codelineno-42-19" href="#__codelineno-42-19"></a>
+</span><span id="__span-42-20"><a id="__codelineno-42-20" name="__codelineno-42-20" href="#__codelineno-42-20"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>While <code>shared_ptr</code> from C++ allows you to mutate the value it refers to
+<code>Rc</code> and <code>Arc</code> do not. They require a synchronization primitive wrapped around your
+underlying value, like <code>Arc&lt;RwLock&lt;i32&gt;&gt;</code>, but that is more advanced usage,
+and don't worry about it right now. Other than the atomicity, and being shareable between
+threads, <code>Rc</code> and <code>Arc</code> work more or less the same.</p>
+<p>Finally, we have the weak pointer. This basically exists to weaken cyclical references.
+If object A refers to another object, object B, with an <code>Rc</code>, while the object
+B refers to object A, we have a problem. When either, or both go out of scope,
+they will not be deallocated as there is live references to both.</p>
+<p>Try to take a second and imagine this and the things that can go wrong
+when there are multiple references interconnected.</p>
+<p>Go on.</p>
+<p>I'll wait.</p>
+<p>To solve this issue, the weak pointer comes to the rescue. It is along for the party,
+but doesn't actually keep things alive.
+In Rust it is called <a href="https://doc.rust-lang.org/std/rc/struct.Weak.html">Weak<T></a>.
+It can reference the same underlying object as the shared pointer it comes from,
+but does not contribute to the live reference count. As such, it can allow you
+to have cyclical references, without causing a memory leak.
+If object A points to object B with an <code>Rc</code> reference, but object B
+holds a <code>Weak</code> reference to object A, once object A goes out of scope,
+both object A and object B can safely be deallocated.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Rc</span><span class="p">;</span>
+</span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Weak</span><span class="p">;</span>
+</span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a>
+</span><span id="__span-43-4"><a id="__codelineno-43-4" name="__codelineno-43-4" href="#__codelineno-43-4"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-43-5"><a id="__codelineno-43-5" name="__codelineno-43-5" href="#__codelineno-43-5"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference</span>: <span class="nc">Rc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">new</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// Live references = 1</span>
+</span><span id="__span-43-6"><a id="__codelineno-43-6" name="__codelineno-43-6" href="#__codelineno-43-6"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">weak_reference</span>: <span class="nc">Weak</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Weak</span>::<span class="n">new</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// Create a weak reference from nothing</span>
+</span><span id="__span-43-7"><a id="__codelineno-43-7" name="__codelineno-43-7" href="#__codelineno-43-7"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">weak_shared_reference</span>: <span class="nc">Weak</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">downgrade</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference</span><span class="p">);</span>
+</span><span id="__span-43-8"><a id="__codelineno-43-8" name="__codelineno-43-8" href="#__codelineno-43-8"></a>
+</span><span id="__span-43-9"><a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">weak_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 1!</span>
+</span><span id="__span-43-10"><a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>For more information on smart pointers in Rust, there is a nice example
+<a href="https://doc.rust-lang.org/book/ch15-00-smart-pointers.html">here</a>
+and another example about
+<a href="https://doc.rust-lang.org/book/ch15-06-reference-cycles.html">reference cycles</a>,
+which is what we needed weak pointers for.</p>
 <h2 id="the-vector-reloaded">*The Vector Reloaded</h2>
-<p>Strided Access and the transposition<br />
+<p>Export the diagrams!
+Strided Access and the transposition<br />
 Permutations<br />
 Jagged Arrays<br />
-Sparse Arrays<br />
-Using indices instead of pointers allow for predictability and seralization  </p>
-<h2 id="smart-pointers">*Smart pointers</h2>
-<p>Why smart pointers -&gt; Safety<br />
-Smart pointers:  </p>
-<ul>
-<li>unique/box</li>
-<li>shared/rc/arc</li>
-<li>weak/weak</li>
-</ul>
+Sparse Arrays  </p>
 <h2 id="graphs-and-trees">*Graphs and Trees</h2>
 <p>Graphs<br />
 Trees<br />
@@ -1642,18 +1850,18 @@ Graphs and Trees using  </p>
 <li>Smart pointers</li>
 <li>Indices (static, dynamic issue getting a mutable reference to the collection in Rust)</li>
 </ul>
-<h2 id="virtualized-memory-hierarchy">*Virtualized Memory Hierarchy</h2>
-<p>Find a more formalized definition of virtualized memory<br />
-The process' own virtual memory space (the stack and heap share the same memory)<br />
-Stack/Heap Visualization<br />
-Disk -&gt; Image addresses for training networks -&gt; Fat nodes/payload options<br />
-Internet -&gt; Rendering on the internet, or pulling images from the internet  </p>
 <h2 id="garbage-collectors">*Garbage collectors</h2>
 <p>Reference counting
 How to still do memory leaks -&gt; cyclical references, but save some for the exercises
 Generational Garbage Collection
 Calling the GC yourself
 Object Pools</p>
+<h2 id="virtualized-memory-hierarchy">*Virtualized Memory Hierarchy</h2>
+<p>Find a more formalized definition of virtualized memory<br />
+The process' own virtual memory space (the stack and heap share the same memory)<br />
+Stack/Heap Visualization<br />
+Disk -&gt; Image addresses for training networks -&gt; Fat nodes/payload options<br />
+Internet -&gt; Rendering on the internet, or pulling images from the internet  </p>
 <h2 id="further-reading">*Further Reading</h2>
 <p>An explanation of memory allocation, stack and heap
 <a href="https://cs2461-2020.github.io/lectures/dynamic.pdf">in C</a></p>
@@ -1670,7 +1878,7 @@ of the register, cache, main memory and virtual memory parts of the memory hiera
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 20, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 21, 2023</span>
       
         <br>
         Created:
