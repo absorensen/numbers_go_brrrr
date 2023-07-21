@@ -1723,7 +1723,7 @@ can handle some of the intricacies for us.
 First off there is the <a href="https://en.cppreference.com/w/cpp/memory/unique_ptr">unique_ptr<T></a>,
 as in C++, or the <a href="https://doc.rust-lang.org/std/boxed/index.html">Box<T></a> in Rust.
 I will just refer to <code>Box</code> from here on out, their behaviors seem to be more or less the same.
-<code>Box&lt;T&gt;</code> is like a <code>T *</code> in C (pointer to object of type T). 
+<code>Box&lt;T&gt;</code> is like a <code>T *</code> in C (pointer to object of type T).
 With two notable exceptions. It cannot be copied. As in, you cannot have multiple
 instances of <code>Box</code> pointing to the same underlying object. Thus <code>Box</code> in Rust,
 as well as in C++, requires that ownership is moved, and not copied.
@@ -1775,7 +1775,7 @@ being incorrect and the underlying value never being deallocated.</p>
 <p><code>Arc&lt;T&gt;</code> is here to solve exactly that issue.
 It uses atomic reference counting. Atomics will be introduced in the
 <a href="https://absorensen.github.io/the-real-timers-guide-to-the-computational-galaxy/m2_concepts_in_parallelism/">Concepts in Parallelism</a>
-module. But in this context, it means that the reference counting is thread-safe, but a bit slower. </p>
+module. But in this context, it means that the reference counting is thread-safe, but a bit slower.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">sync</span>::<span class="n">Arc</span><span class="p">;</span>
 </span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
 </span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
