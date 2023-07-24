@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#soft-memory-hierarchies" class="md-skip">
+        <a href="#2-soft-memory-hierarchies" class="md-skip">
           Skip to content
         </a>
       
@@ -589,18 +589,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#smart-pointers" class="md-nav__link">
-    *Smart pointers
+  <a href="#3-smart-pointers" class="md-nav__link">
+    3️⃣ Smart pointers
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-vector-reloaded" class="md-nav__link">
-    *The Vector Reloaded
+  <a href="#3-the-vector-reloaded" class="md-nav__link">
+    3️⃣ The Vector Reloaded
   </a>
   
-    <nav class="md-nav" aria-label="*The Vector Reloaded">
+    <nav class="md-nav" aria-label="3️⃣ The Vector Reloaded">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -611,8 +611,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#permutated-arrays" class="md-nav__link">
-    Permutated Arrays
+  <a href="#permuted-arrays" class="md-nav__link">
+    Permuted Arrays
   </a>
   
 </li>
@@ -637,29 +637,29 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#graphs-and-trees" class="md-nav__link">
-    *Graphs and Trees
+  <a href="#3-graphs-and-trees" class="md-nav__link">
+    3️⃣ Graphs and Trees
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#garbage-collectors" class="md-nav__link">
-    *Garbage collectors
+  <a href="#3-garbage-collectors" class="md-nav__link">
+    3️⃣ Garbage collectors
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#virtualized-memory-hierarchy" class="md-nav__link">
-    *Virtualized Memory Hierarchy
+  <a href="#3-virtualized-memory-hierarchy" class="md-nav__link">
+    3️⃣ Virtualized Memory Hierarchy
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#further-reading" class="md-nav__link">
-    *Further Reading
+  <a href="#4-further-reading" class="md-nav__link">
+    4️⃣ Further Reading
   </a>
   
 </li>
@@ -1053,18 +1053,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#smart-pointers" class="md-nav__link">
-    *Smart pointers
+  <a href="#3-smart-pointers" class="md-nav__link">
+    3️⃣ Smart pointers
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#the-vector-reloaded" class="md-nav__link">
-    *The Vector Reloaded
+  <a href="#3-the-vector-reloaded" class="md-nav__link">
+    3️⃣ The Vector Reloaded
   </a>
   
-    <nav class="md-nav" aria-label="*The Vector Reloaded">
+    <nav class="md-nav" aria-label="3️⃣ The Vector Reloaded">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1075,8 +1075,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#permutated-arrays" class="md-nav__link">
-    Permutated Arrays
+  <a href="#permuted-arrays" class="md-nav__link">
+    Permuted Arrays
   </a>
   
 </li>
@@ -1101,29 +1101,29 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#graphs-and-trees" class="md-nav__link">
-    *Graphs and Trees
+  <a href="#3-graphs-and-trees" class="md-nav__link">
+    3️⃣ Graphs and Trees
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#garbage-collectors" class="md-nav__link">
-    *Garbage collectors
+  <a href="#3-garbage-collectors" class="md-nav__link">
+    3️⃣ Garbage collectors
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#virtualized-memory-hierarchy" class="md-nav__link">
-    *Virtualized Memory Hierarchy
+  <a href="#3-virtualized-memory-hierarchy" class="md-nav__link">
+    3️⃣ Virtualized Memory Hierarchy
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#further-reading" class="md-nav__link">
-    *Further Reading
+  <a href="#4-further-reading" class="md-nav__link">
+    4️⃣ Further Reading
   </a>
   
 </li>
@@ -1146,7 +1146,7 @@
   
 
 
-<h1 id="soft-memory-hierarchies">Soft Memory Hierarchies</h1>
+<h1 id="2-soft-memory-hierarchies">2️⃣ Soft Memory Hierarchies</h1>
 <figure>
 <p><a class="glightbox" href="../../figures/amd_athlon_hierarchy.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/amd_athlon_hierarchy.png" width="600" /></a></p>
 <figcaption>
@@ -1762,7 +1762,8 @@ and the pointer to the memory on the heap.</p>
 <p>But hold on a minute! That is illegal! We would have two pointers with
 full write rights. Which is illegal in Rust! Which is also why <code>Vec&lt;T&gt;</code>
 doesn't implement <code>Copy</code> and this has all been a ruse, for your edification.</p>
-<h2 id="smart-pointers">*Smart pointers</h2>
+<hr />
+<h2 id="3-smart-pointers">3️⃣ Smart pointers</h2>
 <p>Ok, so I promised previously, that I would explain how Python, and most other
 garbage collected languages, deal with assigning one variable to another.
 If you recall the previous example</p>
@@ -1903,7 +1904,7 @@ both object A and object B can safely be deallocated.</p>
 and another example about
 <a href="https://doc.rust-lang.org/book/ch15-06-reference-cycles.html">reference cycles</a>,
 which is what we needed weak pointers for.</p>
-<h2 id="the-vector-reloaded">*The Vector Reloaded</h2>
+<h2 id="3-the-vector-reloaded">3️⃣ The Vector Reloaded</h2>
 <p>This isn't meant to be a one-to-one representation of how tensors work in <code>numpy</code> or
 <code>PyTorch</code>, but combined with creating different views on the same underlying
 1-dimensional memory as we learned about earlier, we can look at a few other fun
@@ -1936,8 +1937,27 @@ the time and effort.</p>
 Matrix-matrix multiplication with the second matrix transposed.
 </figcaption>
 </figure>
-<p>Now, lets try out a simple example! CODE DOESN'T GET THE RIGHT RESULTS</p>
-<h3 id="permutated-arrays">Permutated Arrays</h3>
+<p>Now, lets try out a simple example! Checkout the code at
+<code>m1_memory_hierarchies/code/strided_access_and_transposition</code> or check it out
+<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/blob/main/m1_memory_hierarchies/code/strided_access_and_transposition/src/main.rs">online</a>
+.</p>
+<p>Interestingly, when running the code there doesn't seem to be much of a difference until
+the matrix sizes become quite big. Why do you think that is?</p>
+<figure>
+<p><a class="glightbox" href="../../figures/strided_access_transposition_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/strided_access_transposition_benchmark.png" width="500" /></a></p>
+<figcaption>
+Difference gets bigger as the matrices get bigger.
+</figcaption>
+</figure>
+<p>One guess would be a combination of the compiler aggresively optimizing the code, the branch prediction of the
+pipeline (don't worry about it) being really good at guessing these very uniform workloads, but most importantly,
+the caches doing a lot of the heavy lifting for us. Once the caches run out of space we begin to see a gap
+between the two ways of doing it. This might be more pronounced on the GPU. In most cases you should probably
+start with making the simplest and easy comprehendible code and try out (AND MEASURE!!!!) potential
+optimizations before spending your time going down rabbit holes. This is will be a bit of a theme
+in the next few sections. Not much of a difference in anything until the caches begin running out of space.
+At least if you aren't coding something really terrible, like randomized access.</p>
+<h3 id="permuted-arrays">Permuted Arrays</h3>
 <p>Sometimes we might want to change around elements in a matrix, without permanently executing
 the change. Not permanently executing these changes may also allow for several different
 views of the same data. So let's take a look at how permutations work.</p>
@@ -1973,7 +1993,24 @@ order.</p>
 Offset some of the cost of permutations, by just permuting rows.
 </figcaption>
 </figure>
-<p>Now, lets try out a simple example!</p>
+<p>Now, lets try out a simple example! Checkout the code at
+<code>m1_memory_hierarchies/code/permuted_arrays</code> or check it out
+<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/blob/main/m1_memory_hierarchies/code/permuted_arrays/src/main.rs">online</a></p>
+<figure>
+<p><a class="glightbox" href="../../figures/permuted_arrays_benchmark_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_arrays_benchmark_0.png" width="500" /></a></p>
+<figcaption>
+Huh, that's weird. There doesn't seem to be much of a difference.
+</figcaption>
+</figure>
+<p>It seems pretty much the same.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/permuted_arrays_benchmark_1.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_arrays_benchmark_1.png" width="500" /></a></p>
+<figcaption>
+The differences appear as the cache runs out of space with bigger data sizes.
+</figcaption>
+</figure>
+<p>Once we run out of cache however, the executed permutation is quite a bit faster.
+Permuting just the rows can also give quite a performance boost.</p>
 <h3 id="jagged-arrays">Jagged Arrays</h3>
 <p>A weird form of array is the jagged array. A 2D matrix can't simply be
 expressed as having dimensions NxM, but Nx? or ?xM dimensions. As in N rows, each with their
@@ -1982,7 +2019,7 @@ flexible scheme, but unless you are absolutely sure you need it, you should prob
 <p>In the example below, we attain this complete flexibility by using a vector of vectors,
 which as you may recall is really bad for performance.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/jagged_array.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/naive_jagged_array.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/naive_jagged_array.png" width="500" /></a></p>
 <figcaption>
 Create a jagged array by using a vector of vectors.
 </figcaption>
@@ -2037,7 +2074,30 @@ to the end of the array. Otherwise, we can't get the length of the last row.</p>
 As we compacted the data, we can keep track of the starting index of each row in an auxiliary array.
 </figcaption>
 </figure>
-<p>Now for a simple performance benchmark.</p>
+<p>Now for a simple performance benchmark. Checkout the code at
+<code>m1_memory_hierarchies/code/jagged_arrays</code> or check it out
+<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/blob/main/m1_memory_hierarchies/code/jagged_arrays/src/main.rs">online</a></p>
+<figure>
+<p><a class="glightbox" href="../../figures/jagged_arrays_benchmark_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_arrays_benchmark_0.png" width="500" /></a></p>
+<figcaption>
+Huh, that's weird. There doesn't seem to be much of a difference.
+</figcaption>
+</figure>
+<figure>
+<p><a class="glightbox" href="../../figures/jagged_arrays_benchmark_1.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_arrays_benchmark_1.png" width="500" /></a></p>
+<figcaption>
+There we go, we ran out of cache!.
+</figcaption>
+</figure>
+<p>Note that the only version which is not extremely slow for inserting values is the naive one. But in most other
+cases our final optimized version JaggedArraySizeCompactedAux seems to be the winner. It doesn't take a lot of
+memory compared to the other solutions and it seems to be in some cases on-par with the fastest
+(with a reasonable variance) or the fastest. In most other cases the NaiveJaggedArray seems just fine.
+Again, don't overcomplicate things and measure the differences for your case. In any case, you should
+avoid a jagged array if you can. And especially the CompactedJaggedArray, which costs the least memory, but
+has a catastrophic access time due to needing to accumulate the indices needed to find the row index. Plus,
+having the indices be interleaved with the values is problematic as we mix control flow and data, as well
+as needing to accomodate casting a data value to an index value. Please don't do that!</p>
 <h3 id="sparse-arrays">Sparse Arrays</h3>
 <p>Finally, we have the sparse array. In the case of huge matrices with lots of values we don't care about,
 especially 0's, we can use the run-length encoding we just saw to encode values. This usually results
@@ -2053,7 +2113,7 @@ A sparse array created with run-length encoding.
 <p>For this to be more efficient than the dense version, you usually need at least 90% sparseness, or an array
 so big that you are having issues with memory. Sparse matrices also require their own separate implementations
 and can be hard to parallelize.</p>
-<h2 id="graphs-and-trees">*Graphs and Trees</h2>
+<h2 id="3-graphs-and-trees">3️⃣ Graphs and Trees</h2>
 <p>Graphs<br />
 Trees<br />
 Graphs and Trees using  </p>
@@ -2062,19 +2122,19 @@ Graphs and Trees using  </p>
 <li>Smart pointers</li>
 <li>Indices (static, dynamic issue getting a mutable reference to the collection in Rust)</li>
 </ul>
-<h2 id="garbage-collectors">*Garbage collectors</h2>
+<h2 id="3-garbage-collectors">3️⃣ Garbage collectors</h2>
 <p>Reference counting
 How to still do memory leaks -&gt; cyclical references, but save some for the exercises
 Generational Garbage Collection
 Calling the GC yourself
 Object Pools</p>
-<h2 id="virtualized-memory-hierarchy">*Virtualized Memory Hierarchy</h2>
+<h2 id="3-virtualized-memory-hierarchy">3️⃣ Virtualized Memory Hierarchy</h2>
 <p>Find a more formalized definition of virtualized memory<br />
 The process' own virtual memory space (the stack and heap share the same memory)<br />
 Stack/Heap Visualization<br />
 Disk -&gt; Image addresses for training networks -&gt; Fat nodes/payload options<br />
 Internet -&gt; Rendering on the internet, or pulling images from the internet  </p>
-<h2 id="further-reading">*Further Reading</h2>
+<h2 id="4-further-reading">4️⃣ Further Reading</h2>
 <p>An explanation of memory allocation, stack and heap
 <a href="https://cs2461-2020.github.io/lectures/dynamic.pdf">in C</a></p>
 <p>A more rigorous <a href="http://eceweb.ucsd.edu/~gert/ece30/CN5.pdf">explanation</a>
@@ -2120,7 +2180,7 @@ of the register, cache, main memory and virtual memory parts of the memory hiera
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Memory Hierarchies, Computational Graphs and Compilers" rel="prev">
+          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: 1️⃣ Memory Hierarchies, Computational Graphs and Compilers" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -2129,7 +2189,7 @@ of the register, cache, main memory and virtual memory parts of the memory hiera
                 Previous
               </span>
               <div class="md-ellipsis">
-                Memory Hierarchies, Computational Graphs and Compilers
+                1️⃣ Memory Hierarchies, Computational Graphs and Compilers
               </div>
             </div>
           </a>

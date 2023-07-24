@@ -1,4 +1,6 @@
-use std::mem;
+use std::{mem, time::{Instant, Duration}};
+
+use rand::{rngs::ThreadRng, Rng};
 
 struct NaiveJaggedArray {
     data: Vec<Vec<f32>>,
@@ -262,7 +264,233 @@ impl CompactedJaggedArrayAuxRowStart {
     }
 }
 
+fn execute_test(iteration_count: usize, row_count: usize, max_row_length: usize, row_lengths: Vec<usize>, random_access_count: usize, run_expensive_tests: bool) -> f32 {
+    println!("Running test with {} row count, {} max row length, {} iterations, {} random accesses", row_count, max_row_length, iteration_count, random_access_count);
+    
+    let mut sum: f32 = 0.0;
+    let mut rng: ThreadRng = rand::thread_rng();
+
+    
+    // Introduce scope to drop the vectors once they are done
+    {
+        let naive_jagged_array: NaiveJaggedArray = NaiveJaggedArray::new(row_lengths.clone());
+        let now: Instant = Instant::now();
+        for _ in 0..iteration_count {
+            sum += naive_jagged_array.sum();
+        }
+        let elapsed_time: Duration = now.elapsed();
+        println!("{} ms for NaiveJaggedArray sum test taking {} bytes of memory", elapsed_time.as_millis() as f64, naive_jagged_array.get_memory_size());
+
+        let mut time_sum: Duration = Duration::new(0, 0);
+        // Generating the random indices might be just as expensive as making the accesses so we do this in bulk
+        // outside the timing.
+        let mut random_indices: Vec<(usize, usize)> = (0..random_access_count).into_iter().map(|_| (rng.gen_range(0..row_count), rng.gen_range(0..max_row_length))).collect();
+        for _ in 0..iteration_count {
+            for indices in &mut random_indices {
+                indices.0 = rng.gen_range(0..row_count);
+                indices.1 = rng.gen_range(0..max_row_length);
+            }
+            let now: Instant = Instant::now();
+            for (row_index, column_index) in &random_indices {
+                if let Some(value) = naive_jagged_array.random_access(*row_index, *column_index) {
+                    sum += value;
+                }
+            }
+            let elapsed_time: Duration = now.elapsed();
+            time_sum += elapsed_time;
+        }
+        println!("{} ms for NaiveJaggedArray random access test taking {} bytes of memory", time_sum.as_millis() as f64, naive_jagged_array.get_memory_size());
+    }
+
+    // Introduce scope to drop the vectors once they are done
+    {
+        let jagged_array_aux_lengths: JaggedArrayAuxLengths = JaggedArrayAuxLengths::new(row_count, row_lengths.clone());
+        let now: Instant = Instant::now();
+        for _ in 0..iteration_count {
+            sum += jagged_array_aux_lengths.sum();
+        }
+        let elapsed_time: Duration = now.elapsed();
+        println!("{} ms for JaggedArrayAuxLengths sum test taking {} bytes of memory", elapsed_time.as_millis() as f64, jagged_array_aux_lengths.get_memory_size());
+
+        let mut time_sum: Duration = Duration::new(0, 0);
+        // Generating the random indices might be just as expensive as making the accesses so we do this in bulk
+        // outside the timing.
+        let mut random_indices: Vec<(usize, usize)> = (0..random_access_count).into_iter().map(|_| (rng.gen_range(0..row_count), rng.gen_range(0..max_row_length))).collect();
+        for _ in 0..iteration_count {
+            for indices in &mut random_indices {
+                indices.0 = rng.gen_range(0..row_count);
+                indices.1 = rng.gen_range(0..max_row_length);
+            }
+            let now: Instant = Instant::now();
+            for (row_index, column_index) in &random_indices {
+                if let Some(value) = jagged_array_aux_lengths.random_access(*row_index, *column_index) {
+                    sum += value;
+                }
+            }
+            let elapsed_time: Duration = now.elapsed();
+            time_sum += elapsed_time;
+        }
+        println!("{} ms for JaggedArrayAuxLengths random access test taking {} bytes of memory", time_sum.as_millis() as f64, jagged_array_aux_lengths.get_memory_size());
+    }
+
+
+    // Introduce scope to drop the vectors once they are done
+    {
+        let constrained_jagged_array: ConstrainedJaggedArray = ConstrainedJaggedArray::new(row_count, row_lengths.clone());
+        let now: Instant = Instant::now();
+        for _ in 0..iteration_count {
+            sum += constrained_jagged_array.sum();
+        }
+        let elapsed_time: Duration = now.elapsed();
+        println!("{} ms for ConstrainedJaggedArray sum test taking {} bytes of memory", elapsed_time.as_millis() as f64, constrained_jagged_array.get_memory_size());
+
+        let mut time_sum: Duration = Duration::new(0, 0);
+        // Generating the random indices might be just as expensive as making the accesses so we do this in bulk
+        // outside the timing.
+        let mut random_indices: Vec<(usize, usize)> = (0..random_access_count).into_iter().map(|_| (rng.gen_range(0..row_count), rng.gen_range(0..max_row_length))).collect();
+        for _ in 0..iteration_count {
+            for indices in &mut random_indices {
+                indices.0 = rng.gen_range(0..row_count);
+                indices.1 = rng.gen_range(0..max_row_length);
+            }
+            let now: Instant = Instant::now();
+            for (row_index, column_index) in &random_indices {
+                if let Some(value) = constrained_jagged_array.random_access(*row_index, *column_index) {
+                    sum += value;
+                }
+            }
+            let elapsed_time: Duration = now.elapsed();
+            time_sum += elapsed_time;
+        }
+        println!("{} ms for ConstrainedJaggedArray random access test taking {} bytes of memory", time_sum.as_millis() as f64, constrained_jagged_array.get_memory_size());
+    }
+
+    
+    // Introduce scope to drop the vectors once they are done
+    {
+        let compacted_jagged_array: CompactedJaggedArray = CompactedJaggedArray::new(row_count, row_lengths.clone());
+        let now: Instant = Instant::now();
+        for _ in 0..iteration_count {
+            sum += compacted_jagged_array.sum();
+        }
+        let elapsed_time: Duration = now.elapsed();
+        println!("{} ms for CompactedJaggedArray sum test taking {} bytes of memory", elapsed_time.as_millis() as f64, compacted_jagged_array.get_memory_size());
+
+        if run_expensive_tests {
+            let mut time_sum: Duration = Duration::new(0, 0);
+            // Generating the random indices might be just as expensive as making the accesses so we do this in bulk
+            // outside the timing.
+            let mut random_indices: Vec<(usize, usize)> = (0..random_access_count).into_iter().map(|_| (rng.gen_range(0..row_count), rng.gen_range(0..max_row_length))).collect();
+            for _ in 0..iteration_count {
+                for indices in &mut random_indices {
+                    indices.0 = rng.gen_range(0..row_count);
+                    indices.1 = rng.gen_range(0..max_row_length);
+                }
+                let now: Instant = Instant::now();
+                for (row_index, column_index) in &random_indices {
+                    if let Some(value) = compacted_jagged_array.random_access(*row_index, *column_index) {
+                        sum += value;
+                    }
+                }
+                let elapsed_time: Duration = now.elapsed();
+                time_sum += elapsed_time;
+            }
+            println!("{} ms for CompactedJaggedArray random access test taking {} bytes of memory", time_sum.as_millis() as f64, compacted_jagged_array.get_memory_size());
+        } else {
+            println!("Didn't run random access test for CompactedJaggedArray because it was too expensive!");
+        }
+    }
+
+    // Introduce scope to drop the vectors once they are done
+    {
+        let compacted_jagged_array_aux_row_start: CompactedJaggedArrayAuxRowStart = CompactedJaggedArrayAuxRowStart::new(row_count, row_lengths.clone());
+        let now: Instant = Instant::now();
+        for _ in 0..iteration_count {
+            sum += compacted_jagged_array_aux_row_start.sum();
+        }
+        let elapsed_time: Duration = now.elapsed();
+        println!("{} ms for CompactedJaggedArrayAuxRowStart sum test taking {} bytes of memory", elapsed_time.as_millis() as f64, compacted_jagged_array_aux_row_start.get_memory_size());
+
+        let mut time_sum: Duration = Duration::new(0, 0);
+        // Generating the random indices might be just as expensive as making the accesses so we do this in bulk
+        // outside the timing.
+        let mut random_indices: Vec<(usize, usize)> = (0..random_access_count).into_iter().map(|_| (rng.gen_range(0..row_count), rng.gen_range(0..max_row_length))).collect();
+        for _ in 0..iteration_count {
+            for indices in &mut random_indices {
+                indices.0 = rng.gen_range(0..row_count);
+                indices.1 = rng.gen_range(0..max_row_length);
+            }
+            let now: Instant = Instant::now();
+            for (row_index, column_index) in &random_indices {
+                if let Some(value) = compacted_jagged_array_aux_row_start.random_access(*row_index, *column_index) {
+                    sum += value;
+                }
+            }
+            let elapsed_time: Duration = now.elapsed();
+            time_sum += elapsed_time;
+        }
+        println!("{} ms for CompactedJaggedArrayAuxRowStart random access test taking {} bytes of memory", time_sum.as_millis() as f64, compacted_jagged_array_aux_row_start.get_memory_size());
+    }
+
+    println!("");
+    println!("");
+
+    sum
+}
 
 fn main() {
-    println!("Hello, world!");
+    let mut rng: ThreadRng = rand::thread_rng();
+    let mut sums: f32 = 0.0;
+
+
+    let iteration_count: usize = 1_000_000;
+    let row_count: usize = 10;
+    let max_row_length: usize = 10;
+    let row_lengths: Vec<usize> = (0..row_count).into_iter().map(|_| rng.gen_range(0..max_row_length)).collect();
+    let random_access_count: usize = row_count * max_row_length / 10;
+    let run_expensive_tests: bool = true;
+
+    sums += execute_test(iteration_count, row_count, max_row_length, row_lengths, random_access_count, run_expensive_tests);
+
+
+    let iteration_count: usize = 100_000;
+    let row_count: usize = 100;
+    let max_row_length: usize = 100;
+    let row_lengths: Vec<usize> = (0..row_count).into_iter().map(|_| rng.gen_range(0..max_row_length)).collect();
+    let random_access_count: usize = row_count * max_row_length / 10;
+    let run_expensive_tests: bool = true;
+
+    sums += execute_test(iteration_count, row_count, max_row_length, row_lengths, random_access_count, run_expensive_tests);
+
+
+    let iteration_count: usize = 1_000;
+    let row_count: usize = 1000;
+    let max_row_length: usize = 1000;
+    let row_lengths: Vec<usize> = (0..row_count).into_iter().map(|_| rng.gen_range(0..max_row_length)).collect();
+    let random_access_count: usize = row_count * max_row_length / 10;
+    let run_expensive_tests: bool = false;
+
+    sums += execute_test(iteration_count, row_count, max_row_length, row_lengths, random_access_count, run_expensive_tests);
+
+
+    let iteration_count: usize = 100;
+    let row_count: usize = 10000;
+    let max_row_length: usize = 10000;
+    let row_lengths: Vec<usize> = (0..row_count).into_iter().map(|_| rng.gen_range(0..max_row_length)).collect();
+    let random_access_count: usize = row_count * max_row_length / 100;
+    let run_expensive_tests: bool = false;
+    
+    sums += execute_test(iteration_count, row_count, max_row_length, row_lengths, random_access_count, run_expensive_tests);
+
+
+    let iteration_count: usize = 1;
+    let row_count: usize = 100000;
+    let max_row_length: usize = 100000;
+    let row_lengths: Vec<usize> = (0..row_count).into_iter().map(|_| rng.gen_range(0..max_row_length)).collect();
+    let random_access_count: usize = row_count * max_row_length / 1000;
+    let run_expensive_tests: bool = false;
+
+    sums += execute_test(iteration_count, row_count, max_row_length, row_lengths, random_access_count, run_expensive_tests);
+
+    println!("Sum was: {}", sums);
 }

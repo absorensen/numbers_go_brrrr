@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#introducing-rust" class="md-skip">
+        <a href="#2-introducing-rust" class="md-skip">
           Skip to content
         </a>
       
@@ -824,7 +824,7 @@
   
 
 
-<h1 id="introducing-rust">Introducing Rust</h1>
+<h1 id="2-introducing-rust">2️⃣ Introducing Rust</h1>
 <p>Why use <a href="https://www.rust-lang.org/">Rust</a> for the guide? Say you've decided you want to eat 35 burgers.
 Python is the friend that helps you order them delivered.
 C++ is the friend who says 'do whatever you want'. Rust on the other hand,
@@ -904,7 +904,8 @@ Sometimes you need more info as to what went wrong with the test. There's a
 <p>On some computers the GPU tests will currently fail unless being run with <code>cargo test -- --test-threads=1</code>
 as the tests are running concurrently. All of the tests requiring GPU access will try to grab the GPU without
 sharing resources. Even then it might fail. You can just try a few more times or try to run tests individually.  </p>
-<h1 id="clippy">*Clippy</h1>
+<hr />
+<h1 id="3-clippy">3️⃣ Clippy</h1>
 <p><a href="https://doc.rust-lang.org/stable/clippy/index.html">Clippy</a> is cargo's tool for giving suggestions for improving
 your code and making it more akin to idiomatic Rust. The guide has most code conformant to Clippy's suggestions,
 however the guide chooses to diverge where making the code simpler and easier to understand for people who have
@@ -917,12 +918,12 @@ It is recommended that you use Clippy in your own code. It is as simple as calli
 The guide elects not to fix this, because the return statement was put there to make a point.
 </figcaption>
 </figure>
-<h1 id="rustfmt">*rustfmt</h1>
+<h1 id="3-rustfmt">3️⃣ rustfmt</h1>
 <p><a href="https://github.com/rust-lang/rustfmt">rustfmt</a> is a formatter for Rust. Surprise!
 You can install it by running <code>rustup component add rustfmt</code> in a terminal. From then on you can run commands
 like <code>cargo fmt</code>, which automatically changes the code in your current crate (subproject,
 or the entire project if you are standing in the root).</p>
-<h1 id="fix">*fix</h1>
+<h1 id="3-fix">3️⃣ fix</h1>
 <p><a href="https://doc.rust-lang.org/book/appendix-04-useful-development-tools.html#fix-your-code-with-rustfix">fix</a> is
 a tool for taking as many of those pesky compiler warnings as possible, and fixing your code for you. You just
 enter <code>cargo fix</code>.</p>
@@ -932,7 +933,7 @@ enter <code>cargo fix</code>.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 6, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 24, 2023</span>
       
         <br>
         Created:

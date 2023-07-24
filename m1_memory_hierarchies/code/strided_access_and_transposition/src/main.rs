@@ -63,20 +63,21 @@ impl Matrix2D {
     }
 }
 
-fn print_example(outer_dimension: usize, inner_dimension: usize) {
+fn print_example(outer_dimension: usize, inner_dimension: usize, iteration_count: usize) {
     println!(
-        "Now running {}x{} = {}x{} x {}x{} example",
+        "Now running {}x{} = {}x{} x {}x{} example for {} iterations",
         inner_dimension,
         inner_dimension,
         outer_dimension,
         inner_dimension,
         inner_dimension,
-        outer_dimension
+        outer_dimension,
+        iteration_count
     );
 }
 
 fn test(outer_dimension: usize, inner_dimension: usize, iteration_count: usize) {
-    print_example(outer_dimension, inner_dimension);
+    print_example(outer_dimension, inner_dimension, iteration_count);
     let input_a: Matrix2D = Matrix2D::new(outer_dimension, inner_dimension, 0.1);
     let mut input_b: Matrix2D = Matrix2D::new(inner_dimension, outer_dimension, 0.2);
     let mut output: Matrix2D = Matrix2D::new(outer_dimension, outer_dimension, 0.0);
@@ -101,9 +102,37 @@ fn test(outer_dimension: usize, inner_dimension: usize, iteration_count: usize) 
 }
 
 fn main() {
-    let iteration_count: usize = 1_000;
-
+    let iteration_count: usize = 6_000_000;
     let outer_dimension: usize = 10;
-    let inner_dimension: usize = 100;
+    let inner_dimension: usize = 8;
     test(outer_dimension, inner_dimension, iteration_count);
+
+    let iteration_count: usize = 10_000;
+    let outer_dimension: usize = 100;
+    let inner_dimension: usize = 50;
+    test(outer_dimension, inner_dimension, iteration_count);
+
+
+    let iteration_count: usize = 20;
+    let outer_dimension: usize = 500;
+    let inner_dimension: usize = 500;
+    test(outer_dimension, inner_dimension, iteration_count);
+
+
+    let iteration_count: usize = 5;
+    let outer_dimension: usize = 1_000;
+    let inner_dimension: usize = 1_000;
+    test(outer_dimension, inner_dimension, iteration_count);
+
+
+    let iteration_count: usize = 1;
+    let outer_dimension: usize = 2_000;
+    let inner_dimension: usize = 2_000;
+    test(outer_dimension, inner_dimension, iteration_count);
+
+    let iteration_count: usize = 1;
+    let outer_dimension: usize = 3_000;
+    let inner_dimension: usize = 1_000;
+    test(outer_dimension, inner_dimension, iteration_count);
+
 }

@@ -1,19 +1,9 @@
-use std::io::Read;
 use std::mem;
 use std::time::{Instant, Duration};
 
 use rand::Rng;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
-
-fn print_example(function: &str, iteration_count: usize, data_count: usize) {
-    println!(
-        "Now running {} example with {} elements for {} iterations",
-        function,
-        data_count,
-        iteration_count
-    );
-}
 
 fn test_permuted(iteration_count: usize, data_count: usize) -> f32{
     let mut rng: ThreadRng = rand::thread_rng();
@@ -34,7 +24,11 @@ fn test_permuted(iteration_count: usize, data_count: usize) -> f32{
     }
     let elapsed_time: Duration = now.elapsed();
 
-    let bytes_used: usize = data.len() * mem::size_of::<f32>() + indices.len() * mem::size_of::<usize>();
+    let bytes_used: usize = 
+        data.len() * mem::size_of::<f32>() + 
+        mem::size_of::<Vec<f32>>() +
+        indices.len() * mem::size_of::<usize>() +
+        mem::size_of::<Vec<usize>>();
     println!("{} ms for permuted test taking {} bytes of memory", elapsed_time.as_millis() as f64, bytes_used);
 
     total_sum
@@ -60,7 +54,9 @@ fn test_executed_permuted(iteration_count: usize, data_count: usize) -> f32 {
     }
     let elapsed_time: Duration = now.elapsed();
 
-    let bytes_used: usize = data.len() * mem::size_of::<f32>();
+    let bytes_used: usize = 
+        data.len() * mem::size_of::<f32>() +
+        mem::size_of::<Vec<f32>>();
     println!("{} ms for executed permuted test taking {} bytes of memory", elapsed_time.as_millis() as f64, bytes_used);
 
     total_sum
@@ -86,18 +82,25 @@ fn test_permuted_rows(iteration_count: usize, data_count: usize, row_length: usi
         total_sum += sum;
     }
     let elapsed_time: Duration = now.elapsed();
-    let bytes_used: usize = data.len() * mem::size_of::<f32>() + indices.len() * mem::size_of::<usize>();
-    println!("{} ms for permuted rows test taking {} bytes of memory", elapsed_time.as_millis() as f64, bytes_used);
+    let bytes_used: usize = 
+        data.len() * mem::size_of::<f32>() +
+        mem::size_of::<Vec<f32>>() + 
+        indices.len() * mem::size_of::<usize>() +
+        mem::size_of::<Vec<usize>>();
+    println!("{} ms for permuted rows test taking {} bytes of memory with row_length {}", elapsed_time.as_millis() as f64, bytes_used, row_length);
 
     total_sum
 } 
 
-fn test(iteration_count: usize, data_count: usize, row_length: usize) {
-    println!("Running tests for {} elements for {} iterations", data_count, iteration_count);
+fn test(iteration_count: usize, data_count: usize, row_lengths: Vec<usize>) {
+    println!("Running tests for {} elements for {} iterations with row_length {:?}", data_count, iteration_count, row_lengths);
     let mut sums: f32 = 0.0;
     sums += test_permuted(iteration_count, data_count);
     sums += test_executed_permuted(iteration_count, data_count);
-    sums += test_permuted_rows(iteration_count, data_count, row_length);
+    
+    for row_length in row_lengths {
+        sums += test_permuted_rows(iteration_count, data_count, row_length);
+    }
     println!("Sums were: {}", sums);
     println!("");
 }
@@ -105,7 +108,33 @@ fn test(iteration_count: usize, data_count: usize, row_length: usize) {
 // Add different size tests and random access testing in addition to the sum test
 fn main() {
     let iteration_count: usize = 100_000;
+    let data_count: usize = 1000;
+    let row_lengths: Vec<usize> = Vec::<usize>::from([1, 10, 100, 1000]); 
+    test(iteration_count, data_count, row_lengths);
+
+    let iteration_count: usize = 10_000;
+    let data_count: usize = 10000;
+    let row_lengths: Vec<usize> = Vec::<usize>::from([1, 10, 100, 1000]); 
+    test(iteration_count, data_count, row_lengths);
+
+    let iteration_count: usize = 1_000;
     let data_count: usize = 100000;
-    let row_length: usize = 100;
-    test(iteration_count, data_count, row_length);
+    let row_lengths: Vec<usize> = Vec::<usize>::from([1, 10, 100, 1000]); 
+    test(iteration_count, data_count, row_lengths);
+
+    let iteration_count: usize = 100;
+    let data_count: usize = 1000000;
+    let row_lengths: Vec<usize> = Vec::<usize>::from([1, 10, 100, 1000, 10000, 100000]); 
+    test(iteration_count, data_count, row_lengths);
+
+    let iteration_count: usize = 10;
+    let data_count: usize = 10000000;
+    let row_lengths: Vec<usize> = Vec::<usize>::from([1, 10, 100, 1000, 10000, 100000]); 
+    test(iteration_count, data_count, row_lengths);
+
+    let iteration_count: usize = 1;
+    let data_count: usize = 100000000;
+    let row_lengths: Vec<usize> = Vec::<usize>::from([1, 10, 100, 1000, 10000, 100000]); 
+    test(iteration_count, data_count, row_lengths);
+
 }
