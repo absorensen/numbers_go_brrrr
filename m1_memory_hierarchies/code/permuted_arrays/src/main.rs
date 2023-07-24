@@ -102,6 +102,7 @@ fn test(iteration_count: usize, data_count: usize, row_length: usize) {
     println!("");
 }
 
+// Add different size tests and random access testing in addition to the sum test
 fn main() {
     let iteration_count: usize = 100_000;
     let data_count: usize = 100000;
