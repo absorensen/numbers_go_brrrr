@@ -2418,14 +2418,24 @@ number.
 so big that you are having issues with memory. Sparse matrices also require their own separate implementations
 and can be hard to parallelize.</p>
 <h2 id="3-hash-maps">3️⃣ Hash Maps</h2>
-<p>Our final fundamental data structure is the hash map. The hash map takes a key type and a value type.
+<p>Another fundamental data structure is the hash map. The hash map takes a key type and a value type.
 The value type can pretty much be anything, don't worry about it! But where things get really interesting is
 the key value. What a hash map does is to take a key value and translate it into an array index using something
 called a hash function. A very simple hash function takes a number, adds a number, multiplies by a very big prime
 number and then modulos that number by a number representing how much space we have available. The base
 recommendation is that a hash map should have at least twice the space needed to densely represent the
 same number of elements. </p>
-<p>INSERT DIAGRAM OF HASH FUNCTION HERE</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="c1">// Not actually a good hash function</span>
+</span><span id="__span-44-2"><a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="k">fn</span> <span class="nf">example_hash_function</span><span class="p">(</span><span class="n">key</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="kt">usize</span> <span class="p">{</span>
+</span><span id="__span-44-3"><a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="n">PRIME</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">6457</span><span class="p">;</span>
+</span><span id="__span-44-4"><a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">hash</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-44-5"><a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-44-6"><a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a><span class="w">        </span><span class="n">hash</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="p">(</span><span class="n">hash</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">31</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">usize</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="n">PRIME</span><span class="p">;</span>
+</span><span id="__span-44-7"><a id="__codelineno-44-7" name="__codelineno-44-7" href="#__codelineno-44-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-44-8"><a id="__codelineno-44-8" name="__codelineno-44-8" href="#__codelineno-44-8"></a>
+</span><span id="__span-44-9"><a id="__codelineno-44-9" name="__codelineno-44-9" href="#__codelineno-44-9"></a><span class="w">    </span><span class="n">hash</span>
+</span><span id="__span-44-10"><a id="__codelineno-44-10" name="__codelineno-44-10" href="#__codelineno-44-10"></a><span class="p">}</span>
+</span></code></pre></div>
 <p>Generally, a hash map will have constant time lookup and insertion. The reason for the recommendation of
 at least a factor 2 in space is collisions! A collision is when two different keys hash to the same
 value in our storage. Remember that we can have both the initial key that we queried with, and the
@@ -2438,7 +2448,12 @@ we might have a fragmented performance. If we know we are done and have a signif
 elements which need to be queried a lot, we can usually ask the data structure to
 <code>.shrink_to_fit()</code> or <code>.rehash()</code>. Rehashing will reconstruct the structure to be
 made as if it had only been the elements currently stored, all along.</p>
-<p>INSERT DIAGRAM OF HASH COLLISION SEARCH</p>
+<figure>
+<p><a class="glightbox" href="../../figures/hash_map_find_key.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/hash_map_find_key.png" width="500" /></a></p>
+<figcaption>
+A number of keys have been inserted in random order. We try to find the entry corresponding to the key "Ni" at index 3. But its natural spot was already taken by a spillover from the index 2. We find the entry in the next index instead. This is also known as open addressing.
+</figcaption>
+</figure>
 <p>I will reiterate a theme here -
 <em>if it can be done with a basic array, it should probably be done with a basic array</em>.
 Of course there are different, more optimized methods for implementing hash maps, you can usually find a few
@@ -2453,8 +2468,22 @@ neural network with random access, you can just create a new string "Linear0" an
 that as a key for the first linear layer and its contents, and then "ReLU0", "Linear1",
 "ReLU1", "Softmax0" and so on. If possible, it is more efficient to use small types as
 your key. Such as an integer.</p>
-<p>INSERT BENCHMARK FOR HASH STRING VS HASH INT HERE.</p>
-<p>In general hash maps have an alright performance. C#'s dictionary lookup performance will usually go down hill at around 30k entries though. This doesn't happen for arrays.</p>
+<p>Now for a simple performance benchmark. Checkout the code at
+<code>m1_memory_hierarchies/code/hash_maps</code> or check it out
+<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/blob/main/m1_memory_hierarchies/code/hash_maps/src/main.rs">online</a></p>
+<p>As you can see the hash map using integers clearly outperforms Strings. To be fair, every insertion in the
+string based map, requires a clone of the original string, the read and update only requires a reference.
+But we can expect just about a factor 2 performance difference by using the simpler type with the simpler
+hashing function. It should however, be noted that the string keys were all just the integer keys
+as strings, which might have an influence on the distribution in the hash table. What we could do
+in our previous neural network layer example would be to have an integer value representing each layer type
+and then the id. We could relegate them to different parts of an integer. This could for example be the first 20
+bits reserved for the layer type and the last 44, or perhaps just 12, bits reserved for the layer id. This
+does however incur a significant amount of extra code and the code will become more complex and implicit,
+so it's probably only worth it if you are doing A LOT of accesses for each layer.</p>
+<p>In general hash maps have an alright performance. C#'s dictionary lookup performance will usually go down
+hill at around 30k entries though. This doesn't happen for arrays. You can read more about different hash table
+implementations <a href="https://www.cs.princeton.edu/courses/archive/fall06/cos226/lectures/hash.pdf">here</a>.</p>
 <h2 id="3-graphs-and-trees">3️⃣ Graphs and Trees</h2>
 <p>Now that we have dicked around with variations on a theme (that theme was arrays if you are in doubt),
 let's look at a different fundamental data structure. Graphs! Not the kind with the lines...
@@ -2478,7 +2507,7 @@ Which is not to say that it is easier in C/C++, the compiler just doesn't stop y
 something problematic.</p>
 <p>Anyways... the rest of the module will be about how using data structures like computational graphs,
 which is essentially what is created when you define your entire neural network on a single object in
-PyTorch is, can speed up your code immensely as the structure allows the library/framework/compiler to reason
+PyTorch, can speed up your code immensely as the structure allows the library/framework/compiler to reason
 about your program. Essentially, computational graphs communicate the intention of your program ahead of time 
 before you start running everything in a loop. It can help the library/framework/compiler to optimize your code,
 optimize where the data should be located, when the data should be moved to/from the GPU, when two operations
@@ -2492,13 +2521,23 @@ arrows on the ends. Edges can be represented by indices, pointers, smart pointer
 that I can't think of right now. The node on the other hand, can be whatever you want SPARKLES. It can even
 be just a number or an index to the corresponding data paylod if you have seperated the graph structure
 from the data payloads.</p>
-<p>INSERT DIAGRAM OF BIDIRECTIONAL GRAPH HERE</p>
+<figure>
+<p><a class="glightbox" href="../../figures/bidirectional_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/bidirectional_graph.png" width="500" /></a></p>
+<figcaption>
+A bidirectional graph. Each edge points both ways.
+</figcaption>
+</figure>
 <p>Graphs come in lots of different flavors, but the three most important, and fundamental, are bidirectional,
 unidirectional and DAGs. Bidirectional means that the edges go both ways. If node A points to node B, node B
 also points to node A. Unidirectional graphs, you guessed it, means that the edges only point one way. That
 does not dictate that node A and B can't point to each other, but that it's not the default and it requires
-inserting two edges into the graph. </p>
-<p>INSERT DIAGRAM OF UNIDIRECTIONAL GRAPH HERE</p>
+inserting two edges into the graph. Note that edges can also have weights or other values themselves.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/unidirectional_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/unidirectional_graph.png" width="500" /></a></p>
+<figcaption>
+A unidirectional graph. Each edge points one way. Note that edges can also have weights.
+</figcaption>
+</figure>
 <p>Finally, the DAG, which stands for directional acyclical graph, is a
 unidirectional graph which does not contain cycles. A cycle is not just node A pointing to node B, which points
 to node A, it can also be node A pointing to node B pointing to node C pointing to node A, and so on an so forth
@@ -2506,42 +2545,72 @@ until we have an infinite number of nodes to traverse until we get back to node 
 way to Mordor just to go back to the friggin shire. No eagles will save you. You will just have to walk home.
 As you can imagine can be a costly property to assert unless we devise mechanisms to prevent this
 from happening in the first place.</p>
-<p>INSERT DIAGRAM OF DAG GRAPH HERE</p>
-<p>In general, if you are reading this, you should try to avoid graphs with cycles.
+<figure>
+<p><a class="glightbox" href="../../figures/directed_acyclic_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/directed_acyclic_graph.png" width="500" /></a></p>
+<figcaption>
+The unidirectional graph is verified as being a DAG through a topological sorting. No edges points backwards.
+</figcaption>
+</figure>
+<p>In the diagram, I have sorted the previous graph topologically. As long as none of the edges go backwards, we have
+a DAG. In general, if you are reading this, you should try to avoid graphs with cycles.
 It's a headache and you'll end up down a headscratching rabbit hole. It's also a good source
 of memory leaks if you haven't implemented your graph or tree in a certain fashion.</p>
-<p>INSERT DIAGRAM OF COMPUTATIONAL GRAPH HERE</p>
+<figure>
+<p><a class="glightbox" href="../../figures/computational_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/computational_graph.png" width="500" /></a></p>
+<figcaption>
+A neural network formulated as a computational graph.
+</figcaption>
+</figure>
+<p>Note that formulating a neural network in advance like this, also allows us to perform dimension checking between
+all layers before running the network.</p>
 <h3 id="trees">Trees</h3>
 <p>Trees can be seen as a subset of graphs. They can be both bi- and unidirectional. Typically, there is a root
 node which will point to one or more child nodes. If the tree is bidirectional, the children will be pointing back.
 Leaf nodes are nodes which are not pointing to any children.
 Nodes which are not the root, but also not a leaf node are usually called internal nodes.</p>
-<p>INSERT DIAGRAM OF UNIDIRECTIONAL TREE HERE</p>
+<figure>
+<p><a class="glightbox" href="../../figures/unidirectional_tree.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/unidirectional_tree.png" width="500" /></a></p>
+<figcaption>
+A binary tree where parent nodes point to children nodes, but children nodes don't point back.
+</figcaption>
+</figure>
 <p>Typically, a tree can be really good for sorting data, like getting the biggest value, it can be good for finding
 things spatially, like, give me all of the nodes in a 3D scene which can be seen by the camera, or give me the
 closest number to some query. The hierarchical nature of the tree lends itself well to getting approximately
 <code>log(N)</code> performance in a situation which would typically have <code>N</code> performance. This typically requires
 that the tree is fairly balanced. Meaning that the maximum length from root node to any leaf node is reasonably
 close.</p>
-<p>INSERT DIAGRAM OF BALANCED AND UNBALANCED TREE HERE</p>
+<figure>
+<p><a class="glightbox" href="../../figures/tree_balance.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/tree_balance.png" width="500" /></a></p>
+<figcaption>
+A balanced and an unbalanced binary tree. Note the sparseness and the differences
+in minimum and maximum height (distance from root node).
+</figcaption>
+</figure>
 <p>One key difference which makes trees very powerful, compared to the more open definition of graphs, is that we
 need rules to define what makes a tree. Once we know these explicit rules, we can sometimes take advantage to make
 implicit assumptions of the structure, which can save quite a lot of space, reduce the amount of indirections we
 need to follow in order to traverse the structure and make it easier to serialize (write it to a file on disk)
 the tree.</p>
-<p>INSERT DIAGRAM OF BIDIRECTIONAL TREE HERE</p>
+<figure>
+<p><a class="glightbox" href="../../figures/bidirectional_tree.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/bidirectional_tree.png" width="500" /></a></p>
+<figcaption>
+A bidirectional tree. Note if the pointers pointing from children nodes to parent nodes are strong pointers,
+the tree is rife with cyclical references.
+</figcaption>
+</figure>
 <h4 id="binary-trees">Binary Trees</h4>
 <p>Binary trees are some of the simplest trees. Any node has at most two children. These are usually called
 <code>left</code> and <code>right</code>. In C and C++, they could be raw pointers or smart pointers, and you would have to
 check whether they were <code>NULL</code> or <code>nullptr</code> whenever you were considering whether child nodes were
 available. In Rust, you might have something like <code>Option&lt;Arc&lt;Node&gt;&gt;</code> and you would have to check whether the
 child was <code>None</code> or <code>Some(child)</code>.</p>
-<div class="language-rust highlight"><pre><span></span><code><span id="__span-44-1"><a id="__codelineno-44-1" name="__codelineno-44-1" href="#__codelineno-44-1"></a><span class="k">struct</span> <span class="nc">BinaryNode</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-44-2"><a id="__codelineno-44-2" name="__codelineno-44-2" href="#__codelineno-44-2"></a><span class="w">    </span><span class="n">payload</span>: <span class="kt">i32</span><span class="p">,</span>
-</span><span id="__span-44-3"><a id="__codelineno-44-3" name="__codelineno-44-3" href="#__codelineno-44-3"></a><span class="w">    </span><span class="n">left</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Arc</span><span class="o">&lt;</span><span class="n">BinaryNode</span><span class="o">&gt;&gt;</span><span class="p">,</span>
-</span><span id="__span-44-4"><a id="__codelineno-44-4" name="__codelineno-44-4" href="#__codelineno-44-4"></a><span class="w">    </span><span class="n">right</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Arc</span><span class="o">&lt;</span><span class="n">BinaryNode</span><span class="o">&gt;&gt;</span><span class="p">,</span>
-</span><span id="__span-44-5"><a id="__codelineno-44-5" name="__codelineno-44-5" href="#__codelineno-44-5"></a><span class="w">    </span><span class="n">parent</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Weak</span><span class="o">&lt;</span><span class="n">BinaryNode</span><span class="o">&gt;&gt;</span><span class="p">,</span>
-</span><span id="__span-44-6"><a id="__codelineno-44-6" name="__codelineno-44-6" href="#__codelineno-44-6"></a><span class="p">}</span>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-45-1"><a id="__codelineno-45-1" name="__codelineno-45-1" href="#__codelineno-45-1"></a><span class="k">struct</span> <span class="nc">BinaryNode</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-45-2"><a id="__codelineno-45-2" name="__codelineno-45-2" href="#__codelineno-45-2"></a><span class="w">    </span><span class="n">payload</span>: <span class="kt">i32</span><span class="p">,</span>
+</span><span id="__span-45-3"><a id="__codelineno-45-3" name="__codelineno-45-3" href="#__codelineno-45-3"></a><span class="w">    </span><span class="n">left</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Arc</span><span class="o">&lt;</span><span class="n">BinaryNode</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+</span><span id="__span-45-4"><a id="__codelineno-45-4" name="__codelineno-45-4" href="#__codelineno-45-4"></a><span class="w">    </span><span class="n">right</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Arc</span><span class="o">&lt;</span><span class="n">BinaryNode</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+</span><span id="__span-45-5"><a id="__codelineno-45-5" name="__codelineno-45-5" href="#__codelineno-45-5"></a><span class="w">    </span><span class="n">parent</span>: <span class="nb">Option</span><span class="o">&lt;</span><span class="n">Weak</span><span class="o">&lt;</span><span class="n">BinaryNode</span><span class="o">&gt;&gt;</span><span class="p">,</span>
+</span><span id="__span-45-6"><a id="__codelineno-45-6" name="__codelineno-45-6" href="#__codelineno-45-6"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>INSERT DIAGRAM HERE SHOWING WHAT THE CODE IS DOING</p>
 <p>The baseline definition doesn't go much further than that. But, some variations built on the binary tree,
@@ -2750,7 +2819,7 @@ For even more <a href="http://csapp.cs.cmu.edu/2e/ch9-preview.pdf">virtual memor
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 28, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 29, 2023</span>
       
         <br>
         Created:
