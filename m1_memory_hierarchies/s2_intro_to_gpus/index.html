@@ -582,15 +582,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-introducing-wgpu" class="md-nav__link">
-    3️⃣ Introducing wgpu
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-setting-up-wgpu" class="md-nav__link">
-    3️⃣ Setting up wgpu
+  <a href="#3-introducing-wgpu-and-wgsl" class="md-nav__link">
+    3️⃣ Introducing wgpu and wgsl
   </a>
   
 </li>
@@ -599,6 +592,33 @@
   <a href="#3-basic-gpu-programming" class="md-nav__link">
     3️⃣ Basic GPU Programming
   </a>
+  
+    <nav class="md-nav" aria-label="3️⃣ Basic GPU Programming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#host-side" class="md-nav__link">
+    Host side
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device-side" class="md-nav__link">
+    Device side
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-the-loop-where-you-say" class="md-nav__link">
+    Remove the loop where, you say?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -617,15 +637,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-synchronization" class="md-nav__link">
-    3️⃣ Synchronization
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-shared-memory" class="md-nav__link">
-    3️⃣ Shared memory
+  <a href="#3-synchronization-and-shared-memory" class="md-nav__link">
+    3️⃣ Synchronization and Shared Memory
   </a>
   
 </li>
@@ -963,15 +976,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-introducing-wgpu" class="md-nav__link">
-    3️⃣ Introducing wgpu
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-setting-up-wgpu" class="md-nav__link">
-    3️⃣ Setting up wgpu
+  <a href="#3-introducing-wgpu-and-wgsl" class="md-nav__link">
+    3️⃣ Introducing wgpu and wgsl
   </a>
   
 </li>
@@ -980,6 +986,33 @@
   <a href="#3-basic-gpu-programming" class="md-nav__link">
     3️⃣ Basic GPU Programming
   </a>
+  
+    <nav class="md-nav" aria-label="3️⃣ Basic GPU Programming">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#host-side" class="md-nav__link">
+    Host side
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device-side" class="md-nav__link">
+    Device side
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#remove-the-loop-where-you-say" class="md-nav__link">
+    Remove the loop where, you say?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -998,15 +1031,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-synchronization" class="md-nav__link">
-    3️⃣ Synchronization
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-shared-memory" class="md-nav__link">
-    3️⃣ Shared memory
+  <a href="#3-synchronization-and-shared-memory" class="md-nav__link">
+    3️⃣ Synchronization and Shared Memory
   </a>
   
 </li>
@@ -1037,6 +1063,8 @@
 
 
 <h1 id="2-intro-to-gpus">2️⃣ Intro to GPU's</h1>
+<p>Now, I'll just give you a quick introduction to GPU's as the next section is about immediate mode
+GPU computation.</p>
 <p>GPU's are fairly ubiquitous at this point. They started off as purely for graphics, but
 around 2008, enough researchers had tinkered with workarounds to use them for general
 computing, that Nvidia put out CUDA, opening up GPU's for more general usage. GPU's still do lots
@@ -1161,21 +1189,53 @@ This makes for faster transfers, but probably slower overall computation. This h
 recently with most consumer grade GPU's having around 8 GB of memory and locally run neural networks
 like diffusion models easily being able to use more than that. A desktop GPU with more than 16GB of RAM would
 probably still outperform an integrated graphics card with 16GB of RAM available, but it would be very expensive.</p>
-<h2 id="3-introducing-wgpu">3️⃣ Introducing wgpu</h2>
-<h2 id="3-setting-up-wgpu">3️⃣ Setting up wgpu</h2>
-<p>Imported how in rust
-What is the initial setup of a compute pipeline
-<a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</p>
+<h2 id="3-introducing-wgpu-and-wgsl">3️⃣ Introducing wgpu and wgsl</h2>
+<p>The guide will for all GPU purposes make use of the graphics library wgpu, but only the compute parts.
+wgpu is based on the WebGPU spec, which is supposed to be the new web GPU API, as well as not being particularly
+creative with their naming, the actual support in browsers for WebGPU is nascent. Chrome supports if you fiddle
+with some settings, but for most systems, especially if you aren't actually running in a browser, wgpu
+will default to using different, more powerful backends. For example, at the time of writing this,
+I am using an HP laptop, with an Intel integrated graphics card running Windows 10. Whenver I run a program
+with wgpu, wgpu tells me it has chosen Vulkan as my current backend. We could of course just write Vulkan,
+but it would be a bit more complicated, as Vulkan is slightly more low-level than wgpu, but it would also
+be more powerful. But attaining ultimate performance isn't the purpose of the guide. It's to get as many
+people as possible started as soon as possible. It has to run on an Apple computer and it has to be easy to
+install. So, wgpu it is. While any API which has to cover as many platforms as wgpu does will usually be hampered
+by the lowest common denominator, it is possible to query wgpu for hardware support for various features, such
+as fp16. While wgpu is still quite new, it has some exciting features on the way, such as a hardware accelerated
+ray tracing extension.</p>
+<p>The default shading language (the language you use to write the code the GPU will run) is wgsl, which
+was defined along with the WebGPU specification. It is possible to use other shading languages, such
+as glsl and hlsl, which also have more info and general documentation, but because of the increased code
+complexity in building the files to SPIR-V and then ingesting them, I elected to just use what was simplest.</p>
+<p>We can add wgpu to a project by going into the <code>Cargo.toml</code> file in the root directory,
+and under <code>[dependencies]</code> write the line <code>wgpu = "*"</code>. It will pull down the latest version of wgpu.
+You can of course also get a specific version of it, such as <code>wgpu = "0.16.3"</code>.</p>
 <h2 id="3-basic-gpu-programming">3️⃣ Basic GPU Programming</h2>
-<p>API and Shader language are not the same
-Host side
-Device side
-Remove the loop where?</p>
+<p>GPU programming, as has previously been mentioned, has two major elements. Host (CPU) code and device (GPU)
+code. We'll start off with the basics of the host code and then move on the GPU code. Just enough
+for you to be able to read the following sections and understand what is going on in this entire module,
+as it doesn't go into the finer details of GPU programming, but is centered around a GPU-centric paradigm.</p>
+<p>The rest of this section will be make use of the code location at <code>m1_memory_hierarchies/code/gpu_add/</code> or
+<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/tree/main/m1_memory_hierarchies/code/gpu_add">online</a>.</p>
+<p>If you want to learn more about wgpu you can visit <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</p>
+<h3 id="host-side">Host side</h3>
+<p>Is there a GPU available?
+Is it compatible with what we need?
+Get the device and queue
+What are they?
+Create a compute pipeline and a few buffers</p>
+<h3 id="device-side">Device side</h3>
+<p>Our addition shader
+Bindings</p>
+<h3 id="remove-the-loop-where-you-say">Remove the loop where, you say?</h3>
+<p>Vector add function, remove one loop</p>
 <h2 id="3-warp-divergence-occupancy-and-overlap">3️⃣ Warp Divergence, Occupancy and Overlap</h2>
+<p>If statements, and warp divergence, softened cost
+Occupancy and Overlap</p>
 <h2 id="3-coalesced-accessing-and-strides">3️⃣ Coalesced Accessing and Strides</h2>
-<h2 id="3-synchronization">3️⃣ Synchronization</h2>
-<p>A small code sample from wgsl</p>
-<h2 id="3-shared-memory">3️⃣ Shared memory</h2>
+<p>Stride in the loop</p>
+<h2 id="3-synchronization-and-shared-memory">3️⃣ Synchronization and Shared Memory</h2>
 <p>A small code sample from wgsl</p>
 <h2 id="5-further-reading">5️⃣ Further Reading</h2>
 <p><a href="https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/lectures/08_mem_hierarchy.pdf">The GPU Memory Hierarchy</a>,
@@ -1187,6 +1247,8 @@ The last entry is highly recommended.</p>
 <p>A slightly more detailed explanation of
 <a href="https://engineering.purdue.edu/~smidkiff/ece563/NVidiaGPUTeachingToolkit/Mod14DataXfer/Mod14DataXfer.pdf">asynchronous memory transfers</a>
 for GPUs.</p>
+<p>If you want to learn more about wgpu, this is the most used tutorial -
+<a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</p>
 
   <hr>
 <div class="md-source-file">
