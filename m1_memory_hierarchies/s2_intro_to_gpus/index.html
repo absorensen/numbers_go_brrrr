@@ -1059,7 +1059,7 @@ a very small piece each and people have to work in lockstep. But. Their throughp
 <p>At level 3️⃣ I will go into more detail as to how to actually write GPU code, but the guide is set up using
 Rust and a GPU API abstraction layer called <a href="https://wgpu.rs/">wgpu</a>. You don't need to understand how it works
 right now, but it means that you should be able to run all code, including GPU code, on your platform, even if
-it's made by Apple or AMD. </p>
+it's made by Apple or AMD.</p>
 <h2 id="gpu-hardware">GPU Hardware</h2>
 <p>First off, when dealing with the GPU, you will have to manipulate the GPU from the CPU with commands
 like "allocate this much memory", "transfer this memory from the CPU to GPU", "execute this shader/kernel" and
@@ -1074,9 +1074,10 @@ function, the CPU-side code will block and wait until any and all submitted comm
 and the GPU sends the all-clear signal in return. Imagine you are at a horse track. You have to give instructions
 to a jockey on a race horse. You stand on the periphery of the big oval race track. You tell the jockey to make
 some adjustment and do a lap. The horse first has to accelerate and then once it nears you slow down and you can
-talk again. What would be more efficient was if you could leave notes for the jockey to pick up whenever he was coming around and the horse could just continue at speed. In some API's the GPU can just be set in motion and then
-whenever you have a change to the loop it is running, adjust or change. Or you can set work in motion and come back
-at a later time, whether the work might be done.</p>
+talk again. What would be more efficient was if you could leave notes for the jockey to pick up
+whenever he was coming around and the horse could just continue at speed. In some API's the GPU
+can just be set in motion and then whenever you have a change to the loop it is running, adjust
+or change. Or you can set work in motion and come back at a later time, whether the work might be done.</p>
 <h3 id="transfer">Transfer</h3>
 <p>When transferring memory, you should have the following model in mind, nothing gets transferred without a staging
 area. When transferring from CPU to GPU, at least in the CUDA programming model, it will pin an area in memory.
