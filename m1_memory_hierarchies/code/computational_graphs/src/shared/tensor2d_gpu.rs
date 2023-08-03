@@ -216,7 +216,7 @@ impl SumUniform {
             data: [element_count as u32, workgroup_count as u32],
         };
 
-        let size: u64 = std::mem::size_of::<ReluDimensions>() as wgpu::BufferAddress;
+        let size: u64 = std::mem::size_of::<SumElements>() as wgpu::BufferAddress;
         let staging_buffer: Buffer = handles.device.create_buffer(&wgpu::BufferDescriptor {
             label: None,
             size,
@@ -246,7 +246,7 @@ impl SumUniform {
 
     #[inline(always)]
     pub fn size(&self) -> u64 {
-        std::mem::size_of::<ReluDimensions>() as u64
+        std::mem::size_of::<SumElements>() as u64
     }
 
     pub fn copy_to_gpu(&self, encoder: &mut CommandEncoder) {

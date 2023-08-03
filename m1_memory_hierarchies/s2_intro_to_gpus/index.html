@@ -15,7 +15,7 @@
         <link rel="next" href="../s3_immediate_gpu_computation/">
       
       <link rel="icon" href="../../figures/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.1, mkdocs-material-9.1.21">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
     
     
       
@@ -597,20 +597,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#host-side" class="md-nav__link">
-    Host side
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#device-side" class="md-nav__link">
-    Device side
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#remove-the-loop-where-you-say" class="md-nav__link">
     Remove the loop where, you say?
   </a>
@@ -991,20 +977,6 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#host-side" class="md-nav__link">
-    Host side
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#device-side" class="md-nav__link">
-    Device side
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#remove-the-loop-where-you-say" class="md-nav__link">
     Remove the loop where, you say?
   </a>
@@ -1217,17 +1189,128 @@ code. We'll start off with the basics of the host code and then move on the GPU 
 for you to be able to read the following sections and understand what is going on in this entire module,
 as it doesn't go into the finer details of GPU programming, but is centered around a GPU-centric paradigm.</p>
 <p>The rest of this section will be make use of the code location at <code>m1_memory_hierarchies/code/gpu_add/</code> or
-<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/tree/main/m1_memory_hierarchies/code/gpu_add">online</a>.</p>
-<p>If you want to learn more about wgpu you can visit <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</p>
-<h3 id="host-side">Host side</h3>
-<p>Is there a GPU available?
-Is it compatible with what we need?
-Get the device and queue
-What are they?
-Create a compute pipeline and a few buffers</p>
-<h3 id="device-side">Device side</h3>
-<p>Our addition shader
-Bindings</p>
+<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/tree/main/m1_memory_hierarchies/code/gpu_add">online</a>.
+Make sure to go and actually read the code. It is full of comments! And they're made just for you!
+If you want to learn more about wgpu you can visit <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</p>
+<p>Be sure to read through the code! Do this before you read the rest of this section, which will go into greater
+detail.</p>
+<p>Starting in the <code>main</code> function, first we initialize the environment logger with <code>env_logger::init()</code>.
+This will get us more helpful feedback from wgpu. This should only happen once in your code, so by putting it
+as the very first line, we should be sure that it shouldn't need to happen anywhere else.</p>
+<p>Next up, we call <code>pollster::block_on(self_test())</code>. The <code>self_test</code> function, is a function I made, and
+use elsewhere to make sure your system is compatible and to print the system info so you can see what GPU is being
+found and what backend is being used. <code>pollster::block_on</code> allows us to call asynchronous code from a normal
+function. If you don't remember what asynchronous means, just think of it as being non-blocking. Meaning, we can
+launch an asynchronous function and just continue on to the next line of code. But the way we do this is different
+depending on whether we are inside a normal function or an <code>async</code> function. An <code>async</code> function definition
+example - <code>pub async fn self_test() -&gt; bool {</code>.</p>
+<p>If we are in a normal function and we call an <code>async</code> function, we have to wait for it to complete. As in, block
+on the function call, which is of course <code>pollster::block_on()</code>. Inside the <code>async</code> function it self it can
+either block on async function calls by using <code>await</code> - such as <code>let result = async_function().await;</code> or
+you can store what is known as a future. We could set in motion the loading of a number of files, and then once we
+were done and actually genuinely NEEDED to use the files for something, <code>await</code> on the future. The <code>async</code> function, when called from a normal function also returns a future, but we can't use <code>.await</code> on it.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">pub</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="k">fn</span> <span class="nf">load_four_files</span><span class="p">(</span><span class="n">path_a</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">path_b</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">path_c</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">path_d</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="p">(</span><span class="n">File</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_future_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load_file_async</span><span class="p">(</span><span class="n">path_a</span><span class="p">);</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_future_b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load_file_async</span><span class="p">(</span><span class="n">path_b</span><span class="p">);</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_future_c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load_file_async</span><span class="p">(</span><span class="n">path_c</span><span class="p">);</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_future_d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load_file_async</span><span class="p">(</span><span class="n">path_d</span><span class="p">);</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file_future_a</span><span class="p">.</span><span class="k">await</span><span class="p">;</span><span class="w"> </span><span class="c1">// Block on the future</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file_future_b</span><span class="p">.</span><span class="k">await</span><span class="p">;</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file_future_c</span><span class="p">.</span><span class="k">await</span><span class="p">;</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_d</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">file_future_d</span><span class="p">.</span><span class="k">await</span><span class="p">;</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="p">(</span><span class="n">file_a</span><span class="p">,</span><span class="w"> </span><span class="n">file_b</span><span class="p">,</span><span class="w"> </span><span class="n">file_c</span><span class="p">,</span><span class="w"> </span><span class="n">file_d</span><span class="p">)</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Ok, so why do we need <code>async</code> when dealing with the GPU? In some cases, we don't care about synchronization.
+We just want to keep transferring data to the GPU as fast as we can get it, the GPU might output to the display
+or we might get some data transferred back, but if we are doing this in a real-time setting, we might not care
+to synchronize, as in block, and we just need things when they are ready. Anything to do with gpu - <code>async</code>
+will be involved. At least in Rust.</p>
+<p>Let's move on. We set up our CPU-side data. This is a simple vector addition, and I elected to make the data
+in a way that was easily verifiable as correct for humans. Input A and B are just vectors of 32-bit floats
+with values equal to their index. The correct result in the output vector should of course be double the
+index value then.</p>
+<p>Finally, we call <code>initialize_gpu()</code> and block on it. Let's go into that function!</p>
+<p>First we get an <code>Instance</code>. The <code>Instance</code> is a wgpu context which we will use to get <code>Adapter</code> and
+<code>Surface</code>. The <code>Adapter</code> corresponds to your GPU. We specifically request the adapter with high performance.
+If you are on a system with more than one GPU, such as a laptop with an integrated GPU, which shares memory with
+the CPU and a more powerful dedicated GPU, it should try to get access to the dedicated GPU. We also request
+<code>None</code> for <code>compatible_surface</code>. Surfaces are what you would render to if you were doing graphics. Think
+of an image with extra steps which you could show on your display. If we don't need to do graphics, not having one
+is less work. It also means we can run on data center GPU's, which might not even have a display port. So we just
+get the <code>Adapter</code>. We use the <code>Adapter</code> to get <code>Device</code>, which will be our handle to the GPU
+from now on. Whereas the <code>Adapter</code> is more of a raw connection, where we can't do much with it, the
+<code>Device</code> is a handle that has some guaranteed features. The <code>Adapter</code> tells us what features we can get.
+Once those features are guaranteed, it is much easier for wgpu to open up for more functionality with
+the <code>Device</code>. We actually don't need the <code>Adapter</code> after we get the device,
+but I keep it around in the GPUHandles for you to tinker around with in auto-complete to see what it can
+do. We do need the <code>Device</code> though. We also need the <code>Queue</code>. The <code>Queue</code> is where we
+can submit the work we want the GPU to do.</p>
+<p>Note that when defining our <code>DeviceDescriptor</code> for getting a <code>Device</code> that lives up to our needs
+our current requested <code>features</code> is <code>wgpu::Features::empty()</code>. We just want the absolute basics.
+But we could request, or at least see whether we could get them, features like 16-bit floating point support.</p>
+<p>Now back to the <code>main</code> function!</p>
+<p>We now have our bundled GPU-related handles. Now we calculate how many threads we need to launch for our
+problem size. <code>let element_count: usize = 100;</code>, so we need to launch AT LEAST 100 threads if each thread
+only processes one element of our problem. Which it does in our simplified case. Given that we would like to fill
+up our work groups, I have elected to use 32 threads per work group. <code>let block_size: usize = 32;</code>.
+Given that the register pressure is likely very low for our shader, this should be no problem. Finally, we
+calculate how many blocks to launch. This simple calculation is found all of the place when doing
+GPGPU programming. <code>let launch_blocks: u32 = ((element_count + block_size - 1) / block_size) as u32;</code>.
+The basic premise is that we add one element less than the full work group size and then use integer division
+to make sure we always have at least as many threads as we need. In the worst case of a work group size of 32,
+we will have a work group at the very end of the vectors with 31 idle threads doing nothing.</p>
+<p>Next up, we compile our shader code <code>add_vectors.wgsl</code> with <code>create_shader_module()</code>.
+Compiling shaders is quite expensive, so if you are programming a bigger system than this, you might want to
+save the compiled code or do it as a build step and load it from disk when needed. Once we have compiled
+our shader code we can create a compute pipeline with a specific entry point. The entry point is just the function
+that will be called when dispatching the shader call later on. Once we have a <code>ComputePipeline</code> we can
+begin doing our bind group layouts. In CUDA you can pass device side pointers to your CUDA functions
+when dispatching. Or phrased differently, when using CUDA you can pass along memory addresses for buffers you have
+explicitly allocated on the GPU. When using the graphics APIs the most basic thing to do, if you are
+not going bindless, which is... well, don't worry about it, is to use bindings. There is a certain amount of bind
+slots available in a shader depending on the API and perhaps the system. What can be a bit tricky is the binding
+slot you declare on the CPU for buffer X, has to match the exact binding slot in the shader. E.g. if you bound
+your input buffer to binding slot 0 on the CPU, it has to be bound to binding slot 0 in your shader code.
+Additionally, the compiler will complain if you don't use that buffer in the shader. Finally, you can have multiple
+sets of bindings in the same shader. These are called bind groups and each has N binding slots.</p>
+<p>When I created the <code>GPUVector</code>s earlier, the <code>new</code> function allocated a storage buffer, which is visible
+to the shader and transferred the contents of the given vector to the GPU. This can be done more effectively, but
+it's a nice and easy way to start things off. We don't have to keep track of whether we remembered to transfer
+our data to the GPU or not, which makes sure we don't use initialized data. In the case of the output vector, we
+have also allocated a <code>staging_buffer</code> to more explicitly transfer data back to the CPU. This <code>Buffer</code>
+has also been flagged as readable from the CPU.</p>
+<p>The <code>storage_buffer</code>s we have created, when creating the <code>GPUVector</code>s from before, can be bound. I
+add these binding references to a vector and send them to a convenience function <code>create_bind_group()</code>, which
+binds the array of bindings in order. Do note that we don't specify what can and cannot be done at this step. It
+was specified at the creation of the <code>storage_buffer</code>s and it will be specificed locally in the binding of
+the buffers in the shader.</p>
+<p>Once we have our bindings set up, we create a <code>CommandEncoder</code>, which we get from <code>Device</code>. 
+The command encoder is a buffer of commands. We can add stuff like render and compute operations, their sort of like
+a collection of operations and state, and transfer operations. The command encoder needs to be finished, before it
+is submitted to the queue. Remember the <code>Queue</code> we got earlier? This is what it was for. We submit
+finished <code>CommandEncoder</code>s to our <code>Queue</code>, which submits the jobs to the GPU. For this specific program
+we add two commands to the <code>CommandEncoder</code>. We dispatch our compute shader, enclosed in a <code>ComputePass</code> and
+launch the appropriate number of threads. Note also the <code>label</code> field. This field permeates wgpu usage. It is
+mostly for debugging. It helps us identify what is causing an issue. Once we have finished our <code>ComputePass</code>,
+due to it going out of scope, we add a transfer operation. We use the <code>staging_buffer</code> on our <code>output</code>
+vector, to read the output back to the CPU. Then we finish our <code>CommandEncoder</code> and submit it
+to the <code>Queue</code>.</p>
+<p>We then setup a <code>oneshot_channel</code>. Don't worry too much about this. It is a connection which can only be used
+for sending data once. We map the <code>staging_buffer</code> and send its data using the sender/receiver pair. Once
+we have done this <code>map_async</code> call, we wait for the GPU to be finish all operations currently in its queue.
+Once it has finished we block on the receiver. Until the receiver sends the <code>Ok</code> signal we wait. Once we get
+it we retrieve the data. This is raw data in bytes, <code>u8</code>, which we recast to the type we know it is, which in
+this case is <code>f32</code>. We do a bit of clean up, and don't you know it, that's the program!</p>
+<figure>
+<p><a class="glightbox" href="../../figures/intro_to_gpu_vector_add_results.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/intro_to_gpu_vector_add_results.png" width="600" /></a></p>
+<figcaption>
+Adding our two vectors, it should be easily verifiable that it is correct.
+</figcaption>
+</figure>
+<p>Maybe now might be a good time to go back to the code and try to run through it yourself again.</p>
 <h3 id="remove-the-loop-where-you-say">Remove the loop where, you say?</h3>
 <p>Vector add function, remove one loop</p>
 <h2 id="3-warp-divergence-occupancy-and-overlap">3️⃣ Warp Divergence, Occupancy and Overlap</h2>
@@ -1255,7 +1338,7 @@ for GPUs.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 1, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 3, 2023</span>
       
         <br>
         Created:

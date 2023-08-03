@@ -15,7 +15,7 @@
         <link rel="next" href="../../m2_concepts_in_parallelism/">
       
       <link rel="icon" href="../../figures/favicon.png">
-      <meta name="generator" content="mkdocs-1.5.1, mkdocs-material-9.1.21">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
     
     
       
@@ -898,6 +898,9 @@ N dimensional indexing in 1D array</p>
 <ul>
 <li>Implement a version of the linear layer functions which uses shared memory and tiling</li>
 <li>Add reusable buffers to the computational graph system</li>
+<li>Change the <code>Tensor2DGPU</code> to have switchable access details on its buffers. It should be able to
+accomodate some tensors being exclusively read-only. Do you see any performance differences for whether
+they are read-only or not?</li>
 <li>Implement the tree reduction version of the sum function and add it to the softmax function.
 Also compare the single pass and the tree reduction performance graphs. <a href="https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf">Reference</a></li>
 <li>Implement a max pooling operator, as well as fusing with ReLU, in all levels and implement tests</li>
@@ -909,7 +912,7 @@ Also compare the single pass and the tree reduction performance graphs. <a href=
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 24, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 3, 2023</span>
       
         <br>
         Created:
