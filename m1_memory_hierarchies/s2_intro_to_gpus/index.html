@@ -1332,7 +1332,7 @@ it compiles) -</p>
 <p>When that works, you can begin thinking about how to remove that pesky loop. You do that by removing a dimension
 in your shader, but adding one in your dispatch and then making accomodations in your shader. We can take that
 and transform it by instead dispatching more 1D threads: <code>cpass.dispatch_workgroups(launch_blocks, 1, 1);</code>.
-Then we change the shader to have each thread work on a single element - </p>
+Then we change the shader to have each thread work on a single element -</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">(</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">global_invocation_id</span><span class="p">)</span><span class="w"> </span><span class="n">global_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span>
@@ -1349,7 +1349,7 @@ until the third dimension, usually you can launch less threads in the third dime
 also have to remember to check whether the thread is outside of the valid range for each dimension. You
 should always look up for your graphics cards and your GPU API how many threads you can launch. You might have to
 break it into several passes. It's not actually quite this simple, as, well you remember how we learned stride
-had a negative impact on performance earlier? Well, that is not quite the same on GPU's. </p>
+had a negative impact on performance earlier? Well, that is not quite the same on GPU's.</p>
 <h2 id="3-coalesced-accessing-and-strides">3️⃣ Coalesced Accessing and Strides</h2>
 <p>Because of the way threads and work groups share memory on a GPU, and each thread executing the same line of
 code at the same time, if thread A calls for memory at indices 0, 1, 2, 3 and thread B, which is right next to it
