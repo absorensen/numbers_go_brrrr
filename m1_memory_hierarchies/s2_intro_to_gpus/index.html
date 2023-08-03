@@ -593,24 +593,11 @@
     3️⃣ Basic GPU Programming
   </a>
   
-    <nav class="md-nav" aria-label="3️⃣ Basic GPU Programming">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#remove-the-loop-where-you-say" class="md-nav__link">
-    Remove the loop where, you say?
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-warp-divergence-occupancy-and-overlap" class="md-nav__link">
-    3️⃣ Warp Divergence, Occupancy and Overlap
+  <a href="#3-remove-the-loop-where-you-say" class="md-nav__link">
+    3️⃣ Remove the loop where, you say?
   </a>
   
 </li>
@@ -618,6 +605,13 @@
         <li class="md-nav__item">
   <a href="#3-coalesced-accessing-and-strides" class="md-nav__link">
     3️⃣ Coalesced Accessing and Strides
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-warp-divergence-occupancy-and-overlap" class="md-nav__link">
+    3️⃣ Warp Divergence, Occupancy and Overlap
   </a>
   
 </li>
@@ -973,24 +967,11 @@
     3️⃣ Basic GPU Programming
   </a>
   
-    <nav class="md-nav" aria-label="3️⃣ Basic GPU Programming">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#remove-the-loop-where-you-say" class="md-nav__link">
-    Remove the loop where, you say?
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-warp-divergence-occupancy-and-overlap" class="md-nav__link">
-    3️⃣ Warp Divergence, Occupancy and Overlap
+  <a href="#3-remove-the-loop-where-you-say" class="md-nav__link">
+    3️⃣ Remove the loop where, you say?
   </a>
   
 </li>
@@ -998,6 +979,13 @@
         <li class="md-nav__item">
   <a href="#3-coalesced-accessing-and-strides" class="md-nav__link">
     3️⃣ Coalesced Accessing and Strides
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-warp-divergence-occupancy-and-overlap" class="md-nav__link">
+    3️⃣ Warp Divergence, Occupancy and Overlap
   </a>
   
 </li>
@@ -1312,13 +1300,116 @@ Adding our two vectors, it should be easily verifiable that it is correct.
 </figcaption>
 </figure>
 <p>Maybe now might be a good time to go back to the code and try to run through it yourself again.</p>
-<h3 id="remove-the-loop-where-you-say">Remove the loop where, you say?</h3>
-<p>Vector add function, remove one loop</p>
+<h2 id="3-remove-the-loop-where-you-say">3️⃣ Remove the loop where, you say?</h2>
+<p>When writing GPU programs, you should usually start writing a CPU-based program. Once that works, you have
+something to verify your GPU program against. Often the part of your program that you want to offload to the GPU,
+will have loops. For example, in a vector addition snippet you might have -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">ouput</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">output</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_a</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">input_b</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>When transferring your program to a GPU shader, as a way to get comfortable with thinking about this sort of
+parallelism, you should start with writing a single threaded version on the GPU. You can do this by dispatching
+a single thread <code>cpass.dispatch_workgroups(1, 1, 1);</code>. It WILL be slower than the CPU
+version, but it allows you to get all of the transfers and synchronizations out of the way first. Once you have
+done that, and you have verified that it works, mind you, you can start adding, or rather removing dimensions.
+You do that by removing one of the for-loops in your code and replacing it with added dimensionality in your shader
+dispatch. So in your first version of your vector addition shader, it might look like this sketch (don't know if
+it compiles) -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">(</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">global_invocation_id</span><span class="p">)</span><span class="w"> </span><span class="n">global_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">thread_id</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="n">global_id</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">thread_id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">var</span><span class="w"> </span><span class="n">index</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="n">u</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimensions</span><span class="p">.</span><span class="n">element_count</span><span class="p">;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="n">u</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">            </span><span class="n">output</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_a</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">input_b</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>When that works, you can begin thinking about how to remove that pesky loop. You do that by removing a dimension
+in your shader, but adding one in your dispatch and then making accomodations in your shader. We can take that
+and transform it by instead dispatching more 1D threads: <code>cpass.dispatch_workgroups(launch_blocks, 1, 1);</code>.
+Then we change the shader to have each thread work on a single element - </p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">(</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">global_invocation_id</span><span class="p">)</span><span class="w"> </span><span class="n">global_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">thread_id</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="n">global_id</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">thread_id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimensions</span><span class="p">.</span><span class="n">element_count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="n">output</span><span class="p">[</span><span class="n">thread_id</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_a</span><span class="p">[</span><span class="n">thread_id</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">input_b</span><span class="p">[</span><span class="n">thread_id</span><span class="p">];</span><span class="w">        </span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>If there had been more dimensions we could have continued expanding and removing dimensionality. We can continue
+until the third dimension, usually you can launch less threads in the third dimension than in the first two. You
+also have to remember to check whether the thread is outside of the valid range for each dimension. You
+should always look up for your graphics cards and your GPU API how many threads you can launch. You might have to
+break it into several passes. It's not actually quite this simple, as, well you remember how we learned stride
+had a negative impact on performance earlier? Well, that is not quite the same on GPU's. </p>
+<h2 id="3-coalesced-accessing-and-strides">3️⃣ Coalesced Accessing and Strides</h2>
+<p>Because of the way threads and work groups share memory on a GPU, and each thread executing the same line of
+code at the same time, if thread A calls for memory at indices 0, 1, 2, 3 and thread B, which is right next to it
+in the same work group, calls for indices 4, 5, 6, 7, they will be asking for two different cache lines at the
+same time. Imagine the whole work group doing this at the same time. They will all be waiting, while
+requesting different cache lines. What is normally faster, is if, given a work group size of 32,
+thread A calls for indices 0, 32, 64 and 96, with thread B calling for indices 1, 33, 65 and 97. This allows for
+the work group to call for a minimum of cache lines in lock step and each getting a piece of the cache line.
+This is called <em>coalesced accessing</em> and if you ever say that to a GPU programmer, you will see a faint smile on
+their face. Think of a jigsaw puzzle, where the pieces are slowly being adjusted.
+Eventually, they all snap into place. All of the pieces fit exactly right.</p>
+<p>Here's a small example, if we for some reason were intent on turning our vector addition shader into
+2D matrix addition, but we were deadset on keeping the thread grid for our dispatch one dimensional we
+could do something like this -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">const</span><span class="w"> </span><span class="n">BLOCK_SIZE</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="n">u</span><span class="p">;</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">(</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">global_invocation_id</span><span class="p">)</span><span class="w"> </span><span class="n">global_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">thread_id</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="n">global_id</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">thread_id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimensions</span><span class="p">.</span><span class="n">first_dimension_count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">            </span><span class="n">var</span><span class="w"> </span><span class="n">index</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="n">thread_id</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">            </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimensions</span><span class="p">.</span><span class="n">second_dimension_count</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">            </span><span class="n">index</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">BLOCK_SIZE</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">            </span><span class="n">output</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_a</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">input_b</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Again, not verified/compiled code. But hold on for a second! We have to remember that there are other work groups
+too. We can't necessarily just stride through the single dimension in the same way. We would be reprocessing
+elements that had already been processed by a different work group. What we could do instead would be to step
+along the rows instead.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">(</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">global_invocation_id</span><span class="p">)</span><span class="w"> </span><span class="n">global_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">thread_id</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="n">global_id</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">thread_id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimensions</span><span class="p">.</span><span class="n">first_dimension_count</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">            </span><span class="n">var</span><span class="w"> </span><span class="n">index</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="n">thread_id</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">            </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">dimensions</span><span class="p">.</span><span class="n">second_dimension_count</span><span class="p">;</span><span class="w"> </span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">            </span><span class="n">index</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">dimensions</span><span class="p">.</span><span class="n">first_dimension_count</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">            </span><span class="n">output</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_a</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">input_b</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>In other cases, using a stride of the work group size can work as well. In this case, stepping along the rows
+made better sense, but keep thinking in these terms, implement different versions and test them! It's the
+only way to be sure! Once you have made a couple of different versions and done simple timing you can always
+add in a profiler, m4 has got you covered!</p>
 <h2 id="3-warp-divergence-occupancy-and-overlap">3️⃣ Warp Divergence, Occupancy and Overlap</h2>
 <p>If statements, and warp divergence, softened cost
 Occupancy and Overlap</p>
-<h2 id="3-coalesced-accessing-and-strides">3️⃣ Coalesced Accessing and Strides</h2>
-<p>Stride in the loop</p>
 <h2 id="3-synchronization-and-shared-memory">3️⃣ Synchronization and Shared Memory</h2>
 <p>A small code sample from wgsl</p>
 <h2 id="5-further-reading">5️⃣ Further Reading</h2>
