@@ -610,15 +610,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-warp-divergence-occupancy-and-overlap" class="md-nav__link">
-    3️⃣ Warp Divergence, Occupancy and Overlap
+  <a href="#3-divergence-overlap-and-occupancy" class="md-nav__link">
+    3️⃣ Divergence, Overlap and Occupancy
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-synchronization-and-shared-memory" class="md-nav__link">
-    3️⃣ Synchronization and Shared Memory
+  <a href="#3-shared-memory-and-synchronization" class="md-nav__link">
+    3️⃣ Shared Memory and Synchronization
   </a>
   
 </li>
@@ -984,15 +984,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-warp-divergence-occupancy-and-overlap" class="md-nav__link">
-    3️⃣ Warp Divergence, Occupancy and Overlap
+  <a href="#3-divergence-overlap-and-occupancy" class="md-nav__link">
+    3️⃣ Divergence, Overlap and Occupancy
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-synchronization-and-shared-memory" class="md-nav__link">
-    3️⃣ Synchronization and Shared Memory
+  <a href="#3-shared-memory-and-synchronization" class="md-nav__link">
+    3️⃣ Shared Memory and Synchronization
   </a>
   
 </li>
@@ -1407,11 +1407,85 @@ along the rows instead.</p>
 made better sense, but keep thinking in these terms, implement different versions and test them! It's the
 only way to be sure! Once you have made a couple of different versions and done simple timing you can always
 add in a profiler, m4 has got you covered!</p>
-<h2 id="3-warp-divergence-occupancy-and-overlap">3️⃣ Warp Divergence, Occupancy and Overlap</h2>
-<p>If statements, and warp divergence, softened cost
-Occupancy and Overlap</p>
-<h2 id="3-synchronization-and-shared-memory">3️⃣ Synchronization and Shared Memory</h2>
-<p>A small code sample from wgsl</p>
+<h2 id="3-divergence-overlap-and-occupancy">3️⃣ Divergence, Overlap and Occupancy</h2>
+<p>One statement I tried to sweep under the rug in the last section was - "each thread in a work group executes in lock step".
+It is highly desirable for a work group to have each thread executing in lock step. That is each thread is executing the
+same line in your program. If you have branches, like if-statements, some threads might execute path A and some threads
+might execute path B. This will lead to divergence.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/work_group_divergence.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/work_group_divergence.png" width="700" /></a></p>
+<figcaption>
+An if-statement causes a work group to diverge into two.
+<a href="https://developer.nvidia.com/blog/using-cuda-warp-level-primitives/">
+Image credit </a>
+</figcaption>
+</figure>
+<p>As you can imagine, this expands the timeline of executing the code compared to a non-diverging execution.
+But if you were within a workgroup where all <code>threadIdx.x &lt; 4</code> there wouldn't be an issue.
+Thankfully, recent hardware takes less of a performance hit when work groups diverge.</p>
+<p>Once you have most of your work groups not diverging, are you sure your threads aren't just sitting around
+waiting? Whenever a thread wants to load a piece of data all the way from memory, it can take quite a long
+while to retrieve. If however, you have dispatched enough work, the threads waiting around for memory
+can be swapped out for another work group which might be able to do some work, once this work group has time
+for a nap, like when it is also requesting data from memory, the first work group can be swapped back in,
+when the requested data has, hopefully, arrived. Without this overlap, GPU programs are likely to seem
+a lot slower than they need to be. If however, you launch a lot more threads than there are physical
+execution units, you are likely to see this overlap resulting in higher occupancy. The higher the occupancy
+the more time a physical execution unit spends on doing actual work and not just stalling until everything
+is ready. So you can either launch a lot of independent work, or use a lot of elements in your data.
+Like really big matrices! </p>
+<p>In machine learning terms, if you have pipelined and made your computational graph
+relatively indpendent, you might see a big increase in occupancy by choosing fewer layers, but using very
+big layers.</p>
+<h2 id="3-shared-memory-and-synchronization">3️⃣ Shared Memory and Synchronization</h2>
+<p>Just two final pieces are missing before we go back to memory hierarchies. Shared memory and synchronization.
+GPU's have more programmable pieces of the memory hiearchy, such as sharing directly between threads, sharing
+between work groups and more, but WGSL has the primitives for shared memory, which is the only one
+I will present for you. Shared memory is a programmable section of the L1 cache. If a cache miss, resulting
+in retrieving data all the way from memory costs 100's of cycles, quite often somewhere around 250-300,
+accessing data from shared memory costs around 10 cycles. This is very useful if each piece of data is
+accessed more than once. It could for example be overlaps in convolutions or storing preliminary results
+in shared memory, for the work group to finally reduce the results internally in the workgroup using
+shared memory to share the results between the threads.</p>
+<p>Typically using shared memory, you will first see a section where each thread loads one or more pieces
+of data into shared memory, followed by a synchronization primitive. This synchronization primitive
+is available in wgsl and is called <code>workgroupBarrier();</code>. It is available in most shader languages,
+although it will likely be named something else. It is a barrier ensuring that all threads in the
+workgroup will stall and wait until each thread has signalled that it is ready to proceed. This
+is very handy when you are loading data into shared memory for reuse between the threads. A small
+example snippet -</p>
+<p><div class="language-rust highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">var</span><span class="o">&lt;</span><span class="n">workgroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shared_data</span>: <span class="nc">array</span><span class="o">&lt;</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_SIZE</span><span class="o">&gt;</span><span class="p">;</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="k">fn</span> <span class="nf">workgroup_phase</span><span class="p">(</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">workgroup_id</span><span class="p">)</span><span class="w"> </span><span class="n">group_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">local_invocation_id</span><span class="p">)</span><span class="w"> </span><span class="n">local_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">    </span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="n">var</span><span class="w"> </span><span class="n">tid</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="n">local_id</span><span class="p">.</span><span class="n">x</span><span class="p">;</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">group_id</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="n">u</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">        </span><span class="c1">// In this first section we can use all 32 threads</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">        </span><span class="n">var</span><span class="w"> </span><span class="n">elements_left</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="n">sum_uniform</span><span class="p">.</span><span class="n">block_count</span><span class="p">;</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">        </span><span class="n">var</span><span class="w"> </span><span class="n">i</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="n">tid</span><span class="p">;</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">        </span><span class="n">var</span><span class="w"> </span><span class="n">sum_value</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="c1">// How do we handle the odd case?</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">BLOCK_SIZE</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">elements_left</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">            </span><span class="n">sum_value</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">            </span><span class="n">elements_left</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="n">BLOCK_SIZE</span><span class="p">;</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">            </span><span class="n">i</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">BLOCK_SIZE</span><span class="p">;</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="n">u</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">elements_left</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">            </span><span class="k">if</span><span class="p">(</span><span class="n">tid</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">elements_left</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">                </span><span class="n">sum_value</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">            </span><span class="p">}</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">        </span><span class="n">shared_data</span><span class="p">[</span><span class="n">tid</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sum_value</span><span class="p">;</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">        </span><span class="n">workgroupBarrier</span><span class="p">();</span>
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">    </span><span class="p">}</span>
+</span></code></pre></div>
+As usual, this code isn't very well tested and there might be some cases where it isn't fully functional,
+but you can see the primitives for declaring shared memory, accessing it and synchronizing.
+Now back to the memory hierarchies!</p>
 <h2 id="5-further-reading">5️⃣ Further Reading</h2>
 <p><a href="https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/lectures/08_mem_hierarchy.pdf">The GPU Memory Hierarchy</a>,
 <a href="http://meseec.ce.rit.edu/551-projects/spring2015/3-2.pdf">GPU Memory Hierarchy</a>,
@@ -1424,13 +1498,15 @@ The last entry is highly recommended.</p>
 for GPUs.</p>
 <p>If you want to learn more about wgpu, this is the most used tutorial -
 <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</p>
+<p>To learn more about
+<a href="https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory">optimzing shaders with shared memory</a>.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 3, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 4, 2023</span>
       
         <br>
         Created:
