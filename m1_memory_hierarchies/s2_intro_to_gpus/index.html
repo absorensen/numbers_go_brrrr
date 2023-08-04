@@ -1433,7 +1433,7 @@ a lot slower than they need to be. If however, you launch a lot more threads tha
 execution units, you are likely to see this overlap resulting in higher occupancy. The higher the occupancy
 the more time a physical execution unit spends on doing actual work and not just stalling until everything
 is ready. So you can either launch a lot of independent work, or use a lot of elements in your data.
-Like really big matrices! </p>
+Like really big matrices!</p>
 <p>In machine learning terms, if you have pipelined and made your computational graph
 relatively indpendent, you might see a big increase in occupancy by choosing fewer layers, but using very
 big layers.</p>
@@ -1454,7 +1454,7 @@ although it will likely be named something else. It is a barrier ensuring that a
 workgroup will stall and wait until each thread has signalled that it is ready to proceed. This
 is very handy when you are loading data into shared memory for reuse between the threads. A small
 example snippet -</p>
-<p><div class="language-rust highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">var</span><span class="o">&lt;</span><span class="n">workgroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shared_data</span>: <span class="nc">array</span><span class="o">&lt;</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_SIZE</span><span class="o">&gt;</span><span class="p">;</span>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">var</span><span class="o">&lt;</span><span class="n">workgroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shared_data</span>: <span class="nc">array</span><span class="o">&lt;</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_SIZE</span><span class="o">&gt;</span><span class="p">;</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="k">fn</span> <span class="nf">workgroup_phase</span><span class="p">(</span>
@@ -1483,7 +1483,7 @@ example snippet -</p>
 </span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">        </span><span class="n">workgroupBarrier</span><span class="p">();</span>
 </span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">    </span><span class="p">}</span>
 </span></code></pre></div>
-As usual, this code isn't very well tested and there might be some cases where it isn't fully functional,
+<p>As usual, this code isn't very well tested and there might be some cases where it isn't fully functional,
 but you can see the primitives for declaring shared memory, accessing it and synchronizing.
 Now back to the memory hierarchies!</p>
 <h2 id="5-further-reading">5️⃣ Further Reading</h2>
