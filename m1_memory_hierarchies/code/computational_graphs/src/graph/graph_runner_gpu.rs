@@ -372,13 +372,6 @@ impl GraphRunnerGPU {
         self.graph_operators_are_valid = true;
     }
 
-    // Should be run after all other commands have been submitted.
-    fn transfer_all_buffers(data_buffers: &mut Vec<Tensor2DGPU>, encoder: &mut CommandEncoder) {
-        for buffer in data_buffers {
-            buffer.copy_to_gpu_mut(encoder)
-        }
-    }
-
     fn submit_operator_commands(
         gpu_handles: &GPUHandles,
         use_cache: bool,
@@ -476,9 +469,6 @@ impl GraphRunnerGPU {
                 &mut encoder,
             );
 
-            // Transfer all buffers to GPU
-            Self::transfer_all_buffers(&mut self.data_buffers, &mut encoder);
-
             // Submit commands
             gpu_handles.queue.submit(Some(encoder.finish()));
         }
@@ -495,7 +485,9 @@ impl GraphRunnerGPU {
 
         gpu_handles.device.poll(wgpu::Maintain::Wait);
 
-        output.retrieve_results().await;
+        if output.live_data_on_device {
+            output.retrieve_results().await;
+        }
 
         output.data.clone()
     }

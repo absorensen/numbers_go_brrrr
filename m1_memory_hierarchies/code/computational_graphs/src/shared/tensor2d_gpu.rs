@@ -12,7 +12,6 @@ pub struct LinearLayerDimensions {
 #[derive(Debug)]
 pub struct LinearLayerUniform {
     pub dimensions: LinearLayerDimensions,
-    pub staging_buffer: Buffer,
     pub storage_buffer: Buffer,
 }
 
@@ -38,16 +37,6 @@ impl LinearLayerUniform {
             ],
         };
 
-        let size: u64 = std::mem::size_of::<LinearLayerDimensions>() as wgpu::BufferAddress;
-        let staging_buffer: Buffer = handles.device.create_buffer(&wgpu::BufferDescriptor {
-            label: None,
-            size,
-            usage: wgpu::BufferUsages::UNIFORM
-                | wgpu::BufferUsages::COPY_DST
-                | wgpu::BufferUsages::COPY_SRC,
-            mapped_at_creation: false,
-        });
-
         let storage_buffer: Buffer =
             handles
                 .device
@@ -55,13 +44,11 @@ impl LinearLayerUniform {
                     label: Some(label),
                     contents: bytemuck::cast_slice(&dimensions.data),
                     usage: wgpu::BufferUsages::UNIFORM
-                        | wgpu::BufferUsages::COPY_DST
-                        | wgpu::BufferUsages::COPY_SRC,
+                        | wgpu::BufferUsages::COPY_DST,
                 });
 
         Self {
             dimensions,
-            staging_buffer,
             storage_buffer,
         }
     }
@@ -87,16 +74,6 @@ impl LinearLayerUniform {
             ],
         };
 
-        let size: u64 = std::mem::size_of::<LinearLayerDimensions>() as wgpu::BufferAddress;
-        let staging_buffer: Buffer = handles.device.create_buffer(&wgpu::BufferDescriptor {
-            label: None,
-            size,
-            usage: wgpu::BufferUsages::UNIFORM
-                | wgpu::BufferUsages::COPY_DST
-                | wgpu::BufferUsages::COPY_SRC,
-            mapped_at_creation: false,
-        });
-
         let storage_buffer: Buffer =
             handles
                 .device
@@ -104,13 +81,11 @@ impl LinearLayerUniform {
                     label: Some(label),
                     contents: bytemuck::cast_slice(&dimensions.data),
                     usage: wgpu::BufferUsages::UNIFORM
-                        | wgpu::BufferUsages::COPY_DST
-                        | wgpu::BufferUsages::COPY_SRC,
+                        | wgpu::BufferUsages::COPY_DST,
                 });
 
         Self {
             dimensions,
-            staging_buffer,
             storage_buffer,
         }
     }
@@ -118,16 +93,6 @@ impl LinearLayerUniform {
     #[inline(always)]
     pub fn size(&self) -> u64 {
         std::mem::size_of::<LinearLayerDimensions>() as u64
-    }
-
-    pub fn copy_to_gpu(&self, encoder: &mut CommandEncoder) {
-        encoder.copy_buffer_to_buffer(
-            &self.storage_buffer,
-            0,
-            &self.staging_buffer,
-            0,
-            self.size(),
-        );
     }
 }
 
@@ -139,7 +104,6 @@ pub struct ReluDimensions {
 
 pub struct ReluUniform {
     pub dimensions: ReluDimensions,
-    pub staging_buffer: Buffer,
     pub storage_buffer: Buffer,
 }
 
@@ -149,16 +113,6 @@ impl ReluUniform {
             data: [input.row_count as u32, input.column_count as u32],
         };
 
-        let size: u64 = std::mem::size_of::<ReluDimensions>() as wgpu::BufferAddress;
-        let staging_buffer: Buffer = handles.device.create_buffer(&wgpu::BufferDescriptor {
-            label: None,
-            size,
-            usage: wgpu::BufferUsages::UNIFORM
-                | wgpu::BufferUsages::COPY_DST
-                | wgpu::BufferUsages::COPY_SRC,
-            mapped_at_creation: false,
-        });
-
         let storage_buffer: Buffer =
             handles
                 .device
@@ -166,13 +120,11 @@ impl ReluUniform {
                     label: Some(label),
                     contents: bytemuck::cast_slice(&dimensions.data),
                     usage: wgpu::BufferUsages::UNIFORM
-                        | wgpu::BufferUsages::COPY_DST
-                        | wgpu::BufferUsages::COPY_SRC,
+                        | wgpu::BufferUsages::COPY_DST,
                 });
 
         Self {
             dimensions,
-            staging_buffer,
             storage_buffer,
         }
     }
@@ -182,15 +134,6 @@ impl ReluUniform {
         std::mem::size_of::<ReluDimensions>() as u64
     }
 
-    pub fn copy_to_gpu(&self, encoder: &mut CommandEncoder) {
-        encoder.copy_buffer_to_buffer(
-            &self.storage_buffer,
-            0,
-            &self.staging_buffer,
-            0,
-            self.size(),
-        );
-    }
 }
 
 #[repr(C)]
@@ -201,7 +144,6 @@ pub struct SumElements {
 
 pub struct SumUniform {
     pub elements: SumElements,
-    pub staging_buffer: Buffer,
     pub storage_buffer: Buffer,
 }
 
@@ -216,16 +158,6 @@ impl SumUniform {
             data: [element_count as u32, workgroup_count as u32],
         };
 
-        let size: u64 = std::mem::size_of::<SumElements>() as wgpu::BufferAddress;
-        let staging_buffer: Buffer = handles.device.create_buffer(&wgpu::BufferDescriptor {
-            label: None,
-            size,
-            usage: wgpu::BufferUsages::UNIFORM
-                | wgpu::BufferUsages::COPY_DST
-                | wgpu::BufferUsages::COPY_SRC,
-            mapped_at_creation: false,
-        });
-
         let storage_buffer: Buffer =
             handles
                 .device
@@ -233,13 +165,11 @@ impl SumUniform {
                     label: Some(label),
                     contents: bytemuck::cast_slice(&elements.data),
                     usage: wgpu::BufferUsages::UNIFORM
-                        | wgpu::BufferUsages::COPY_DST
-                        | wgpu::BufferUsages::COPY_SRC,
+                        | wgpu::BufferUsages::COPY_DST,
                 });
 
         Self {
             elements,
-            staging_buffer,
             storage_buffer,
         }
     }
@@ -249,15 +179,6 @@ impl SumUniform {
         std::mem::size_of::<SumElements>() as u64
     }
 
-    pub fn copy_to_gpu(&self, encoder: &mut CommandEncoder) {
-        encoder.copy_buffer_to_buffer(
-            &self.storage_buffer,
-            0,
-            &self.staging_buffer,
-            0,
-            self.size(),
-        );
-    }
 }
 
 #[repr(C)]
@@ -268,7 +189,6 @@ pub struct SoftmaxDimensions {
 
 pub struct SoftmaxUniform {
     pub dimensions: SoftmaxDimensions,
-    pub staging_buffer: Buffer,
     pub storage_buffer: Buffer,
 }
 
@@ -278,16 +198,6 @@ impl SoftmaxUniform {
             data: [element_count as u32],
         };
 
-        let size: u64 = std::mem::size_of::<SoftmaxDimensions>() as wgpu::BufferAddress;
-        let staging_buffer: Buffer = handles.device.create_buffer(&wgpu::BufferDescriptor {
-            label: None,
-            size,
-            usage: wgpu::BufferUsages::UNIFORM
-                | wgpu::BufferUsages::COPY_DST
-                | wgpu::BufferUsages::COPY_SRC,
-            mapped_at_creation: false,
-        });
-
         let storage_buffer: Buffer =
             handles
                 .device
@@ -295,13 +205,11 @@ impl SoftmaxUniform {
                     label: Some(label),
                     contents: bytemuck::cast_slice(&dimensions.data),
                     usage: wgpu::BufferUsages::UNIFORM
-                        | wgpu::BufferUsages::COPY_DST
-                        | wgpu::BufferUsages::COPY_SRC,
+                        | wgpu::BufferUsages::COPY_DST,
                 });
 
         Self {
             dimensions,
-            staging_buffer,
             storage_buffer,
         }
     }
@@ -311,15 +219,6 @@ impl SoftmaxUniform {
         std::mem::size_of::<SoftmaxDimensions>() as u64
     }
 
-    pub fn copy_to_gpu(&self, encoder: &mut CommandEncoder) {
-        encoder.copy_buffer_to_buffer(
-            &self.storage_buffer,
-            0,
-            &self.staging_buffer,
-            0,
-            self.size(),
-        );
-    }
 }
 
 #[derive(Debug)]
@@ -438,7 +337,7 @@ impl Tensor2DGPU {
         }
     }
 
-    pub fn copy_to_gpu_mut(&mut self, encoder: &mut CommandEncoder) {
+    pub fn copy_from_gpu_mut(&mut self, encoder: &mut CommandEncoder) {
         if self.live_data_on_device {
             return;
         }
@@ -450,16 +349,6 @@ impl Tensor2DGPU {
             self.size(),
         );
         self.live_data_on_device = true;
-    }
-
-    pub fn copy_to_gpu(&self, encoder: &mut CommandEncoder) {
-        encoder.copy_buffer_to_buffer(
-            &self.storage_buffer,
-            0,
-            &self.staging_buffer,
-            0,
-            self.size(),
-        );
     }
 
     pub async fn retrieve_results(&mut self) {

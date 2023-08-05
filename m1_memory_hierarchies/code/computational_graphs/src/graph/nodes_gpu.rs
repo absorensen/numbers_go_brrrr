@@ -192,7 +192,6 @@ pub fn linear_layer(
         cpass.insert_debug_marker("linear_layer_graph");
         cpass.dispatch_workgroups(launch_blocks_x, launch_blocks_y, 1); // Number of cells to run, the (x,y,z) size of item being processed
     }
-    uniform_device.copy_to_gpu(encoder);
 }
 
 // ReLU
@@ -301,8 +300,6 @@ pub fn relu(
             1,
         ); // Number of cells to run, the (x,y,z) size of item being processed
     }
-
-    uniform.copy_to_gpu(encoder);
 }
 
 // Softmax
@@ -509,10 +506,6 @@ pub fn softmax(
         cpass.dispatch_workgroups(((input.len() + block_size - 1) / block_size) as u32, 1, 1);
         // Number of cells to run, the (x,y,z) size of item being processed
     }
-
-    uniform.copy_to_gpu(encoder);
-    global_max.copy_to_gpu(encoder);
-    global_offset.copy_to_gpu(encoder);
 }
 
 // LinearReLUSoftmax
@@ -537,7 +530,7 @@ pub fn linear_relu_softmax(
     let bias: &Tensor2DGPU = &data_buffers[node.buffer_indices[2]];
     let output: &Tensor2DGPU = &data_buffers[node.buffer_indices[3]];
 
-    let mut intermediate: Tensor2DGPU = Tensor2DGPU::new(
+    let intermediate: Tensor2DGPU = Tensor2DGPU::new(
         gpu_handles,
         "intermediate",
         0.0,
@@ -764,9 +757,4 @@ pub fn linear_relu_softmax(
             1,
         ); // Number of cells to run, the (x,y,z) size of item being processed
     }
-
-    softmax_global_max.copy_to_gpu(encoder);
-    softmax_global_offset.copy_to_gpu(encoder);
-    linear_uniform.copy_to_gpu(encoder);
-    intermediate.copy_to_gpu_mut(encoder);
 }

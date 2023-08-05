@@ -49,9 +49,9 @@ pub async fn run() {
         pollster::block_on(immediate::runner::execute(&configuration));
         pollster::block_on(graph::runner::execute(&configuration));
 
-        let gpu_handles: GPUHandles = initialize_gpu(configuration.warmup_gpu)
-            .await
-            .expect("Failed to acquire GPU Handles");
-        op_code_compiler::runner::compile_linear_shader(&gpu_handles, true);
+        // let gpu_handles: GPUHandles = initialize_gpu(configuration.warmup_gpu)
+        //     .await
+        //     .expect("Failed to acquire GPU Handles");
+        // op_code_compiler::runner::compile_linear_shader(&gpu_handles, true);
     }
 }

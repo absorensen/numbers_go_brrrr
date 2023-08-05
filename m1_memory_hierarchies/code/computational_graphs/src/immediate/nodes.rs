@@ -60,11 +60,7 @@ pub async fn linear_layer(
         cpass.insert_debug_marker("linear_layer_immediate");
         cpass.dispatch_workgroups(launch_blocks_x, launch_blocks_y, 1); // Number of cells to run, the (x,y,z) size of item being processed
     }
-    uniform_device.copy_to_gpu(&mut encoder);
-    input.copy_to_gpu(&mut encoder);
-    weights.copy_to_gpu(&mut encoder);
-    bias.copy_to_gpu(&mut encoder);
-    output.copy_to_gpu_mut(&mut encoder);
+    output.copy_from_gpu_mut(&mut encoder);
 
     gpu_handles.queue.submit(Some(encoder.finish()));
 
@@ -203,9 +199,7 @@ pub async fn relu(
             1,
         ); // Number of cells to run, the (x,y,z) size of item being processed
     }
-    uniform_device.copy_to_gpu(&mut encoder);
-    input_device.copy_to_gpu(&mut encoder);
-    output_device.copy_to_gpu_mut(&mut encoder);
+    output_device.copy_from_gpu_mut(&mut encoder);
 
     gpu_handles.queue.submit(Some(encoder.finish()));
 
@@ -262,8 +256,7 @@ pub async fn relu_inplace(gpu_handles: &GPUHandles, data_device: &mut Tensor2DGP
             1,
         ); // Number of cells to run, the (x,y,z) size of item being processed
     }
-    uniform_device.copy_to_gpu(&mut encoder);
-    data_device.copy_to_gpu_mut(&mut encoder);
+    data_device.copy_from_gpu_mut(&mut encoder);
 
     gpu_handles.queue.submit(Some(encoder.finish()));
 
@@ -311,9 +304,7 @@ pub async fn sum(
         cpass.insert_debug_marker("Sum Immediate");
         cpass.dispatch_workgroups(1, 1, 1); // Number of cells to run, the (x,y,z) size of item being processed
     }
-    uniform_device.copy_to_gpu(&mut encoder);
-    input_device.copy_to_gpu(&mut encoder);
-    output_device.copy_to_gpu_mut(&mut encoder);
+    output_device.copy_from_gpu_mut(&mut encoder);
 
     gpu_handles.queue.submit(Some(encoder.finish()));
 
@@ -441,11 +432,7 @@ pub async fn softmax(
         ); // Number of cells to run, the (x,y,z) size of item being processed
     }
 
-    uniform_device.copy_to_gpu(&mut encoder);
-    input_device.copy_to_gpu(&mut encoder);
-    global_max_device.copy_to_gpu(&mut encoder);
-    global_offset_device.copy_to_gpu(&mut encoder);
-    output_device.copy_to_gpu_mut(&mut encoder);
+    output_device.copy_from_gpu_mut(&mut encoder);
 
     gpu_handles.queue.submit(Some(encoder.finish()));
 
@@ -587,7 +574,7 @@ pub async fn linear_relu_softmax_fused(
     bias: &Tensor2DGPU,
     output: &mut Tensor2DGPU,
 ) {
-    let mut intermediate: Tensor2DGPU = Tensor2DGPU::new(
+    let intermediate: Tensor2DGPU = Tensor2DGPU::new(
         gpu_handles,
         "intermediate",
         0.0,
@@ -726,14 +713,7 @@ pub async fn linear_relu_softmax_fused(
         ); // Number of cells to run, the (x,y,z) size of item being processed
     }
 
-    softmax_global_max.copy_to_gpu(&mut encoder);
-    softmax_global_offset.copy_to_gpu(&mut encoder);
-    linear_uniform.copy_to_gpu(&mut encoder);
-    input.copy_to_gpu(&mut encoder);
-    weights.copy_to_gpu(&mut encoder);
-    bias.copy_to_gpu(&mut encoder);
-    intermediate.copy_to_gpu_mut(&mut encoder);
-    output.copy_to_gpu_mut(&mut encoder);
+    output.copy_from_gpu_mut(&mut encoder);
 
     gpu_handles.queue.submit(Some(encoder.finish()));
 
