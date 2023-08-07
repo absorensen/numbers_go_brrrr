@@ -5,7 +5,7 @@ use crate::{
     shared::{
         benchmark_plot::draw_benchmark_plot,
         configuration::Configuration,
-        gpu_utilities::{initialize_gpu, GPUHandles},
+        gpu_utilities::GPUHandles,
         graph_operators::GraphOperator,
         performance_measurement::{
             benchmark_function_vector_gpu_graph, GraphFunction, PerformanceMeasurements,

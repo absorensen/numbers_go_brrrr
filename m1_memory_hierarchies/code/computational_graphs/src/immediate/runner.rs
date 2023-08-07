@@ -3,7 +3,7 @@
 use crate::shared::{
     benchmark_plot::draw_benchmark_plot,
     configuration::Configuration,
-    gpu_utilities::{initialize_gpu, GPUHandles},
+    gpu_utilities::GPUHandles,
     performance_measurement::{benchmark_function_vector_gpu, PerformanceMeasurements},
     tensor2d::Tensor2D,
 };
