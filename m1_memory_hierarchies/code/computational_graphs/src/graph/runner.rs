@@ -356,13 +356,9 @@ fn graph_benchmarks(config: &Configuration, gpu_handles: &GPUHandles) {
     );
 }
 
-pub async fn execute(config: &Configuration) {
-    let gpu_handles: GPUHandles = initialize_gpu(config.warmup_gpu)
-        .await
-        .expect("Failed to acquire GPU Handles");
-
+pub async fn execute(gpu_handles: &GPUHandles, config: &Configuration) {
     if config.run_performance_benchmark {
-        graph_benchmarks(config, &gpu_handles);
+        graph_benchmarks(config, gpu_handles);
         return;
     }
 
@@ -422,12 +418,12 @@ pub async fn execute(config: &Configuration) {
     );
 
     let mut graph_runner: GraphRunnerGPU = GraphRunnerGPU::new(
-        &gpu_handles,
+        gpu_handles,
         &graph_operators,
         fuse_operators,
         cache_elements,
     );
-    let output: Tensor2D = graph_runner.run(&gpu_handles, 1).await;
+    let output: Tensor2D = graph_runner.run(gpu_handles, 1).await;
     println!("gpu output: {:?}", output);
 
     let difference: Tensor2D = Tensor2D::subtraction(&output_cpu, &output);

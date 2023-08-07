@@ -419,13 +419,10 @@ async fn linear_relu_softmax_fused(config: &Configuration, gpu_handles: &GPUHand
     }
 }
 
-pub async fn execute(config: &Configuration) {
-    let gpu_handles: GPUHandles = initialize_gpu(config.warmup_gpu)
-        .await
-        .expect("Failed to acquire GPU Handles");
-    linear_layer(config, &gpu_handles).await;
-    relu(config, &gpu_handles).await;
-    sum(config, &gpu_handles).await;
-    softmax(config, &gpu_handles).await;
-    linear_relu_softmax_fused(config, &gpu_handles).await;
+pub async fn execute(gpu_handles: &GPUHandles, config: &Configuration) {
+    linear_layer(config, gpu_handles).await;
+    relu(config, gpu_handles).await;
+    sum(config, gpu_handles).await;
+    softmax(config, gpu_handles).await;
+    linear_relu_softmax_fused(config, gpu_handles).await;
 }

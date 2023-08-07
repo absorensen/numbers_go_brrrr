@@ -46,12 +46,12 @@ pub async fn run() {
     stack::runner::execute(&configuration);
 
     if configuration.compatible_gpu_found {
-        pollster::block_on(immediate::runner::execute(&configuration));
-        pollster::block_on(graph::runner::execute(&configuration));
+        let gpu_handles: GPUHandles = initialize_gpu(configuration.warmup_gpu)
+            .await
+            .expect("Failed to acquire GPU Handles");
 
-        // let gpu_handles: GPUHandles = initialize_gpu(configuration.warmup_gpu)
-        //     .await
-        //     .expect("Failed to acquire GPU Handles");
-        // op_code_compiler::runner::compile_linear_shader(&gpu_handles, true);
+        pollster::block_on(immediate::runner::execute(&gpu_handles, &configuration));
+        pollster::block_on(graph::runner::execute(&gpu_handles, &configuration));
+        op_code_compiler::runner::compile_linear_shader(&gpu_handles, true);
     }
 }
