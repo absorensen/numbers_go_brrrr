@@ -897,14 +897,14 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../m5_projects/">M5 - 🧬4️⃣ Projects</a>
+          <a href="../../m5_projects/">M5 - 🧬3️⃣ Projects</a>
           
         </div>
       
       <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_9">
           <span class="md-nav__icon md-icon"></span>
-          M5 - 🧬4️⃣ Projects
+          M5 - 🧬3️⃣ Projects
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -1214,9 +1214,11 @@ and suggest inlining to the compiler, without demanding it. The compiler is pret
 out what is best. As you will see in the function <code>linear_layer_preallocated_inline</code>, the function itself
 is not different in any way.</p>
 <p>Next up is the function <code>linear_layer_local_accumulation</code>. Now it's memory hierarchy time! While I didn't
-get rid of the strided memory access of the weights tensor, I elected to not accumulate the result of each
-output element directly in the output tensor. Instead I accumulate in a local variable, which will hopefully
-be kept in a register.</p>
+get rid of the strided memory access of the weights tensor, I removed some of that control flow overhead,
+by linearizing the bias part. Now it is just a single for-loop, instead of two, because the dimensions of
+the output and bias tensors match, and there are no transformations to be made. So we get to just iterate
+through all elements. I also elected to not accumulate the result of each output element directly in the output
+tensor. Instead I accumulate in a local variable, which will hopefully be kept in a register.</p>
 <p>Think back! Where is the register located? And why can it be problematic to accumulate in the output tensor?</p>
 <p>The bias is the same. But that does mean we are writing to the same output element twice. Let's move the bias
 calculation into the matrix-matrix multiplication loop. <code>linear_layer_optimized</code> moves the bias to just
@@ -1234,6 +1236,7 @@ it locally, don't worry, I got you covered!</p>
 <figure>
 <p><a class="glightbox" href="../../figures/linear_layer_cpu_benchmark_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/linear_layer_cpu_benchmark_stack.png" width="800" /></a></p>
 <figcaption>
+Benchmarking linear operator functions on the CPU.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
@@ -1262,9 +1265,34 @@ interesting ranges. Like right around the size of the last bend.
 Another thing to note is that only the versions of the linear operator that uses local accumulation
 significantly outperform the naive version. One surprise is that keeping the bias outside of the
 matrix-matrix loop, is better performing than moving the bias in. Sometimes it really is better to
-keep things simple. So from now on, the
-<code>linear_layer_local_accumulation</code> version will be the preferred one.</p>
+keep things simple. So from now on, the <code>linear_layer_local_accumulation</code> version will be the preferred one.</p>
 <h3 id="relu">ReLU</h3>
+<p>Next up, we have the ReLU function, which is embarrasingly simple. It returns the maximum of two numbers.
+One of the numbers is zero. Done.</p>
+<p>So, move your way down to the <code>relu</code> and <code>relu_preallocated</code> functions. Here I also completely flatten
+out the two dimensional tensor to save on the amount of time spent on control flow vs. actual computation.
+But then we get a new variant. The <code>relu_inplace</code> function. Because it is possible to do the ReLU operation
+directly on the input array, let's try that variant as well and see what the effect is. Finally, we have
+<code>relu_inplace_inline</code>. This function is definitely small enough that it might benefit from inlining.</p>
+<p>So now go back into the same folder where you found the linear benchmark output and look at what your computer
+could crunch out. Alternatively, if you couldn't run it, I got you covered here.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/relu_cpu_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/relu_cpu_stack.png" width="800" /></a></p>
+<figcaption>
+Benchmarking ReLU operator functions on the CPU.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+<p>Note the huge difference between the naive version and the other ones. Why do you think there is
+this huge difference?</p>
+<p>You guessed it! All of the other functions have either preallocated the output matrix, or do the
+operations in-place. Since the ReLU operation is so simple, it becomes easily dominated by allocation
+and memory costs. The difference between the preallocated version and the inplace version is neglible. It is
+still doing 1 read and 1 write after all. But we see the inline version absolutely dominating. First, we saw
+the allocation dominate, then the cost of the function call itself as it is apparently quite costly for this
+simple function. Go back and look at the how much was gained by inlining the much more complex linear operator
+in the previous benchmark! Go on!</p>
 <h3 id="softmax">Softmax</h3>
 <h3 id="fused">Fused</h3>
 <h2 id="data-dependencies-and-control-dependencies">Data dependencies and control dependencies</h2>
