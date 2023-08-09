@@ -534,13 +534,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#intro-to-computational-graphs-overview-of-immediate-graph-and-compiled-graph" class="md-nav__link">
-    Intro to computational graphs - overview of immediate, graph and compiled graph
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#what-is-a-graph" class="md-nav__link">
     What is a graph?
   </a>
@@ -562,6 +555,47 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#implementing-operators" class="md-nav__link">
+    Implementing operators
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementing operators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#linear" class="md-nav__link">
+    Linear
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relu" class="md-nav__link">
+    ReLU
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#softmax" class="md-nav__link">
+    Softmax
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fused" class="md-nav__link">
+    Fused
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#data-dependencies-and-control-dependencies" class="md-nav__link">
     Data dependencies and control dependencies
   </a>
@@ -571,13 +605,6 @@
         <li class="md-nav__item">
   <a href="#testing-the-correctness-of-the-nodes" class="md-nav__link">
     Testing the correctness of the nodes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inlining" class="md-nav__link">
-    Inlining
   </a>
   
 </li>
@@ -604,8 +631,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-perspective-to-render-graphs" class="md-nav__link">
-    🧬3️⃣ Perspective to render graphs
+  <a href="#3-graphs-in-graphicsgpu-programming" class="md-nav__link">
+    🧬3️⃣ Graphs in Graphics/GPU Programming
   </a>
   
 </li>
@@ -916,13 +943,6 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#intro-to-computational-graphs-overview-of-immediate-graph-and-compiled-graph" class="md-nav__link">
-    Intro to computational graphs - overview of immediate, graph and compiled graph
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#what-is-a-graph" class="md-nav__link">
     What is a graph?
   </a>
@@ -944,6 +964,47 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#implementing-operators" class="md-nav__link">
+    Implementing operators
+  </a>
+  
+    <nav class="md-nav" aria-label="Implementing operators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#linear" class="md-nav__link">
+    Linear
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relu" class="md-nav__link">
+    ReLU
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#softmax" class="md-nav__link">
+    Softmax
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fused" class="md-nav__link">
+    Fused
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#data-dependencies-and-control-dependencies" class="md-nav__link">
     Data dependencies and control dependencies
   </a>
@@ -953,13 +1014,6 @@
         <li class="md-nav__item">
   <a href="#testing-the-correctness-of-the-nodes" class="md-nav__link">
     Testing the correctness of the nodes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#inlining" class="md-nav__link">
-    Inlining
   </a>
   
 </li>
@@ -986,8 +1040,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-perspective-to-render-graphs" class="md-nav__link">
-    🧬3️⃣ Perspective to render graphs
+  <a href="#3-graphs-in-graphicsgpu-programming" class="md-nav__link">
+    🧬3️⃣ Graphs in Graphics/GPU Programming
   </a>
   
 </li>
@@ -1011,35 +1065,233 @@
 
 
 <h1 id="2-computational-graphs">2️⃣ Computational Graphs</h1>
-<h2 id="intro-to-computational-graphs-overview-of-immediate-graph-and-compiled-graph">Intro to computational graphs - overview of immediate, graph and compiled graph</h2>
+<p>Conveying the importance of computational graphs to people who were probably using Python to
+program neural networks was the motivation for doing this whole thing in the first place.
+So now let's get to business.</p>
+<p>Computational graphs are more or less a way to communicate the flow of your program.
+It can allow a library or a framework to keep data at various levels of the memory hierarchy.
+It can allow it to check that all of the dimensions fit for the data,
+it can make assumptions about fusing nodes (combining them), remove redundancies and removed unused elements.  </p>
+<p>Let's take a look at this defined network from PyTorch's own
+<a href="https://pytorch.org/tutorials/recipes/recipes/defining_a_neural_network.html">documentation</a>.</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>      <span class="nb">super</span><span class="p">(</span><span class="n">Net</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>      <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>      <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>      <span class="bp">self</span><span class="o">.</span><span class="n">dropout1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout2d</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>      <span class="bp">self</span><span class="o">.</span><span class="n">dropout2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout2d</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>      <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">9216</span><span class="p">,</span> <span class="mi">128</span><span class="p">)</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>      <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="c1"># x represents our data</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>      <span class="c1"># Pass data through conv1</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>      <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>      <span class="c1"># Use the rectified-linear activation function over x</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>      <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>      <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">conv2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>      <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>      <span class="c1"># Run max pooling over x</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>      <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">max_pool2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>      <span class="c1"># Pass data through dropout1</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>      <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>      <span class="c1"># Flatten x with start_dim=1</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>      <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>      <span class="c1"># Pass data through ``fc1``</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>      <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>      <span class="n">x</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>      <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>      <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>
+</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>      <span class="c1"># Apply softmax to x</span>
+</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>      <span class="n">output</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">log_softmax</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>      <span class="k">return</span> <span class="n">output</span>
+</span></code></pre></div>
+<p>In PyTorch the user does not fully create a graph, but if the user makes sure <code>x</code> is on the
+GPU by calling <code>x.to_device()</code> all of the functions will be executed on the GPU until the
+output is transferred back to the CPU. This reactive paradigm might be part of why the first
+complete iteration of a PyTorch training loop will be signifcantly slower than the subsequent
+loop. Not to mention all of the allocations behind the scenes for backpropagation.</p>
+<p>If you use <code>torch.compile()</code> it will do something called tracing behind the scenes.
+You don't need to worry about the specifics, but just know that it creates a computational graph
+from the Python code above and then optimizes that code to run faster and/or use less memory.</p>
+<p>So why does it need the graph? That is something the rest of this module will try to answer,
+along with a really basic introduction something called fusion, where layers can be combined
+to be more efficient. </p>
 <h2 id="what-is-a-graph">What is a graph?</h2>
-<p>Trees, graphs, pointers, very abstract</p>
+<p>A graph is <a href="https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)">a type of structure</a>,
+for our needs, a data structure. In s0 there is a more elaborate examination of the concept for level 3.
+So for right now, just give the link to graph's wiki page a quick look. You should get the gist just by
+looking at a few of the images.</p>
+<p>Once you have done this, just know, that the rest of this module won't actually use a real graph.
+The graph we will concern ourselves with will be defined as being one way, unidirectional, and each
+node can point to at most one other node. This reduces the entire graph to just being a list of operations
+which will be executed sequentially.</p>
 <h2 id="the-network-we-want-to-support">The network we want to support</h2>
-<p>Linear Layer, ReLU, Softmax, input, output
-Linear
-f32 only, dtype=f32</p>
+<p>For illustrating how computational graphs can benefit your code we don't really need to support
+a lot of operators. We need transfers to and from the GPU (eventually), a linear operator
+(matrix-matrix multiplication followed by an addition), a ReLU operator (single call to a max function with 0)
+and a softmax operator. The softmax operator is the most complex part, don't worry I will show you some
+CPU code that is fairly easy to understand. The GPU version gets a bit complicated and is only constructed
+on a fairly simplistic version.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/basic_graph_operations.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/basic_graph_operations.png" width="300" /></a></p>
+<figcaption>
+Our minimal computational graph example will only contain these 5 operations.
+</figcaption>
+</figure>
+<p>For the computation graphs we will use, note that due to the constraints of transfer first and last, and softmax
+next to last, the only difference is the amount of linear and ReLU layers. Eventually, when we look
+at fusion, new operators will be produced, linear-ReLU and linear-ReLU-softmax. We will only use
+32-bit floating point, <code>f32</code> in Rust, as the data type.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/example_computational_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_computational_graph.png" width="300" /></a></p>
+<figcaption>
+An example computational graph. 
+</figcaption>
+</figure>
+<p>The code for the rest of the module can be found at <code>m1_memory_hierarchies/code/computational_graphs/</code> or
+<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/tree/main/m1_memory_hierarchies/code/computational_graphs">online</a>.</p>
 <h2 id="whats-in-a-tensor">What's in a tensor</h2>
-<p>Linear memory, sometimes called the raw view</p>
+<p>First of all we are going to start on the CPU. 
+We are going to create a data type which will hold the data our operators consume on the CPU.
+Let's call it <code>Tensor2D</code>. Our 2D tensor will actually be a simple piece of 1 dimensional memory under the
+hood and we will keep track of the number of rows and columns to find out how to access each piece of data.
+If you are in the root directory for <code>computational_graphs</code> go to <code>src/shared/tensor_2d.rs</code> or
+<a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/tree/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor_2d.rs">online</a>.</p>
+<p>Start by taking a look at the definition of the <code>Tensor2D</code> struct at the very top. The <code>derive</code> stuff
+at the top is asking some macros to automatically implement (derive) some traits (interfaces and behavior)
+automatically. <code>Clone</code> means we can call a Tensor2D element as below - </p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_tensor</span>: <span class="nc">Tensor2D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tensor2D</span>::<span class="n">new</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">);</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">copy_of_some_tensor</span>: <span class="nc">Tensor2D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">some_tensor</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span>
+</span></code></pre></div>
+<p>This creates a complete and total copy of <code>some_tensor</code>. If we manipulate or move <code>some_tensor</code>,
+<code>copy_of_some_tensor</code> will not be affected as they no longer have anything to do with each other.</p>
+<p>Next, take a look at the <code>new</code> function. In it we create a new <code>Tensor2D</code> by creating a new
+<code>Vec&lt;f32&gt;</code> with size <code>row_count * column_count</code>. Each element is given a value of <code>scale * index</code>.
+This is just for testing purposes so I found it useful for this to not be all zeros and not all random numbers.
+This allows us to verify that the GPU implementations are functionally equivalent to the CPU implementations.</p>
+<p>We don't need to otherwise relate to the values of <code>row_count</code> and <code>column_count</code>. Even if we implement
+a two dimensional structure on top of a piece of one dimensional memory, when we are iterating through all
+elements, such as we do when setting all of the elements to some value or accumulating the sum of all elements
+we can do away with the two dimensional stuff. Keeping up that illusion unneccesarily induces extra cost
+in the form of more time and code spent on control flow statements like <code>for-loops</code> and <code>if-statements</code>.</p>
+<h2 id="implementing-operators">Implementing operators</h2>
+<p>In this section I will be going through various implementations of the three operators and their fused variants
+and show benchmarks to show you how big of a performance impact these sort of first guess optimizations can have
+even without profiling or microoptimizations.</p>
+<h3 id="linear">Linear</h3>
+<p>There's some dimension checking functions, you can just ignore those. They use <code>debug_assert</code> statements
+to raise an error if the dimensions of the tensors given to a linear layer function don't match. <code>debug_assert</code>
+is the same as an <code>assert</code> statement, except it is only run in debug mode. I did it this way incur only a small
+hit to performance. You probably passed the <code>linear_layer</code> function on the way down, it just acts as a wrapper
+around the <code>linear_layer_preallocated</code> function. If you haven't already allocated a tensor to use as output,
+it will make one for you. If you do this a lot however, such as in a loop, you should be using the preallocated
+version to not have memory allocations in your loops.</p>
+<p>Finally, let's go down to the <code>linear_layer_preallocated</code> function. There are three main sections. One is
+the call to the <code>debug_assert</code> function from earlier, to check for valid input and output dimensions, the
+second is the matrix-matrix multiplication which needs three whole for-loops and finally the bias section. Note
+the use of linearized accesses, if you need a reminder what that is all about, go back to m1::s0::The Vector.</p>
+<p>It's not too bad, but we could do better, although we won't do more efficient implementations of matrix-matrix
+multiplication, note that the read accesses of the weights tensor is strided. We could have implemented that some
+tensors could be transposed, but you get the point. So we have a triple for-loop and a double for-loop in our
+linear operator. Try to think, based on the contents of the last couple of sections, what would be good first
+optimizations for this function?</p>
+<p>While you think about that in the back of your mind, I'll take a quick detour to introduce a very simple but
+finnicky concept - inlining!</p>
+<p>Inlining in Rust, and most other languages, is done via an annotation to the compiler. It is usually more of a hint
+or request than an actual instruction. In Rust it looks like the derivation of traits we saw earlier -
+<code>#[inline(always)]</code>. In that case it actually is more of a command. There's other variants you can put inside
+the parantheses like <code>#[inline]</code>, which is more of a suggestion, or <code>#[inline(never)]</code>. Inlining
+is basically taking all calls to that function and substituting it with the code from the function. This is
+largely good for very small functions, such as if we made a function for making our linearized array accesses
+prettier to look at, but for large functions it either does nothing or makes the performance worse. So, in general,
+unless you were trying to examine the concept of inlining like we are now, you should stick with <code>#[inline]</code>
+and suggest inlining to the compiler, without demanding it. The compiler is pretty smart and will usually figure
+out what is best. As you will see in the function <code>linear_layer_preallocated_inline</code>, the function itself
+is not different in any way.</p>
+<p>Next up is the function <code>linear_layer_local_accumulation</code>. Now it's memory hierarchy time! While I didn't
+get rid of the strided memory access of the weights tensor, I elected to not accumulate the result of each
+output element directly in the output tensor. Instead I accumulate in a local variable, which will hopefully
+be kept in a register.</p>
+<p>Think back! Where is the register located? And why can it be problematic to accumulate in the output tensor?</p>
+<p>The bias is the same. But that does mean we are writing to the same output element twice. Let's move the bias
+calculation into the matrix-matrix multiplication loop. <code>linear_layer_optimized</code> moves the bias to just
+before the writing of the accumulated result to the output tensor. If the bias calculation was a lot larger, this
+might not be faster. In some cases for highly complex loops, it can instead make sense to separate them into
+more loops, which is a process called <code>loop fission</code>. I have only used a small subset of loop optimizations,
+but you can read about more ways of optimzing a loop <a href="https://en.wikipedia.org/wiki/Loop_optimization">here</a>.</p>
+<p>Ok, so try and run the code locally! To begin with go to the file <code>src/lib.rs</code>. Comment out all
+of the lines within and including the <code>if configuration.compatible_gpu_found {</code> line. Then in your terminal
+navigate to the root folder, the one containing the <code>src</code> folder, and write <code>cargo run --release</code>. Your
+computer will now run a bunch of benchmarks relevant to the rest of this section. You can find the output
+in <code>computational_graphs/outputs/benchmarks/stack</code>. The one that should have been generated on your computer
+that we want to look at now is called <code>linear_layer_cpu_benchmark_stack.png</code>. If you weren't able to run
+it locally, don't worry, I got you covered!</p>
+<figure>
+<p><a class="glightbox" href="../../figures/linear_layer_cpu_benchmark_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/linear_layer_cpu_benchmark_stack.png" width="800" /></a></p>
+<figcaption>
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively. 
+</figcaption>
+</figure>
+<p>The graph is quite high resolution to allow you to zoom in. The X-axis is the size of the tensors. Only NxN matrices
+are used. The Y-axis is time in nanoseconds averaged over 10 runs, which is a bit on the low side. Note the how the
+lines are piece-wise linear. There are two points where all of the lines get quite a bit slower and scale worse
+with the size of the tensors. Why do you think that is?</p>
+<p>You guessed it! You are seeing the size of the tensor becoming too big for the different caches! It looks like the
+last bend happens at 4096 elements. This corresponds to a 64x64 matrix. 4096 elements of 32-bits, or 4 bytes, each
+corresponds to 16384 bytes, or 16 KB. We have 4 of these tensor structs, so we should have total allocations of
+64 KB just for that data and then add in all of the other memory used by the application and everything else
+running on the laptop at the time.</p>
+<p>This might be a good time to experiment with changing the values in <code>lib.rs</code> for</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">loop_count</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">loop_range</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">usize</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="k">u32</span><span class="o">..</span><span class="mi">8</span><span class="k">u32</span><span class="p">).</span><span class="n">map</span><span class="p">(</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="k">usize</span><span class="p">.</span><span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">)).</span><span class="n">collect</span><span class="p">();</span>
+</span></code></pre></div>
+<p><code>loop_count</code> is how many measurements are made per data point. <code>loop_range</code> is a vector of matrix sizes.
+In this case, the first element is 4, so the first measurement will be done with matrices sized 4x4.
+Currently, it takes a range between 2 and 8 (not including 8) and yields a vector of sizes of 2^n.
+So 4, 8, 16, 32, 64, 128. If you wanted all values in the range of 0 to 100 you could write</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">loop_range</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">usize</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">101</span><span class="p">).</span><span class="n">collect</span><span class="p">();</span>
+</span></code></pre></div>
+<p>You can zoom in on these parts of the graph by modifying <code>lib.rs</code> to just test values in these
+interesting ranges. Like right around the size of the last bend. 
+Another thing to note is that only the versions of the linear operator that uses local accumulation
+significantly outperform the naive version. One surprise is that keeping the bias outside of the
+matrix-matrix loop, is better performing than moving the bias in. Sometimes it really is better to
+keep things simple. So from now on, the
+<code>linear_layer_local_accumulation</code> version will be the preferred one.</p>
+<h3 id="relu">ReLU</h3>
+<h3 id="softmax">Softmax</h3>
+<h3 id="fused">Fused</h3>
 <h2 id="data-dependencies-and-control-dependencies">Data dependencies and control dependencies</h2>
 <p>Working on a graph
-Contatenation (multiple writes to the same node)</p>
+Contatenation (multiple writes to the same node)
+Do the dimensions fit</p>
 <h2 id="testing-the-correctness-of-the-nodes">Testing the correctness of the nodes</h2>
 <p>Testing in Rust</p>
-<h2 id="inlining">Inlining</h2>
-<p>What is inlining
-Perspective to kernel fusion</p>
+<hr />
 <h2 id="3-compiler-verifications-and-the-restrict-keyword">3️⃣ Compiler verifications and the restrict keyword</h2>
+<p>Perspective back to aliasing and graphs</p>
 <h2 id="3-intermediate-representations">3️⃣ Intermediate representations</h2>
 <h2 id="3-graph-representations">3️⃣ Graph representations</h2>
-<h2 id="3-perspective-to-render-graphs">🧬3️⃣ Perspective to render graphs</h2>
-<p>For graphics</p>
+<h2 id="3-graphs-in-graphicsgpu-programming">🧬3️⃣ Graphs in Graphics/GPU Programming</h2>
+<p>Computational graphs are even making their way into the way you can program the GPU!
+Ways to define computational graphs have been added to
+<a href="https://devblogs.microsoft.com/directx/d3d12-work-graphs-preview/">DirectX12</a>
+and <a href="https://gpuopen.com/gpu-work-graphs-in-vulkan/">Vulkan</a>.
+This development seems to be lead by game and graphics workloads being increasingly
+compute shader driven.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 30, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 9, 2023</span>
       
         <br>
         Created:

@@ -113,12 +113,14 @@ impl GPUVector {
         GPUVector { cpu_data, staging_buffer, storage_buffer }
     }
 
+    // For a bit more nuance to staging buffers and copy to copy 
+    // https://www.reddit.com/r/wgpu/comments/13zqe1u/can_someone_please_explain_to_me_the_whole_buffer/
     pub fn transfer_from_gpu_to_cpu_mut(&mut self, encoder: &mut CommandEncoder) {
         // We copy from the shader-visible GPU storage buffer
         // to the CPU-visible staging buffer.
         if self.staging_buffer.is_some() {
             encoder.copy_buffer_to_buffer(
-                &self.storage_buffer,
+                self.storage_buffer.as_ref(),
                 0,
                 self.staging_buffer.as_ref().unwrap(),
                 0,
