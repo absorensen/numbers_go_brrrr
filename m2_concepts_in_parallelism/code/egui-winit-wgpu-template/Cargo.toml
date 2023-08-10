@@ -1,0 +1,30 @@
+[package]
+name = "wgpu_winit_egui_template"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "wgpu_winit_egui_template"
+path = "src/main.rs"
+
+[lib]
+name = "wgpu_winit_egui_template"
+path = "src/lib.rs"
+
+[profile.dev]
+incremental = true
+
+[profile.release]
+incremental = true
+
+[dependencies]
+wgpu = { version = "0.16" }
+bytemuck = { version="1.13.1", features = [ "derive" ] }
+crossbeam-channel = "0.5.8"
+pollster = "0.2"
+winit = { version="0.28.6" }
+env_logger = "0.9"
+rfd = "0.11.4"
+egui = "0.21"
+egui_winit_platform = "0.18.0"
+egui_wgpu_backend = "0.23.0"
