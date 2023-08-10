@@ -535,31 +535,31 @@
       
         <li class="md-nav__item">
   <a href="#what-is-a-graph" class="md-nav__link">
-    What is a graph?
+    What is a Graph?
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#the-network-we-want-to-support" class="md-nav__link">
-    The network we want to support
+    The Network We Want to Support
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#whats-in-a-tensor" class="md-nav__link">
-    What's in a tensor
+  <a href="#whats-in-a-tensor2d" class="md-nav__link">
+    What's in a Tensor2D?
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#implementing-operators" class="md-nav__link">
-    Implementing operators
+    Implementing Operators
   </a>
   
-    <nav class="md-nav" aria-label="Implementing operators">
+    <nav class="md-nav" aria-label="Implementing Operators">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -596,36 +596,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-dependencies-and-control-dependencies" class="md-nav__link">
-    Data dependencies and control dependencies
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-the-correctness-of-the-nodes" class="md-nav__link">
-    Testing the correctness of the nodes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-compiler-verifications-and-the-restrict-keyword" class="md-nav__link">
-    3️⃣ Compiler verifications and the restrict keyword
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-intermediate-representations" class="md-nav__link">
-    3️⃣ Intermediate representations
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-graph-representations" class="md-nav__link">
-    3️⃣ Graph representations
+  <a href="#3-testing-operators" class="md-nav__link">
+    3️⃣ Testing Operators
   </a>
   
 </li>
@@ -944,31 +916,31 @@
       
         <li class="md-nav__item">
   <a href="#what-is-a-graph" class="md-nav__link">
-    What is a graph?
+    What is a Graph?
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#the-network-we-want-to-support" class="md-nav__link">
-    The network we want to support
+    The Network We Want to Support
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#whats-in-a-tensor" class="md-nav__link">
-    What's in a tensor
+  <a href="#whats-in-a-tensor2d" class="md-nav__link">
+    What's in a Tensor2D?
   </a>
   
 </li>
       
         <li class="md-nav__item">
   <a href="#implementing-operators" class="md-nav__link">
-    Implementing operators
+    Implementing Operators
   </a>
   
-    <nav class="md-nav" aria-label="Implementing operators">
+    <nav class="md-nav" aria-label="Implementing Operators">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1005,36 +977,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-dependencies-and-control-dependencies" class="md-nav__link">
-    Data dependencies and control dependencies
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-the-correctness-of-the-nodes" class="md-nav__link">
-    Testing the correctness of the nodes
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-compiler-verifications-and-the-restrict-keyword" class="md-nav__link">
-    3️⃣ Compiler verifications and the restrict keyword
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-intermediate-representations" class="md-nav__link">
-    3️⃣ Intermediate representations
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-graph-representations" class="md-nav__link">
-    3️⃣ Graph representations
+  <a href="#3-testing-operators" class="md-nav__link">
+    3️⃣ Testing Operators
   </a>
   
 </li>
@@ -1121,7 +1065,7 @@ from the Python code above and then optimizes that code to run faster and/or use
 <p>So why does it need the graph? That is something the rest of this module will try to answer,
 along with a really basic introduction something called fusion, where layers can be combined
 to be more efficient.</p>
-<h2 id="what-is-a-graph">What is a graph?</h2>
+<h2 id="what-is-a-graph">What is a Graph?</h2>
 <p>A graph is <a href="https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)">a type of structure</a>,
 for our needs, a data structure. In s0 there is a more elaborate examination of the concept for level 3.
 So for right now, just give the link to graph's wiki page a quick look. You should get the gist just by
@@ -1130,7 +1074,7 @@ looking at a few of the images.</p>
 The graph we will concern ourselves with will be defined as being one way, unidirectional, and each
 node can point to at most one other node. This reduces the entire graph to just being a list of operations
 which will be executed sequentially.</p>
-<h2 id="the-network-we-want-to-support">The network we want to support</h2>
+<h2 id="the-network-we-want-to-support">The Network We Want to Support</h2>
 <p>For illustrating how computational graphs can benefit your code we don't really need to support
 a lot of operators. We need transfers to and from the GPU (eventually), a linear operator
 (matrix-matrix multiplication followed by an addition), a ReLU operator (single call to a max function with 0)
@@ -1155,7 +1099,7 @@ An example computational graph.
 </figure>
 <p>The code for the rest of the module can be found at <code>m1_memory_hierarchies/code/computational_graphs/</code> or
 <a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/tree/main/m1_memory_hierarchies/code/computational_graphs">online</a>.</p>
-<h2 id="whats-in-a-tensor">What's in a tensor</h2>
+<h2 id="whats-in-a-tensor2d">What's in a Tensor2D?</h2>
 <p>First of all we are going to start on the CPU.
 We are going to create a data type which will hold the data our operators consume on the CPU.
 Let's call it <code>Tensor2D</code>. Our 2D tensor will actually be a simple piece of 1 dimensional memory under the
@@ -1179,7 +1123,7 @@ a two dimensional structure on top of a piece of one dimensional memory, when we
 elements, such as we do when setting all of the elements to some value or accumulating the sum of all elements
 we can do away with the two dimensional stuff. Keeping up that illusion unneccesarily induces extra cost
 in the form of more time and code spent on control flow statements like <code>for-loops</code> and <code>if-statements</code>.</p>
-<h2 id="implementing-operators">Implementing operators</h2>
+<h2 id="implementing-operators">Implementing Operators</h2>
 <p>In this section I will be going through various implementations of the three operators and their fused variants
 and show benchmarks to show you how big of a performance impact these sort of first guess optimizations can have
 even without profiling or microoptimizations.</p>
@@ -1287,25 +1231,81 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 <p>Note the huge difference between the naive version and the other ones. Why do you think there is
 this huge difference?</p>
 <p>You guessed it! All of the other functions have either preallocated the output matrix, or do the
-operations in-place. Since the ReLU operation is so simple, it becomes easily dominated by allocation
+operations inplace. Since the ReLU operation is so simple, it becomes easily dominated by allocation
 and memory costs. The difference between the preallocated version and the inplace version is neglible. It is
-still doing 1 read and 1 write after all. But we see the inline version absolutely dominating. First, we saw
+still doing one read and one write after all. But we see the inline version absolutely dominating. First, we saw
 the allocation dominate, then the cost of the function call itself as it is apparently quite costly for this
 simple function. Go back and look at the how much was gained by inlining the much more complex linear operator
 in the previous benchmark! Go on!</p>
+<p>Inplace operations are also available in PyTorch. The ReLU actually has a flag for the
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html">inplace version</a>.</p>
 <h3 id="softmax">Softmax</h3>
+<p>Now let's look at the softmax operator. It isn't that complicated, except as we'll see when we talk about
+the GPU version, the max and sum values are actually non-trivial to implement on a GPU using more than a
+single work group (a group of threads).</p>
+<p>Anyways, head down to <code>softmax</code> and <code>softmax_preallocated</code>. In <code>softmax_preallocated</code> we
+have 3 distinct sections. The first section is finding the global maximum value. Once that is found
+a modified sum reduction is performed using the max value. Finally the sum and max are used to calculate
+an offset value which is used to modify all of the values in place. The sum of all the values should
+now be 1. Note that we only use one for-loop for all of the elements as softmax doesn't care
+about dimensions. This allows us once again to cut down on control flow overhead. Once again,
+we create an inplace and an inline-inplace version. Try and look at the code for a second
+and go through why we can an unproblematic inplace version of softmax.</p>
+<p>Got it?</p>
+<p>Finally, checkout the results in your output folder! Or if you couldn't run them locally I have
+some here -</p>
+<figure>
+<p><a class="glightbox" href="../../figures/softmax_cpu_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/softmax_cpu_stack.png" width="800" /></a></p>
+<figcaption>
+Benchmarking Softmax operator functions on the CPU.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+<p>As can be seen, the inplace and inline versions beat the naive and preallocated versions by an extremely wide margin.
+The different between the inplace and inline seems quite small, but the inplace version seems to consistently beat
+the inline version.</p>
 <h3 id="fused">Fused</h3>
-<h2 id="data-dependencies-and-control-dependencies">Data dependencies and control dependencies</h2>
-<p>Working on a graph
-Contatenation (multiple writes to the same node)
-Do the dimensions fit</p>
-<h2 id="testing-the-correctness-of-the-nodes">Testing the correctness of the nodes</h2>
-<p>Testing in Rust</p>
+<p>Finally, let's see what we can do with combining the operators with fusion! First take a look at the functions
+<code>linear_layer_local_accumulation_relu</code> and <code>linear_layer_optimized_relu</code>. In these two I combine
+the linear operator with the ReLU operator. In the local accumulation variant, the bias and ReLU are handled
+in their own distinct loop (loop fission). In the optimized variant, they are in the same loop as the
+matrix-matrix multiplication.</p>
+<p>Now let's add in the softmax operator. Take a look at <code>linear_relu_softmax_fused_fission</code> and
+<code>linear_relu_softmax_fused</code>. In the fission version, the max value is found in the same loop as
+the bias and ReLU computation. In fused version, bias, ReLU and max are all moved into the ending of the
+matrix-matrix multiplication loop.</p>
+<p>Finally, checkout the results in your output folder! Or if you couldn't run them locally I have
+some here -</p>
+<figure>
+<p><a class="glightbox" href="../../figures/linear_relu_softmax_fused_cpu_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/linear_relu_softmax_fused_cpu_stack.png" width="800" /></a></p>
+<figcaption>
+Benchmarking fused operators functions on the CPU.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+<p>As can be seen the naive version, which is just successive function calls to linear, ReLU and softmax operators
+is massively outperformed by the fused linear-relu-softmax operators, with the fissioned version with bias
+outside of the matrix-matrix loop winning out. Of course the linear-relu version are the fastest,
+as they don't do softmax, but between the two of them it is actually the one with bias in the matrix-matrix
+loop that seems to consistently win.</p>
+<p>It's hard to make a general conclusion based on that, without going a lot deeper, but in any case,
+you should always test and measure! Now, you can either continue on reading the level 3 material
+or go to the next section to get a general introduction to GPUs. We will be using the GPU on
+your laptop, with no CUDA involved, to see if we can make this even faster.</p>
 <hr />
-<h2 id="3-compiler-verifications-and-the-restrict-keyword">3️⃣ Compiler verifications and the restrict keyword</h2>
-<p>Perspective back to aliasing and graphs</p>
-<h2 id="3-intermediate-representations">3️⃣ Intermediate representations</h2>
-<h2 id="3-graph-representations">3️⃣ Graph representations</h2>
+<h2 id="3-testing-operators">3️⃣ Testing Operators</h2>
+<p>All of the operators have been tested to be numerically equivalent. Rust has some nice
+test facilities to help with this. If you look at the file next to <code>tensor2d.rs</code>,
+called <code>tensor2d_test.rs</code>, you can see a bunch of tests. This used to be in
+<code>tensor2d.rs</code>, but I moved it to this file during a clean up, because the file
+was getting massive.</p>
+<p>The generic way to run these tests is writing <code>cargo test</code> from the same spot you
+would otherwise write <code>cargo run --release</code>. This works just fine for all of the
+CPU based tests. The testing system launches lots of tests in parallel to speed up
+the amount of time it takes to run the tests. As we will see later, this parallel
+test launch can create some issues when testing our GPU functions.</p>
 <h2 id="3-graphs-in-graphicsgpu-programming">🧬3️⃣ Graphs in Graphics/GPU Programming</h2>
 <p>Computational graphs are even making their way into the way you can program the GPU!
 Ways to define computational graphs have been added to
@@ -1319,7 +1319,7 @@ compute shader driven.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 9, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 10, 2023</span>
       
         <br>
         Created:

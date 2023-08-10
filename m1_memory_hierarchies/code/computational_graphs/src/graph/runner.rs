@@ -49,7 +49,7 @@ fn cpu_benchmark(
                 Tensor2D::relu_inplace_inline(&mut intermediate_output);
             }
             Softmax => {
-                Tensor2D::softmax_optimized(&mut intermediate_output);
+                Tensor2D::softmax_inplace_inline(&mut intermediate_output);
             }
             LinearReLUFused { weights, bias } => {
                 let mut temp_output: Tensor2D =
@@ -65,7 +65,7 @@ fn cpu_benchmark(
             LinearReLUSoftmaxFused { weights, bias } => {
                 let mut temp_output: Tensor2D =
                     Tensor2D::new(0.0, bias.row_count, bias.column_count);
-                Tensor2D::linear_relu_softmax_fused(
+                Tensor2D::linear_relu_softmax_fused_fission(
                     &intermediate_output,
                     weights,
                     bias,

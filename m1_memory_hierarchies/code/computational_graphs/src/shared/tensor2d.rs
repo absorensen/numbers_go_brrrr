@@ -360,29 +360,35 @@ impl Tensor2D {
         }
     }
 
-    // Try out the inverse multiplication
-    #[inline(always)]
-    pub fn softmax_optimized(out: &mut Tensor2D) {
-        let mut max: f32 = f32::NEG_INFINITY;
-        for index in 0..(out.column_count * out.row_count) {
-            if max < out.data[index] {
-                max = out.data[index];
+    #[inline]
+    pub fn linear_layer_local_accumulation_relu(
+        input: &Tensor2D,
+        weights: &Tensor2D,
+        bias: &Tensor2D,
+        output: &mut Tensor2D,
+    ) {
+        Self::linear_layer_assert(input, weights, bias, output);
+
+        for row_output in 0..output.row_count {
+            for column_output in 0..output.column_count {
+                let mut result: f32 = 0.0;
+                let mut index_input: usize = row_output * input.column_count;
+                let mut index_weights: usize = column_output;
+                for _ in 0..input.column_count {
+                    result += input.data[index_input] * weights.data[index_weights];
+                    index_input += 1;
+                    index_weights += weights.column_count;
+                }
+                output.data[row_output * output.column_count + column_output] = result;
             }
         }
 
-        let mut sum: f32 = 0.0;
-        for index in 0..(out.column_count * out.row_count) {
-            sum += (out.data[index] - max).exp();
-        }
-
-        let offset: f32 = max + sum.ln();
-
-        for index in 0..(out.column_count * out.row_count) {
-            out.data[index] = (out.data[index] - offset).exp();
+        for index in 0..(bias.row_count * bias.column_count) {
+            output.data[index] = (output.data[index] + bias.data[index]).max(0.0);
         }
     }
 
-    // This should be the local accumulation version
+    #[inline]
     pub fn linear_layer_optimized_relu(
         input: &Tensor2D,
         weights: &Tensor2D,
@@ -402,14 +408,61 @@ impl Tensor2D {
                     index_weights += weights.column_count;
                 }
 
-                // Try this with bias read
                 let index: usize = row_output * output.column_count + column_output;
                 output.data[index] = (result + bias.data[index]).max(0.0);
             }
         }
     }
 
-    #[inline(always)]
+    // Maybe just inline
+    #[inline]
+    pub fn linear_relu_softmax_fused_fission(
+        input: &Tensor2D,
+        weights: &Tensor2D,
+        bias: &Tensor2D,
+        output: &mut Tensor2D,
+    ) {
+        Self::linear_relu_softmax_assert(input, weights, bias, output);
+
+        for row_output in 0..output.row_count {
+            for column_output in 0..output.column_count {
+                let mut result: f32 = 0.0;
+                let mut index_input: usize = row_output * input.column_count;
+                let mut index_weights: usize = column_output;
+                for _ in 0..input.column_count {
+                    result += input.data[index_input] * weights.data[index_weights];
+                    index_input += 1;
+                    index_weights += weights.column_count;
+                }
+
+                // TODO: Try this with bias fissioned
+                let index: usize = row_output * output.column_count + column_output;
+         
+                output.data[index] = result;
+            }
+        }
+
+        let mut max: f32 = f32::NEG_INFINITY;
+        for index in 0..(bias.row_count * bias.column_count) {
+            let result: f32 = (output.data[index] + bias.data[index]).max(0.0);
+            max = max.max(result);
+            output.data[index] = result;
+        }
+
+        let mut sum: f32 = 0.0;
+        for index in 0..(output.column_count * output.row_count) {
+            sum += (output.data[index] - max).exp();
+        }
+
+        let offset: f32 = max + sum.ln();
+
+        for index in 0..(output.column_count * output.row_count) {
+            output.data[index] = (output.data[index] - offset).exp();
+        }
+    }
+
+    // Maybe just inline
+    #[inline]
     pub fn linear_relu_softmax_fused(
         input: &Tensor2D,
         weights: &Tensor2D,
@@ -430,7 +483,6 @@ impl Tensor2D {
                     index_weights += weights.column_count;
                 }
 
-                // TODO: Try this with bias fissioned
                 let index: usize = row_output * output.column_count + column_output;
                 result = (result + bias.data[index]).max(0.0);
                 max = max.max(result);
