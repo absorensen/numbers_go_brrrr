@@ -896,6 +896,7 @@ N dimensional indexing in 1D array</p>
 <p>Extend the computational graph with an inplace operation for the ReLU operator (only for the non-fused ReLU)</p>
 <p>The following list is sorted by expected complexity - do at least 1</p>
 <ul>
+<li>Implement a shader cached version of the immediate mode GPU operators and add it to the benchmark</li>
 <li>Implement a version of the linear layer functions which uses shared memory and tiling</li>
 <li>Add reusable buffers to the computational graph system</li>
 <li>Change the <code>Tensor2DGPU</code> to have switchable access details on its buffers. It should be able to
@@ -912,7 +913,7 @@ Also compare the single pass and the tree reduction performance graphs. <a href=
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 3, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 11, 2023</span>
       
         <br>
         Created:

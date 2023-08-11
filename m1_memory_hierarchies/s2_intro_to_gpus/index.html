@@ -1048,6 +1048,9 @@ a very small piece each and people have to work in lockstep. But. Their throughp
 Rust and a GPU API abstraction layer called <a href="https://wgpu.rs/">wgpu</a>. You don't need to understand how it works
 right now, but it means that you should be able to run all code, including GPU code, on your platform, even if
 it's made by Apple or AMD.</p>
+<p>In general, I will be using terminology specific to the compute part of the graphics API's and I will
+keep to <code>wgpu</code> and <code>wgsl</code> terminology. You might see significant differences in terminology
+if you follow up this guide with some <code>CUDA</code> programming.</p>
 <h2 id="gpu-hardware">GPU Hardware</h2>
 <p>First off, when dealing with the GPU, you will have to manipulate the GPU from the CPU with commands
 like "allocate this much memory", "transfer this memory from the CPU to GPU", "execute this shader/kernel" and
@@ -1149,6 +1152,7 @@ This makes for faster transfers, but probably slower overall computation. This h
 recently with most consumer grade GPU's having around 8 GB of memory and locally run neural networks
 like diffusion models easily being able to use more than that. A desktop GPU with more than 16GB of RAM would
 probably still outperform an integrated graphics card with 16GB of RAM available, but it would be very expensive.</p>
+<hr />
 <h2 id="3-introducing-wgpu-and-wgsl">3️⃣ Introducing wgpu and wgsl</h2>
 <p>The guide will for all GPU purposes make use of the graphics library wgpu, but only the compute parts.
 wgpu is based on the WebGPU spec, which is supposed to be the new web GPU API, as well as not being particularly
@@ -1506,7 +1510,7 @@ for GPUs.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 4, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 11, 2023</span>
       
         <br>
         Created:

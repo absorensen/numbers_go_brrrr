@@ -22,7 +22,7 @@ pub async fn run() {
     // If not wgpu compatible, then alert the user
     let debug_level: u32 = 4;
     let run_performance_benchmark: bool = true;
-    let loop_count: usize = 10;
+    let loop_count: usize = 10000;
     let loop_range: Vec<usize> = (2u32..8u32).map(|x| 2usize.pow(x)).collect();
     let log_scale: bool = false;
     let compatible_gpu_found: bool = pollster::block_on(gpu_utilities::self_test());

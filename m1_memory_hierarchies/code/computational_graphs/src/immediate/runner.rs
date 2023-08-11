@@ -347,7 +347,7 @@ fn linear_relu_softmax_fused_benchmark(config: &Configuration, gpu_handles: &GPU
     let names: Vec<String> = vec![
         "linear_relu_softmax".to_string(),
         "linearrelu_softmax".to_string(),
-        "linear_relu_softmax_fused".to_string(),
+        "linearrelusoftmax".to_string(),
     ];
 
     let functions: Vec<fn(&GPUHandles, &mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> = vec![
