@@ -576,15 +576,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-a-computational-graph" class="md-nav__link">
-    Building a computational graph
+  <a href="#building-the-cpu-graph" class="md-nav__link">
+    Building the CPU Graph
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-data-dependencies-and-control-dependencies" class="md-nav__link">
-    3️⃣ Data dependencies and control dependencies
+  <a href="#building-the-gpu-graph" class="md-nav__link">
+    Building the GPU Graph
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-borrow-checking-a-graph" class="md-nav__link">
+    3️⃣ Borrow Checking a Graph?
   </a>
   
 </li>
@@ -853,15 +860,22 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-a-computational-graph" class="md-nav__link">
-    Building a computational graph
+  <a href="#building-the-cpu-graph" class="md-nav__link">
+    Building the CPU Graph
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-data-dependencies-and-control-dependencies" class="md-nav__link">
-    3️⃣ Data dependencies and control dependencies
+  <a href="#building-the-gpu-graph" class="md-nav__link">
+    Building the GPU Graph
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-borrow-checking-a-graph" class="md-nav__link">
+    3️⃣ Borrow Checking a Graph?
   </a>
   
 </li>
@@ -885,21 +899,161 @@
 
 
 <h1 id="2-building-a-computational-graph">2️⃣ Building a Computational Graph</h1>
-<p>The CPU version of the graph</p>
-<h2 id="building-a-computational-graph">Building a computational graph</h2>
+<p>Ok, so now we have the basic building blocks ready. We also have a very simplifying set of constraints. This
+allows us to just represent this graph as a straight line. Thus we can just represent our graph as a
+series of nodes in a list. This list needs to be runnable both on the CPU and the GPU, so we'll look
+at how we can make a CPU graph runner and a GPU graph runner which can interpret the same list of
+commands and still work just fine. First we are going to do this on the CPU, then the GPU. Then
+we are going to run the GPU graph in a loop instead of reconstructing it with every iteration.
+This also the part where we really start to let loose, creating graphs of different sizes,
+creating arbitrary permutations of linear and ReLU nodes and seeing what the benchmarks can show us.</p>
+<h2 id="building-the-cpu-graph">Building the CPU Graph</h2>
+<p>The CPU version of the computational graph is found in <code>src::graph::nodes.rs</code>,
+<code>src::graph::graph_runner.rs</code>, <code>src::graph::graph_validation.rs</code> and
+<code>src::shared::graph_operators.rs</code>. First of all, a graph is given as a
+<code>Vec&lt;GraphOperator&gt;</code> whether it is headed for the CPU or the GPU.
+It can be found in <code>src::shared::graph_operators.rs</code>.
+<code>GraphOperator</code> is an enum and has all of the operators we are used to,
+<code>Linear</code>, <code>ReLU</code>, <code>Softmax</code>, <code>LinearReLUFused</code> and <code>LinearReLUSoftmaxFused</code>.
+Additionally, it has <code>HostToDevice</code> and <code>DeviceToHost</code>. But hold up, you might think,
+the CPU part of the code shouldn't do any transfers to device (GPU) or back, well, I'll get to
+that in a second. In benchmarking we will define this <code>Vec&lt;GraphOperator&gt;</code> the same for
+both CPU and GPU. For this to work, the list has to live up to the highest minimum requirements,
+which is the GPU in this case. Each graph runner (that's just a term I came up with, I don't know
+what the standard term is) has to interpret that list and translate it to its own set of instructions.</p>
+<p>In general, it is a way to sequester state by changing the type from layer to layer in your pipeline.
+Imagine a physics engine. Sure, could just represent everything as a float of a high enough precision and
+"just name our variables correctly", which is once again a red flag as our systems should never rely on
+the absence of human errors, or we could create new types which makes sure that we don't mix up
+Newtons per second and meters per second. We can even ensure that only certain operations are available
+for a <code>NewtonsPerSecond</code> type. One of those operations could be a
+<code>GarbblediGook(&amp;self, meters_per,_second: &amp;MetersPerSecond) -&gt; NewtonMetersPerSecondPerSecond</code>
+function (sorry, I'm not a physicist), which would nudge us towards correct type usage. Getting back to
+our graph system, in much the same way, our <code>GraphRunner</code> found in <code>src::graph::graph_runner.rs</code> can take in a <code>Vec&lt;GraphOperator&gt;</code> and output a verified <code>Vec&lt;Node&gt;</code> which contains not only
+verified data and dimensions, but additional information. So what happens for the <code>HostToDevice</code> and
+<code>DeviceToHost</code> on the CPU is basically just dimension verification. Just keeping track of which buffer
+goes where. You can almost think of it as a passthrough operation. It is used when verifying the
+dimensions and when creating the buffers needed to run the graph, but at run time, encountering an
+<code>Input</code> or <code>Output</code> operator does nothing.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="cp">#[derive(Clone, Debug, Eq, Hash, PartialEq)]</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">pub</span><span class="w"> </span><span class="k">enum</span> <span class="nc">NodeOperator</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">Input</span><span class="p">,</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">Output</span><span class="p">,</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">Transfer</span><span class="p">,</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="n">LinearLayer</span><span class="p">,</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">ReLU</span><span class="p">,</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="n">Softmax</span><span class="p">,</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="n">LinearReLU</span><span class="p">,</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">    </span><span class="n">LinearReLUSoftmax</span><span class="p">,</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="p">}</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="cp">#[derive(Debug)]</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Node</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">name</span>: <span class="nb">String</span><span class="p">,</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">operator</span>: <span class="nc">NodeOperator</span><span class="p">,</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">buffer_indices</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">usize</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>In this case I decided, when first verifying and then processing the input vector to generate the
+requisite buffers, put them in a vector of buffers and for each <code>Node</code> to just carry around the
+indices of the buffers in our buffer list. This puts some restrictions on how dynamically we can treat
+our list of buffers. We can't just remove a buffer and move all of the succeeding buffers one slot to the
+left. <code>buffer_indices</code> is <code>Vec&lt;usize&gt;</code> because each <code>NodeOperator</code> type, has a different
+amount of buffers it needs to reference. Using indices like this also means we don't need any
+smart pointers and the transfer of data from one operator to the next is handled by having indices to
+the same buffer, as well as our graph being executed sequentially, so we don't need to worry about
+only one access happening to a buffer at a time as only one operator will be running at a time.</p>
+<p>Ok, so now we've rummaged around a little bit, try to go back to the files relevant to the CPU graph
+and see what they're doing. Don't worry about understanding the <code>sorted_mutable_references</code>
+function.</p>
+<h2 id="building-the-gpu-graph">Building the GPU Graph</h2>
+<p>Ok, so now let's take a look at how the GPU graph does almost the same. Verification, translation
+and allocation. Start by perusing the relevant files - <code>src::graph::nodes_gpu.rs</code> and
+<code>graph_runner_gpu.rs</code>. The validation is the exact same.</p>
+<p>Once again, the GPU graph runner, takes a vector of nodes, it validates the correctness, it translates
+the nodes to its own intermediate representation (see below), and allocates any and all buffers. It uses the indices to share data between operators.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="cp">#[derive(Clone, Debug, Eq, Hash, PartialEq)]</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">pub</span><span class="w"> </span><span class="k">enum</span> <span class="nc">NodeOperatorGPU</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">HostToDevice</span><span class="p">,</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">DeviceToHost</span><span class="p">,</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">DeviceToDevice</span><span class="p">,</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">LinearLayer</span><span class="p">,</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">    </span><span class="n">ReLU</span><span class="p">,</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="n">Softmax</span><span class="p">,</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="n">LinearReLU</span><span class="p">,</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="n">LinearReLUSoftmax</span><span class="p">,</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="cp">#[derive(Debug)]</span>
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">NodeGPU</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">name</span>: <span class="nb">String</span><span class="p">,</span>
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">operator</span>: <span class="nc">NodeOperatorGPU</span><span class="p">,</span>
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">buffer_indices</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">usize</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Note the <code>DeviceToDevice</code> operator is in there now. It is just a transfer of data from one
+operator to the next. It actually does nothing in itself, but it is used by operators to get the previous
+operators output and it outputs a <code>DeviceToDevice</code> itself to send its output to the next operator.
+This simplifies our handling of the inputs and outputs and makes the communication between
+operators explicit instead of depending on implicit communication. This isn't actually that much
+of an issue with this setup as we know there is only ever one preceding operator and none of the
+operators writes to more than a single buffer, but the second either of those cases were needed
+we would have to rewrite it or accept that we had to handle a lot of cases. The <code>DeviceToDevice</code>
+operator doesn't cost anything when running the graph and you can verify that the runner
+does nothing when it sees a <code>DeviceToDevice</code> operator.</p>
+<p>Finally, you can see that for every operator, the necessary bindings are made and commands are generated
+and enqueued in a command buffer. Once all operators have been added to the queue note that there is
+not a synchronization, but the commands are submitted to the queue. The synchronization does not happen
+until the result are retrieved.</p>
+<p>In the next section, s5, we will look at how a system could take the computational graph and aside from
+verifying and translating, actually optimize, given the knowledge of the graph. I will also run
+a benchmark so you can see the differences in our assortment of implementations.</p>
 <hr />
-<h2 id="3-data-dependencies-and-control-dependencies">3️⃣ Data dependencies and control dependencies</h2>
-<p>Working on a graph
-Concatenation (multiple writes to the same node)
-Do the dimensions fit
-Perspective back to aliasing and graphs</p>
+<h2 id="3-borrow-checking-a-graph">3️⃣ Borrow Checking a Graph?</h2>
+<p>Ok, so what if we actually wanted a more complex, and applicaple in real-world circumstances, graph
+we ironically need to deal with the issues that Rust enforces through the borrow checker.
+If we have one node writing to multiple other nodes, that is fine.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/graph_this_is_fine.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graph_this_is_fine.png" width="400" /></a></p>
+<figcaption>
+One node writing to multiple buffers is fine.
+</figcaption>
+</figure>
+<figure>
+<p><a class="glightbox" href="../../figures/graph_this_is_also_fine.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graph_this_is_also_fine.png" width="400" /></a></p>
+<figcaption>
+One node reading from multiple buffers is fine. The dashed line is a synchronization barrier. 
+Nodes A and B can write to buffers, node C just has to be sure that nodes A and B are done before reading.
+</figcaption>
+</figure>
+<figure>
+<p><a class="glightbox" href="../../figures/graph_this_is_not_fine.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graph_this_is_not_fine.png" width="400" /></a></p>
+<figcaption>
+Multiple nodes writing to the same buffer is not fine.
+</figcaption>
+</figure>
+<p>Multiple nodes writing to the same buffer is not correct, unless they either write only to
+specific sections, such as if concatenation takes place and node A might exclusively write
+to indices 0-16, with node B exclusively writing to indices 17-32. Either that or we
+have to use synchronization through mechanisms like atomics (more about that in m2)
+to ensure that the calculations are correct. This is essentially what the borrow
+checker enforces in Rust. You either hand off one part of memory to one writer
+and another part of memory to another writer (slice references) for exclusive access
+or you use the more expensive synchronization primitives to make the reads and writes
+to those elements sequential.</p>
+<p>Unfortunately, <code>wgpu</code> and <code>wgsl</code> don't have a borrow checker, and we have to do that
+analysis ourselves. Sometimes it can make sense to actually do this contentious writing
+to a shared buffer amyway, as the synchronized version can be substantially more expensive
+and correctness might not be worth the cost. But if you feel you need to introduce this
+sort of incorrectness to your system, my recommendation is that you make absolutely sure that
+the incorrectness is confined to as small a pocket of your system as possible.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 11, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 12, 2023</span>
       
         <br>
         Created:
