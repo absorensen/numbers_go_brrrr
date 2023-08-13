@@ -958,7 +958,7 @@ tools to tell the GPU to run some program for 100 times, it might completely set
 I probably wouldn't be benchmarking on a laptop, but there a number of caveats that might make the benchmarks
 look slightly different. Some of these I might fix if/when I get the time, some are left as potential exercises,
 as again, this is more of an introduction to a bunch of concepts, and you get the point at this point hopefully.
-Point. </p>
+Point.</p>
 <p>Anyways, the <code>Tensor2DGPU</code> currently allocates a staging buffer, even for the ones that don't need it.
 If this was made optional, immediate mode computation would do an allocation less, so would all of the other
 GPU paradigms, but immediate mode is probably the one hurting the most here.</p>
@@ -996,10 +996,10 @@ makes our code so much more complex, but it allows us a great amount of flexibil
 found out we were running on a GPU with a much bigger L1 cache, we might change how we
 handled shared memory programming. If we were doing a render graph with a number of image-based
 single pixel operations such as tone mapping, changing hues or saturation, we might use op codes
-to merge these several different calls, keeping the data as close to the registers as possible. </p>
+to merge these several different calls, keeping the data as close to the registers as possible.</p>
 <h2 id="5-further-reading">5️⃣ Further reading</h2>
-<p><a href="https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust">Fun and hackable tensors in Rust</a>  <br />
-<a href="https://getcode.substack.com/p/massively-parallel-fun-with-gpus">Massively Parallel Fun with GPUs: Accelerating Tensors in Rust</a><br />
+<p><a href="https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust">Fun and hackable tensors in Rust</a><br />
+<a href="https://getcode.substack.com/p/massively-parallel-fun-with-gpus">Massively Parallel Fun with GPUs</a><br />
 <a href="https://github.com/googlefonts/compute-shader-101/blob/main/docs/glossary.md">Compute Shader Glossary</a><br />
 <a href="https://pytorch.org/docs/stable/fx.html">Torch.fx</a><br />
 <a href="https://pytorch.org/docs/stable/generated/torch.compile.html">torch.compile</a><br />
