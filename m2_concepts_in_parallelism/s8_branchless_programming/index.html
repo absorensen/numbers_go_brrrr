@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../s2_basic_concepts_in_rust/">
+        <link rel="prev" href="../s7_more_gpu/">
       
       
-        <link rel="next" href="../s4_exercises/">
+        <link rel="next" href="../sX_exercises/">
       
       <link rel="icon" href="../../figures/favicon.png">
       <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
     
     
       
-        <title>S3 - 3️⃣ Less Basic Concepts in Rust - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S8 - 3️⃣ Branchless Programming - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#3-less-basic-concepts-in-rust" class="md-skip">
+        <a href="#3-branchless-programming" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S3 - 3️⃣ Less Basic Concepts in Rust
+              S8 - 3️⃣ Branchless Programming
             
           </span>
         </div>
@@ -296,16 +296,14 @@
 
   
   
-    
-  
   
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
       
       
         
@@ -328,7 +326,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../">M0 - Introduction</a>
+          <a href="../../m0_introduction/">M0 - Introduction</a>
           
             <label for="__nav_4">
               <span class="md-nav__icon md-icon"></span>
@@ -336,7 +334,7 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
         <label class="md-nav__title" for="__nav_4">
           <span class="md-nav__icon md-icon"></span>
           M0 - Introduction
@@ -351,7 +349,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s0_intro_to_computing/" class="md-nav__link">
+      <a href="../../m0_introduction/s0_intro_to_computing/" class="md-nav__link">
         S0 - Introduction to the Computing Landscape
       </a>
     </li>
@@ -365,7 +363,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s1_intro_to_rust/" class="md-nav__link">
+      <a href="../../m0_introduction/s1_intro_to_rust/" class="md-nav__link">
         S1 - Introduction to Rust
       </a>
     </li>
@@ -379,7 +377,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s2_basic_concepts_in_rust/" class="md-nav__link">
+      <a href="../../m0_introduction/s2_basic_concepts_in_rust/" class="md-nav__link">
         S2 - Basic Concepts in Rust
       </a>
     </li>
@@ -391,21 +389,11 @@
               
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../m0_introduction/s3_less_basic_concepts_in_rust/" class="md-nav__link">
         S3 - 3️⃣ Less Basic Concepts in Rust
       </a>
-      
     </li>
   
 
@@ -417,7 +405,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s4_exercises/" class="md-nav__link">
+      <a href="../../m0_introduction/s4_exercises/" class="md-nav__link">
         S4 - 4️⃣ Exercises
       </a>
     </li>
@@ -598,14 +586,16 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
       
       
-      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
       
       
         
@@ -638,7 +628,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../../m2_concepts_in_parallelism/">M2 - Concepts in Parallelism</a>
+          <a href="../">M2 - Concepts in Parallelism</a>
           
             <label for="__nav_6">
               <span class="md-nav__icon md-icon"></span>
@@ -646,7 +636,7 @@
           
         </div>
       
-      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_6">
           <span class="md-nav__icon md-icon"></span>
           M2 - Concepts in Parallelism
@@ -661,7 +651,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s0_threads/" class="md-nav__link">
+      <a href="../s0_threads/" class="md-nav__link">
         S0 - Threads
       </a>
     </li>
@@ -675,7 +665,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s1_async/" class="md-nav__link">
+      <a href="../s1_async/" class="md-nav__link">
         S1 - Async
       </a>
     </li>
@@ -689,7 +679,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s2_events/" class="md-nav__link">
+      <a href="../s2_events/" class="md-nav__link">
         S2 - Events
       </a>
     </li>
@@ -703,7 +693,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s3_mutiex.md" class="md-nav__link">
+      <a href="../s3_mutiex.md" class="md-nav__link">
         S3 - Mutex
       </a>
     </li>
@@ -717,7 +707,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s4_atomic/" class="md-nav__link">
+      <a href="../s4_atomic/" class="md-nav__link">
         S4 - Atomic
       </a>
     </li>
@@ -731,7 +721,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s5_channels/" class="md-nav__link">
+      <a href="../s5_channels/" class="md-nav__link">
         S5 - Channels
       </a>
     </li>
@@ -745,7 +735,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s6_data_parallelism/" class="md-nav__link">
+      <a href="../s6_data_parallelism/" class="md-nav__link">
         S6 - Data Parallelism
       </a>
     </li>
@@ -759,7 +749,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s7_more_gpu/" class="md-nav__link">
+      <a href="../s7_more_gpu/" class="md-nav__link">
         S7 - 3️⃣ More GPU
       </a>
     </li>
@@ -771,11 +761,52 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s8_branchless_programming/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          S8 - 3️⃣ Branchless Programming
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         S8 - 3️⃣ Branchless Programming
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#simd" class="md-nav__link">
+    SIMD
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -787,7 +818,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/sX_exercises/" class="md-nav__link">
+      <a href="../sX_exercises/" class="md-nav__link">
         SX - 4️⃣ Exercises
       </a>
     </li>
@@ -956,6 +987,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#simd" class="md-nav__link">
+    SIMD
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -972,122 +1018,19 @@
   
 
 
-<h1 id="3-less-basic-concepts-in-rust">3️⃣ Less Basic Concepts in Rust</h1>
-<p>The real contents of this section is the project in <code>m0_introduction/code/less_basic_concepts/</code>.
-Go into the file corresponding to each function being called in the <code>main</code> function in <code>main.rs</code>
-and read all of the comments in order.
-The code can also be found</p>
-<!-- markdownlint-disable -->
-<p><a href="https://github.com/absorensen/the-real-timers-guide-to-the-computational-galaxy/tree/main/m0_introduction/code/less_basic_concepts">online</a>.</p>
-<!-- markdownlint-restore -->
-
-<h1 id="supplementary-comments">Supplementary Comments</h1>
-<p>In this section, we'll take you through a few addendums, which aren't as much about a
-specific language construct, but some concepts it might help to know.</p>
-<h2 id="aliasing">Aliasing</h2>
-<p>Aliasing is a term for when two pointers or references refer to the same place in memory.
-That might not sound like much of a problem at first, but it allows the compiler to make optimizations.
-Take a look at this code -</p>
-<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">fn</span> <span class="nf">compute</span><span class="p">(</span><span class="n">input</span>: <span class="kp">&amp;</span><span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">output</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="kt">u32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">*</span><span class="n">input</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="o">*</span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">*</span><span class="n">input</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="o">*</span><span class="n">output</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="c1">// remember that `output` will be `2` if `input &gt; 10`</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="p">}</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="k">fn</span> <span class="nf">compute</span><span class="p">(</span><span class="n">input</span>: <span class="kp">&amp;</span><span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">output</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="kt">u32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">cached_input</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">input</span><span class="p">;</span><span class="w"> </span><span class="c1">// keep `*input` in a register</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="mi">10</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">cached_input</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">        </span><span class="c1">// If the input is greater than 10, the previous code would set the output to 1 and then double it,</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">        </span><span class="c1">// resulting in an output of 2 (because `10&lt;&gt;` implies `5&lt;&gt;`).</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">        </span><span class="c1">// Here, we avoid the double assignment and just set it directly to 2.</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">        </span><span class="o">*</span><span class="n">output</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">cached_input</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">        </span><span class="o">*</span><span class="n">output</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="p">}</span>
-</span></code></pre></div>
-<p>You can also check the Rustonomicon for a
-<a href="https://doc.rust-lang.org/nomicon/aliasing.html">better explanation of aliasing</a>.
-It is where the code snippets above are from. The code has been reformatted to preference.
-It may be on the more advanced side however.</p>
-<p>Basically, whenever you write to a value and there are multiple references to that value hidden away
-in different places of the memory hieararchy, such as some threads registers, or even within the same
-function, everything becomes invalidated. This is one of the reasons for the borrow checker
-adamantly enforcing that there can be multiple shared (read-only) references to a value,
-but only one mutable reference (read/write), and if there is a mutable reference, there cannot
-be any shared references to that value. If there were multiple shared references and a multiple reference
-it would be impossible to guarantee correctness as just when a value is retrieved from RAM by a shared reference
-a write to that value may have ocurred, which in order to make the sequence of operations correct might
-necessitate another ready, but what if it happens again? Another read! This is not what happens, you
-just get a program behaving "weird". In another case it would also mean you could not read from a value
-and save that value in a local variable to do a bunch of operations before writing it somewhere. It already
-sounds very headscratching and like you should only ever do single threaded programs. But thankfully,
-the borrow checker is there to keep things in check for you. One recommendation, you should try
-to minimize the time that a mutable reference to a value will exist.</p>
-<h2 id="multiple-function-definitions-not-allowed">Multiple Function Definitions Not Allowed</h2>
-<p>As opposed to languages like C++, you cannot have multiple functions with the same name in Rust.
-In C++ this is perfectly legal, and the compiler will attempt to deduce which one you mean based
-on the way you are calling function().</p>
-<div class="language-c++ highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">void</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argument_a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">argument_b</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kt">void</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argument_a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">argument_b</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">argument_c</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kt">void</span><span class="w"> </span><span class="nf">function</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">argument_a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">argument_b</span><span class="p">,</span><span class="w"> </span><span class="kt">float</span><span class="w"> </span><span class="n">argument_c</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
-</span></code></pre></div>
-<p>Rust seems to be designed in a way as to minimize the amount of ambiguity faced by the compiler (and you too).
-Sometimes in Rust code you will see several different constructor functions, such as build, build_from_ints,
-new and default. In one way, that is a pain in the ass. In another way, it's quite nice.
-It forces the programmer to be explicit about how the functions are different, instead of being unwritten,
-implicit, or 'well, you can just read the code, it's not that complicated'. If you ever think or say
-that. Remember this... <em>ahem</em> RED FLAG! Fix your stuff so people don't have to guess, it will
-probably make the next person to read your code hate you slightly less. Which is a good thing!</p>
-<h2 id="index-checking">Index Checking</h2>
-<p>Whenever you access an element in an indexed collection such as a Vec:</p>
-<div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="p">}</span>
-</span></code></pre></div>
-<p>Whenever you do this in Rust, there is a runtime check to make sure this index is not outside of the
-memory of the vector. This does have some performance cost, but unless you are absolutely sure this processing
-is happening in a hot region (a region of your code where a lot of time is spent), it is not recommended to try
-and circumvent this.</p>
-<div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">        </span><span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">get_unchecked</span><span class="p">(</span><span class="n">index</span><span class="p">));</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="p">}</span>
-</span></code></pre></div>
-<p>It requires an unsafe region, which is a region in your code where you tell the compiler
-to allow you to do some things it would otherwise not allow you to, and call the function get_unchecked(index).
-An unsafe region does not turn off all checking, but in general, if you are at the level of reading the guide,
-you don't need it and we won't be talking about it more. If you really want to read more about unsafe,
-the <a href="https://doc.rust-lang.org/nomicon/intro.html">Rustonomicon</a> is the defacto standard
-introduction to unsafe in Rust.</p>
-<p>The two above functions are equivalent to</p>
-<div class="language-c++ highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">at</span><span class="p">(</span><span class="n">index</span><span class="p">));</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="p">}</span>
-</span></code></pre></div>
-<div class="language-c++ highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">index</span><span class="p">)</span><span class="w">  </span><span class="p">{</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="n">do_something</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]);</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="p">}</span>
-</span></code></pre></div>
-<p>Note however, that square bracket indexing is the defacto standard way of accessing an array element in both
-languages. This showcases a core difference between the two languages. One being safety opt-out, and
-another being safety opt-in.</p>
+<h1 id="3-branchless-programming">3️⃣ Branchless Programming</h1>
+<h2 id="simd">SIMD</h2>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 24, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 14, 2023</span>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">July 3, 2023</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 14, 2023</span>
       
     
   </small>
@@ -1113,7 +1056,7 @@ another being safety opt-in.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../s2_basic_concepts_in_rust/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S2 - Basic Concepts in Rust" rel="prev">
+          <a href="../s7_more_gpu/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S7 - 3️⃣ More GPU" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -1122,20 +1065,20 @@ another being safety opt-in.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                S2 - Basic Concepts in Rust
+                S7 - 3️⃣ More GPU
               </div>
             </div>
           </a>
         
         
           
-          <a href="../s4_exercises/" class="md-footer__link md-footer__link--next" aria-label="Next: S4 - 4️⃣ Exercises" rel="next">
+          <a href="../sX_exercises/" class="md-footer__link md-footer__link--next" aria-label="Next: SX - 4️⃣ Exercises" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S4 - 4️⃣ Exercises
+                SX - 4️⃣ Exercises
               </div>
             </div>
             <div class="md-footer__button md-icon">
