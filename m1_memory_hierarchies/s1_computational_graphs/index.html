@@ -1244,11 +1244,10 @@ loop. Not to mention all of the allocations behind the scenes for backpropagatio
 You don't need to worry about the specifics, but just know that it creates a computational graph
 from the Python code above and then optimizes that code to run faster and/or use less memory.</p>
 <p>So why does it need the graph? That is something the rest of this module will try to answer,
-along with a really basic introduction something called fusion, where layers can be combined
-to be more efficient.</p>
+along with a really basic introduction to fusion, where layers are combined to be more efficient.</p>
 <h2 id="what-is-a-graph">What is a Graph?</h2>
 <p>A graph is <a href="https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)">a type of structure</a>,
-for our needs, a data structure. In s0 there is a more elaborate examination of the concept for level 3.
+for our needs, a data structure. In s0 there is a more elaborate examination of the concept for 3️⃣.
 So for right now, just give the link to graph's wiki page a quick look. You should get the gist just by
 looking at a few of the images.</p>
 <p>Once you have done this, just know, that the rest of this module won't actually use a real graph.
@@ -1261,7 +1260,7 @@ a lot of operators. We need transfers to and from the GPU (eventually), a linear
 (matrix-matrix multiplication followed by an addition), a ReLU operator (single call to a max function with 0)
 and a softmax operator. The softmax operator is the most complex part, don't worry I will show you some
 CPU code that is fairly easy to understand. The GPU version gets a bit complicated and is only constructed
-on a fairly simplistic version.</p>
+in a fairly simplistic version.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/basic_graph_operations.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/basic_graph_operations.png" width="300" /></a></p>
 <figcaption>
@@ -1283,7 +1282,7 @@ An example computational graph.
 <h2 id="whats-in-a-tensor2d">What's in a Tensor2D?</h2>
 <p>First of all we are going to start on the CPU.
 We are going to create a data type which will hold the data our operators consume on the CPU.
-Let's call it <code>Tensor2D</code>. Our 2D tensor will actually be a simple piece of 1 dimensional memory under the
+Let's call it <code>Tensor2D</code>. Our 2D tensor will actually be a simple piece of one dimensional memory under the
 hood and we will keep track of the number of rows and columns to find out how to access each piece of data.
 If you are in the root directory for <code>computational_graphs</code> go to <code>src/shared/tensor_2d.rs</code> or
 <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d.rs">online</a>.</p>
@@ -1311,7 +1310,7 @@ even without profiling or microoptimizations.</p>
 <h3 id="linear">Linear</h3>
 <p>There's some dimension checking functions, you can just ignore those. They use <code>debug_assert</code> statements
 to raise an error if the dimensions of the tensors given to a linear layer function don't match. <code>debug_assert</code>
-is the same as an <code>assert</code> statement, except it is only run in debug mode. I did it this way incur only a small
+is the same as an <code>assert</code> statement, except it is only run in debug mode. I did it this way to incur only a small
 hit to performance. You probably passed the <code>linear_layer</code> function on the way down, it just acts as a wrapper
 around the <code>linear_layer_preallocated</code> function. If you haven't already allocated a tensor to use as output,
 it will make one for you. If you do this a lot however, such as in a loop, you should be using the preallocated
@@ -1319,7 +1318,7 @@ version to not have memory allocations in your loops.</p>
 <p>Finally, let's go down to the <code>linear_layer_preallocated</code> function. There are three main sections. One is
 the call to the <code>debug_assert</code> function from earlier, to check for valid input and output dimensions, the
 second is the matrix-matrix multiplication which needs three whole for-loops and finally the bias section. Note
-the use of linearized accesses, if you need a reminder what that is all about, go back to m1::s0::The Vector.</p>
+the use of linearized accesses, if you need a reminder what that is all about, go back to <code>m1::s0::The Vector</code>.</p>
 <p>It's not too bad, but we could do better, although we won't do more efficient implementations of matrix-matrix
 multiplication, note that the read accesses of the weights tensor is strided. We could have implemented that some
 tensors could be transposed, but you get the point. So we have a triple for-loop and a double for-loop in our
@@ -1501,7 +1500,7 @@ compute shader driven.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 14, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 15, 2023</span>
       
         <br>
         Created:

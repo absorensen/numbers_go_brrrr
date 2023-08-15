@@ -1588,10 +1588,10 @@ First off we will start bridging hardware and software.</p>
 <h2 id="getting-to-the-pointer">Getting to the Point(er)</h2>
 <p>One of the core mechanisms in using memory is the pointer! All it does is point to pieces of memory.
 Why? Because a pointer is basically just an address. Anti-climactic, I know, but as one of the core building
-blocks of computing, we need to take a bit of time to look at what it is.
+blocks of computing, we need to really examine these concepts from the bottom and up.
 If you have ever tried programming in C, you will invariably have been introduced to the pointer.
 The examples in this heading will be in C, but don't worry, we won't even define an entire function.
-It is rife with opportunities for making trouble, to a degree where in Rust, which is made to be a
+Pointers are rife with opportunities for getting into trouble, to a degree where in Rust, which is made to be a
 reasonably safe language, you can't directly interact with a pointer unless you have an unsafe region
 around the pointer interaction. Yikes! On the other hand, you can get some of the most extreme performance
 by using raw pointers. So let's take a look!</p>
@@ -1658,7 +1658,7 @@ now asks the CPU to write to the address 42, the number 0. So far so good. But t
 42, to get the next integer element, we don't go to the address 43, which would just be the second byte of the
 first element. No, we want to go to the address 46, where the second element in the array begins. Since
 <code>integer_array</code> has the type <code>int*</code>, we have defined that each element is 4 bytes and we now have a
-STRIDE of 4 bytes.
+<em>stride</em> of 4 bytes.
 We also need to keep track of the size of our allocation close to the pointer itself,
 as trying to access an element outside of our allocation will be catastrophic, and likely result in a
 <a href="https://en.wikipedia.org/wiki/Segmentation_fault">segmentation fault</a>. So, no <code>integer_array[42]</code>.
@@ -1730,7 +1730,7 @@ The operating system just wants an address. This allows the operating system to 
 denoted by the start of the section, and probably by its own record of the length.
 Note also that the address (42) held by <code>base_integer_array</code> is still in play.
 It is what is known as a 'dangling pointer'.
-We could try to dereference it after giving it to <code>free</code>, which is the notorious use after free.
+We could try to dereference it after giving it to <code>free</code>, which is the notorious <em>use after free</em>.
 This is also undefined behavior as we try to access memory that is no longer accessible by our program.
 What we could do is to set <code>base_integer_array</code> and <code>integer_array</code> to new values to denote
 that they were invalid.</p>
@@ -1760,7 +1760,7 @@ Anytime a system depends on humans just not making any errors and being
 rockstars at everything, it's a dangerous system and you should be on guard.</p>
 <h2 id="access-patterns">Access Patterns</h2>
 <p>While it is import that you increase your understanding of what it takes to get valid,
-predictable, boring code. Which is the best kind. What the guide is most interested in
+predictable, boring code. Which is the best kind. What you are most likely interested in
 is for you to write more performant code. An absolutely
 essential part of getting performant code is how we access the underlying memory. Yes, we can address
 memory a single byte at a time with <a href="https://en.wikipedia.org/wiki/Byte_addressing">byte addressing</a>.
@@ -1782,7 +1782,7 @@ and you elected to turn off the auto-alignment with <code>__attribute__ ((packed
 </span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span></code></pre></div>
-<p>if you had an alignment of say, 8 bytes, the last two lines would result in 2 cache lines being retrieved.</p>
+<p>If you had an alignment of say, 8 bytes, the last two lines would result in 2 cache lines being retrieved.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/cache_alignment.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment.png" width="600" /></a></p>
 <figcaption>
@@ -1802,7 +1802,7 @@ which is the default behavior in C.</p>
 </span><span id="__span-16-9"><a id="__codelineno-16-9" name="__codelineno-16-9" href="#__codelineno-16-9"></a><span class="p">}</span>
 </span><span id="__span-16-10"><a id="__codelineno-16-10" name="__codelineno-16-10" href="#__codelineno-16-10"></a>
 </span><span id="__span-16-11"><a id="__codelineno-16-11" name="__codelineno-16-11" href="#__codelineno-16-11"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
-</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="n">my_struct</span><span class="o">*</span><span class="w"> </span><span class="n">structs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_struct</span><span class="p">));</span><span class="w"> </span><span class="c1">// 4 * 6</span>
+</span><span id="__span-16-12"><a id="__codelineno-16-12" name="__codelineno-16-12" href="#__codelineno-16-12"></a><span class="n">my_struct</span><span class="o">*</span><span class="w"> </span><span class="n">structs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_struct</span><span class="p">));</span><span class="w"> </span><span class="c1">// 4 * 8</span>
 </span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span></code></pre></div>
@@ -1814,9 +1814,8 @@ Better cache alignment.
 </figcaption>
 </figure>
 <p>And we now only involve a single cache line. Which to remind you, is quite a bit smaller than the
-more standard 64 byte cache line. Now that we have that in place, let's take a look at some of the ways we can
-run through an array of values.</p>
-<p>Now that we have learned a bit about cache lines, we are equipped to talk actually talk about access patterns.
+more standard 64 byte cache line. </p>
+<p>Now that we have learned a bit about cache lines, we are equipped to actually talk about access patterns.
 I have made some Rust code for you which is located at <code>m1_memory_hierarchies/code/access_patterns/</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/access_patterns">online</a>.</p>
 <p>First off is sequential access. It is the one we usually strive for. We start at one end and go through every
@@ -1887,7 +1886,7 @@ Image credit </a>
 <p>Thus if either one becomes too big they begin encroaching on the other.
 Everytime you ask for dynamically sized memory, it is allocated on the heap.
 This is a slow process and you have to remember to deallocate the memory to not
-get a memory leak. But the memory survives across functions now.
+get a memory leak. But the memory survives across functions.
 If you remember the pointer examples from earlier - the memory segment we asked for
 lived on the heap, whereas the pointer (address) itself lived on the stack.
 We are allowed to keep the pointer on the stack because a pointer is a known size
@@ -1898,7 +1897,7 @@ ownership changes hands.</p>
 <h2 id="the-dynamic-array">The Dynamic Array</h2>
 <p>The dynamic array is ubiquitous in C++ and Rust. It is quite often what we think
 about, when we think of arrays in those languages. C++ has
-<a href="https://en.cppreference.com/w/cpp/container/vector"><code>std::vector&lt;T&gt;</code></a>
+<a href="https://en.cppreference.com/w/cpp/container/vector"><code>vector&lt;T&gt;</code></a>
 and Rust has <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html"><code>Vec&lt;T&gt;</code></a>.
 I highly recommend reading the first parts of the Rust Vec page.
 They are basically the same though and I will refer to them as vector from here on out.
@@ -1983,21 +1982,25 @@ If it doesn't it will allocate, copy and deallocate.</p>
 <p>There are more idiomatic ways to do this in Rust, which might also be faster, but you get the gist!</p>
 <h2 id="the-vector">The Vector</h2>
 <p>But, we aren't just interested in single lists of numbers, sometimes, we would even like a matrix.
-In Rust we can have fixed size, arrays defined like so:</p>
+In Rust we can have fixed size arrays defined like so:</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
 </span></code></pre></div>
 <p>If the sizes given to the array definition are constants, known at compile time, the array will be
 stack allocated.
 From what we have learned previously, the elements will be stored in memory in the order of 0 and 1.
 But what if we create a two-dimensional array?</p>
-<div class="language-rust highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]];</span>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">                        </span><span class="p">[</span>
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">                            </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span>
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">                            </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span>
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">                        </span><span class="p">];</span>
 </span></code></pre></div>
 <p>In Rust the elements will be ordered in memory 0, 1, 2, 3. But that is not a universal truth.
 This is called row-major ordering and is the standard layout in C, C++, Rust, Python and
 most modern languages.
 The alternative is column-major which is seen in Fortran and Matlab.
 In column-major ordering the elements would be ordered in memory as 0, 2, 1, 3.
-Basically, the memory will be most tightly packed in the innermost dimension.
+With row-major ordering the memory will be most tightly packed in the last dimension from the left.
 To iterate through a 3 dimensional vector, this triple for-loop would access the memory
 in order.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
@@ -2018,7 +2021,7 @@ in order.</p>
 </span><span id="__span-26-16"><a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-26-17"><a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>Where as if Rust was favored column-major ordering the in-memory-order traversal would be</p>
+<p>Where as if Rust favored column-major ordering the in-memory-order traversal would be</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
 </span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">                            </span><span class="p">[</span>
 </span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
@@ -2084,7 +2087,7 @@ calculated by</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">x_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y_size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y_index</span>
 </span></code></pre></div>
 <p>I really hope this makes sense. Once it clicks it is a very simple formula, if a bit wordy.
-Usually libraries will work like this under the surface but wrap it in an interface
+Some libraries will work like this under the hood but wrap it in an interface
 for you to simply access it like it was a multi-dimensional array.</p>
 <p>To wrap it up I have made a performance test of these approaches. The code
 doesn't match completely as we need bigger dimensions to get a good test.
@@ -2115,7 +2118,7 @@ some implicit rules, which can have wide reaching consequences, both in terms of
 correctness and performance.</p>
 <p>In Python, variables are all references to an underlying object, which is freed
 when there are no longer any references to said object. Don't worry about it too
-much, it is a level 3 concept I will introduce further down the page.
+much, it is a 3️⃣ concept I will introduce further down the page.
 But, it does have consequences when this happens</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">42</span><span class="p">]</span>
 </span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
@@ -2175,7 +2178,7 @@ references to the same data, as in the Python example, which could make for inco
 C++ does have these <a href="https://en.cppreference.com/w/cpp/utility/move">move operations</a>
 as well, it is even highly recommended a lot of the time. It is however,
 not the default behavior of the language.</p>
-<p>Rust does however have something called traits (don't worry about it).
+<p>Rust has something called traits (don't worry about it).
 One of these traits is the <code>Copy</code> trait. If a type implements
 the <code>Copy</code> trait, it will be
 <a href="https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/">copied rather than moved</a>
@@ -2189,8 +2192,8 @@ full write rights. Which is illegal in Rust! Which is also why <code>Vec&lt;T&gt
 doesn't implement <code>Copy</code> and this has all been a ruse, for your edification.</p>
 <h2 id="stacks">Stacks</h2>
 <p>Now let's start looking at a couple of fundamental data structures. Next up is the stack. It isn't an array, but
-most implementations are just an array used in a restricted fashion. A stack is what is called
-Last In, First Out (LIFO). The usual example is, imagine a stack of cantina trays.
+most implementations are just an array used in a restricted fashion. A stack is what is called a
+Last In, First Out (LIFO) data structure. The usual example is, imagine a stack of cantina trays.
 If you put a tray into the stack,
 in order to get a tray, you have to take the top tray, you can't remove a tray that is below the top tray.</p>
 <figure>
@@ -2217,12 +2220,13 @@ Popping a value from the top (end) of the stack. The states are from before the 
 the result of the previous push.
 </figcaption>
 </figure>
-<p>Stacks scale well and all operations are constant time, except for when enough values have been pushed to
-necessitate a resize, which is amortized constant time.</p>
+<p>Stacks scale well and all operations would be constant time, except when enough values have been pushed to
+necessitate a resize. However, the cost of this is low enough that across all of the operations it averages out
+and becomes amortized constant time.</p>
 <h2 id="queues">Queues</h2>
-<p>Queues, just like stacks, are a fundamental data type centered around constant time operations mostly impemented
+<p>Queues, just like stacks, are a fundamental data type centered around constant time operations mostly implemented
 on top of dynamic arrays. Queues maintain a First In, First Out (FIFO) principle, just like queues of people.
-The first person to enter af queue, should be the first person to leave it. Now we no longer har <code>pop</code>
+The first person to enter a queue, should be the first person to leave it. Now we no longer have <code>pop</code>
 and <code>push</code>, but <code>enqueue</code> and <code>dequeue</code>. Enqueueing is basically the same as <code>push</code> on a stack.
 An element is added to the index at <code>size</code>, except, the queue needs two new variables, <code>front</code> and
 <code>back</code>. Once the <code>back</code> index extends beyond the <code>size</code> or <code>capacity</code>, it can just wrap
@@ -2239,7 +2243,7 @@ overwhelmable. If data comes in too fast to process, and it keeps coming in fast
 instead say that the <code>front</code> will move with the <code>back</code> if they become equal, thus letting the older data
 be overwritten. Other options could be to have whatever is trying to submit an element, wait until a spot opens up
 in the queue or the element could be "added", but not actually added to the queue. You'd of course like to be
-certain of how your queue type would handle being full. It's a central property and should make sure if you
+certain of how your queue type would handle being full. It's a central property and you should make sure if you
 are constructing systems with lots of data that you use a queue with the right behavior for your system.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/queue_dequeue.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/queue_dequeue.png" width="500" /></a></p>
@@ -2262,7 +2266,8 @@ If you recall the previous example</p>
 ownership of the list, and <code>x</code> is a live reference to that list.
 The system keeps track of how many live references there are to the list.
 Once <code>x</code> goes out of scope, the live reference count for the list
-decreases by one. Once the live reference count reaches 0, it is deallocated.</p>
+decreases by one. Once the live reference count reaches 0, it is deallocated or marked available for future
+deallocation.</p>
 <p>Until we hit the end of the scope, and <code>x</code> and <code>y</code> disappear, there
 are two live references to the the list created at line 1. While a fine enough
 solution at first glance, sometimes, answering the question "what is alive"
@@ -2284,7 +2289,7 @@ With two notable exceptions. It cannot be copied. As in, you cannot have multipl
 instances of <code>Box</code> pointing to the same underlying object. Thus <code>Box</code> in Rust,
 as well as in C++, requires that ownership is moved, and not copied.
 The other notable difference from a raw pointer is that once the ´´´Box´´´ goes out of scope,
-the object on the heap that it is pointing to is deallocated.  </p>
+the object on the heap that it is pointing to is deallocated automatically.  </p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">box_variable</span>: <span class="nb">Box</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Box</span>::<span class="n">new</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
 </span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">other_box</span>: <span class="nb">Box</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">box_variable</span><span class="p">;</span><span class="w"> </span><span class="c1">// box_variable no longer accesible due to move</span>
 </span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="kd">let</span><span class="w"> </span><span class="n">copied_variable</span>: <span class="kt">i32</span> <span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">other_box</span><span class="p">;</span><span class="w"> </span><span class="c1">// Dereference and copy the underlying value, this is not a move</span>
@@ -2294,7 +2299,7 @@ the object on the heap that it is pointing to is deallocated.  </p>
 </span></code></pre></div>
 <p>Next up are the shared pointers. They are essentially what Python is using in the example
 from earlier. In C++ it is called <a href="https://en.cppreference.com/w/cpp/memory/shared_ptr">shared_ptr<T></a>,
-in Rust it actually comes in two versions;
+in Rust it comes in two versions;
 <a href="https://doc.rust-lang.org/std/rc/index.html">Rc<T></a> and
 <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html">Arc<T></a>.
 <code>Rc</code> stands for reference counted. It is only made for single threaded usage as the
@@ -2373,7 +2378,7 @@ It can reference the same underlying object as the shared pointer it comes from,
 but does not contribute to the live reference count. As such, it can allow you
 to have cyclical references, without causing a memory leak.
 If object A points to object B with an <code>Rc</code> reference, but object B
-holds a <code>Weak</code> reference to object A, once object A goes out of scope,
+points to object A with a <code>Weak</code>, once object A goes out of scope,
 both object A and object B can safely be deallocated.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Rc</span><span class="p">;</span>
 </span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Weak</span><span class="p">;</span>
@@ -2394,11 +2399,11 @@ which is what we needed weak pointers for.</p>
 <h2 id="3-the-vector-reloaded">3️⃣ The Vector Reloaded</h2>
 <p>This isn't meant to be a one-to-one representation of how tensors work in <code>numpy</code> or
 <code>PyTorch</code>, but combined with creating different views on the same underlying
-1-dimensional memory as we learned about earlier, we can look at a few other fun
+one dimensional memory as we learned about earlier, we can look at a few other fun
 concepts in different ways to arrange tensors.</p>
 <h3 id="strided-access-and-transposition">Strided Access and Transposition</h3>
 <p>One of the most used operations is the matrix matrix multiplication.
-If we assume 2 2D matrices as input and output into another 2D matrix,
+If we assume two 2D matrices as input and output into another 2D matrix,
 one of those input matrices will be accessed with a stride access in
 a column major form.</p>
 <figure>
@@ -2440,9 +2445,10 @@ Difference gets bigger as the matrices get bigger.
 pipeline (don't worry about it) being really good at guessing these very uniform workloads, but most importantly,
 the caches doing a lot of the heavy lifting for us. Once the caches run out of space we begin to see a gap
 between the two ways of doing it. This might be more pronounced on the GPU. In most cases you should probably
-start with making the simplest and easy comprehendible code and try out (AND MEASURE!!!!) potential
+start with making the simplest and easy comprehendable code and try out (AND MEASURE!!!!) potential
 optimizations before spending your time going down rabbit holes. This is will be a bit of a theme
-in the next few sections. Not much of a difference in anything until the caches begin running out of space.
+in the next few sections. There won't be much of a difference between techniques until the caches
+begin running out of space.
 At least if you aren't coding something really terrible, like randomized access.</p>
 <h3 id="permuted-arrays">Permuted Arrays</h3>
 <p>Sometimes we might want to change around elements in a matrix, without permanently executing
@@ -2460,7 +2466,7 @@ have to follow more than one pointer to get to our data.</p>
 Create permutations of an array by creating a list of indices and permuting that list.
 </figcaption>
 </figure>
-<p>If we only view the data through the lens of the permutation array anyway and we
+<p>If we only view the data through the lens of a single permutation array anyway and we
 read from this vector alot, we might as well execute the permutation. If we
 wanted to be able to undo the permutation, we could just keep track of the
 permutation we executed and undo it later. But we should now be able to get back
@@ -2502,7 +2508,7 @@ Permuting just the rows can also give quite a performance boost.</p>
 <p>A weird form of array is the jagged array. A 2D matrix can't simply be
 expressed as having dimensions NxM, but Nx? or ?xM dimensions. As in N rows, each with their
 own individual lengths, or M columns, each with individual lengths. It's a highly
-flexible scheme, but unless you are absolutely sure you need it, you should probably avoid it.</p>
+flexible scheme, but unless you are absolutely sure you need it, you should absolutely avoid it.</p>
 <p>In the example below, we attain this complete flexibility by using a vector of vectors,
 which as you may recall is really bad for performance.</p>
 <figure>
@@ -2523,7 +2529,7 @@ Slightly better now with the data in a single vector.
 </figure>
 <p>If we really wanted to compact the jagged array above, we could remove all of the
 non-active segments (denoted -1) and use the auxiliary array to indicate where each
-new row starts. Just like the first permutation scheme, we are derefercing two pointers
+new row starts. Just like the first permutation scheme, we are dereferencing two pointers
 for access.</p>
 <p>Finally, we could do all of this, still under the constraint that we have a reasonable
 ceiling on the max length of each row, by interleaving the auxiliary array with the data
@@ -2549,9 +2555,9 @@ nearest whole number.
 Instead we have to go from row length to row length and find out how many indices we have to move forward to
 get to the next indicator. As such, to get to the lower right corner element (42), we would first have to read
 index 0, jump 4 spots forward to index 4, read the 4, jump 5 spots forward to index 9, and then jump forward
-2 elements to get to what in a dense array would be inded [2, 1].</p>
-<p>This sort of makes me miss the auxiliary array. We can sum up the jumps to denote where each row starts,
-this would allow for compaction of the data while keeping us to just 2 jumps. Note that we now keep track of
+2 elements to get to what in a dense array would be index [2, 1].</p>
+<p>This sort of makes me miss the auxiliary array. We can sum up the jumps to denote where each row starts.
+This would allow for compaction of the data while keeping us to just 2 jumps. Note that we now keep track of
 the length of each row by taking the difference between the starting index of the row we are looking to find
 and the beginning of the next row. Which is also why I have inserted an extra starting index, which points
 to the end of the array. Otherwise, we can't get the length of the last row.</p>
@@ -2627,7 +2633,7 @@ post-hash key used for indexing into storage.
 One way of resolving the collision is to keep searching our storage until we find an empty spot.
 But then if we query our hash map and the first index we look at in storage, we iterate the
 array until we find a key that matches the one we queried with. Much like vectors, the
-hash map can dynamically expand to accomodate inserted data. Once we are done with insertions,
+hash map could dynamically expand to accomodate inserted data. Once we are done with insertions,
 we might have a fragmented performance. If we know we are done and have a significant amount of
 elements which need to be queried a lot, we can usually ask the data structure to
 <code>.shrink_to_fit()</code> or <code>.rehash()</code>. Rehashing will reconstruct the structure to be
@@ -2644,10 +2650,10 @@ in the next index instead. This is also known as open addressing.
 <em>if it can be done with a basic array, it should probably be done with a basic array</em>.
 Of course there are different, more optimized methods for implementing hash maps, you can usually find a few
 different ones based on the specific needs for your usage, i.e. if you need better insertion
-performance or better read performance., but this is basically what you need to know.
-In Rust it is <code>HashMap&lt;K, V&gt;</code>, in C++ it is <code>std::unordered_map&lt;K, V&gt;</code>, in
-python and C# it is called a dictionary. You can use anything for the key in Rust,
-as long as the type implements the <code>Hashable</code> trait. You can even using strings.
+performance or better read performance, but this is basically what you need to know.
+In Rust it is <code>HashMap&lt;K, V&gt;</code>, in C++ it is <code>unordered_map&lt;K, V&gt;</code>, in
+Python and C# it is called a dictionary. You can use anything for the key in Rust,
+as long as the type implements the <code>Hashable</code> trait. You can even use strings.
 This can be very useful for keeping an assortment of random data which you need to
 distinguish between. For example, if you needed to keep track of different layers of a
 neural network with random access, you can just create a new string "Linear0" and use
@@ -2667,17 +2673,17 @@ and then the id. We could relegate them to different parts of an integer. This c
 bits reserved for the layer type and the last 44, or perhaps just 12, bits reserved for the layer id. This
 does however incur a significant amount of extra code and the code will become more complex and implicit,
 so it's probably only worth it if you are doing A LOT of accesses for each layer.</p>
-<p>In general hash maps have an alright performance. C#'s dictionary lookup performance will usually go down
+<p>Generally, hash maps have an alright performance. C#'s dictionary lookup performance will usually go down
 hill at around 30k entries though. This doesn't happen for arrays. You can read more about different hash table
 implementations <a href="https://www.cs.princeton.edu/courses/archive/fall06/cos226/lectures/hash.pdf">here</a>.</p>
 <h2 id="3-graphs-and-trees">3️⃣ Graphs and Trees</h2>
-<p>Now that we have dicked around with variations on a theme (that theme was arrays if you are in doubt),
+<p>Now that we have dicked around with variations on a theme (that theme was arrays if you were in doubt),
 let's look at a different fundamental data structure. Graphs! Not the kind with the lines...
 wait these have lines too, uuuh, not the kind that has an x and a y axis, but the kind that has some circles with
 some arrows between them. "But wait!" you say, "The heading says 'Graphs and Trees'" you say, well,
 trees can be seen as a subset of graphs, while all graphs are not necessarily trees.</p>
 <p>Graphs and trees are some of the absolutely fundamental data structures which you need to be acquainted with.
-Along with arrays, queues, stacks and hash tables (don't worry, it's the next heading), they are the fundamental
+Along with arrays, queues, stacks and hash tables, they are the fundamental
 building blocks with which you can make pretty much anything. Graphs and trees are a bit special, however, in them
 being potentially easy to implement, but also very easy to mess up. Languages like C and C++ let you implement
 them with relative ease, but implementing graphs and trees without cyclical references
@@ -2685,7 +2691,7 @@ them with relative ease, but implementing graphs and trees without cyclical refe
 actually quite hard. Sometimes even fundamentally unsafe.</p>
 <p>I have used Rust as one of the primary languages for demonstrating and benchmarking things for you.
 The examples under this header will be more along the lines of toy examples as Rust code for graphs
-and trees can get quite involved if you don't wanna just sprinkle <code>Arc</code> everywhere. And even then you
+and trees can get quite hairy if you don't want to just sprinkle <code>Arc</code> everywhere. And even then you
 might end up having to battle cyclical references.
 It's really nice that the compiler puts on guard rails for you and herds you towards safe behavior.
 Implementing graphs and trees in Rust is notoriously difficult for this exact reason.
@@ -2699,14 +2705,14 @@ before you start running everything in a loop. It can help the library/framework
 optimize where the data should be located, when the data should be moved to/from the GPU, when two operations
 can be fused and so on.</p>
 <p>Additionally, I will take a look at one of the simpler trees, the binary tree, and if you are interested in
-graphics or computer vision, the octree is recommended for that specialization.</p>
+graphics or computer vision, the octree is recommended reading.</p>
 <h3 id="graphs">Graphs</h3>
 <p>Ok, so let's get this show on the road. Graphs are primarily made up of two things, nodes and edges.
-Edges are references from one node to another. In a diagram they are usually represented by a line with one more
-arrows on the ends. Edges can be represented by indices, pointers, smart pointers or something else
-that I can't think of right now. The node on the other hand, can be whatever you want SPARKLES. It can even
-be just a number or an index to the corresponding data paylod if you have seperated the graph structure
-from the data payloads.</p>
+Edges are references from one node to another. In a diagram they are usually represented by a line, some
+times with one more arrows on the ends. Edges can be represented by indices, pointers, smart pointers or
+something else that I can't think of right now. The node on the other hand, can be ✨ whatever you want ✨.
+It can even be just a number or an index to the corresponding data payload if you have seperated
+the graph structure from the data payloads.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/bidirectional_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/bidirectional_graph.png" width="500" /></a></p>
 <figcaption>
@@ -2728,8 +2734,8 @@ A unidirectional graph. Each edge points one way. Note that edges can also have 
 unidirectional graph which does not contain cycles. A cycle is not just node A pointing to node B, which points
 to node A, it can also be node A pointing to node B pointing to node C pointing to node A, and so on an so forth
 until we have an infinite number of nodes to traverse until we get back to node A again, like going all the
-way to Mordor just to go back to the friggin shire. No eagles will save you. You will just have to walk home.
-As you can imagine can be a costly property to assert unless we devise mechanisms to prevent this
+way to Mordor just to go back to the friggin Shire. No eagles will save you. You will just have to walk home.
+As you can imagine this can be a costly property to assert, unless we devise mechanisms to prevent this
 from happening in the first place.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/directed_acyclic_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/directed_acyclic_graph.png" width="500" /></a></p>
@@ -2740,7 +2746,7 @@ The unidirectional graph is verified as being a DAG through a topological sortin
 <p>In the diagram, I have sorted the previous graph topologically. As long as none of the edges go backwards, we have
 a DAG. In general, if you are reading this, you should try to avoid graphs with cycles.
 It's a headache and you'll end up down a headscratching rabbit hole. It's also a good source
-of memory leaks if you haven't implemented your graph or tree in a certain fashion.</p>
+of memory leaks if you haven't implemented your graph or tree in a certain way.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/computational_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/computational_graph.png" width="500" /></a></p>
 <figcaption>
@@ -2814,9 +2820,9 @@ pointers. Especially if it is sorted as we need less array elements marked as em
 <h3 id="implementing-graphs-and-trees">Implementing Graphs (and Trees)</h3>
 <p>Implementing graphs is generally considered hard in Rust specifically, which makes sense,
 because of the many caveats and potential issues in graphs. Dynamic graphs especially are problematic and
-you should consider very carefully whether all the logic is correct.To make things more difficult,
+you should consider very carefully whether all the logic is correct. To make things more difficult,
 constructing a graph, even if it has to spend the vast majority of its time as a read-only artifact,
-has to have construction phase were pointers can be used, not used, you can end up creating cyclical references.
+has to have a construction phase where pointers can be used and you can end up creating cyclical references.
 Uni-directional DAGs are easier, as long as you don't have to verify their correctness, but if implementing trees
 where you would like a pointer from the child to the parent, you can use a strong pointer from parent to child,
 and a weak pointer from child to parent. With graphs in general you cannot easily make a constraint that enforces
@@ -2841,29 +2847,29 @@ always be the right child. To access any node's (index N) children, we merely ha
 <code>N*2+1</code> for the left child and <code>N*2+2</code> for the right. We can handle a node not being
 present in this otherwise dense structure, by having a
 means of representing an empty value, but the greater the sparseness, the more inefficient this <em>linearized</em>
-tree structure works quite well and makes the structure easily serializeable
-(write it to a file on disk) or transferable to and useable on GPU's.</p>
-<p>Better explanation of <a href="https://github.com/nrc/r4cppp/blob/master/graphs/README.md">graphs in Rust</a><br />
-graphs in Rust using
+tree structure becomes. The implicit/predictable structure makes the linearized treeqv easily serializeable
+(writing it to a file on disk) or transferable to and useable on GPU's.</p>
+<p>A better explanation of <a href="https://github.com/nrc/r4cppp/blob/master/graphs/README.md">graphs in Rust</a><br />
+and graphs in Rust using
 <a href="http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/">indices</a>  </p>
 <h3 id="octrees">🧬 Octrees</h3>
 <p>Octrees are elevant for all of the specializations that aren't deep learning, especially <em>computer graphics</em>.
-But it might be relevant for deep learning too if you do stuff related to geometry or spatial data, though.</p>
+But it might be relevant for deep learning too if you do stuff related to geometry or spatial data.</p>
 <p>Octrees are mostly concerned with sorting space. For every node, there are 8 children. If it is sparse, there are
 <em>up to</em> 8 children. What cannot change however, is the regular structure. Every node covers a certain space.
 The space covered by the child nodes are strictly within this space and are halved on each axis based on the
 center point of the parent node. Child 0 would be the eighth of space with <code>x</code>, <code>y</code> and <code>z</code> starting
 from the minimum value of the parent space up to the center point of the parent space. Child 1 could be the eighth
 of space the same as child 0, except with the x range starting from the midpoint's <code>x</code> value, going to the
-maximum <code>x</code> value of the parent space. So on and so forth, all child nodes get's an eight of space. But again,
+maximum <code>x</code> value of the parent space. So on and so forth, all child nodes gets an eighth of space. But again,
 there doesn't need to be exactly 8 active children, they do all need to go into predictable slots. If the
-definition child 0 is what I wrote earlier, that range ALWAYS needs to reside in child 0. It cannot be moved to
+definition of child 0 is what I wrote earlier, that range ALWAYS needs to reside in child 0. It cannot be moved to
 other children or other slots. One nice property of the octree is that we can describe any path from root to leaf
-by a string numbers from 0 to 7.</p>
+by a sequence numbers from 0 to 7.</p>
 <p>Now let's talk about payloads. A typical use case within graphics is to use an octree to reason about which scene
 geometry to render or to use for nearest neighbor queries. Let's start with the simpler payload,
 <a href="https://en.wikipedia.org/wiki/Point_cloud">point clouds</a>.
-We have a list of three dimensional points. We want to find the nearest one relative to our current point.
+We have a list of three dimensional points. We want to find the nearest one relative to our query point.
 This is quite useful for algorithms like <a href="https://en.wikipedia.org/wiki/Iterative_closest_point">ICP</a>.
 We start with the whole array of points and then continually go through our points sending them to one of the 8
 children until a child receives only a single point, at which point that child node becomes a leaf node.
@@ -2884,9 +2890,9 @@ neighbors.
 </figcaption>
 </figure>
 <p>For nearest neighbor queries having a single point per leaf node is wildly inefficient though, and you should
-consider fattening up the leaf nodes to contain more points and have some amount of points in the interior nodes as
+consider fattening up the leaf nodes to contain more points, and in some cases points in the interior nodes as
 well. These could be efficiently searched by sorting them into linearized octrees. More on those in a future
-module. Quite often a node is not much more than 4x32-bits, in which case it is wildly inefficent to have more
+module. Quite often a point is not much more than 4x32-bits, in which case it is wildly inefficent to have more
 than 1 pointer per node. You might also end up with a stack overflow if you try to build the octree recursively.
 Last time I tried that in C++ I got a stack overflow at a depth of 1000. If you absolutely need a pointer based
 tree, try to add nodes of interest to a queue instead and just process that queue. E.g. you arrive at node X, it
@@ -2894,7 +2900,7 @@ has 8 children. You deem 4 of them to be of interest, add all 4 to a processing 
 for you to process. This might take you all over the tree though. Another option could be using a stack.
 For spatially larger payloads, like meshes, you might also need to keep a reference to that geometry
 across more than one node, ending up with some geometry being evaluated more than once.
-You win some, you lose some. But it's all the same to me. It's the eight of space.</p>
+You win some, you lose some. But it's all the same to me. It's the eighth of space.</p>
 <p>Another use case where the octree is very useful is when deciding what to render and at what level-of-detail.
 It also makes for a useful abstraction over virtualized geometry. More on that in a later module.</p>
 <h2 id="3-garbage-collectors">3️⃣ Garbage collectors</h2>
@@ -2957,7 +2963,7 @@ however, what if we don't have all of our data in main memory?</p>
 <h3 id="virtualized-memory-and-operating-systems">Virtualized Memory and Operating Systems</h3>
 <p>The operating system itself can, and will, <a href="https://en.wikipedia.org/wiki/Virtual_memory">virtualize your memory</a>.
 It may at some point decide to spare the main memory, probably because it doesn't have any more, and instead
-allocate temporary space on the disk to swap in and out of main memory. This is painfully slow, but happens
+allocates temporary space on the disk to swap in and out of main memory. This is painfully slow, but happens
 seamlessly behind the scenes to be able to continue to allocate more memory for your program. The programmer
 does not have to do anything as the virtualization is hidden. Usually, there will be hardware support for the
 virtualization with components such as a dedicated memory management unit.</p>
@@ -2966,9 +2972,11 @@ program might see its addresses start in very low numbers despite a number of ot
 on your computer. In face, while the address space given to your process might look continuous it is probably
 fragmented, scattered across diffent physical locations, but the virtualization makes it appear continuous.
 In general, it is a major security risk for programs to read memory outside of the memory
-allocated for it. This is also known as a <em>segmentation fault</em>. The operating dislikes this concept so much that it
-is likely to just kill your program entirely. If you have every programmed C or C++, you have probably tried this.
-The virtual memory space allocated for your process, for stuff like heap and stack will typically look like below.</p>
+allocated for it. This is also known as a <em>segmentation fault</em>. The operating system dislikes this concept
+so much that it is likely to just kill your program entirely. If you have ever programmed C or C++,
+you have probably tried this making this mistake and your error has been met with swift and uncompromising
+consequences. The virtual memory space allocated for your process, for stuff like heap and stack will
+typically look as below.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/virtual_heap_and_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/virtual_heap_and_stack.png" width="300" /></a></p>
 <figcaption>
@@ -2978,7 +2986,7 @@ Image credit</a>.
 </figcaption>
 </figure>
 <h3 id="virtualizing-your-own-application">Virtualizing Your Own Application</h3>
-<p>As I just described in the presceding virtualized memory section, the operating system will store temporary data
+<p>As I just described in the preceding virtualized memory section, the operating system will store temporary data
 on the disk if it runs out of space in main memory, keep track of what is not in memory and in disk instead and,
 when needed, invisibly load requested data into memory while swapping some other piece of data unto the disk.
 But we can make our own virtualized memory too! We could for example have a dataset for training a neural network
@@ -2998,7 +3006,7 @@ process.</p>
 <h3 id="virtualized-rendering">🧬 Virtualized Rendering</h3>
 <p>Another use of this is the rendering of data sets too large to fit in a users computer. You preprocess
 all of the data you need to visualize into a tree structure and then just keep the tree in memory at all times.
-If you then render with progressive rendering, which is where as soon as the camera stands still you render across
+You can then render render progressively, which is where as soon as the camera stands still you render across
 multiple frames into the same uncleared buffers, letting the user see progress while the system downloads, unpacks
 and renders the entire scene. This also allows for rendering of scenes which are too big to fit in GPU memory or
 even main memory.</p>
@@ -3032,7 +3040,7 @@ and <a href="https://www.evl.uic.edu/vchand2/thesis/papers/Marching%20Cubes.pdf"
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 14, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 15, 2023</span>
       
         <br>
         Created:

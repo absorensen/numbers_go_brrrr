@@ -1013,6 +1013,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#5-further-reading" class="md-nav__link">
+    5️⃣ Further Reading
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1050,10 +1057,10 @@ Image credit</a>
 <h2 id="perspective">Perspective</h2>
 <p>The further you move from simple, albeit heavy, problems such as a matrix-matrix problem to more heterogenous
 problems, such as training a neural network, the harder it can be to get good performance. How do you know or
-reason about what is where when in complex systems like
+reason about what is where and when in complex systems like
 <a href="https://pytorch.org/">PyTorch</a>, <a href="https://www.tensorflow.org/">Tensorflow</a>,
 <a href="https://jax.readthedocs.io/en/latest/">JAX</a>, <a href="https://numba.pydata.org/">Numba</a> and
-<a href="https://www.taichi-lang.org/">Taichi</a>. All of these frameworks, compilers and domain specific languages have to
+<a href="https://www.taichi-lang.org/">Taichi</a>? All of these frameworks, compilers and domain specific languages have to
 nudge you in different directions to give them the restrictions and hints needed to let them run your code
 as efficiently as possible. Nudges like defining your neural network as a computational graph. If you're unsure
 about what a computational graph is, the basic version is that you define a bunch of operations and how they relate
@@ -1073,7 +1080,7 @@ The registers are the fastest and smallest of the bunch. They reside right next 
 the CPU that does the computations.
 As a rule of thumb, most of the variables you declare in the scope of your function, unless
 there is A LOT of variables, will be kept in registers. The caches and the main memory all work
-in conjunction with each other as an invisible way of speeding up the accesses to the main memory.</p>
+in conjunction with each other as an invisible way of speeding up the accesses to the main memory (RAM).</p>
 <figure>
 <p><a class="glightbox" href="../figures/cpu_hierarchy.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/cpu_hierarchy.png" width="500" /></a></p>
 <figcaption>
@@ -1090,17 +1097,17 @@ L1 cache, do you have this value? If yes, that would be a cache hit, and we woul
 retrieve the value. If the L1 cache did not have a valid copy of the value, we would ask the L2 cache, and so on
 and so on, until we reach memory. If our file was too big to fit in memory, the operating system might even
 virtualize (don't worry about it) the memory and go all the way to the disk or to the internet to retrieve our value.
-Which is just as slow as it sounds.</p>
+Which is even slower than it sounds.</p>
 <figure>
 <p><a class="glightbox" href="../figures/2_cpus_hierarchy.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/2_cpus_hierarchy.png" width="500" /></a></p>
 <figcaption>
-An example view of what CPU memory hierarchy can look like with 2 cores.
+An example view of what the CPU memory hierarchy can look like with 2 cores.
 </figcaption>
 </figure>
-<p>To further complicate things, multicore CPU's have each CPU sharing the disk, memory and L3 cache, sometimes they also share
-the L2 cache with a few other CPUs.
-We are also at risk of each core not just reading from the same values, but what if some of them modified
-one or more of the 5 values? At any point in time a value loaded from memory, to L3 cache, to L2 cache, to L1 cache,
+<p>To further complicate things, multicore CPU's have each CPU sharing the disk, memory and L3 cache,
+sometimes they also share the L2 cache with a few other CPUs.
+We are also at risk of each core not just reading from the same values, but some of them could even modify
+one or more of the 5 values. At any point in time a value loaded from memory, to L3 cache, to L2 cache, to L1 cache,
 to the registers of thread A, might be invalid because thread B wrote to that value. This may have updated
 the value in memory and in thread B's registers, L1 and L2 caches, hopefully, it also updated it in an
 L2 and/or L3 cache it shared with thread A, but even then we would still need to move the value from
@@ -1120,8 +1127,6 @@ An example view of what CPU memory hierarchy can look like with 8 cores.
 <p>Nudging the programmer (that's you!), to better define your program, not just line-by-line, but as a whole,
 to constrain these sorts of contentions, is one of the myriad reasons why
 frameworks like PyTorch can greatly speed up your code, if you help it along.</p>
-<p>For a more in-depth explanation on the memory hierarchy see this chapter on
-<a href="https://www.cs.umd.edu/~meesh/411/CA-online/chapter/memory-hierarchy-design-basics/index.html">Memory Hierarchy Design</a>.</p>
 <h2 id="expanding-the-memory-hierarchy">Expanding the Memory Hierarchy</h2>
 <p>To top it off we can expand this memory hierarchy with additional components, such as accelerators, networking
 and the internet!
@@ -1133,9 +1138,9 @@ basically means GPU program. So Nvidia releases CUDA as a pure compute (no graph
 It only runs on Nvidia GPU's though. Transfering memory from the CPU to the GPU and back, can be a
 quite explicit process. Not only does the CPU need to reserve some memory for copying to the GPU,
 the CPU and GPU have to be synchronized which can take a while, and then the data is usually transferred
-across the slower (compared to memory and cache) PCIe bus. It is certainly one you should always be thinking
-about if you are using a GPU for your program. Neglecting transfers is one of the fastest ways to your code
-the slowest. The GPU also has its
+across the slower (compared to memory and cache) PCIe bus. This transfer is something you should always be thinking
+about if you are using a GPU for your program. Neglecting transfers is one of the fastest ways to slow code.
+The GPU also has its
 <a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">own memory hierarchy</a>.</p>
 <figure>
 <p><a class="glightbox" href="../figures/Full-H100-GPU-with-144-SMs-1024x457.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/Full-H100-GPU-with-144-SMs-1024x457.png" width="500" /></a></p>
@@ -1157,12 +1162,12 @@ Image credit </a>
 Each of these warps, Nvidia terminology for one of these four sections, have 32 threads with an L0 instruction
 cache, which is not matched for data. Additional accelerators exist, such as the neural engine featured in
 quite a lot of Apple products, and dedicated image and video processing hardware.</p>
-<p>Finally, you can even go outside of your current system. Two CPU's and eight GPU's could be tightly
+<p>You can even go outside of your current system. Two CPU's and eight GPU's could be tightly
 interconnected in a node, such as in the
 <a href="https://www.nvidia.com/en-us/data-center/dgx-a100/">Nvidia DGX system</a>. In the case of a DGX system
 everything is tightly interconnected with specialized hardware to minimize the time it takes to
 transfer data from one component to the other.</p>
-<p>Taking things even further we could be sending data between more than one node, requiring yet another layer of
+<p>Taking things even further, we could be sending data between more than one node, requiring yet another layer of
 communication, which is going to be slower than communicating internally in your CPU or in your node.
 When running on clusters with multiple nodes, the data you work from might have to be fetched from one
 or more storage nodes, which keeps your data between batch jobs. Taking neural network training as an example,
@@ -1185,13 +1190,16 @@ Image credit </a>
 <p>Hopefully, this teaser hasn't scared you away from charging ahead and learning more about memory hierarchies
 and computational graphs. Memory hierarchies are at the center of getting good performance in pretty much
 all programs and it is worth spending some time on having at least a tenuous grasp of how to use them.</p>
+<h2 id="5-further-reading">5️⃣ Further Reading</h2>
+<p>For a more in-depth explanation on the memory hierarchy see this chapter on
+<a href="https://www.cs.umd.edu/~meesh/411/CA-online/chapter/memory-hierarchy-design-basics/index.html">Memory Hierarchy Design</a>.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 3, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 15, 2023</span>
       
         <br>
         Created:
