@@ -694,7 +694,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concepts_in_parallelism/s3_mutiex.md" class="md-nav__link">
+      <a href="../../m2_concepts_in_parallelism/s3_mutex/" class="md-nav__link">
         S3 - Mutex
       </a>
     </li>
@@ -1007,12 +1007,12 @@
 
 <h1 id="2-introducing-rust">2️⃣ Introducing Rust</h1>
 <p>Why use <a href="https://www.rust-lang.org/">Rust</a> for the guide? Say you've decided you want to eat 35 burgers.
-Python is the friend that helps you order them delivered.
+Python is the friend that helps you order them to be delivered at your door.
 C++ is the friend who says 'do whatever you want'. Rust on the other hand,
 is the friend who stops you and then recommends you a salad. That may be annoying at times,
 especially if you were just craving 35 entire burgers, but it is what is best for you.
-Since the guide is not a beginners introduction to programming, and we will be introducing,
-at times fairly advanced, concepts, having a language that keeps you on the straight and
+Since the guide is not a beginners introduction to programming, and I will be introducing
+at times fairly advanced concepts, having a language that keeps you on the straight and
 narrow, even if it seems pedantic and like it is getting in your way, is a genuine advantage.
 If the Rust compiler accepts your code without any unsafe sections, it is probably going to work.
 Another point in Rust's favor was the easy setup and use on Windows, Linux and macOS.
@@ -1023,11 +1023,11 @@ use of an external package manager and the use of header files and build systems
 Rust takes care of all that with <a href="https://doc.rust-lang.org/cargo/index.html">cargo</a>.
 cargo can help you run and test your code, as well as helping downloading and building all of the
 dependencies in the <code>Cargo.toml</code> file, which you will find in the root of each code project.
-The guide was not supposed to be a guide for learning either of those languages.<br />
+This guide was not supposed to be a guide for learning either any these languages.<br />
 Rust's very helpful compiler is likely to be a boon for guiding users towards sensible code.<br />
 The process of having to program in such a memory focused, modern, compiled language
 will turn what is otherwise an implicit, unspoken process inside out,
-forcing the user to think about what good code is, where is my memory,
+forcing you to think about what good code is, where is the data located in memory,
 which thread has access to which data, and so on.</p>
 <h1 id="setup">Setup</h1>
 <p>To use the code in the course, as well as doing the exercises, first of all, you should have git and Rust installed.</p>
@@ -1061,7 +1061,6 @@ of the dependencies. By default cargo will look in the <code>src</code> director
 through the code and getting better error messages. It will also result in significantly less compilation
 time, but slower run time. If you add <code>cargo run --release</code> it will compile in release mode.
 Compilation will take longer, the code will run faster, but debugging will be harder.</p>
-<h2 id="frequent-commands">Frequent commands</h2>
 <p>To save on space, especially for some of the smaller projects where you just need to run a command or two,
 write <code>cargo clean</code> once you are done to remove all of the relevant dependencies.</p>
 <h1 id="testing">Testing</h1>
@@ -1089,7 +1088,7 @@ sharing resources. Even then it might fail. You can just try a few more times or
 <h1 id="3-clippy">3️⃣ Clippy</h1>
 <p><a href="https://doc.rust-lang.org/stable/clippy/index.html">Clippy</a> is cargo's tool for giving suggestions for improving
 your code and making it more akin to idiomatic Rust. The guide has most code conformant to Clippy's suggestions,
-however the guide chooses to diverge where making the code simpler and easier to understand for people who have
+however I choose to diverge where making the code simpler and easier to understand for people who have
 never programmed Rust before is a priority. Clippy's messages are very informative and a good learning experience.
 It is recommended that you use Clippy in your own code. It is as simple as calling <code>cargo clippy</code>.</p>
 <p>Running it on the <code>how_to_test</code> project, Clippy returns the following message -</p>
@@ -1114,7 +1113,7 @@ enter <code>cargo fix</code>.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 14, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 15, 2023</span>
       
         <br>
         Created:
