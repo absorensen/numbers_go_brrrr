@@ -928,7 +928,7 @@
   
     <li class="md-nav__item">
       <a href="../../m2_concepts_in_parallelism/sX_exercises/" class="md-nav__link">
-        SX - 4️⃣ Exercises
+        S12 - 4️⃣ Exercises
       </a>
     </li>
   
@@ -1209,7 +1209,7 @@ GPU computation.</p>
 <p>GPU's are fairly ubiquitous at this point. They started off as purely for graphics, but
 around 2008, enough researchers had tinkered with workarounds to use them for general
 computing, that Nvidia put out CUDA, opening up GPU's for more general usage. GPU's still do lots
-of graphis, but they are no longer opaque black boxes and even graphics API's such as OpenGL, Vulkan,
+of graphics, but the opaque black box parts are increasingly opened and even graphics API's such as OpenGL, Vulkan,
 Metal and DirectX have opened up. With modern graphics API's you don't even necessarily need a graphics output
 to use them. You can just use the pure compute capabilities. This guide won't get into graphics, except
 for the graphics specialization.</p>
@@ -1217,7 +1217,7 @@ for the graphics specialization.</p>
 the hardware increasingly has hardware support for neural network specific operations and ChatGPT has
 increased the hype and demand for AI to exasperating levels.</p>
 <p>You can think of the GPU as an expansion of the memory hierarchies we have been examining earlier.
-It is not running in lockstep, and you have to program more things explicitly, while also changing
+It is not running in lock step, and you have to program more things explicitly, while also changing
 your mindset about how programming works. Memory transfers to and from the CPU and GPU will be
 relatively explicit, you have explicit control of a part of the L1 cache, you have start programming
 in a warp oriented fashion and if-statements become quite dangerous.</p>
@@ -1225,7 +1225,7 @@ in a warp oriented fashion and if-statements become quite dangerous.</p>
 they can build an amazing car, they can adapt to changing circumstances quite well, they can act independently,
 then the GPU is like a factory. Each path and process has to be carefully optimized, they might each only deal with
 a very small piece each and people have to work in lockstep. But. Their throughput is unmatched.</p>
-<p>At level 3️⃣ I will go into more detail as to how to actually write GPU code, but the guide is set up using
+<p>At 3️⃣ I will go into more detail as to how to actually write GPU code, but the guide is set up using
 Rust and a GPU API abstraction layer called <a href="https://wgpu.rs/">wgpu</a>. You don't need to understand how it works
 right now, but it means that you should be able to run all code, including GPU code, on your platform, even if
 it's made by Apple or AMD.</p>
@@ -1245,11 +1245,11 @@ synchronization. The commands may/may not have already been submitted, but if yo
 function, the CPU-side code will block and wait until any and all submitted commands have executed on the GPU
 and the GPU sends the all-clear signal in return. Imagine you are at a horse track. You have to give instructions
 to a jockey on a race horse. You stand on the periphery of the big oval race track. You tell the jockey to make
-some adjustment and do a lap. The horse first has to accelerate and then once it nears you slow down and you can
-talk again. What would be more efficient was if you could leave notes for the jockey to pick up
+some adjustment and do a lap. The horse first has to accelerate and then once it nears you, it slows down and you can
+talk again. What would be more efficient was, if you could leave notes for the jockey to pick up
 whenever he was coming around and the horse could just continue at speed. In some API's the GPU
 can just be set in motion and then whenever you have a change to the loop it is running, adjust
-or change. Or you can set work in motion and come back at a later time, whether the work might be done.</p>
+or change. Or you can set work in motion and come back at a later time, checking whether the work might be done.</p>
 <h3 id="transfer">Transfer</h3>
 <p>When transferring memory, you should have the following model in mind, nothing gets transferred without a staging
 area. When transferring from CPU to GPU, at least in the CUDA programming model, it will pin an area in memory.
@@ -1297,10 +1297,10 @@ the thread ID calculation. If within acceptable range, do work, otherwise, don't
 waves of work groups because there aren't enough physical execution units.
 As such, we can only synchronize between threads inside the warp.</p>
 <h3 id="gpu-memory-hierarchy">GPU Memory Hierarchy</h3>
-<p>The memory hierarchy on a GPU, here as exemplified by the Nvidia H100, which is a very expensive data center GPU
-and most definitely not the one residing in your laptop, looks a lot like the memory hierarchy on the CPU.
-But the bandwidth (how much data per second) internally on the card is a lot higher than on the CPU. All of
-the streaming multiprocessors share the L2 cache and each streaming multiprocessor shares an L1 cache. On
+<p>The memory hierarchy on a GPU looks a lot like the memory hierarchy on the CPU. Here it is exemplified by the
+Nvidia H100, which is a very expensive data center GPU and most definitely not the one residing in your laptop. 
+But the bandwidth (how much data per second can be transferred) internally on the card is a lot higher than on the CPU.
+All of the streaming multiprocessors share the L2 cache and each streaming multiprocessor shares an L1 cache. On
 Nvidia GPU's the streaming multiprocessor is a number of, in this case 4, units which can each execute a
 work group, or in Nvidia terminology, a warp.</p>
 <figure>
@@ -1312,7 +1312,7 @@ Image credit </a>
 </figcaption>
 </figure>
 <p>Take some time to study these two diagrams and think about how data moves first from the CPU,
-to the GPU's main memory, then to the L2 cache, then to what streaming multiprocessor which needs its L1 cache
+to the GPU's main memory, then to the L2 cache, then to the streaming multiprocessor which needs its L1 cache
 until it finally is loaded up into the registers of the 32x4 threads executing on different, but adjacent, segments
 of the same data.</p>
 <figure>
@@ -1360,7 +1360,7 @@ You can of course also get a specific version of it, such as <code>wgpu = "0.16.
 <p>GPU programming, as has previously been mentioned, has two major elements. Host (CPU) code and device (GPU)
 code. We'll start off with the basics of the host code and then move on the GPU code. Just enough
 for you to be able to read the following sections and understand what is going on in this entire module,
-as it doesn't go into the finer details of GPU programming, but is centered around a GPU-centric paradigm.</p>
+as it doesn't go into the finer details of GPU programming, but is centered around a GPU-oriented paradigm.</p>
 <p>The rest of this section will be make use of the code location at <code>m1_memory_hierarchies/code/gpu_add/</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_add">online</a>.
 Make sure to go and actually read the code. It is full of comments! And they're made just for you!
@@ -1378,7 +1378,7 @@ launch an asynchronous function and just continue on to the next line of code. B
 depending on whether we are inside a normal function or an <code>async</code> function. An <code>async</code> function definition
 example - <code>pub async fn self_test() -&gt; bool {</code>.</p>
 <p>If we are in a normal function and we call an <code>async</code> function, we have to wait for it to complete. As in, block
-on the function call, which is of course <code>pollster::block_on()</code>. Inside the <code>async</code> function it self it can
+on the function call, which is of course <code>pollster::block_on()</code>. Inside the <code>async</code> function itself it can
 either block on async function calls by using <code>await</code> - such as <code>let result = async_function().await;</code> or
 you can store what is known as a future. We could set in motion the loading of a number of files, and then once we
 were done and actually genuinely NEEDED to use the files for something, <code>await</code> on the future. The <code>async</code>
@@ -1412,14 +1412,14 @@ index value then.</p>
 If you are on a system with more than one GPU, such as a laptop with an integrated GPU, which shares memory with
 the CPU and a more powerful dedicated GPU, it should try to get access to the dedicated GPU. We also request
 <code>None</code> for <code>compatible_surface</code>. Surfaces are what you would render to if you were doing graphics. Think
-of an image with extra steps which you could show on your display. If we don't need to do graphics, not having one
+of an image with extra steps, which you could show on your display. If we don't need to do graphics, not having one
 is less work. It also means we can run on data center GPU's, which might not even have a display port. So we just
 get the <code>Adapter</code>. We use the <code>Adapter</code> to get <code>Device</code>, which will be our handle to the GPU
-from now on. Whereas the <code>Adapter</code> is more of a raw connection, where we can't do much with it, the
+from now on. Whereas the <code>Adapter</code> is more of a raw connection, which we can't do much with. The
 <code>Device</code> is a handle that has some guaranteed features. The <code>Adapter</code> tells us what features we can get.
 Once those features are guaranteed, it is much easier for wgpu to open up for more functionality with
 the <code>Device</code>. We actually don't need the <code>Adapter</code> after we get the device,
-but I keep it around in the GPUHandles for you to tinker around with in auto-complete to see what it can
+but I keep it around in the GPUHandles for you to tinker around with auto-complete to see what it can
 do. We do need the <code>Device</code> though. We also need the <code>Queue</code>. The <code>Queue</code> is where we
 can submit the work we want the GPU to do.</p>
 <p>Note that when defining our <code>DeviceDescriptor</code> for getting a <code>Device</code> that lives up to our needs
@@ -1428,17 +1428,18 @@ But we could request, or at least see whether we could get them, features like 1
 <p>Now back to the <code>main</code> function!</p>
 <p>We now have our bundled GPU-related handles. Now we calculate how many threads we need to launch for our
 problem size. <code>let element_count: usize = 100;</code>, so we need to launch AT LEAST 100 threads if each thread
-only processes one element of our problem. Which it does in our simplified case. Given that we would like to fill
+only processes one element of our problem. Which it does, in our simplified case. Given that we would like to fill
 up our work groups, I have elected to use 32 threads per work group. <code>let block_size: usize = 32;</code>.
 Given that the register pressure is likely very low for our shader, this should be no problem. Finally, we
 calculate how many blocks to launch. This simple calculation is found all of the place when doing
 GPGPU programming. <code>let launch_blocks: u32 = ((element_count + block_size - 1) / block_size) as u32;</code>.
 The basic premise is that we add one element less than the full work group size and then use integer division
 to make sure we always have at least as many threads as we need. In the worst case of a work group size of 32,
-we will have a work group at the very end of the vectors with 31 idle threads doing nothing.</p>
-<p>Next up, we compile our shader code <code>add_vectors.wgsl</code> with <code>create_shader_module()</code>.
+we will have a work group at the very end of the vectors with 31 idle threads.</p>
+<p>Next up, we compile our shader code <code>add_vectors.wgsl</code> with <code>.create_shader_module()</code>.
 Compiling shaders is quite expensive, so if you are programming a bigger system than this, you might want to
-save the compiled code or do it as a build step and load it from disk when needed. Once we have compiled
+save the compiled code or do it as part of your build step.
+When running you can load it from disk as needed. Once we have compiled
 our shader code we can create a compute pipeline with a specific entry point. The entry point is just the function
 that will be called when dispatching the shader call later on. Once we have a <code>ComputePipeline</code> we can
 begin doing our bind group layouts. In CUDA you can pass device side pointers to your CUDA functions
@@ -1462,20 +1463,21 @@ binds the array of bindings in order. Do note that we don't specify what can and
 was specified at the creation of the <code>storage_buffer</code>s and it will be specificed locally in the binding of
 the buffers in the shader.</p>
 <p>Once we have our bindings set up, we create a <code>CommandEncoder</code>, which we get from <code>Device</code>.
-The command encoder is a buffer of commands. We can add stuff like render and compute operations, their sort of like
-a collection of operations and state, and transfer operations. The command encoder needs to be finished, before it
-is submitted to the queue. Remember the <code>Queue</code> we got earlier? This is what it was for. We submit
-finished <code>CommandEncoder</code>s to our <code>Queue</code>, which submits the jobs to the GPU. For this specific program
-we add two commands to the <code>CommandEncoder</code>. We dispatch our compute shader, enclosed in a <code>ComputePass</code> and
-launch the appropriate number of threads. Note also the <code>label</code> field. This field permeates wgpu usage. It is
-mostly for debugging. It helps us identify what is causing an issue. Once we have finished our <code>ComputePass</code>,
+The command encoder is a buffer of commands. We can add stuff like render and compute operations,
+they are sort of like a collection of operations and state, and transfer operations. The command encoder
+needs to be finished, before it is submitted to the queue. Remember the <code>Queue</code> we got earlier?
+This is what it was for. We submit finished <code>CommandEncoder</code>s to our <code>Queue</code>, which submits
+the jobs to the GPU. For this specific program we add two commands to the <code>CommandEncoder</code>. We
+dispatch our compute shader, enclosed in a <code>ComputePass</code> and launch the appropriate number of threads.
+Note also the <code>label</code> field. This field permeates wgpu usage. It is mostly for debugging. It helps us
+identify what is causing an issue. Once we have finished our <code>ComputePass</code>,
 due to it going out of scope, we add a transfer operation. We use the <code>staging_buffer</code> on our <code>output</code>
 vector, to read the output back to the CPU. Then we finish our <code>CommandEncoder</code> and submit it
 to the <code>Queue</code>.</p>
 <p>We then setup a <code>oneshot_channel</code>. Don't worry too much about this. It is a connection which can only be used
 for sending data once. We map the <code>staging_buffer</code> and send its data using the sender/receiver pair. Once
 we have done this <code>map_async</code> call, we wait for the GPU to be finish all operations currently in its queue.
-Once it has finished we block on the receiver. Until the receiver sends the <code>Ok</code> signal we wait. Once we get
+Once it has finished we block on the receiver. Until the receiver sends the <code>Ok</code> signal, we wait. Once we get
 it we retrieve the data. This is raw data in bytes, <code>u8</code>, which we recast to the type we know it is, which in
 this case is <code>f32</code>. We do a bit of clean up, and don't you know it, that's the program!</p>
 <figure>
@@ -1484,9 +1486,9 @@ this case is <code>f32</code>. We do a bit of clean up, and don't you know it, t
 Adding our two vectors, it should be easily verifiable that it is correct.
 </figcaption>
 </figure>
-<p>Maybe now might be a good time to go back to the code and try to run through it yourself again.</p>
+<p>Maybe now might be a good time to go back to the code and try to run through it again.</p>
 <h2 id="3-remove-the-loop-where-you-say">3️⃣ Remove the loop where, you say?</h2>
-<p>When writing GPU programs, you should usually start writing a CPU-based program. Once that works, you have
+<p>When writing GPU programs, you should usually start writing a CPU-based version. Once that works, you have
 something to verify your GPU program against. Often the part of your program that you want to offload to the GPU,
 will have loops. For example, in a vector addition snippet you might have -</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">ouput</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -1532,7 +1534,7 @@ Then we change the shader to have each thread work on a single element -</p>
 <p>If there had been more dimensions we could have continued expanding and removing dimensionality. We can continue
 until the third dimension, usually you can launch less threads in the third dimension than in the first two. You
 also have to remember to check whether the thread is outside of the valid range for each dimension. You
-should always look up for your graphics cards and your GPU API how many threads you can launch. You might have to
+should always look up your graphics cards and GPU API to see how many threads you can launch. You might have to
 break it into several passes. It's not actually quite this simple, as, well you remember how we learned stride
 had a negative impact on performance earlier? Well, that is not quite the same on GPU's.</p>
 <h2 id="3-coalesced-accessing-and-strides">3️⃣ Coalesced Accessing and Strides</h2>
@@ -1543,7 +1545,7 @@ same time. Imagine the whole work group doing this at the same time. They will a
 requesting different cache lines. What is normally faster, is if, given a work group size of 32,
 thread A calls for indices 0, 32, 64 and 96, with thread B calling for indices 1, 33, 65 and 97. This allows for
 the work group to call for a minimum of cache lines in lock step and each getting a piece of the cache line.
-This is called <em>coalesced accessing</em> and if you ever say that to a GPU programmer, you will see a faint smile on
+This is called <em>coalesced accessing</em> and if you ever say that to a GPGPU programmer, you will see a faint smile on
 their face. Think of a jigsaw puzzle, where the pieces are slowly being adjusted.
 Eventually, they all snap into place. All of the pieces fit exactly right.</p>
 <p>Here's a small example, if we for some reason were intent on turning our vector addition shader into
@@ -1596,7 +1598,8 @@ add in a profiler, m4 has got you covered!</p>
 <p>One statement I tried to sweep under the rug in the last section was - "each thread in a work group executes in lock step".
 It is highly desirable for a work group to have each thread executing in lock step. That is each thread is executing the
 same line in your program. If you have branches, like if-statements, some threads might execute path A and some threads
-might execute path B. This will lead to divergence.</p>
+might execute path B. This will lead to divergence. Divergence will result in the group of threads A executing
+while group of threads B will wait until A is finished, and then executed. Finally, they might join again. </p>
 <figure>
 <p><a class="glightbox" href="../../figures/work_group_divergence.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/work_group_divergence.png" width="700" /></a></p>
 <figcaption>
@@ -1606,7 +1609,7 @@ Image credit </a>
 </figcaption>
 </figure>
 <p>As you can imagine, this expands the timeline of executing the code compared to a non-diverging execution.
-But if you were within a workgroup where all <code>threadIdx.x &lt; 4</code> there wouldn't be an issue.
+But if you were within a workgroup where all threads take the same branch there wouldn't be an issue.
 Thankfully, recent hardware takes less of a performance hit when work groups diverge.</p>
 <p>Once you have most of your work groups not diverging, are you sure your threads aren't just sitting around
 waiting? Whenever a thread wants to load a piece of data all the way from memory, it can take quite a long
@@ -1620,18 +1623,18 @@ the more time a physical execution unit spends on doing actual work and not just
 is ready. So you can either launch a lot of independent work, or use a lot of elements in your data.
 Like really big matrices!</p>
 <p>In machine learning terms, if you have pipelined and made your computational graph
-relatively indpendent, you might see a big increase in occupancy by choosing fewer layers, but using very
-big layers.</p>
+relatively independent, you might see a big increase in occupancy by using less layers and make the ones left very
+wide.</p>
 <h2 id="3-shared-memory-and-synchronization">3️⃣ Shared Memory and Synchronization</h2>
 <p>Just two final pieces are missing before we go back to memory hierarchies. Shared memory and synchronization.
 GPU's have more programmable pieces of the memory hiearchy, such as sharing directly between threads, sharing
-between work groups and more, but WGSL has the primitives for shared memory, which is the only one
+between work groups and more, but WGSL just has the primitives for shared memory, which is the only one
 I will present for you. Shared memory is a programmable section of the L1 cache. If a cache miss, resulting
 in retrieving data all the way from memory costs 100's of cycles, quite often somewhere around 250-300,
 accessing data from shared memory costs around 10 cycles. This is very useful if each piece of data is
 accessed more than once. It could for example be overlaps in convolutions or storing preliminary results
-in shared memory, for the work group to finally reduce the results internally in the workgroup using
-shared memory to share the results between the threads.</p>
+in shared memory for the work group to finally reduce the results internally in the workgroup, before one
+of the threads writes the final result to global memory.</p>
 <p>Typically using shared memory, you will first see a section where each thread loads one or more pieces
 of data into shared memory, followed by a synchronization primitive. This synchronization primitive
 is available in wgsl and is called <code>workgroupBarrier();</code>. It is available in most shader languages,
@@ -1691,7 +1694,7 @@ for GPUs.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 14, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 16, 2023</span>
       
         <br>
         Created:

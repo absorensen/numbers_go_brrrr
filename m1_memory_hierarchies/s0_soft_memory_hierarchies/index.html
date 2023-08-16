@@ -1112,7 +1112,7 @@
   
     <li class="md-nav__item">
       <a href="../../m2_concepts_in_parallelism/sX_exercises/" class="md-nav__link">
-        SX - 4️⃣ Exercises
+        S12 - 4️⃣ Exercises
       </a>
     </li>
   
@@ -1782,7 +1782,7 @@ and you elected to turn off the auto-alignment with <code>__attribute__ ((packed
 </span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span></code></pre></div>
-<p>If you had an alignment of say, 8 bytes, the last two lines would result in 2 cache lines being retrieved.</p>
+<p>If you had an alignment of say, 8 bytes, the last two lines would result in two cache lines being retrieved.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/cache_alignment.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment.png" width="600" /></a></p>
 <figcaption>
@@ -1829,8 +1829,7 @@ and the size of the elements, it might result in each cache line only being used
 In the implementations in the code there is both a non-wrapping and a wrapping stride implementation,
 meaning once we step over the end we wrap back around using a modulo operator.
 This is to ensure that it accesses the same amount of elements as the sequential access.
-With the non-wrapping stride we only access every N elements, but we also end up doing
-much less work.</p>
+With the non-wrapping stride we only access every N elements, but we also end up doing much less work.</p>
 <p>Finally, we have random access. This is basically the worst case scenario. We randomly select an element
 to access the same amount of times as the number of elements in the array.</p>
 <figure>
@@ -2335,7 +2334,7 @@ being incorrect and the underlying value never being deallocated.</p>
 </span></code></pre></div>
 <p><code>Arc&lt;T&gt;</code> is here to solve exactly that issue.
 It uses atomic reference counting. Atomics will be introduced in the
-<a href="https://absorensen.github.io/the-guide/m2_concepts_in_parallelism/">Concepts in Parallelism</a>
+<a href="https://absorensen.github.io/the-guide/m2_concepts_in_parallelism/">concepts in parallelism</a>
 module. But in this context, it means that the reference counting is thread-safe, but a bit slower.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">sync</span>::<span class="n">Arc</span><span class="p">;</span>
 </span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
@@ -2402,7 +2401,7 @@ which is what we needed weak pointers for.</p>
 one dimensional memory as we learned about earlier, we can look at a few other fun
 concepts in different ways to arrange tensors.</p>
 <h3 id="strided-access-and-transposition">Strided Access and Transposition</h3>
-<p>One of the most used operations is the matrix matrix multiplication.
+<p>One of the most used operations is the matrix-matrix multiplication.
 If we assume two 2D matrices as input and output into another 2D matrix,
 one of those input matrices will be accessed with a stride access in
 a column major form.</p>
@@ -2445,7 +2444,7 @@ Difference gets bigger as the matrices get bigger.
 pipeline (don't worry about it) being really good at guessing these very uniform workloads, but most importantly,
 the caches doing a lot of the heavy lifting for us. Once the caches run out of space we begin to see a gap
 between the two ways of doing it. This might be more pronounced on the GPU. In most cases you should probably
-start with making the simplest and easy comprehendable code and try out (AND MEASURE!!!!) potential
+start with making the simplest and easy comprehendable code and try out, and measure, potential
 optimizations before spending your time going down rabbit holes. This is will be a bit of a theme
 in the next few sections. There won't be much of a difference between techniques until the caches
 begin running out of space.
@@ -2557,7 +2556,7 @@ get to the next indicator. As such, to get to the lower right corner element (42
 index 0, jump 4 spots forward to index 4, read the 4, jump 5 spots forward to index 9, and then jump forward
 2 elements to get to what in a dense array would be index [2, 1].</p>
 <p>This sort of makes me miss the auxiliary array. We can sum up the jumps to denote where each row starts.
-This would allow for compaction of the data while keeping us to just 2 jumps. Note that we now keep track of
+This would allow for compaction of the data while keeping us to just two jumps. Note that we now keep track of
 the length of each row by taking the difference between the starting index of the row we are looking to find
 and the beginning of the next row. Which is also why I have inserted an extra starting index, which points
 to the end of the array. Otherwise, we can't get the length of the last row.</p>
@@ -2825,7 +2824,7 @@ constructing a graph, even if it has to spend the vast majority of its time as a
 has to have a construction phase where pointers can be used and you can end up creating cyclical references.
 Uni-directional DAGs are easier, as long as you don't have to verify their correctness, but if implementing trees
 where you would like a pointer from the child to the parent, you can use a strong pointer from parent to child,
-and a weak pointer from child to parent. With graphs in general you cannot easily make a constraint that enforces
+and a weak pointer from child to parent. With graphs, in general, you cannot easily make a constraint that enforces
 that each node in your graph is only ever pointed to by a single strong pointer. What you can do however, is to
 contain all of the nodes in a graph object which has a strong reference to every single node, and the connectivity
 between the nodes being dictated by weak pointers. This will tie the lifetime (when the object is alive and not
@@ -2975,7 +2974,7 @@ In general, it is a major security risk for programs to read memory outside of t
 allocated for it. This is also known as a <em>segmentation fault</em>. The operating system dislikes this concept
 so much that it is likely to just kill your program entirely. If you have ever programmed C or C++,
 you have probably tried this making this mistake and your error has been met with swift and uncompromising
-consequences. The virtual memory space allocated for your process, for stuff like heap and stack will
+reprisals. The virtual memory space allocated for your process, for stuff like heap and stack will
 typically look as below.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/virtual_heap_and_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/virtual_heap_and_stack.png" width="300" /></a></p>
@@ -3040,7 +3039,7 @@ and <a href="https://www.evl.uic.edu/vchand2/thesis/papers/Marching%20Cubes.pdf"
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 15, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 16, 2023</span>
       
         <br>
         Created:
