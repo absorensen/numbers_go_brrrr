@@ -1298,7 +1298,7 @@ waves of work groups because there aren't enough physical execution units.
 As such, we can only synchronize between threads inside the warp.</p>
 <h3 id="gpu-memory-hierarchy">GPU Memory Hierarchy</h3>
 <p>The memory hierarchy on a GPU looks a lot like the memory hierarchy on the CPU. Here it is exemplified by the
-Nvidia H100, which is a very expensive data center GPU and most definitely not the one residing in your laptop. 
+Nvidia H100, which is a very expensive data center GPU and most definitely not the one residing in your laptop.
 But the bandwidth (how much data per second can be transferred) internally on the card is a lot higher than on the CPU.
 All of the streaming multiprocessors share the L2 cache and each streaming multiprocessor shares an L1 cache. On
 Nvidia GPU's the streaming multiprocessor is a number of, in this case 4, units which can each execute a
@@ -1599,7 +1599,7 @@ add in a profiler, m4 has got you covered!</p>
 It is highly desirable for a work group to have each thread executing in lock step. That is each thread is executing the
 same line in your program. If you have branches, like if-statements, some threads might execute path A and some threads
 might execute path B. This will lead to divergence. Divergence will result in the group of threads A executing
-while group of threads B will wait until A is finished, and then executed. Finally, they might join again. </p>
+while group of threads B will wait until A is finished, and then executed. Finally, they might join again.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/work_group_divergence.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/work_group_divergence.png" width="700" /></a></p>
 <figcaption>
