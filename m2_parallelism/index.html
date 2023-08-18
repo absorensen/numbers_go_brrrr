@@ -810,7 +810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="sX_exercises.md" class="md-nav__link">
+      <a href="s12_exercises/" class="md-nav__link">
         S12 - 4️⃣ Exercises
       </a>
     </li>
@@ -1093,19 +1093,28 @@ performed siginifcantly better for some types of algorithms on the GPU.</p>
 asking yourself, where is this going to run and how is the memory
 accessed in order to accomplish what I want to do?</p>
 <h2 id="here-be-dragons">Here Be Dragons</h2>
-<p>Harder to debug
-Hazards
-Data races
-Race conditions</p>
+<p>Some of the things you have to get used to when parallel programming is
+the sudden lack of serialized interactions. Thread 1 won't necessarily
+execute before thread 8, and the way you debug and verify your code
+will have to take that into account.</p>
+<p>Along the way, you will encounter a number of hazards. Especially race hazards are prevalent.
+The race condition happens when at least one thread is writing while one or
+more are writing or reading. Typically, these types of bugs can be very
+hard to find due to some part of your code being serialized once you
+try to find the bug or due to the multithreading, the execution might
+be non-deterministic.</p>
+<p>Take a few minutes to familiarize yourself with race conditions in
+software and data races <a href="https://en.wikipedia.org/wiki/Race_condition">here</a>.</p>
 <h2 id="platforms">Platforms</h2>
-<p>CPUs, efficiency and performance cores
-GPUs, integrated and separate, accelerators within accelerators
-Data Center GPUs
-Multiple GPUs
-FPGAs
-Edge
-Cloud
-Neuromorphic - Not necromorphic</p>
+<p>When you decide you want to parallelize your application, you almost
+always have to consider the platform you will be running on. Do you
+expect to run it on users' laptops, will you have GPUs available,
+will it be running in a data center with powerful, very expensive
+GPUs, will you be using an integrated GPU on a laptop, will
+it run on the edge or in the cloud? I will assume you are running
+on your own laptop or desktop for following along, but running on
+multiple data center GPUs seems to be all the rage these days, so I will keep
+that in mind.</p>
 
   <hr>
 <div class="md-source-file">
@@ -1193,7 +1202,7 @@ Neuromorphic - Not necromorphic</p>
     
     
     
-    <a href="mailto:anders-soerensen@hotmail.com" target="_blank" rel="noopener" title="" class="md-social__link">
+    <a href="mailto:aboso@dtu.com" target="_blank" rel="noopener" title="" class="md-social__link">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m20 8-8 5-8-5V6l8 5 8-5m0-2H4c-1.11 0-2 .89-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Z"/></svg>
     </a>
   
