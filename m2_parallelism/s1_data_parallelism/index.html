@@ -9,17 +9,17 @@
       
       
       
-        <link rel="prev" href="../s5_channels/">
+        <link rel="prev" href="../s0_threads/">
       
       
-        <link rel="next" href="../s7_more_gpu/">
+        <link rel="next" href="../s2_mutex/">
       
       <link rel="icon" href="../../figures/nebula.png">
       <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
     
     
       
-        <title>S6 - Data Parallelism - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S1 - Data Parallelism - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#data-parallelism" class="md-skip">
+        <a href="#2-data-parallelism" class="md-skip">
           Skip to content
         </a>
       
@@ -116,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S6 - Data Parallelism
+              S1 - Data Parallelism
             
           </span>
         </div>
@@ -619,7 +619,7 @@
         
         
         <div class="md-nav__link md-nav__link--index ">
-          <a href="../">M2 - Concepts in Parallelism</a>
+          <a href="../">M2 - Parallelism</a>
           
             <label for="__nav_5">
               <span class="md-nav__icon md-icon"></span>
@@ -630,7 +630,7 @@
       <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
         <label class="md-nav__title" for="__nav_5">
           <span class="md-nav__icon md-icon"></span>
-          M2 - Concepts in Parallelism
+          M2 - Parallelism
         </label>
         <ul class="md-nav__list" data-md-scrollfix>
           
@@ -654,76 +654,6 @@
               
   
   
-  
-    <li class="md-nav__item">
-      <a href="../s1_async/" class="md-nav__link">
-        S1 - Async
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s2_events/" class="md-nav__link">
-        S2 - Events
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s3_mutex/" class="md-nav__link">
-        S3 - Mutex
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s4_atomic/" class="md-nav__link">
-        S4 - Atomic
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s5_channels/" class="md-nav__link">
-        S5 - Channels
-      </a>
-    </li>
-  
-
-            
-          
-            
-              
-  
-  
     
   
   
@@ -736,12 +666,12 @@
       
       
         <label class="md-nav__link md-nav__link--active" for="__toc">
-          S6 - Data Parallelism
+          S1 - Data Parallelism
           <span class="md-nav__icon md-icon"></span>
         </label>
       
       <a href="./" class="md-nav__link md-nav__link--active">
-        S6 - Data Parallelism
+        S1 - Data Parallelism
       </a>
       
         
@@ -773,10 +703,87 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#examples-with-rayon" class="md-nav__link">
+    Examples with Rayon
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s2_mutex/" class="md-nav__link">
+        S2 - Mutex
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3_atomic/" class="md-nav__link">
+        S3 - Atomic
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s4_message_passing/" class="md-nav__link">
+        S4 - Message Passing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s5_async/" class="md-nav__link">
+        S5 - Async
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s6_events/" class="md-nav__link">
+        S6 - Events
+      </a>
     </li>
   
 
@@ -858,7 +865,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../sX_exercises/" class="md-nav__link">
+      <a href="../sX_exercises.md" class="md-nav__link">
         S12 - 4️⃣ Exercises
       </a>
     </li>
@@ -1047,6 +1054,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#examples-with-rayon" class="md-nav__link">
+    Examples with Rayon
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1065,24 +1079,25 @@
   
 
 
-<h1 id="data-parallelism">Data Parallelism</h1>
-<p>Map on an array
-Mandelbrot</p>
+<h1 id="2-data-parallelism">2️⃣ Data Parallelism</h1>
+<p>Map on an array</p>
 <h2 id="non-work-stealing">Non-Work Stealing</h2>
-<p>Crossbeam</p>
+<p>https://github.com/ProgrammingRust/mandelbrot/</p>
 <h2 id="work-stealing">Work Stealing</h2>
-<p>Rayon</p>
+<p>Rayon
+Mandelbrot</p>
+<h2 id="examples-with-rayon">Examples with Rayon</h2>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 15, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 18, 2023</span>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 14, 2023</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 18, 2023</span>
       
     
   </small>
@@ -1108,7 +1123,7 @@ Mandelbrot</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../s5_channels/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S5 - Channels" rel="prev">
+          <a href="../s0_threads/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S0 - Threads" rel="prev">
             <div class="md-footer__button md-icon">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
             </div>
@@ -1117,20 +1132,20 @@ Mandelbrot</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                S5 - Channels
+                S0 - Threads
               </div>
             </div>
           </a>
         
         
           
-          <a href="../s7_more_gpu/" class="md-footer__link md-footer__link--next" aria-label="Next: S7 - 3️⃣ More GPU" rel="next">
+          <a href="../s2_mutex/" class="md-footer__link md-footer__link--next" aria-label="Next: S2 - Mutex" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S7 - 3️⃣ More GPU
+                S2 - Mutex
               </div>
             </div>
             <div class="md-footer__button md-icon">
