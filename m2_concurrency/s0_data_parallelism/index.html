@@ -1301,27 +1301,31 @@ for very uneven workloads like generating Mandelbrot images or path tracing. Aga
 way of doing parallelism in Rust, both because it is such a small change from idiomatic Rust (using iterators)
 and the cognitive load, if there is no communication between threads, is so very small.</p>
 <h2 id="a-parallel-iterator-benchmark">A Parallel Iterator Benchmark</h2>
+<p>You can find the code for this section in <code>src/m2_concurrency/code/data_parallelism</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/data_parallelism">online</a>.</p>
 <p>First we define our data, how many elements we want, and how many iterations we will iterate through
-the data to do our benchmarks.
+the data to do our benchmarks.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">element_count</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">10_000_000</span><span class="p">;</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">iteration_count</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="n">element_count</span><span class="p">).</span><span class="n">into_iter</span><span class="p">().</span><span class="n">map</span><span class="p">(</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f32</span><span class="p">).</span><span class="n">collect</span><span class="p">();</span>
 </span></code></pre></div>
-Now let's see what a non-iterator mapping of all the elements would look like.
+<p>Now let's see what a non-iterator mapping of all the elements would look like.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">iteration_count</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">            </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">3.14</span><span class="p">;</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">        </span><span class="p">}</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="p">}</span>
 </span></code></pre></div>
-A key difference with this approach compared to the other two is that we are ensured this mapping happens in-place.
-The iterator version is here -
+<p>A key difference with this approach compared to the other two is that we are ensured this mapping happens in-place.
+The iterator version is here -</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">iteration_count</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">        </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">iter</span><span class="p">().</span><span class="n">map</span><span class="p">(</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">3.14</span><span class="p">).</span><span class="n">collect</span><span class="p">();</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="p">}</span>
-</span></code></pre></div></p>
-<p>Once we have done this reformulation, Rayon is made to be a drop in replacement. We just import the needed Rayon prelude and replace <code>.iter()</code> with <code>.par_iter()</code> or <code>.into_iter()</code> with <code>.into_par_iter()</code>.</p>
+</span></code></pre></div>
+<p>Once we have done this reformulation, Rayon is made to be a drop in replacement. We just
+import the needed Rayon prelude and replace <code>.iter()</code> with <code>.par_iter()</code> or
+<code>.into_iter()</code> with <code>.into_par_iter()</code>.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">iteration_count</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">        </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">par_iter</span><span class="p">().</span><span class="n">map</span><span class="p">(</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="o">*</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">3.14</span><span class="p">).</span><span class="n">collect</span><span class="p">();</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="p">}</span>
@@ -1365,6 +1369,8 @@ and the <code>render()</code> <a href="https://github.com/absorensen/raytracing_
 <p>So, now that we can conclude that Rayon can be really good and easy to use for some things, let's move on
 to more explicitly define our own parallel system with, perhaps, longer running threads.</p>
 <h2 id="3-examples-with-rayon">3️⃣ Examples with Rayon</h2>
+<p>You can find the code for this section in <code>src/m2_concurrency/code/data_parallelism</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/data_parallelism">online</a>.</p>
 <p>Ok, so I made two additional examples. There's lots of different adaptors for iterators and I'll just show two.
 <code>.filter()</code> and <code>.window()</code>. If you go back to the file from earlier and change the bool in the
 main function to <code>true</code>, it should now run these two 3️⃣ benchmarks. First off let's look at the filter
@@ -1375,7 +1381,7 @@ using the following lines -</p>
 </span></code></pre></div>
 <p>If the random number generator used to generate the floats in <code>data</code> is completely uniform, every time we use
 this filter, the filter should emit half the elements. Then we just count the amount of elements emitted.
-The parallel version is very similar - </p>
+The parallel version is very similar -</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="w">    </span><span class="n">sums</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">par_iter</span><span class="p">().</span><span class="n">filter</span><span class="p">(</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="mf">0.5</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="o">**</span><span class="n">x</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kc">true</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kc">false</span><span class="w"> </span><span class="p">}).</span><span class="n">count</span><span class="p">();</span>
 </span></code></pre></div>
 <p>If we run this benchmark we get the following -</p>
