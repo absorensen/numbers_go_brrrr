@@ -1292,7 +1292,7 @@
 <a href="https://github.com/ProgrammingRust/mandelbrot/">Mandelbrot</a> image generation.
 If you don't know about the Mandelbrot image, you can see what that's all about
 <a href="https://www.co-pylit.org/courses/cosc1337/lectures/17-Complex-Numbers/02-mandelbrot-math.html">here</a>!
-Ok, so I will start off talking about the parallel part of things. First off, lets look at 
+Ok, so I will start off talking about the parallel part of things. First off, lets look at
 <a href="https://github.com/rayon-rs/rayon">Rayon</a>, which is the easiest way of doing parallelism in Rust.</p>
 <p>To use Rayon, we just have to formulate our computations as iterators. Under the hood Rayon divvies up the work
 into chunks and distributes it to a fitting amount of threads. It also does something called work stealing where if
