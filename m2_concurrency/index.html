@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.1">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.3">
     
     
       
@@ -1222,6 +1222,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#rust-and-concurrency" class="md-nav__link">
+    Rust and Concurrency
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1316,7 +1323,7 @@ performed siginifcantly better for some types of algorithms on the GPU.</p>
 asking yourself, where is this going to run and how is the memory
 accessed in order to accomplish what I want to do?</p>
 <h2 id="here-be-dragons">Here Be Dragons</h2>
-<p>Some of the things you have to get used to when parallel programming is
+<p>Some of the things you have to get used to in concurrency programming is
 the sudden lack of serialized interactions. Thread 1 won't necessarily
 execute before thread 8, and the way you debug and verify your code
 will have to take that into account.</p>
@@ -1338,13 +1345,24 @@ it run on the edge or in the cloud? I will assume you are running
 on your own laptop or desktop for following along, but running on
 multiple data center GPUs seems to be all the rage these days, so I will keep
 that in mind.</p>
+<h2 id="rust-and-concurrency">Rust and Concurrency</h2>
+<p>Each language has its own implementations of concepts in concurrency, but I will focus on showing you the ones
+in Rust and wgsl. All of them exist in other languages, but some may for example be more ergonomic to work with
+for concepts like <code>async</code> or <code>channels</code>. What the other languages do not have is the borrow checker to
+ensure the validity of your code. Often this results in parallelized Rust code looking or feeling slightl
+different, as the borrow checker forces you down a certain path. Also Rust has traits, such as <code>Send</code>
+and <code>Sync</code>, but these are specific to Rust and I have tried to avoid getting too far into traits,
+so I won't be explaining them. If interested you are most welcome to read about them
+<a href="https://doc.rust-lang.org/nomicon/send-and-sync.html">here</a>.
+This is mostly relevant if implementing your own types which need to be shared by threads. In most
+cases, <code>Send</code> and <code>Sync</code> are automatically derived.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 22, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 23, 2023</span>
       
         <br>
         Created:

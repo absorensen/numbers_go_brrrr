@@ -204,7 +204,7 @@ fn main() {
     let benchmark_level_3: bool = true;
     if benchmark_level_3 {
         let element_count: usize = 10_000_000;
-        let iteration_count: usize = 100;
+        let iteration_count: usize = 10;
         let thread_count: u32 = 8;
 
         println!("RUNNING LEVEL 3");
@@ -214,7 +214,7 @@ fn main() {
         println!("");
         println!("");
     } else {
-        let thread_count: u32 = 8;
+        let thread_count: u32 = 16;
         let repetition_count: u32 = 3;
         let wait_time: u64 = 40;
 
