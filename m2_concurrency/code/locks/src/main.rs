@@ -1,4 +1,4 @@
-use std::{thread::{self, JoinHandle}, time::{Duration, Instant}};
+use std::{time::{Duration, Instant}, sync::{Mutex, Arc}};
 use itertools::Itertools;
 use rayon::prelude::{ParallelIterator, IntoParallelRefMutIterator, IndexedParallelIterator, IntoParallelRefIterator};
 
@@ -40,73 +40,11 @@ fn fine_double_function(input: &f32, output: &mut f32) {
     *output = 2.0 * *input;
 }
 
-fn print_thread(name: String, repetition_count: u32, wait_time: u64) {
-    for repetition in 0..repetition_count {
-        println!("Thread {} Print {}", name, repetition);
-        thread::sleep(Duration::from_millis(wait_time));
-    }
-}
-
-fn basic_threading(thread_count: u32, repetition_count: u32, wait_time: u64) {
-    for thread_index in 0..thread_count {
-        // We get access from use std::thread
-        // The closure arguments ( || ) are for
-        // moving any variables to be owned by this
-        // thread.
-        // Note the function after the ||.
-        // This can get out of hand fairly quickly
-        // so I'm just gonna call a function from
-        // here.
-        thread::spawn(move || {
-            print_thread(thread_index.to_string(), repetition_count, wait_time);
-        });
-        // All the threads we just launched, will exist until
-        // the main thread is terminated. This will happen
-        // when the entire program ends. We haven't determined
-        // a way to stop the threads yet.
-    }
-
-    print_thread("MAIN".to_string(), repetition_count, wait_time);
-}
-
-fn basic_threading_with_termination(thread_count: u32, repetition_count: u32, wait_time: u64) {
-    let mut handles: Vec<JoinHandle<()>> = vec![];
-    for thread_index in 0..thread_count {
-        handles.push(thread::spawn(move || {
-            print_thread(thread_index.to_string(), repetition_count, wait_time);
-        }));
-    }
-
-    print_thread("MAIN".to_string(), repetition_count, wait_time);
-
-    // Wait until each thread has completed its tasks
-    for handle in handles {
-        handle.join().unwrap();
-    }
-}
-
-fn basic_threading_with_scope(thread_count: u32, repetition_count: u32, wait_time: u64) {
-    crossbeam::scope(|spawner| {
-        for thread_index in 0..thread_count {
-            spawner.spawn(move |_| {
-                print_thread(thread_index.to_string(), repetition_count, wait_time);
-            });
-        }
-    }).unwrap();
-    
-    // Note that the MAIN print does not happen until
-    // the very end, because now we effectively have joins
-    // on every thread at the end of crossbeam::scope's
-    // scope.
-    print_thread("MAIN".to_string(), repetition_count, wait_time);
-}
-
-fn crossbeam(element_count: usize, iteration_count: usize, thread_count: u32) {
+fn crossbeam(element_count: usize, thread_count: usize, chunk_size: usize, iteration_count: usize) {
     let input: Vec<f32> = (0..element_count).into_iter().map(|x| x as f32).collect();
     let mut output: Vec<f32> = (0..element_count).into_iter().map(|_| 0.0 ).collect();
     let fine_input: Vec<f32> = (0..element_count).into_iter().map(|x| x as f32).collect();
     let mut fine_output: Vec<f32> = (0..element_count).into_iter().map(|_| 0.0 ).collect();
-    let chunk_size: usize = element_count / thread_count as usize;
 
     let input_chunks: Vec<&[f32]> = input.chunks(chunk_size).collect_vec();
     let output_chunks: Vec<&mut [f32]> = output.chunks_mut(chunk_size).collect_vec();
@@ -157,6 +95,38 @@ fn crossbeam(element_count: usize, iteration_count: usize, thread_count: u32) {
     let elapsed_time: Duration = now.elapsed();
     println!("{} ms for crossbeam double function", elapsed_time.as_millis() as f64);
 
+    {
+        let mut total_time: u128 = 0;
+        let now: Instant = Instant::now();
+        for _ in 0..iteration_count {
+            let task_queue = Arc::new(Mutex::new(zipped_chunks.iter_mut()));
+            let iteration_now: Instant = Instant::now();
+            crossbeam::scope(|spawner| {
+                for _ in 0..thread_count {
+                    let task_queue_handle = Arc::clone(&task_queue);
+                    spawner.spawn(move |_| {
+                        loop {
+                            match {
+                                let mut data: std::sync::MutexGuard<'_, std::slice::IterMut<'_, (&[f32], &mut [f32])>> = task_queue_handle.lock().unwrap();
+                                data.next()
+                            }
+                            {
+                                None => { return; }
+                                Some((input_chunk, output_chunk)) => {
+                                    double_function(input_chunk, output_chunk);
+                                }
+                            }
+                        }
+                    });
+                }
+            }).unwrap();
+            total_time += iteration_now.elapsed().as_millis();
+        }
+        let elapsed_time: Duration = now.elapsed();
+        println!("{} ms for crossbeam task queue double function", elapsed_time.as_millis() as f64);
+        println!("{} ms for crossbeam task queue double function when discounting queue creation", total_time as f64);
+        println!("");
+    }
 
 
     //
@@ -198,43 +168,50 @@ fn crossbeam(element_count: usize, iteration_count: usize, thread_count: u32) {
     }
     let elapsed_time: Duration = now.elapsed();
     println!("{} ms for crossbeam map function", elapsed_time.as_millis() as f64);
+
+    {
+        let mut total_time: u128 = 0;
+        let now: Instant = Instant::now();
+        for _ in 0..iteration_count {
+            let task_queue = Arc::new(Mutex::new(zipped_chunks.iter_mut()));
+            let iteration_now: Instant = Instant::now();
+            crossbeam::scope(|spawner| {
+                for _ in 0..thread_count {
+                    let task_queue_handle = Arc::clone(&task_queue);
+                    spawner.spawn(move |_| {
+                        loop {
+                            match {
+                                let mut data: std::sync::MutexGuard<'_, std::slice::IterMut<'_, (&[f32], &mut [f32])>> = task_queue_handle.lock().unwrap();
+                                data.next()
+                            }
+                            {
+                                None => { return; }
+                                Some((input_chunk, output_chunk)) => {
+                                    map_function(input_chunk, output_chunk);
+                                }
+                            }
+                        }
+                    });
+                }
+            }).unwrap();
+            total_time += iteration_now.elapsed().as_millis();
+        }
+        let elapsed_time: Duration = now.elapsed();
+        println!("{} ms for crossbeam task queue map function", elapsed_time.as_millis() as f64);
+        println!("{} ms for crossbeam task queue map function when discounting queue creation", total_time as f64);
+        println!("");
+    }
 }
 
 fn main() {
-    let benchmark_level_3: bool = true;
-    if benchmark_level_3 {
-        let element_count: usize = 10_000_000;
-        let iteration_count: usize = 10;
-        let thread_count: u32 = 8;
+    let element_count: usize = 10_000_000;
+    let iteration_count: usize = 10;
+    let thread_count: usize = 8;
+    let chunk_size: usize = element_count / (thread_count * 32);
 
-        println!("RUNNING LEVEL 3");
-        println!("Crossbeam Chunking and Scope:");
-        println!("================");
-        crossbeam(element_count, iteration_count, thread_count);
-        println!("");
-        println!("");
-    } else {
-        let thread_count: u32 = 16;
-        let repetition_count: u32 = 3;
-        let wait_time: u64 = 40;
-
-        println!("RUNNING LEVEL 2");
-        println!("Basic Threading:");
-        println!("================");
-        basic_threading(thread_count, repetition_count, wait_time);
-        println!("");
-        println!("");
-
-        println!("Basic Threading with Termination:");
-        println!("=================================");
-        basic_threading_with_termination(thread_count, repetition_count, wait_time);
-        println!("");
-        println!("");
-
-        println!("Basic Threading with Scope:");
-        println!("===========================");
-        basic_threading_with_scope(thread_count, repetition_count, wait_time);
-        println!("");
-        println!("");
-    }
+    println!("Crossbeam Task Queue:");
+    println!("================");
+    crossbeam(element_count, thread_count, chunk_size, iteration_count);
+    println!("");
+    println!("");
 }
