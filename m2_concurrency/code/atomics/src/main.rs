@@ -1,4 +1,4 @@
-use std::{time::{Duration, Instant}, sync::{Mutex, Arc}};
+use std::{time::{Duration, Instant}, sync::{Mutex, Arc, atomic::AtomicUsize}, cell::RefCell};
 use itertools::Itertools;
 use rayon::prelude::{ParallelIterator, IntoParallelRefMutIterator, IndexedParallelIterator, IntoParallelRefIterator};
 
@@ -125,8 +125,35 @@ fn crossbeam(element_count: usize, thread_count: usize, chunk_size: usize, itera
         let elapsed_time: Duration = now.elapsed();
         println!("{} ms for crossbeam task queue", elapsed_time.as_millis() as f64);
         println!("{} ms for crossbeam task queue when discounting queue creation", total_time as f64);
-        println!("");
     }
+
+    use atomic_chunks_mut::AtomicChunksMut;
+    {
+        let index: Arc<AtomicUsize> = Arc::new(AtomicUsize::new(0));
+        let chunk_count: usize = zipped_chunks.len();
+        let chunk_handle: Arc<_> = Arc::new(AtomicRefCell::new(zipped_chunks));
+        let now: Instant = Instant::now();
+        for _ in 0..iteration_count {
+            crossbeam::scope(|spawner| {
+                for _ in 0..thread_count {
+                    let index_handle: Arc<AtomicUsize> = Arc::clone(&index);
+                    let chunk_handle: Arc<_> = Arc::clone(&chunk_handle);
+                    spawner.spawn(move |_| {
+                        loop {
+                            let current_index: usize = index_handle.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                            if chunk_count <= current_index { return; }
+                            let chunk = { chunk_handle.borrow_mut()[current_index] };
+                            double_function(chunk.0, chunk.1);
+                        }
+                    });
+                }
+            }).unwrap();
+        }
+        let elapsed_time: Duration = now.elapsed();
+        println!("{} ms for crossbeam atomic chunks", elapsed_time.as_millis() as f64);
+    }
+
+    println!("");
 
 
     //
@@ -198,9 +225,30 @@ fn crossbeam(element_count: usize, thread_count: usize, chunk_size: usize, itera
         }
         let elapsed_time: Duration = now.elapsed();
         println!("{} ms for crossbeam task queue", elapsed_time.as_millis() as f64);
-        println!("{} ms for crossbeam task queue when discounting queue creation", total_time as f64);
-        println!("");
+        println!("{} ms for crossbeam task queue when discounting queue creation", total_time as f64);        
     }
+
+    {
+        let mut total_time: u128 = 0;
+        let now: Instant = Instant::now();
+        for _ in 0..iteration_count {
+            let atomic_chunks = AtomicChunksMut::new(zipped_chunks.as_mut_slice(), 1);
+            let iteration_now: Instant = Instant::now();
+            crossbeam::scope(|spawner| {
+                for (_, chunk) in &atomic_chunks {
+                    spawner.spawn(move |_| {
+                        map_function(chunk[0].0, chunk[0].1);
+                    });
+                }
+            }).unwrap();
+            total_time += iteration_now.elapsed().as_millis();
+        }
+        let _elapsed_time: Duration = now.elapsed();
+        println!("{} ms for crossbeam atomic chunks", total_time as f64);
+    }
+
+    println!("");
+
 }
 
 fn main() {
