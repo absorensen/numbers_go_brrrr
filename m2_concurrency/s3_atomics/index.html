@@ -1322,7 +1322,7 @@ mutex, it is quite fast. You can even use atomics in GPU programming. One tricky
 your language supports atomics, but your hardware doesn't. In that case the atomic operation will
 be emulated in software which will make your code inexplicably slower.</p>
 <p>First off, let's look at the concept of memory ordering. Afterwards I'll describe a few different
-atomic functions you can use, and then finally look at what atomics are like in WGSL. </p>
+atomic functions you can use, and then finally look at what atomics are like in WGSL.</p>
 <p>Anyways, memory ordering.</p>
 <p>Various hardware platforms have different types of support for atomics. If we for
 example had a counter variable, it could for example be used to sum an array, we could make sure that
