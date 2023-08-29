@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.3">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.5">
     
     
       
@@ -1311,7 +1311,7 @@
 
 
 <h1 id="2-atomics">2️⃣ Atomics</h1>
-<p>Ok, so if a mutex is a horse, an atomic is a pony. It is a lot smaller. This is usually a good thing!
+<p>If a mutex is a horse, an atomic is a pony. It is a lot smaller. This is usually a good thing!
 The smaller a region serialized through synchronization, the more potential concurrency we can have
 and the less likely things will go wrong. So what is an atomic?</p>
 <p>Atomic operations are a special kind of very small lock. Atomics are specific to certain data types
@@ -1322,8 +1322,9 @@ mutex, it is quite fast. You can even use atomics in GPU programming. One tricky
 your language supports atomics, but your hardware doesn't. In that case the atomic operation will
 be emulated in software which will make your code inexplicably slower.</p>
 <p>First off, let's look at the concept of memory ordering. Afterwards I'll describe a few different
-atomic functions you can use, and then finally look at what atomics are like in WGSL. Anyways,
-memory ordering. Various hardware platforms have different types of support for atomics. If we for
+atomic functions you can use, and then finally look at what atomics are like in WGSL. </p>
+<p>Anyways, memory ordering.</p>
+<p>Various hardware platforms have different types of support for atomics. If we for
 example had a counter variable, it could for example be used to sum an array, we could make sure that
 the sum was correct while still being manipulated and accessed in a multithreaded setting by placing
 the counter inside an atomic. The nature of how the counter is incremented is then dictated by the
@@ -1332,7 +1333,7 @@ memory ordering.</p>
 different orderings. We'll look at three different types, sequentially consistent, acquire-release
 and relaxed. With sequentially consistent ordering, we can have certain guarantees in terms of which
 thread is getting to read and write to the atomic variable in which order. This is likely to be
-the most expensive ordering, but also likely to be the most correct.</p>
+the most expensive ordering, but also likely to be the most consistent.</p>
 <p>Acquire-release is a paired ordering. It is especially good for implementing locks with atomics.
 If you used a bool or an integer (you could store which number thread currently holds the lock),
 inside an atomic you could implement a lock for a critical section which could be acquired
@@ -1352,8 +1353,8 @@ operations. Try and read through them. In practice you would share the atomic va
 by wrapping it with an <code>Arc&lt;Atomic...&gt;</code> and cloning the <code>Arc</code>.</p>
 <p>WGSL, the language used to make GPU programs in this guide, only supports <code>atomic&lt;T&gt;</code> where <code>T</code>
 is either <code>i32</code> or <code>u32</code>. All atomic functions have <code>relaxed</code> memory ordering. It's really
-good for things like reduction operations. Once each warp has a local result computed, they can
-compare results, or add, across warps through a global atomic variable. You can check out which
+good for things like reduction operations. Once each work group has a local result computed, they can
+compare results, or add, across work groups through a global atomic variable. You can check out which
 functions are available, which is a bit more limited compared to what was available in Rust,
 <a href="https://www.w3.org/TR/WGSL/#atomic-builtin-functions">here</a>.</p>
 <h2 id="3-lock-free-algorithms">3️⃣ Lock Free Algorithms</h2>
@@ -1366,8 +1367,31 @@ the same time, but no locks have to be acquired. But this way of using atomics t
 from an array is made possible with all these functions which don't just swap, compare or fetch, but also
 do one more thing. We can increment and fetch to get our new data chunk!</p>
 <h2 id="3-crossbeam-and-atomics">3️⃣ Crossbeam and Atomics</h2>
-<p>Back to the storyline! Hmm, can't do what I thought I could in Rust with this, so I might get back
-to continuing the crossbeam stuff once I figure out how to solve it with atomics.</p>
+<p>Back to the storyline! Once again, go back to <code>m2_concurrency::code::parallelism</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">online</a>.
+Set the <code>crossbeam_atomic_chunks</code> flag to true.</p>
+<p>So, I pulled in the <code>atomic_chunks_mut</code> crate from the mandelbrot example you will see later.
+It is a chunks iterator which uses atomics to increment an index. This allows each thread, whenever
+asking for a new chunk to increment the current index and get the last index value. This is now
+that threads data chunk. Thus we do almost the same as the one with mutex, but with an atomic
+and an index.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/atomics_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/atomics_benchmark.png" width="800" /></a></p>
+<figcaption>
+Crossbeam with an atomic chunk queue.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+<p>As you can see, the <code>crossbeam scope</code> section still performs terribly since we are launching 257 threads with
+a chunk of data each. And while we can get good performance from the atomic chunks, the lower synchronization cost
+doesn't make much of a difference with the bigger chunk size. For my money, I would say that the best return on
+investment for your time, is probably experimenting with running either a fine-grained or a coarse-grained
+Rayon accelerated iterator. The performance is closer to self-tuning and you have less of a headache worrying
+about synchronization and ownership. You should of course always benchmark and use your own reasoning as to when
+you need to optimize this.</p>
+<p>Regardless, you should still try to benchmark different scenarios by changing the
+values in <code>main()</code>. Try to reason about the performance differences!</p>
 <h2 id="5-further-reading">5️⃣ Further Reading</h2>
 <p>If you would like to learn more about atomics I can recommend you read about atomics and reordering in the
 <a href="https://doc.rust-lang.org/nomicon/atomics.html">Rustonomicon</a> or in the
@@ -1381,7 +1405,7 @@ and <a href="https://www.cs.cmu.edu/~410-s05/lectures/L31_LockFree.pdf">here</a>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 25, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 29, 2023</span>
       
         <br>
         Created:

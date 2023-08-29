@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.3">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.5">
     
     
       
@@ -1318,11 +1318,12 @@ has acquired a lock it is free to act inside the critical region guarded by the 
 is finished it should release the lock. If this fails to happen, the threads who are waiting
 to acquire said lock will continue to wait indefinitely. If the thread currently holding the lock
 is stuck waiting to acquire a different lock, which it also won't ever acquire, one or more threads
-will be in a deadlock.</p>
+will be in a <code>deadlock</code>.</p>
 <p>Any time we use a lock around a small piece of data or any kind of region, we incur a cost. Both in
 terms of allocating more memory, but also in terms of all of the time spent waiting to acquire and
 release locks. A lock is effectively a serialization of a region of code. Think back to Amdahl's
-law. The more threads are vying for a lock the more lock contention in your code. This is of course
+law.</p>
+<p>The more threads are vying for a lock the more lock contention in your code. This is of course
 at odds with the lock overhead. The more locks, the more overhead, but the lower the contention.
 Dependencies between locks, like a thread needing to hold more than a single lock at a time,
 increases the chance of incurring a deadlock.</p>
@@ -1333,52 +1334,50 @@ reconsider. Be absolutely sure that that is what you need, and if you do, you ne
 thinking about how to implement it and you need to minimize your exposure by minimizing the regions where locks
 are used.</p>
 <h2 id="locks-in-rust">Locks in Rust</h2>
-<p>Rust does have various locks as part of the standard library and I'll very briefly go through a few examples.
-But again, if you can not use locks, try not to use locks. I tried to come up with my own explanation for
-locks in Rust, but this page from <a href="https://doc.rust-lang.org/book/ch16-03-shared-state.html">The Book</a>
-is quite good.</p>
+<p>I tried to come up with my own explanation for locks in Rust, but this page
+from <a href="https://doc.rust-lang.org/book/ch16-03-shared-state.html">The Book</a> is quite good.</p>
 <h2 id="3-work-queue">3️⃣ Work Queue</h2>
 <p>So let's try to go back to how we could improve the performance of crossbeam when splitting our data
 into chunks and having threads work on a chunk each. This time we will use a mutex to create
 a <a href="https://github.com/ProgrammingRust/mandelbrot/blob/task-queue/src/main.rs">task queue</a>.</p>
-<p>You can find the code in <code>m2_concurrency::code::locks</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/locks">online</a>.</p>
+<p>You can find the code in <code>m2_concurrency::code::parallelism</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">online</a>.</p>
+<p>This time you need to set the flag <code>crossbeam_task_queue</code> to true.</p>
 <p>As you can see, the two added functions have gotten <em>slightly</em> more complex -</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="p">{</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">total_time</span>: <span class="kt">u128</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">iteration_count</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">task_queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arc</span>::<span class="n">new</span><span class="p">(</span><span class="n">Mutex</span>::<span class="n">new</span><span class="p">(</span><span class="n">zipped_chunks</span><span class="p">.</span><span class="n">iter_mut</span><span class="p">()));</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">iteration_now</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">        </span><span class="n">crossbeam</span>::<span class="n">scope</span><span class="p">(</span><span class="o">|</span><span class="n">spawner</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">            </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">thread_count</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">                </span><span class="kd">let</span><span class="w"> </span><span class="n">task_queue_handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arc</span>::<span class="n">clone</span><span class="p">(</span><span class="o">&amp;</span><span class="n">task_queue</span><span class="p">);</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">                </span><span class="n">spawner</span><span class="p">.</span><span class="n">spawn</span><span class="p">(</span><span class="k">move</span><span class="w"> </span><span class="o">|</span><span class="n">_</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">                    </span><span class="k">loop</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">                        </span><span class="k">match</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">                            </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nc">std</span>::<span class="n">sync</span>::<span class="n">MutexGuard</span><span class="o">&lt;&#39;</span><span class="nb">_</span><span class="p">,</span><span class="w"> </span><span class="n">std</span>::<span class="n">slice</span>::<span class="n">IterMut</span><span class="o">&lt;&#39;</span><span class="nb">_</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="o">&amp;</span><span class="p">[</span><span class="kt">f32</span><span class="p">],</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="p">[</span><span class="kt">f32</span><span class="p">])</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">task_queue_handle</span><span class="p">.</span><span class="n">lock</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">                            </span><span class="n">data</span><span class="p">.</span><span class="n">next</span><span class="p">()</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">                        </span><span class="p">}</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">                        </span><span class="p">{</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">                            </span><span class="nb">None</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">                            </span><span class="nb">Some</span><span class="p">((</span><span class="n">input_chunk</span><span class="p">,</span><span class="w"> </span><span class="n">output_chunk</span><span class="p">))</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">                                </span><span class="n">map_function</span><span class="p">(</span><span class="n">input_chunk</span><span class="p">,</span><span class="w"> </span><span class="n">output_chunk</span><span class="p">);</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">                            </span><span class="p">}</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">                        </span><span class="p">}</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">                    </span><span class="p">}</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">                </span><span class="p">});</span>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">            </span><span class="p">}</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">        </span><span class="p">}).</span><span class="n">unwrap</span><span class="p">();</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">        </span><span class="n">total_time</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">iteration_now</span><span class="p">.</span><span class="n">elapsed</span><span class="p">().</span><span class="n">as_millis</span><span class="p">();</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{} ms for crossbeam task queue map function&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time</span><span class="p">.</span><span class="n">as_millis</span><span class="p">()</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f64</span><span class="p">);</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{} ms for crossbeam task queue map function when discounting queue creation&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">total_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f64</span><span class="p">);</span>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;&quot;</span><span class="p">);</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a><span class="p">}</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">total_time</span>: <span class="kt">u128</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">now</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">iteration_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">task_queue</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arc</span>::<span class="n">new</span><span class="p">(</span><span class="n">Mutex</span>::<span class="n">new</span><span class="p">(</span><span class="n">data_chunks</span><span class="p">.</span><span class="n">iter_mut</span><span class="p">()));</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">iteration_now</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">            </span><span class="n">crossbeam</span>::<span class="n">scope</span><span class="p">(</span><span class="o">|</span><span class="n">spawner</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">                </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">thread_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">                    </span><span class="kd">let</span><span class="w"> </span><span class="n">task_queue_handle</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Arc</span>::<span class="n">clone</span><span class="p">(</span><span class="o">&amp;</span><span class="n">task_queue</span><span class="p">);</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="w">                    </span><span class="n">spawner</span><span class="p">.</span><span class="n">spawn</span><span class="p">(</span><span class="k">move</span><span class="w"> </span><span class="o">|</span><span class="n">_</span><span class="o">|</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">                        </span><span class="k">loop</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">                            </span><span class="k">match</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">                                </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">task_queue_handle</span><span class="p">.</span><span class="n">lock</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">                                </span><span class="n">data</span><span class="p">.</span><span class="n">next</span><span class="p">()</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">                            </span><span class="p">}</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">                            </span><span class="p">{</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">                                </span><span class="nb">None</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">                                </span><span class="nb">Some</span><span class="p">(</span><span class="n">data_chunk</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">                                    </span><span class="n">map_function</span><span class="p">(</span><span class="n">data_chunk</span><span class="p">);</span>
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">                                </span><span class="p">}</span>
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="w">                            </span><span class="p">}</span>
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a><span class="w">                        </span><span class="p">}</span>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a><span class="w">                    </span><span class="p">});</span>
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a><span class="w">                </span><span class="p">}</span>
+</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a><span class="w">            </span><span class="p">}).</span><span class="n">unwrap</span><span class="p">();</span>
+</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a><span class="w">            </span><span class="n">total_time</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">iteration_now</span><span class="p">.</span><span class="n">elapsed</span><span class="p">().</span><span class="n">as_millis</span><span class="p">();</span>
+</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{} ms for crossbeam task queue&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time</span><span class="p">.</span><span class="n">as_millis</span><span class="p">()</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f64</span><span class="p">);</span>
+</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{} ms for crossbeam task queue when discounting queue creation&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">total_time</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f64</span><span class="p">);</span>
+</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>This time around we are making a task queue, a task queue which will be emptied with every iteration.
-The task queue, is an Arc (to share this betweem threads) wrapped around a mutex (to allow us write access)
+<p>This time around we are making a task queue. This task queue will be emptied every iteration.
+The task queue, is an Arc (to share this between threads) wrapped around a mutex (to allow us write access)
 wrapped around a mutable iterator to allow us to go through the list of tasks. We are using
 iterations to better benchmark the function. To accomodate this I recreate <code>task_queue</code> every iteration. To
 showcase the effect of this I also added a timing specifically without the extra cost of the recreating the
@@ -1387,28 +1386,27 @@ you should be familiar with by now. Inside the scope we give each launched threa
 queue. Once the thread has spawned, each thread will continuously try to get another piece of data to
 work on, by acquiring the lock. Note that once the thread has acquired the lock and returned the next element
 from the iterator, the lock is released by the scope ending.
-If the iterator is empty the thread will jump out of the loop.
-Note that I added another parameter to launch the benchmark, thus decoupling chunk size from thread count.</p>
+If the iterator is empty the thread will jump out of the loop.</p>
 <p>Now let's look at a benchmark.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/locks_task_queue.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/locks_task_queue.png" width="800" /></a></p>
 <figcaption>
-Crossbeam with a mutex around a task queue. Element count was 10.000.000, iteration count was 10, thread count was 8
-and chunk size was element count / (thread count * 32).
+Crossbeam with a mutex around a task queue.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
 <p>As you can see there is a cost to recreating the task queue every iteration (the difference between the last two lines)
-and we now approach the non-fine grained Rayon performance. Try to play around with the four values in the main
-function to better understand when which solution is best.</p>
+and we now approach the non-fine grained Rayon performance. If we hand tune the parameters for the crossbeam task queue,
+we might be able to get closer to the coarse-grained Rayon performance. Try to play around with the four values in the main
+function to better understand when which solution is best under which conditions.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 25, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 29, 2023</span>
       
         <br>
         Created:

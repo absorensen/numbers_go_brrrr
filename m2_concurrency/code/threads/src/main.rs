@@ -101,140 +101,26 @@ fn basic_threading_with_scope(thread_count: u32, repetition_count: u32, wait_tim
     print_thread("MAIN".to_string(), repetition_count, wait_time);
 }
 
-fn crossbeam(element_count: usize, iteration_count: usize, thread_count: u32) {
-    let input: Vec<f32> = (0..element_count).into_iter().map(|x| x as f32).collect();
-    let mut output: Vec<f32> = (0..element_count).into_iter().map(|_| 0.0 ).collect();
-    let fine_input: Vec<f32> = (0..element_count).into_iter().map(|x| x as f32).collect();
-    let mut fine_output: Vec<f32> = (0..element_count).into_iter().map(|_| 0.0 ).collect();
-    let chunk_size: usize = element_count / thread_count as usize;
-
-    let input_chunks: Vec<&[f32]> = input.chunks(chunk_size).collect_vec();
-    let output_chunks: Vec<&mut [f32]> = output.chunks_mut(chunk_size).collect_vec();
-
-    let mut zipped_chunks: Vec<(&[f32], &mut [f32])> = input_chunks.into_iter().zip(output_chunks).collect_vec();
-
-
-    //
-    // Double Function
-    //
-
-    let now: Instant = Instant::now();
-    for _ in 0..iteration_count {
-        for (input_chunk, output_chunk) in &mut zipped_chunks {
-                double_function(input_chunk, output_chunk);
-        }
-    }
-    let elapsed_time: Duration = now.elapsed();
-    println!("{} ms for single threaded double function", elapsed_time.as_millis() as f64);
-
-
-    let now: Instant = Instant::now();
-    for _ in 0..iteration_count {
-        let result: () = zipped_chunks.par_iter_mut().map(|(input_chunk, output_chunk)| double_function(input_chunk, output_chunk) ).collect();
-    }
-    let elapsed_time: Duration = now.elapsed();
-    println!("{} ms for rayon double function", elapsed_time.as_millis() as f64);
-
-
-    let now: Instant = Instant::now();
-    for _ in 0..iteration_count {
-        let result: () = fine_input.par_iter().zip(&mut fine_output).map(|(input, output)| fine_double_function(input, output) ).collect();
-    }
-    let elapsed_time: Duration = now.elapsed();
-    println!("{} ms for fine-grained rayon double function", elapsed_time.as_millis() as f64);
-
-
-    let now: Instant = Instant::now();
-    for _ in 0..iteration_count {
-        crossbeam::scope(|spawner| {
-            for (input_chunk, output_chunk) in &mut zipped_chunks {
-                spawner.spawn(move |_| {
-                    double_function(input_chunk, output_chunk);
-                });
-            }
-        }).unwrap();
-    }
-    let elapsed_time: Duration = now.elapsed();
-    println!("{} ms for crossbeam double function", elapsed_time.as_millis() as f64);
-
-
-
-    //
-    // Map Function
-    //
-
-    let now: Instant = Instant::now();
-    for _ in 0..iteration_count {
-        for (input_chunk, output_chunk) in &mut zipped_chunks {
-                map_function(input_chunk, output_chunk);
-        }
-    }
-    let elapsed_time: Duration = now.elapsed();
-    println!("{} ms for single threaded map function", elapsed_time.as_millis() as f64);
-
-    let now: Instant = Instant::now();
-    for _ in 0..iteration_count {
-        let result: () = zipped_chunks.par_iter_mut().map(|(input_chunk, output_chunk)| map_function(input_chunk, output_chunk) ).collect();
-    }
-    let elapsed_time: Duration = now.elapsed();
-    println!("{} ms for rayon map function", elapsed_time.as_millis() as f64);
-
-    let now: Instant = Instant::now();
-    for _ in 0..iteration_count {
-        let result: () = fine_input.par_iter().zip(&mut fine_output).map(|(input, output)| fine_map_function(input, output) ).collect();
-    }
-    let elapsed_time: Duration = now.elapsed();
-    println!("{} ms for fine-grained rayon double function", elapsed_time.as_millis() as f64);
-
-    let now: Instant = Instant::now();
-    for _ in 0..iteration_count {
-        crossbeam::scope(|spawner| {
-            for (input_chunk, output_chunk) in &mut zipped_chunks {
-                spawner.spawn(move |_| {
-                    map_function(input_chunk, output_chunk);
-                });
-            }
-        }).unwrap();
-    }
-    let elapsed_time: Duration = now.elapsed();
-    println!("{} ms for crossbeam map function", elapsed_time.as_millis() as f64);
-}
-
 fn main() {
-    let benchmark_level_3: bool = true;
-    if benchmark_level_3 {
-        let element_count: usize = 10_000_000;
-        let iteration_count: usize = 100;
-        let thread_count: u32 = 8;
+    let thread_count: u32 = 8;
+    let repetition_count: u32 = 3;
+    let wait_time: u64 = 40;
 
-        println!("RUNNING LEVEL 3");
-        println!("Crossbeam Chunking and Scope:");
-        println!("================");
-        crossbeam(element_count, iteration_count, thread_count);
-        println!("");
-        println!("");
-    } else {
-        let thread_count: u32 = 8;
-        let repetition_count: u32 = 3;
-        let wait_time: u64 = 40;
+    println!("Basic Threading:");
+    println!("================");
+    basic_threading(thread_count, repetition_count, wait_time);
+    println!("");
+    println!("");
 
-        println!("RUNNING LEVEL 2");
-        println!("Basic Threading:");
-        println!("================");
-        basic_threading(thread_count, repetition_count, wait_time);
-        println!("");
-        println!("");
+    println!("Basic Threading with Termination:");
+    println!("=================================");
+    basic_threading_with_termination(thread_count, repetition_count, wait_time);
+    println!("");
+    println!("");
 
-        println!("Basic Threading with Termination:");
-        println!("=================================");
-        basic_threading_with_termination(thread_count, repetition_count, wait_time);
-        println!("");
-        println!("");
-
-        println!("Basic Threading with Scope:");
-        println!("===========================");
-        basic_threading_with_scope(thread_count, repetition_count, wait_time);
-        println!("");
-        println!("");
-    }
+    println!("Basic Threading with Scope:");
+    println!("===========================");
+    basic_threading_with_scope(thread_count, repetition_count, wait_time);
+    println!("");
+    println!("");
 }
