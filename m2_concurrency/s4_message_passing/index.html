@@ -877,8 +877,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#3-rust-mpsc-channels" class="md-nav__link">
-    3️⃣ Rust MPSC Channels
+  <a href="#3-rust-channels" class="md-nav__link">
+    3️⃣ Rust Channels
   </a>
   
 </li>
@@ -1272,8 +1272,8 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#3-rust-mpsc-channels" class="md-nav__link">
-    3️⃣ Rust MPSC Channels
+  <a href="#3-rust-channels" class="md-nav__link">
+    3️⃣ Rust Channels
   </a>
   
 </li>
@@ -1311,20 +1311,79 @@
 
 
 <h1 id="2-message-passing">2️⃣ Message Passing</h1>
-<p>Let's use the <a href="https://en.wikipedia.org/wiki/Message_passing">message passing memory model</a>. 
-Why is message passing easier than mutexes and atomics?
-Synchronous and asynchronous message passing
-The size of a buffer
-What happens if it is dropped?
-Is the receiver held by a thread that is blocking on the receiver or is it checking in once in a while
-and executing?
-The cost of this low cognitive cost is that executing is slower, especially for small workloads.
-Good for having multiple threads doing different things, also known as
+<p>Now let's look at a different way of doing parallelism. What if we didn't share memory at all and just sent it
+between threads? That would make things so much easier! We will do that with
+<a href="https://en.wikipedia.org/wiki/Message_passing">message passing</a>!
+It might also make things slower, but I will just assume that it is slower than the data parallelism, threads,
+locks and atomics we just looked at. On the other hand it allows us to work simply while maintaining a very high
+degree of freedom between threads, allowing us to take that to the extreme with
 <a href="https://en.wikipedia.org/wiki/Task_parallelism">task parallelism</a>.</p>
-<h2 id="3-rust-mpsc-channels">3️⃣ Rust MPSC Channels</h2>
-<p>Channels</p>
+<p>So why is message passing easier to work with than the mutexes and atomics we just looked at? Until now, we have
+either had a library like Rayon split some shared data into segments which each thread could consume or we have used
+more or less complex locking mechanisms to synchronize which thread had access to which data. With message passing
+we instead use some of the things we learned earlier about move semantics. We partition the data somehow and move
+the data completely to whichever entity will use the data for processing. The processing thread can then return the
+result through message passing as well. These messages could be anything, they could be a tuple of a command, such
+such as "multiply all data by 2" along with the data to be processed.</p>
+<p>This is quite a simple way of doing things and we don't have to worry about a single lock. The implementation takes
+care of that. There are some other caveats, however. The specific version of message passing we will be looking at
+is called channels in Rust. What happens is that the message is basically moved into a queue from which the receiver
+can dequeue messages. The Rust's borrow checker would no longer need to worry about who or what owns what, as the
+data is now fully owned by the receiving thread.
+But what happens if the queue is full? We can have multiple threads enqueueing messages to
+the same channel (queue), if the receiving thread is unable to dequeue fast enough, should the channel overwrite the
+oldest messages in the queue to allow the transmitting threads to move on and no longer block on the transmission,
+should the enqueued message be dropped/ignored or should the threads wanting to enqueue a message wait around until
+space opens up in the channel? If you are designing an efficient system using message passing this is absolutely
+something you should think about.</p>
+<p>Two potential solutions are the synchronous and the asynchronous channels. With the asynchronous channel the
+transmitting thread will send the message to the channel and then move on, as in not block, remember blocking behavior? The asynchronous channel then has two methods of handling message overflow. It can either resize the
+queue (think back to dynamically sized arrays) or begin dropping messages. The synchronous channel on the other
+hand requires the transmitter to wait until either the message has been successfully transmitted or received,
+depending on the interpretation.</p>
+<p>Another hazard is what happens if one side of the channel stops interacting with the channel?
+If you imagine one thread holding a transmitter to the channel. It sends data every once in a while to be processed.
+On the other end a thread might have nothing to do but receive messages from the channel and process them. If then
+the transmitting thread moves on and no longer transmits data to the channel, we need to be aware of that
+possibility and handle it. It could either be the channel itself communicating that one end of the channel had been
+dropped or it could be the transmission of an exit message. This only works if it is the transmitting thread
+moving on. If the receiving thread will move on, or end, it cannot transmit an exit message, unless it has a way to
+send an exit message to the transmitting thread. The channel itself handling whether both ends are still alive is
+probably the way to go in most cases.</p>
+<p>Another main use of message passing is sharing data between computers. If you have multiple computers working on the
+same problem, they don't have any physical memory to share, so instead they can send messages to each other. This
+is the basis of the MPI standard.</p>
+<h2 id="3-rust-channels">3️⃣ Rust Channels</h2>
+<p>The first ways to do message passing you will meet in Rust are the <code>mpsc::channel</code> and <code>mpsc::sync_channel</code>
+structs. <code>mpsc</code> stands for multiple producer, single consumer. When creating an <code>mpsc::channel</code> both a
+sender and a receiver are returned. The sender can be cloned multiple times, to allow several threads to send
+messages using the same channel, whereas there can only ever be one receiver.</p>
+<p><a href="https://doc.rust-lang.org/std/sync/mpsc/fn.channel.html">mpsc::channel</a> is the one most often used and
+is an asynchronous channel. It is what is known as <em>unbounded</em> and if given too many messages will resize to
+accommodate. A transmitting thread will not block.</p>
+<p>The <a href="https://doc.rust-lang.org/std/sync/mpsc/fn.sync_channel.html">mpsc::sync_channel</a> on the other hand
+is <em>bounded</em> and won't change its size. A transmitting thread will have to block until the message as been sent successfully. This might be best if you are running at high speeds and can't drop packages. You could very quickly
+accummulate a massive amount of memory.</p>
 <h2 id="3-real-time-message-passing">3️⃣ Real-Time Message Passing</h2>
-<p>Maybe look at the try_rcv loop</p>
+<p>I made a code example for you. You can either go to <code>m2_concurrency::code::message_passing</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/message_passing">online</a>.</p>
+<p>In this example I use Rust's <code>mpsc::channel</code> to get two pairs of senders/receivers. The main thread
+generates some data and sends the <code>Vec&lt;f32&gt;</code> to a processing thread, which performs some in-place
+computations and sends them back on another channel. The main thread can then receive the result and prints it
+out. Note that each thread does not block and instead of using <code>.rcv()</code>, which is a blocking receive, uses
+<code>.try_rcv()</code> and handles the case where there wasn't any new message to receive. In the case of no message
+being received it also prints.</p>
+<p>There are three values at the top.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">max_work</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">master_wait_time</span>: <span class="kt">u64</span> <span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">worker_wait_time</span>: <span class="kt">u64</span> <span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
+</span></code></pre></div>
+<p>Max work is the most amount of work messages will be processed, otherwise the program would run forever.
+<code>master_wait_time</code> is the amount of miliseconds the master thread will wait after sending a new
+work message. The <code>worker_wait_time</code> is the amount of time the processing thread will wait before attempting to receive another message.</p>
+<p>Try and run the code, see what happens!</p>
+<p>Now try and adjusting the wait times. How does it run when you reduce <code>worker_wait_time</code>.
+Why do you think that is?</p>
 <h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
 <p>A longer, very friendly introduction to channels and message passing in Rust can be found
 <a href="https://doc.rust-lang.org/book/ch16-02-message-passing.html">here</a>.</p>
