@@ -1337,7 +1337,8 @@ should the enqueued message be dropped/ignored or should the threads wanting to 
 space opens up in the channel? If you are designing an efficient system using message passing this is absolutely
 something you should think about.</p>
 <p>Two potential solutions are the synchronous and the asynchronous channels. With the asynchronous channel the
-transmitting thread will send the message to the channel and then move on, as in not block, remember blocking behavior? The asynchronous channel then has two methods of handling message overflow. It can either resize the
+transmitting thread will send the message to the channel and then move on, as in not block, remember blocking
+behavior? The asynchronous channel then has two methods of handling message overflow. It can either resize the
 queue (think back to dynamically sized arrays) or begin dropping messages. The synchronous channel on the other
 hand requires the transmitter to wait until either the message has been successfully transmitted or received,
 depending on the interpretation.</p>
@@ -1362,7 +1363,8 @@ messages using the same channel, whereas there can only ever be one receiver.</p
 is an asynchronous channel. It is what is known as <em>unbounded</em> and if given too many messages will resize to
 accommodate. A transmitting thread will not block.</p>
 <p>The <a href="https://doc.rust-lang.org/std/sync/mpsc/fn.sync_channel.html">mpsc::sync_channel</a> on the other hand
-is <em>bounded</em> and won't change its size. A transmitting thread will have to block until the message as been sent successfully. This might be best if you are running at high speeds and can't drop packages. You could very quickly
+is <em>bounded</em> and won't change its size. A transmitting thread will have to block until the message as been sent
+successfully. This might be best if you are running at high speeds and can't drop packages. You could very quickly
 accummulate a massive amount of memory.</p>
 <h2 id="3-real-time-message-passing">3️⃣ Real-Time Message Passing</h2>
 <p>I made a code example for you. You can either go to <code>m2_concurrency::code::message_passing</code> or
@@ -1380,7 +1382,8 @@ being received it also prints.</p>
 </span></code></pre></div>
 <p>Max work is the most amount of work messages will be processed, otherwise the program would run forever.
 <code>master_wait_time</code> is the amount of miliseconds the master thread will wait after sending a new
-work message. The <code>worker_wait_time</code> is the amount of time the processing thread will wait before attempting to receive another message.</p>
+work message. The <code>worker_wait_time</code> is the amount of time the processing thread will wait before
+attempting to receive another message.</p>
 <p>Try and run the code, see what happens!</p>
 <p>Now try and adjusting the wait times. How does it run when you reduce <code>worker_wait_time</code>.
 Why do you think that is?</p>
