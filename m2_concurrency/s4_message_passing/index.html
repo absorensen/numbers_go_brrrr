@@ -840,6 +840,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    S4 - Message Passing
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -849,6 +860,46 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#3-rust-mpsc-channels" class="md-nav__link">
+    3️⃣ Rust MPSC Channels
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-real-time-message-passing" class="md-nav__link">
+    3️⃣ Real-Time Message Passing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-additional-reading" class="md-nav__link">
+    5️⃣ Additional Reading
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1214,6 +1265,35 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#3-rust-mpsc-channels" class="md-nav__link">
+    3️⃣ Rust MPSC Channels
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-real-time-message-passing" class="md-nav__link">
+    3️⃣ Real-Time Message Passing
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-additional-reading" class="md-nav__link">
+    5️⃣ Additional Reading
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1231,14 +1311,33 @@
 
 
 <h1 id="2-message-passing">2️⃣ Message Passing</h1>
+<p>Let's use the <a href="https://en.wikipedia.org/wiki/Message_passing">message passing memory model</a>. 
+Why is message passing easier than mutexes and atomics?
+Synchronous and asynchronous message passing
+The size of a buffer
+What happens if it is dropped?
+Is the receiver held by a thread that is blocking on the receiver or is it checking in once in a while
+and executing?
+The cost of this low cognitive cost is that executing is slower, especially for small workloads.
+Good for having multiple threads doing different things, also known as
+<a href="https://en.wikipedia.org/wiki/Task_parallelism">task parallelism</a>.</p>
+<h2 id="3-rust-mpsc-channels">3️⃣ Rust MPSC Channels</h2>
 <p>Channels</p>
+<h2 id="3-real-time-message-passing">3️⃣ Real-Time Message Passing</h2>
+<p>Maybe look at the try_rcv loop</p>
+<h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
+<p>A longer, very friendly introduction to channels and message passing in Rust can be found
+<a href="https://doc.rust-lang.org/book/ch16-02-message-passing.html">here</a>.</p>
+<p>This is slightly larger scale, but when running code on multiple compute nodes in an HPC installation,
+the most used method for sharing data between nodes is a standard called
+<a href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI</a>.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 22, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 30, 2023</span>
       
         <br>
         Created:

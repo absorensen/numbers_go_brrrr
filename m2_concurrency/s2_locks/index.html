@@ -1301,7 +1301,8 @@
 But we did some extra work to separate the data into neat chunks, with no overlap
 between which thread read and wrote to which data. So, how would we ensure
 correctness and performance (in that order!) if we had data which more than
-a single thread had access to?</p>
+a single thread had access to? This requires working with the
+<a href="https://en.wikipedia.org/wiki/Shared_memory">shared memory model</a>.</p>
 <p>As we saw earlier we can easily share read-only data between threads with the
 atomically reference counted construct in Rust, <code>Arc&lt;T&gt;</code>. But <code>Arc</code>
 cannot handle if even just one of the threads accessing some shared data
@@ -1406,7 +1407,7 @@ function to better understand when which solution is best under which conditions
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 29, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 30, 2023</span>
       
         <br>
         Created:
