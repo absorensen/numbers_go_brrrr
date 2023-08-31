@@ -17,6 +17,7 @@ struct Uniforms {
 @group(0) @binding(0)
 var<uniform> uniforms: Uniforms;
 
+// Vertex Shader
 @vertex
 fn vs_main(
     model: VertexInput,
@@ -29,8 +30,7 @@ fn vs_main(
     return out;
 }
 
-// Fragment shader
-
+// Fragment Shader
 @fragment
 fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
     return vec4<f32>(in.color, 1.0);
