@@ -9,25 +9,25 @@
       
       
       
-        <link rel="prev" href="../s9_parallel_graphs/">
+        <link rel="prev" href="../m3_types/s5_tensor_cores/">
       
       
-        <link rel="next" href="../../m3_types/">
+        <link rel="next" href="s0_measuring_performance/">
       
       
-      <link rel="icon" href="../../figures/nebula.png">
+      <link rel="icon" href="../figures/nebula.png">
       <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.6">
     
     
       
-        <title>S10 - 4️⃣ Exercises - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>3️⃣ Optimization - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.0e669242.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.0e669242.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.85d0ee34.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.85d0ee34.min.css">
       
       
 
@@ -46,14 +46,14 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
     
-   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
         html.glightbox-open { overflow: initial; height: 100%; }
         .gslide-title { margin-top: 0px; user-select: text; }
         .gslide-desc { color: #666; user-select: text; }
@@ -64,7 +64,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
-            </style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+            </style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#4-exercises" class="md-skip">
+        <a href="#3-optimization" class="md-skip">
           Skip to content
         </a>
       
@@ -102,9 +102,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="The Real-Timers Guide to the Computational Galaxy" class="md-header__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
+    <a href=".." title="The Real-Timers Guide to the Computational Galaxy" class="md-header__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
       
-  <img src="../../figures/nebula.png" alt="logo">
+  <img src="../figures/nebula.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S10 - 4️⃣ Exercises
+              3️⃣ Optimization
             
           </span>
         </div>
@@ -233,9 +233,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="The Real-Timers Guide to the Computational Galaxy" class="md-nav__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
+    <a href=".." title="The Real-Timers Guide to the Computational Galaxy" class="md-nav__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
       
-  <img src="../../figures/nebula.png" alt="logo">
+  <img src="../figures/nebula.png" alt="logo">
 
     </a>
     The Real-Timers Guide to the Computational Galaxy
@@ -261,7 +261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -280,7 +280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../acknowledgements/" class="md-nav__link">
+      <a href="../acknowledgements/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -328,7 +328,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m0_introduction/" class="md-nav__link ">
+            <a href="../m0_introduction/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -359,7 +359,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s0_intro_to_computing/" class="md-nav__link">
+      <a href="../m0_introduction/s0_intro_to_computing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -379,7 +379,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s1_intro_to_rust/" class="md-nav__link">
+      <a href="../m0_introduction/s1_intro_to_rust/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -399,7 +399,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s2_basic_concepts_in_rust/" class="md-nav__link">
+      <a href="../m0_introduction/s2_basic_concepts_in_rust/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -419,7 +419,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s3_less_basic_concepts_in_rust/" class="md-nav__link">
+      <a href="../m0_introduction/s3_less_basic_concepts_in_rust/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -439,7 +439,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s4_exercises/" class="md-nav__link">
+      <a href="../m0_introduction/s4_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -499,7 +499,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m1_memory_hierarchies/" class="md-nav__link ">
+            <a href="../m1_memory_hierarchies/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -530,7 +530,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s0_soft_memory_hierarchies/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s0_soft_memory_hierarchies/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -550,7 +550,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s1_computational_graphs/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s1_computational_graphs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -570,7 +570,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s2_intro_to_gpus/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s2_intro_to_gpus/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -590,7 +590,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s3_immediate_gpu_computation/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s3_immediate_gpu_computation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -610,7 +610,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s4_building_a_computational_graph/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s4_building_a_computational_graph/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -630,7 +630,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s5_computational_graph_compilers/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s5_computational_graph_compilers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -650,7 +650,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s6_exercises/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s6_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -675,8 +675,6 @@
       
   
   
-    
-  
   
     
     
@@ -709,18 +707,18 @@
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../m2_concurrency/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -736,7 +734,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             M2 - Concurrency
@@ -751,7 +749,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s0_data_parallelism/" class="md-nav__link">
+      <a href="../m2_concurrency/s0_data_parallelism/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -771,7 +769,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s1_threads/" class="md-nav__link">
+      <a href="../m2_concurrency/s1_threads/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -791,7 +789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s2_locks/" class="md-nav__link">
+      <a href="../m2_concurrency/s2_locks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -811,7 +809,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s3_atomics/" class="md-nav__link">
+      <a href="../m2_concurrency/s3_atomics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -831,7 +829,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s4_message_passing/" class="md-nav__link">
+      <a href="../m2_concurrency/s4_message_passing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -851,7 +849,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s5_async/" class="md-nav__link">
+      <a href="../m2_concurrency/s5_async/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -871,7 +869,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s6_events/" class="md-nav__link">
+      <a href="../m2_concurrency/s6_events/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -891,7 +889,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s7_more_gpu/" class="md-nav__link">
+      <a href="../m2_concurrency/s7_more_gpu/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -911,7 +909,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s8_branchless_programming/" class="md-nav__link">
+      <a href="../m2_concurrency/s8_branchless_programming/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -931,7 +929,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s9_parallel_graphs/" class="md-nav__link">
+      <a href="../m2_concurrency/s9_parallel_graphs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -949,18 +947,9 @@
                 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../m2_concurrency/s10_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -969,7 +958,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -1019,7 +1007,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m3_types/" class="md-nav__link ">
+            <a href="../m3_types/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1050,7 +1038,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s0_integers/" class="md-nav__link">
+      <a href="../m3_types/s0_integers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1070,7 +1058,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s1_floats/" class="md-nav__link">
+      <a href="../m3_types/s1_floats/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1090,7 +1078,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s2_energy_efficiency/" class="md-nav__link">
+      <a href="../m3_types/s2_energy_efficiency/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1110,7 +1098,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s3_bittricks/" class="md-nav__link">
+      <a href="../m3_types/s3_bittricks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1130,7 +1118,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s4_compression/" class="md-nav__link">
+      <a href="../m3_types/s4_compression/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1150,7 +1138,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s5_tensor_cores/" class="md-nav__link">
+      <a href="../m3_types/s5_tensor_cores/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1175,6 +1163,8 @@
       
   
   
+    
+  
   
     
     
@@ -1199,18 +1189,18 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m4_optimization/" class="md-nav__link ">
+            <a href="./" class="md-nav__link md-nav__link--active">
               
   
   <span class="md-ellipsis">
@@ -1220,13 +1210,13 @@
 
             </a>
             
-              <label class="md-nav__link " for="__nav_7">
+              <label class="md-nav__link md-nav__link--active" for="__nav_7">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             M4 - 3️⃣ Optimization
@@ -1241,7 +1231,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s0_measuring_performance/" class="md-nav__link">
+      <a href="s0_measuring_performance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1261,7 +1251,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s1_profilers/" class="md-nav__link">
+      <a href="s1_profilers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1281,7 +1271,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s2_neural_network_training/" class="md-nav__link">
+      <a href="s2_neural_network_training/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1301,7 +1291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s3_neural_network_inference/" class="md-nav__link">
+      <a href="s3_neural_network_inference/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1321,7 +1311,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s4_path_tracer/" class="md-nav__link">
+      <a href="s4_path_tracer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1341,7 +1331,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s5_point_cloud_renderer/" class="md-nav__link">
+      <a href="s5_point_cloud_renderer/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1361,7 +1351,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s6_exercises/" class="md-nav__link">
+      <a href="s6_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1407,7 +1397,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m5_tips_and_tricks/" class="md-nav__link ">
+            <a href="../m5_tips_and_tricks/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1460,7 +1450,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m6_projects/" class="md-nav__link ">
+            <a href="../m6_projects/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1508,6 +1498,21 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#5-additional-reading" class="md-nav__link">
+    5️⃣ Additional Reading
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1524,53 +1529,9 @@
   
 
 
-<h1 id="4-exercises">4️⃣ Exercises</h1>
-<p>Describe the base architecture of the egui-winit-wgpu template. Found in
-<code>m2_concurrency::code::egui-winit-wgpu-template</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/egui-winit-wgpu-template">online</a>.</p>
-<p>Which elements are in play? Think back to what you have learned in
-this and the previous module. Use words and diagrams!</p>
-<h1 id="descriptions">🧬 Descriptions</h1>
-<p>Pick items worth a total of 3 points or more, write an interpretation of each
-item of at least 10 times the number of points lines. So an item worth 2 points
-requires a 20 line description.</p>
-<p>Suggestions for things to talk about:</p>
-<ul>
-<li>A description of the proposed solution</li>
-<li>Which elements you have learned about in <code>m1</code> and <code>m2</code> are at play?</li>
-<li>What performance implications result from the item?</li>
-</ul>
-<h2 id="general">General</h2>
-<ul>
-<li>1 - Data-oriented design - Entity component systems</li>
-<li>1 - Array of Structs, Structs of Arrays, Auto-Vectorization</li>
-<li>1 - <a href="https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array">Branch Prediction</a></li>
-<li>2 - A <a href="https://github.com/ProgrammingRust/mandelbrot/">Mandelbrot</a> program served 5 different ways</li>
-<li>2 - Custom memory allocators</li>
-<li>2 - <a href="https://ipthomas.com/blog/2023/07/n-times-faster-than-c-where-n-128/">SIMD optimization</a></li>
-</ul>
-<h2 id="deep-learning">🧬 Deep Learning</h2>
-<ul>
-<li>1 - PyTorch - Data-Distributed-Parallelism</li>
-<li>1 - PyTorch - Model-Distributed-Parallelism</li>
-<li>1 - PyTorch - <a href="https://pytorch.org/blog/optimizing-libtorch/?hss_channel=lcp-78618366">Optimizing inference</a></li>
-<li>2 - Flash Attention</li>
-<li>2 - Gyro Dropout - MLSys 2022</li>
-<li>2 - <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX</a></li>
-</ul>
-<h2 id="computer-graphics">🧬 Computer Graphics</h2>
-<ul>
-<li>1 - Linearized octrees</li>
-<li>1 - Hierarchical Frustum Culling</li>
-<li>2 - Sorting kernels in divergent workloads - Wavefront path tracing</li>
-<li>2 - Shadertoy</li>
-<li>2 - <a href="https://devblogs.microsoft.com/directx/d3d12-work-graphs-preview/">Work Graphs in DX12</a></li>
-<li>4 - Nanite</li>
-</ul>
-<h2 id="computer-vision">🧬 Computer Vision</h2>
-<ul>
-<li>4 - ORB-SLAM - design and a warning about trying to code it</li>
-</ul>
+<h1 id="3-optimization">3️⃣ Optimization</h1>
+<h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
+<p><a href="https://nvlabs.github.io/EfficientDL/">Full-Stack, GPU-based Acceleration of Deep Learning</a></p>
 
   <hr>
 <div class="md-source-file">
@@ -1581,7 +1542,7 @@ requires a 20 line description.</p>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 30, 2023</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 31, 2023</span>
       
     
   </small>
@@ -1607,7 +1568,7 @@ requires a 20 line description.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../s9_parallel_graphs/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S9 - 3️⃣🔜 Parallel Graphs" rel="prev">
+          <a href="../m3_types/s5_tensor_cores/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S5 - 3️⃣ Tensor Cores" rel="prev">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1617,20 +1578,20 @@ requires a 20 line description.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                S9 - 3️⃣🔜 Parallel Graphs
+                S5 - 3️⃣ Tensor Cores
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../m3_types/" class="md-footer__link md-footer__link--next" aria-label="Next: 1️⃣ Types" rel="next">
+          <a href="s0_measuring_performance/" class="md-footer__link md-footer__link--next" aria-label="Next: S0 - Measuring Performance" rel="next">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                1️⃣ Types
+                S0 - Measuring Performance
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -1697,10 +1658,10 @@ requires a 20 line description.</p>
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.78eede0e.min.js"></script>
+      <script src="../assets/javascripts/bundle.78eede0e.min.js"></script>
       
     
   <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
