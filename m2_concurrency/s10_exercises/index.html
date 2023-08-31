@@ -1231,32 +1231,51 @@
 
 
 <h1 id="4-exercises">4️⃣ Exercises</h1>
-<p>Describe the base architecture of the egui-winit-wgpu template.<br />
-Expand on the template and program some things (needs suggestions)<br />
-using some of the primitives introduced in the module</p>
-<h1 id="4-exercises_1">🧬4️⃣ Exercises</h1>
-<p>Pick items worth a total of 3 points or more, write am interpretation of each
-item of at least 10 times the number of points lines.</p>
+<p>Describe the base architecture of the egui-winit-wgpu template. Found in
+<code>m2_concurrency::code::egui-winit-wgpu-template</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/egui-winit-wgpu-template">online</a>.</p>
+<p>Which elements are in play? Think back to what you have learned in
+this and the previous module. Use words and diagrams!</p>
+<h1 id="descriptions">🧬 Descriptions</h1>
+<p>Pick items worth a total of 3 points or more, write an interpretation of each
+item of at least 10 times the number of points lines. So an item worth 2 points
+requires a 20 line description.</p>
+<p>Suggestions for things to talk about:</p>
 <ul>
-<li>2 - A <a href="https://github.com/ProgrammingRust/mandelbrot/">Mandelbrot</a> program served 5 different ways</li>
+<li>A description of the proposed solution</li>
+<li>Which elements you have learned about in <code>m1</code> and <code>m2</code> are at play?</li>
+<li>What performance implications result from the item?</li>
+</ul>
+<h2 id="general">General</h2>
+<ul>
 <li>1 - Data-oriented design - Entity component systems</li>
 <li>1 - Array of Structs, Structs of Arrays, Auto-Vectorization</li>
-<li>1 - Linearized octrees</li>
-<li>2 - Sorting kernels in divergent workloads - Wavefront path tracing</li>
-<li>4 - ORB-SLAM - design and a warning about trying to code it</li>
-<li>4 - Nanite</li>
+<li>1 - <a href="https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array">Branch Prediction</a></li>
+<li>2 - A <a href="https://github.com/ProgrammingRust/mandelbrot/">Mandelbrot</a> program served 5 different ways</li>
+<li>2 - Custom memory allocators</li>
+<li>2 - <a href="https://ipthomas.com/blog/2023/07/n-times-faster-than-c-where-n-128/">SIMD optimization</a></li>
+</ul>
+<h2 id="deep-learning">🧬 Deep Learning</h2>
+<ul>
 <li>1 - PyTorch - Data-Distributed-Parallelism</li>
 <li>1 - PyTorch - Model-Distributed-Parallelism</li>
 <li>1 - PyTorch - <a href="https://pytorch.org/blog/optimizing-libtorch/?hss_channel=lcp-78618366">Optimizing inference</a></li>
-<li>2 - Shadertoy</li>
-<li>2 - Gyro Dropout - MLSys 2022</li>
-<li>1 - Hierarchical Frustum Culling</li>
-<li>1 - <a href="https://ipthomas.com/blog/2023/07/n-times-faster-than-c-where-n-128/">SIMD optimization</a></li>
 <li>2 - Flash Attention</li>
-<li>2 - Custom memory allocators</li>
+<li>2 - Gyro Dropout - MLSys 2022</li>
 <li>2 - <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX</a></li>
-<li>1 - <a href="https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array">Branch Prediction</a></li>
+</ul>
+<h2 id="computer-graphics">🧬 Computer Graphics</h2>
+<ul>
+<li>1 - Linearized octrees</li>
+<li>1 - Hierarchical Frustum Culling</li>
+<li>2 - Sorting kernels in divergent workloads - Wavefront path tracing</li>
+<li>2 - Shadertoy</li>
 <li>2 - <a href="https://devblogs.microsoft.com/directx/d3d12-work-graphs-preview/">Work Graphs in DX12</a></li>
+<li>4 - Nanite</li>
+</ul>
+<h2 id="computer-vision">🧬 Computer Vision</h2>
+<ul>
+<li>4 - ORB-SLAM - design and a warning about trying to code it</li>
 </ul>
 
   <hr>
@@ -1264,7 +1283,7 @@ item of at least 10 times the number of points lines.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 24, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 31, 2023</span>
       
         <br>
         Created:
