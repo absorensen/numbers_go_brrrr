@@ -1537,15 +1537,29 @@
 
 
 <h1 id="1-types">1️⃣ Types</h1>
-<p><code>u8</code> rarely matters, but <code>[u8]</code> sure does.
-Correctness
-Precision
-Bandwidth
-Speed
-Size
-Energy Consumption
-Maintain consistency and reduce bugs in calculations by locking in the types - Rust circumvents this by removing implicit casting
-Choosing the right types enables us to use certain accelerators, GPU's are in general much faster if you use float 32's instead of float 64's and can be even faster if you manage to lower your precision enough to use tensor cores</p>
+<p>Types might not seem to be the sexiest topic of all time, but don't you worry. Knowing about types
+will be a good investment of your time. Whether to use a 32-bit or 64-bit number is not just a matter
+of whether your program has enough precision to go around, but can be a source of bugs and buggy
+behavior. Sometimes you may even need to guarantee that your system yields at minimum some level
+of precision in very real world terms for your users to be satisfied using your system.</p>
+<p>You can reduce the strain on your memory bandwidth by using smaller types (think back to
+cache lines) and get more data elements per cache line resulting in being less memory bound
+which might in turn increase the speed of your program. If you are on a GPU, you performance
+might improve significantly (factor 32) by going from 64-bit floats to 32-bits, you can
+even get access to tensor cores, by reducing precision even further, allowing an even greater
+improvement to the speed of your program. Knowing more about types allows you to sort, order
+and quantize your processed data in a way that has as small an impact on precision as possible
+while decreasing the size of your data. This could result in faster download times, or even
+when streaming your data from disk directly to the GPU, where the GPU itself might be able
+to unpack the data.</p>
+<p>Which types you are using, have an impact not just on speed and size, but also the energy
+consumption of your programs. In general, less bits mean less energy consumed and integers
+cost less energy to process compared to floats. You don't have to micromanage every single
+variable all the time, but one of the first places to look when optimizing should be arrays.
+<code>u8</code> rarely matters, but <code>[u8]</code> sure does.</p>
+<p>Finally, knowing about types allows us to operate directly on the underlying bits, casting
+from one type to another, to create tightly packed information, which we couldn't otherwise
+have, such as packing three dimensional indices into just 32 or 64 bit integers.</p>
 
   <hr>
 <div class="md-source-file">
