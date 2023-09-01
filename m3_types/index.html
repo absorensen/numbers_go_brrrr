@@ -996,6 +996,8 @@
       
         
       
+        
+      
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
@@ -1100,11 +1102,11 @@
   
   
     <li class="md-nav__item">
-      <a href="s3_bittricks/" class="md-nav__link">
+      <a href="s3_bitwise_operations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S3 - 3️⃣ Bittricks
+    S3 - 3️⃣ Bit Tricks
   </span>
   
 
@@ -1120,11 +1122,11 @@
   
   
     <li class="md-nav__item">
-      <a href="s4_compression/" class="md-nav__link">
+      <a href="s4_bit_tricks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S4 - 3️⃣ Compression
+    S4 - 3️⃣ Bit Tricks
   </span>
   
 
@@ -1140,11 +1142,31 @@
   
   
     <li class="md-nav__item">
-      <a href="s5_tensor_cores/" class="md-nav__link">
+      <a href="s5_compression/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S5 - 3️⃣ Tensor Cores
+    S5 - 3️⃣ Compression
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="s6_tensor_cores/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S6 - 3️⃣ Tensor Cores
   </span>
   
 
@@ -1515,14 +1537,22 @@
 
 
 <h1 id="1-types">1️⃣ Types</h1>
-<p><code>u8</code> rarely matters, but <code>[u8]</code> sure does.</p>
+<p><code>u8</code> rarely matters, but <code>[u8]</code> sure does.
+Correctness
+Precision
+Bandwidth
+Speed
+Size
+Energy Consumption
+Maintain consistency and reduce bugs in calculations by locking in the types - Rust circumvents this by removing implicit casting
+Choosing the right types enables us to use certain accelerators, GPU's are in general much faster if you use float 32's instead of float 64's and can be even faster if you manage to lower your precision enough to use tensor cores</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 31, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 1, 2023</span>
       
         <br>
         Created:
