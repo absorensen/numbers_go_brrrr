@@ -1,16 +1,28 @@
 use std::{time::{Duration, Instant}, sync::{Mutex, Arc}};
 use itertools::Itertools;
+use rand::rngs::ThreadRng;
+use rand::prelude::*;
 use rayon::prelude::{ParallelIterator, IntoParallelRefMutIterator};
 
 #[inline(always)]
-fn map_function(data: &mut [f32]){
+fn map_function(complexity: usize, escape_probability: f32, data: &mut [f32]){
+    let mut rng: ThreadRng = thread_rng();
     for index in 0..data.len() {
         let x: f32 = data[index];
         let mut x: f32 = x * x * x * x + x * x + x * x / x + x;
 
-        for _ in 0..62 {
-            x = x * 2.0 + 4.0 + 12.0 / 59.0;
+        if 0.0 < escape_probability {
+            for _ in 0..complexity {
+                let escape: f32 = rng.gen();
+                if escape < escape_probability { break; }
+                x = x * 2.0 + 4.0 + 12.0 / 59.0;
+            }
+        } else {
+            for _ in 0..complexity {
+                x = x * 2.0 + 4.0 + 12.0 / 59.0;
+            }
         }
+
 
         data[index] = x;
     }
@@ -24,12 +36,21 @@ fn double_function(data: &mut [f32]) {
 }
 
 #[inline(always)]
-fn fine_map_function(data: &mut f32) {
+fn fine_map_function(complexity: usize, escape_probability: f32, data: &mut f32) {
+    let mut rng: ThreadRng = thread_rng();
     let x: f32 = *data;
     let mut x: f32 = x * x * x * x + x * x + x * x / x + x;
 
-    for _ in 0..62 {
-        x = x * 2.0 + 4.0 + 12.0 / 59.0;
+    if escape_probability == 0.0 {
+        for _ in 0..complexity {
+            let escape: f32 = rng.gen();
+            if escape < escape_probability { break; }
+            x = x * 2.0 + 4.0 + 12.0 / 59.0;
+        }
+    } else {
+        for _ in 0..complexity {
+            x = x * 2.0 + 4.0 + 12.0 / 59.0;
+        }
     }
 
     *data = x;
@@ -40,13 +61,32 @@ fn fine_double_function(data: &mut f32) {
     *data *= 2.0;
 }
 
-fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, iteration_count: usize, single_thread: bool, rayon: bool, crossbeam_scope: bool, crossbeam_task_queue: bool, crossbeam_atomic_chunks: bool ) {
-    let mut data: Vec<f32> = (0..element_count).into_iter().map(|x| x as f32).collect();
-    let mut atomic_data_double: Vec<f32> = data.clone();
-    let mut atomic_data_map: Vec<f32> = data.clone();
-    let mut fine_data: Vec<f32> = (0..element_count).into_iter().map(|x| x as f32).collect();
+fn parallelism(
+    double_element_count: usize,
+    map_element_count: usize, 
+    thread_count: usize, 
+    chunk_size: usize, 
+    iteration_count: usize, 
+    complexity: usize, 
+    escape_probability: f32, 
+    single_thread: bool, 
+    rayon: bool, 
+    crossbeam_scope: bool, 
+    crossbeam_task_queue: bool, 
+    crossbeam_atomic_chunks: bool ) {
 
-    let mut data_chunks: Vec<&mut [f32]> = data.chunks_mut(chunk_size).collect_vec();
+    let mut double_data: Vec<f32> = (0..double_element_count).into_iter().map(|x| x as f32).collect();
+    let mut double_atomic_data: Vec<f32> = double_data.clone();
+    let mut double_fine_data: Vec<f32> = (0..double_element_count).into_iter().map(|x| x as f32).collect();
+
+    let mut double_data_chunks: Vec<&mut [f32]> = double_data.chunks_mut(chunk_size).collect_vec();
+
+
+    let mut map_data: Vec<f32> = (0..map_element_count).into_iter().map(|x| x as f32).collect();
+    let mut map_atomic_data: Vec<f32> = map_data.clone();
+    let mut map_fine_data: Vec<f32> = (0..map_element_count).into_iter().map(|x| x as f32).collect();
+
+    let mut map_data_chunks: Vec<&mut [f32]> = map_data.chunks_mut(chunk_size).collect_vec();
 
 
 
@@ -57,7 +97,7 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
     if single_thread {
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
-            for data_chunk in &mut data_chunks {
+            for data_chunk in &mut double_data_chunks {
                     double_function(*data_chunk);
             }
         }
@@ -68,7 +108,7 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
     if rayon {
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
-            let _result: () = data_chunks.par_iter_mut().map(|data_chunk| double_function(data_chunk) ).collect();
+            let _result: () = double_data_chunks.par_iter_mut().map(|data_chunk| double_function(data_chunk) ).collect();
         }
         let elapsed_time: Duration = now.elapsed();
         println!("{} ms for coarse-grained rayon", elapsed_time.as_millis() as f64);
@@ -76,7 +116,7 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
 
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
-            let _result: () = fine_data.par_iter_mut().map(|data| fine_double_function(data) ).collect();
+            let _result: () = double_fine_data.par_iter_mut().map(|data| fine_double_function(data) ).collect();
         }
         let elapsed_time: Duration = now.elapsed();
         println!("{} ms for fine-grained rayon", elapsed_time.as_millis() as f64);
@@ -87,11 +127,11 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
         // thousands of threads and oversubscribing
         // instead of just launch some threads
         // and distributing the work
-        if (element_count / chunk_size) < 1000 {
+        if (double_element_count / chunk_size) < 1000 {
             let now: Instant = Instant::now();
             for _ in 0..iteration_count {
                 crossbeam::scope(|spawner| {
-                    for data_chunk in &mut data_chunks {
+                    for data_chunk in &mut double_data_chunks {
                         spawner.spawn(move |_| {
                             double_function(data_chunk);
                         });
@@ -109,7 +149,7 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
         let mut total_time: u128 = 0;
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
-            let task_queue = Arc::new(Mutex::new(data_chunks.iter_mut()));
+            let task_queue = Arc::new(Mutex::new(double_data_chunks.iter_mut()));
             let iteration_now: Instant = Instant::now();
             crossbeam::scope(|spawner| {
                 for _ in 0..thread_count {
@@ -143,7 +183,7 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
         {
-            let chunks = AtomicChunksMut::new(&mut atomic_data_double, chunk_size);
+            let chunks = AtomicChunksMut::new(&mut double_atomic_data, chunk_size);
             let iteration_now: Instant = Instant::now();
             crossbeam::scope(|spawner| {
                 for _ in 0..thread_count {
@@ -173,8 +213,8 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
         println!("MAP FUNCTION:");
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
-            for data_chunk in &mut data_chunks {
-                    map_function(*data_chunk);
+            for data_chunk in &mut map_data_chunks {
+                    map_function(complexity, escape_probability, *data_chunk);
             }
         }
         let elapsed_time: Duration = now.elapsed();
@@ -184,7 +224,7 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
     if rayon {
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
-            let _result: () = data_chunks.par_iter_mut().map(|data_chunk| map_function(data_chunk) ).collect();
+            let _result: () = map_data_chunks.par_iter_mut().map(|data_chunk| map_function(complexity, escape_probability, data_chunk) ).collect();
         }
         let elapsed_time: Duration = now.elapsed();
         println!("{} ms for coarse-grained rayon", elapsed_time.as_millis() as f64);
@@ -192,7 +232,7 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
 
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
-            let _result: () = fine_data.par_iter_mut().map(|data| fine_map_function(data) ).collect();
+            let _result: () = map_fine_data.par_iter_mut().map(|data| fine_map_function(complexity, escape_probability, data) ).collect();
         }
         let elapsed_time: Duration = now.elapsed();
         println!("{} ms for fine-grained rayon", elapsed_time.as_millis() as f64);
@@ -203,13 +243,13 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
         // thousands of threads and oversubscribing
         // instead of just launch some threads
         // and distributing the work
-        if (element_count / chunk_size) < 1000 {
+        if (map_element_count / chunk_size) < 1000 {
             let now: Instant = Instant::now();
             for _ in 0..iteration_count {
                 crossbeam::scope(|spawner| {
-                    for data_chunk in &mut data_chunks {
+                    for data_chunk in &mut map_data_chunks {
                         spawner.spawn(move |_| {
-                            map_function(data_chunk);
+                            map_function(complexity, escape_probability, data_chunk);
                         });
                     }
                 }).unwrap();
@@ -226,7 +266,7 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
         let mut total_time: u128 = 0;
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
-            let task_queue = Arc::new(Mutex::new(data_chunks.iter_mut()));
+            let task_queue = Arc::new(Mutex::new(map_data_chunks.iter_mut()));
             let iteration_now: Instant = Instant::now();
             crossbeam::scope(|spawner| {
                 for _ in 0..thread_count {
@@ -240,7 +280,7 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
                             {
                                 None => { return; }
                                 Some(data_chunk) => {
-                                    map_function(data_chunk);
+                                    map_function(complexity, escape_probability, data_chunk);
                                 }
                             }
                         }
@@ -260,13 +300,13 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
         let now: Instant = Instant::now();
         for _ in 0..iteration_count {
         {
-            let chunks = AtomicChunksMut::new(&mut atomic_data_map, chunk_size);
+            let chunks = AtomicChunksMut::new(&mut map_atomic_data, chunk_size);
             let iteration_now: Instant = Instant::now();
             crossbeam::scope(|spawner| {
                 for _ in 0..thread_count {
                     spawner.spawn(|_| {
                         for (_, chunk) in &chunks {
-                            map_function(chunk);
+                            map_function(complexity, escape_probability, chunk);
                         }
                     });
                 }
@@ -285,10 +325,21 @@ fn parallelism(element_count: usize, thread_count: usize, chunk_size: usize, ite
 }
 
 fn main() {
-    let element_count: usize = 10_000_000;
-    let iteration_count: usize = 100;
-    let thread_count: usize = 8;
-    let chunk_size: usize = element_count / (thread_count * 32);
+    // How many elements will be processed by the simple function
+    let double_element_count: usize = 100_000_000;
+    // How many elemenets will be processed by the complex function
+    let map_element_count: usize = 1_000_000;
+    // How many times we will be going through the entire data set
+    let iteration_count: usize = 100; 
+    // How many threads we will launch in the cases where we aren't
+    // launching a thread per chunk and are explicitly launching threads
+    let thread_count: usize = 8; 
+    // The size of the chunks we will partition the data in
+    let chunk_size: usize = map_element_count / (thread_count * 32);
+    // The probability of escaping the loop in the map function
+    let escape_probability: f32 = 0.0;
+    // The maximum amount of loops in the map function
+    let complexity: usize = 62;
 
     let single_thread: bool = true;
     let rayon: bool = true;
@@ -298,12 +349,28 @@ fn main() {
 
     println!("Parallelism:");
     println!("================");
-    println!("Element Count: {}", element_count);
+    println!("Double Element Count: {}", double_element_count);
+    println!("Map Element Count: {}", map_element_count);
     println!("Iteration Count: {}", iteration_count);
     println!("Thread Count: {}", thread_count);
-    println!("Chunk Size: {} resulting in {} chunks", chunk_size, element_count / chunk_size + 1);
+    println!("Chunk Size: {} resulting in {} chunks", chunk_size, map_element_count / chunk_size + 1);
+    println!("Escape Probability: {}", escape_probability);
+    println!("Complexity: {}", complexity);
     println!("");
-    parallelism(element_count, thread_count, chunk_size, iteration_count, single_thread, rayon, crossbeam_scope, crossbeam_task_queue, crossbeam_atomic_chunks );
+    parallelism(
+        double_element_count,
+        map_element_count, 
+        thread_count, 
+        chunk_size, 
+        iteration_count, 
+        complexity, 
+        escape_probability, 
+        single_thread, 
+        rayon, 
+        crossbeam_scope, 
+        crossbeam_task_queue, 
+        crossbeam_atomic_chunks 
+    );
     println!("");
     println!("");
 }
