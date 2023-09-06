@@ -1112,6 +1112,19 @@
     5️⃣ Additional Reading
   </a>
   
+    <nav class="md-nav" aria-label="5️⃣ Additional Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#computer-graphics" class="md-nav__link">
+    🧬 Computer Graphics
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1578,6 +1591,19 @@
     5️⃣ Additional Reading
   </a>
   
+    <nav class="md-nav" aria-label="5️⃣ Additional Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#computer-graphics" class="md-nav__link">
+    🧬 Computer Graphics
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -1599,18 +1625,47 @@
 
 
 <h1 id="2-floats">2️⃣ Floats</h1>
-<p>Bits
-Precision
-IEEE-754
-NaN behavior</p>
+<p>Where as in signed integers we had two distinct areas of the bits with a uniform precision, we
+have 3 segments and a quite varying precision with floating point numbers. In the more-or-less standard
+IEEE-754 specification we also have a number of exceptions and specific behaviors such as in which situations
+a float locks to a NaN value. Given the use cases in machine learning new, smaller and less standard floating point
+formats have emerged such as bfloat16. A lot of these very small specialized types of floats, or very small integers
+are required to work with tensor core accelerators.</p>
+<p>I can't explain exactly how a float works much better than the
+<a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">wiki</a>. Ever so slightly browsing the page about
+<a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> also makes good sense.</p>
+<p>So, now that you've browsed the websites and your are familliar with concepts such as exponent and fraction, I
+have a few key concepts for you to make note of. If you can at all keep your floats as close to being between
+-1.0 and 1.0, you will keep as much of your precision as possible. 4.0 / 3.0 is not the same in terms of precision
+as 4.0 * (1.0 / 3.0), unless the inverse number that you are multiplying with is exactly 1/2^N. This is an often
+used optimization as a multiplication is vastly cheaper than a division. You will typically see this optimization
+if a division by a constant is happening in a loop -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_constant</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">for</span><span class="w"> </span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">some_constant</span><span class="p">;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>is not numerically equivalent to</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_constant</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">inverse_some_constant</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">some_constant</span><span class="p">;</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">for</span><span class="w"> </span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">inverse_some_constant</span><span class="p">;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>But if <code>some_constant</code> was 4.0, 2.0 or 256.0 or something like that, they would be. Finally, NaN's propagate.
+Any operation involving a NaN value returns a NaN value, including <code>NaN == NaN</code>.</p>
 <h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
-<p>Something wil calculating the error
-<a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">Floating point arithmetic</a><br />
-<a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a><br />
-Physically Based Rendering -
-<a href="https://pbr-book.org/3ed-2018/Shapes/Managing_Rounding_Error">Managing Rounding Errors</a><br />
-<a href="https://developer.nvidia.com/content/depth-precision-visualized">Depth Precision Visualized</a><br />
-<a href="https://www.danielecarbone.com/reverse-depth-buffer-in-opengl/">Reverse Depth Buffer in OpenGL</a>  </p>
+<p>Every floating point operation incurs some form of error. But if you used specialized floating point operations
+such as the <a href="https://en.wikipedia.org/wiki/Multiply%E2%80%93accumulate_operation">fused multiply-add</a>, which
+can be found <a href="https://doc.rust-lang.org/std/primitive.f32.html#method.mul_add">in Rust as well</a>, you can get a
+single rounding error instead of two rounding errors. If you are summing a large list of numbers you can use
+algorithms for compensating for the accumulated error, such as
+<a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm">Kahan Summation</a>. You can also keep a
+<a href="https://pbr-book.org/3ed-2018/Shapes/Managing_Rounding_Error">running estimate of the error</a>.</p>
+<h3 id="computer-graphics">🧬 Computer Graphics</h3>
+<p>Depth buffers are usually in need of some thought. You can take a look at
+<a href="https://developer.nvidia.com/content/depth-precision-visualized">depth precision visualized</a> or the now
+fairly common <a href="https://www.danielecarbone.com/reverse-depth-buffer-in-opengl/">reverse depth buffer</a>.</p>
 
   <hr>
 <div class="md-source-file">
