@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.7">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.2.8">
     
     
       
@@ -1051,6 +1051,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    S0 - Integers
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1060,6 +1071,60 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#binary-base-2" class="md-nav__link">
+    Binary - Base 2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hexadecimal-base-16" class="md-nav__link">
+    Hexadecimal - Base 16
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unsigned-integers" class="md-nav__link">
+    Unsigned Integers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signed-integers" class="md-nav__link">
+    Signed Integers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-additional-reading" class="md-nav__link">
+    5️⃣ Additional Reading
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1116,7 +1181,7 @@
         
   
   <span class="md-ellipsis">
-    S3 - 3️⃣ Bit Tricks
+    S3 - Bitwise Operations
   </span>
   
 
@@ -1176,7 +1241,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 3️⃣ Tensor Cores
+    S6 - 🧬3️⃣ Tensor Cores
   </span>
   
 
@@ -1530,6 +1595,49 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#binary-base-2" class="md-nav__link">
+    Binary - Base 2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hexadecimal-base-16" class="md-nav__link">
+    Hexadecimal - Base 16
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unsigned-integers" class="md-nav__link">
+    Unsigned Integers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#signed-integers" class="md-nav__link">
+    Signed Integers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-additional-reading" class="md-nav__link">
+    5️⃣ Additional Reading
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1547,16 +1655,137 @@
 
 
 <h1 id="2-integers">2️⃣ Integers</h1>
-<p>Range
-Signed
-Unsigned</p>
+<p>So far we have mainly used integers as indices into memory (arrays), but other than being good at
+doing integer math, integers also have a few other characteristics going for them. They have
+uniform precision across their entire span, they are good for compressing data and integer-based
+calculations are quite a bit more energy efficient than floating point calculations.</p>
+<p>Before I go into how a computer typically represents signed and unsigned integers,
+we are going to take a look at how we represent numbers in different bases without a computer.
+You probably know numbers in base 10. But what about base 2 and base 16?</p>
+<h2 id="binary-base-2">Binary - Base 2</h2>
+<p>Base 2 is what you'll know as binary. Binary is at the absolute core of how computers represent
+numbers, as each digit can be represented as either being on or off. 1 or 0. 
+We have 2 possible values for each digit in binary numbers.
+In base 10 the number 18 can be represented as the following -</p>
+<p>1x10<sup>1</sup> + 8x10<sup>0</sup></p>
+<p>There is of course an infinite amount of 0's in front of 18, which we don't see because they
+are implied. Base 2 would represent the number as 0b10010 (note the 0b prefix).</p>
+<p>Let's try and represent the number 18 in base 2.</p>
+<p>1x2<sup>4</sup> + 0x2<sup>3</sup> + 0x2<sup>2</sup> + 1x2<sup>1</sup> + 0x2<sup>0</sup></p>
+<p>Or if we resolve the digits</p>
+<p>1x16 + 0x8 + 0x4 + 1x2 + 0x1</p>
+<p>Removing the zeroes -</p>
+<p>1x16 + 1x2  </p>
+<p>So 0b10010 is the same as 18 in base ten.</p>
+<h2 id="hexadecimal-base-16">Hexadecimal - Base 16</h2>
+<p>Another representation is hexadecimal. It is base 16. So what do you do when you now have
+16 values per digit?</p>
+<p>You start including letters! Hexadecimal numbers have a range for each digit from 0 to F.
+So 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, A (10), B(11), C(12), D(13), E(14) and F(15). Why would
+anyone want to use a system like this?</p>
+<p>We could write the same in hexadecimal by writing 0x12 (note the 0x prefix) or -</p>
+<p>1x16<sup>1</sup> + 2x16<sup>0</sup></p>
+<p>Which amounts to -</p>
+<p>1x16 + 2x1</p>
+<p>But why would you want to do this? Simple, it functions like a contraction of binary.
+Each F represents 4 bits. So if we wanted to indicate an entire byte (8 bits) turned on,
+which is the same as the number 255, we could either write 255 or 0xFF. That case is
+simple enough. Everyone can remember 255. We could just use base 10 for that and save
+us having to learn hexadecimal representations. Stress on the representation,
+whether you write base 2, 10 or 16, in hardware it is all base 2. But where
+hexadecimal really shines is when we want to manipulate individual bytes or bits.</p>
+<p>There is something called bitwise operators, don't worry about it, it is one of
+the next sections (s3). We could use the bitwise operator &amp; (AND) on two numbers.
+&amp; would compare every bit of the two numbers one at a time and output a 1 if
+both bits were 1. It would output a 0 in all other cases. So if we gave it
+the two binary numbers, the mask 0b00000000000000001111111100000000 and some input number
+like 0b01010010001001101011010110010110, we would get an output value of
+0b00000000000000000011010100000000. This allows us to just isolate the active bits
+in the second byte from the right. </p>
+<p>This is really hard to read. If we had instead encoded our mask in hexadecimal,
+we would write 0xFF00 for our mask. We rarely have to write out our inputs, but
+in this case it can be represented as 0x5226B596. If you are on Windows, you can
+find the Calculator app. If you click in the upper left corner, you can find the view
+called "Programmer". On the left side you will see various numerical representations
+like HEX, DEC, OCT and BIN. Having these sorts of calculators can be very handy
+to quickly transfer from one representation to another.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/windows_calculator.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/windows_calculator.png" width="800" /></a></p>
+<figcaption>
+You can find other numerical representations in calculator apps.
+</figcaption>
+</figure>
+<h2 id="unsigned-integers">Unsigned Integers</h2>
+<p>Unsigned integers are more or less represented as a raw binary number.
+The range of possible numbers to represent with an unsigned integer is
+2<sup>n</sup>-1. So an 8-bit number can represent the range 0..255. You
+might wonder why the -1 is there. It's because 0 also has to be represented.</p>
+<p>You can multiply, divide, add, subtract and all the other standard stuff.
+But what happens when you go over or under the representable range?
+This is called over- and underflow. It is defined for unsigned integers,
+but undefined for signed integers. Signed means it can also represent
+negative numbers, where as unsigned integers can exclusively represent
+non-negative numbers.</p>
+<p>Overflow in unsigned integers is defined as being the remaineder of dividing
+the desired number by the maximum representable number. So if you are adding
+128 to 157, both using 8-bit unsigned integers, which has a maximum value of
+255, the desired number is 285. This results in an overflowed value of 30.
+Read <a href="https://www.learncpp.com/cpp-tutorial/unsigned-integers-and-why-to-avoid-them/">this link</a>
+about some of the considerations regarding unsigned integers. The author
+carries the opinion that you should mainly use unsigned integers for
+stuff like array indices (which are all required to be <code>usize</code> in Rust)
+or as variables which you know are being manipulated as bitfields instead of
+numbers.</p>
+<p>A special type of unsigned integer is the <code>usize</code>. On a 32-bit operating system,
+where you might recall we can only address around 2 GB of memory, the <code>usize</code> will
+have a size of 32 bits. On most modern 64-bit operating systems, the <code>usize</code> will be
+a 64-bit unsigned integer. Rust demands that you convert your indices to <code>usize</code>,
+where as C++ implicitly converts your integers to <code>usize</code>. So what happens
+if you index an array with a 32-bit signed integer in C++? This is very common,
+and in most cases it is fine. Except when that signed integer is negative. In
+which case we have used a type that allows us this undesired behavior. I ran this
+code in an online C++ environment -</p>
+<div class="language-c++ highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1">// Online C++ compiler to run C++ program online</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;iostream&gt;</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;vector&gt;</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kt">int</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="c1">// Write C++ code here</span>
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Hello world!&quot;</span><span class="p">;</span>
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">array</span><span class="p">{</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">};</span>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">some_index</span><span class="p">{</span><span class="mi">-2</span><span class="p">};</span>
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="w">    </span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">array</span><span class="p">[</span><span class="n">some_index</span><span class="p">];</span>
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>When running it for other negative indices than -2 it prints the value 0. This is probably
+uninitialized memory which hasn't been used yet. If we index with -2 we get the value
+33. Think back to when we looked at memory hierarchies and pointer arithmetic in <code>m1::s0</code>.
+This is actually a pointer being manipulated. We weren't supposed to go back beyond the start
+of the array, but we just did!</p>
+<p>This is bad, and you shouldn't do it.</p>
+<h2 id="signed-integers">Signed Integers</h2>
+<p>Signed integers are a bit more complex. They can carry both positive and negative numbers.
+The outermost bit is reserved as a sign bit, denoting whether the number is positive or
+negative. Read about the range of signed integers as well as the concept two's complement
+<a href="https://en.wikipedia.org/wiki/Two%27s_complement">here</a>.</p>
+<p>In the case of signed integers, over- and underflow are undefined in general. However,
+overflow for signed integers is
+<a href="https://doc.rust-lang.org/book/ch03-02-data-types.html#integer-overflow">defined in Rust Debug</a>
+. You can se more about the types <a href="https://doc.rust-lang.org/reference/types/numeric.html">in Rust here.</a></p>
+<h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
+<p>You can take a look at the wiki for <a href="https://en.wikipedia.org/wiki/Integer_(computer_science)">integers</a>,
+or you might prefer <a href="https://www.cs.utexas.edu/users/witchel/429H/lectures/02-bits-ints.pdf">lecture slides</a>
+or even a video by your favourite <a href="https://www.youtube.com/watch?v=fYMeYrIWnOc">performance YouTuber</a>.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 1, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 6, 2023</span>
       
         <br>
         Created:
