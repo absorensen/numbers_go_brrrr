@@ -1784,12 +1784,14 @@ numbers. But what if interleaved the bits instead? This results in what is known
 </span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">encoded</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">mask</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">bits_of_precision</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="n">encoded</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">index</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">y</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">index</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="p">((</span><span class="n">z</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">index</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">));</span>
-</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="p">}</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="n">encoded</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">((</span><span class="n">x</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">index</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="p">);</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="n">encoded</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">((</span><span class="n">y</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">index</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">));</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="n">encoded</span><span class="w"> </span><span class="o">|=</span><span class="w"> </span><span class="p">((</span><span class="n">z</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">index</span><span class="p">))</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="n">index</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">2</span><span class="p">));</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="p">}</span>
 </span></code></pre></div>
 <p>Some mad lads looked at
-<a href="https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/">optimization of Morton codes</a>
-. The above code snippet was just a Rust version of what was written in the aforementioned blog post under the
+<a href="https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/">optimization</a>
+of Morton codes. The above code snippet was just a Rust version of what was written in the aforementioned blog post under the
 "For-loop based method"-heading. The blog post also has a nice visualization of what Morton codes look like, as opposed to the grid.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/small_morton_code.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/small_morton_code.png" width="800" /></a></p>
@@ -1800,8 +1802,9 @@ Image credit </a>
 </figcaption>
 </figure>
 <p>In the blog post there is even a lookup table (LUT) version mentioned which removes all of the loops.
-Using LUTs yields an advantage which increases with the size of the numbers as the number of iterations in the for-loops increases.
-It does however require you to copy paste or generate a LUT which you can reuse. You tradeoff a lot of for-loops for doing a few
+Using LUTs yields an advantage which increases with the size of the numbers as the number of iterations
+in the for-loops increases. It does however require you to copy paste or generate a LUT which you can reuse.
+You tradeoff a lot of for-loops for doing a few
 memory look-ups instead. It seems to be the favoured way of doing it when you search for Mortorn encoding libraries.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/morton_vs_hilbert.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/morton_vs_hilbert.jpg" width="800" /></a></p>
@@ -1811,12 +1814,13 @@ The spatial layout of Morton coding compared to Hilbert coding.
 Image credit </a>
 </figcaption>
 </figure>
-<p>We can use Morton codes to do stuff like creating spatial data structures and interestingly, this is how textures are stored on GPU's.
-This allows for better cache coherence when working with textures. Imagine you want to draw some point between 4 different pixels of
-an image. You can either just go to the nearest pixel in the texture, or you can do some filtering function between the 4 nearest pixels,
-like bilinear interpolation. Then we need good locality to get the 4 pixels as quickly as possible. If you go back and look at the
-spatial ordering of the Morton layout, you'll see that if you get lucky, the four pixels can be either very close to each other in
-memory, or pretty close. They aren't an entire row apart.</p>
+<p>We can use Morton codes to do stuff like creating spatial data structures and interestingly, this is how
+textures are stored on GPU's. This allows for better cache coherence when working with textures. Imagine
+you want to draw some point between 4 different pixels of an image. You can either just go to the nearest
+pixel in the texture, or you can do some filtering function between the 4 nearest pixels, like bilinear
+interpolation. Then we need good locality to get the 4 pixels as quickly as possible. If you go back and look at the
+spatial ordering of the Morton layout, you'll see that if you get lucky, the four pixels can be either
+very close to each other in memory, or pretty close. They aren't an entire row apart.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/nearest_linear_texture_filtering.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/nearest_linear_texture_filtering.png" width="800" /></a></p>
 <figcaption>
