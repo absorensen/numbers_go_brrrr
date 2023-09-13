@@ -1604,7 +1604,7 @@ isolate the first 8 bits and not be bothered by the rest. In that case we might 
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Damn you 64-bits!</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">initial_value</span>: <span class="kt">u64</span> <span class="o">=</span><span class="w"> </span><span class="mi">3_074_457_345_618_258_677</span><span class="p">;</span><span class="w"> </span><span class="c1">// or 0x2AAA_AAAA_AAAA_AAF5</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kd">let</span><span class="w"> </span><span class="n">mask</span>: <span class="kt">u64</span> <span class="o">=</span><span class="w"> </span><span class="mh">0xFF00</span><span class="w"> </span><span class="mi">0000</span><span class="w"> </span><span class="mi">0000</span><span class="w"> </span><span class="mi">0000</span><span class="p">;</span><span class="w"> </span><span class="c1">// FF is the same as turning 8 bits completely on. So 0xF == 0xb1111.</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kd">let</span><span class="w"> </span><span class="n">masked_value</span>: <span class="kt">u64</span> <span class="o">=</span><span class="w"> </span><span class="n">initial_value</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span><span class="w"> </span><span class="c1">// masked value should now be 0b11110101</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kd">let</span><span class="w"> </span><span class="n">masked_value</span>: <span class="kt">u64</span> <span class="o">=</span><span class="w"> </span><span class="n">initial_value</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span><span class="w"> </span><span class="c1">// Masked value should be 0x2A00 0000 0000 0000</span>
 </span></code></pre></div>
 <p>Or with a slightly more sane example.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">initial_value</span>: <span class="kt">u16</span> <span class="o">=</span><span class="w"> </span><span class="mi">43_765</span><span class="p">;</span>
@@ -1641,7 +1641,7 @@ The Rust language reference for <a href="https://doc.rust-lang.org/reference/exp
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 12, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 13, 2023</span>
       
         <br>
         Created:
