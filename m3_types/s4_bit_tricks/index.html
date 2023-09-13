@@ -1865,7 +1865,7 @@ knowledge of the mantissa. It casts it back to a float, and then uses a single i
 reducing the error. If you read the rest of the wiki, you will see there have been subsequent improvements to
 the accuracy, elimination of undefined behavior. The algorithm resulted in a four times faster execution
 than just getting the square root directly. Short after, hardware implementations started cropping up which
-outperformed it both in performance and in accuracy. You can even find it in WGSL through calling 
+outperformed it both in performance and in accuracy. You can even find it in WGSL through calling
 <code>inverseSqrt(data)</code>.</p>
 <p>Often you can find hardware implementations of often needed mathematical functions. Especially for GPU programming
 this can yield a performance boost. These are called intrinsic functions. Usually, they will have a lower precision.
