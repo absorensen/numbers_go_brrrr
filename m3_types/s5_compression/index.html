@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.3.1">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.3.2">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.046329b4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.30068a00.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.85d0ee34.min.css">
@@ -1661,7 +1661,7 @@ week 10 on this <a href="http://www2.compute.dtu.dk/courses/02282/2023/">page</a
 Another classic is
 <a href="https://web.stanford.edu/class/archive/cs/cs106b/cs106b.1132/handouts/34-Huffman-Encoding.pdf">Huffman Encoding</a>.</p>
 <h2 id="point-cloud-compression">🧬 Point Cloud Compression</h2>
-<p>This is mostly for people interested in graphics, I will showcase a few examples of transformations you can do to
+<p>This is mostly for people interested in graphics. I will showcase a few examples of transformations you can do to
 compress point clouds, which is based on some real-world experience.</p>
 <p>First up, let's set the scene. A user uploads a point cloud to your system. You have time to preprocess the point
 cloud and at some point the user will see that the point cloud has been processed and is ready for viewing. The
@@ -1670,18 +1670,99 @@ Progressive rendering is chosen to render. In that case the frame buffer is clea
 camera and the relevant parts of the scene is accumulated into the frame buffer, using the depth buffer to
 discriminate between which points should be in view. Frustum culling is also implemented.</p>
 <p>To prioritize which points to render first, and which points to not render at all, we need a data structure
-which lets us make decisions about which packages to even download to the user system before we download them.
+which lets us make decisions about which packages to even download to the user's system before we download them.
 We choose a type of level-of-detail octree. The regular structure of the octree allows us to make some
 nice decisions later on, which are encoded implcitly by our knowledge of the chosen structure. A level-of-detail
 structure for point clouds means that the top node of the octree will cover the entire scene. We will choose
 some maximum amount of points which can reside in this root node. Those points have to cover as much of
 the scene as possible, preferably in as visually nice a way as possible. The fewer nodes at as low
-levels-of-detail as we can get away with, will allow for fast navigation of the scene so the user can find their
-angle and then set the camera to rest so we can accumulate the relevant points and converge on the "true" image.</p>
-<p>Bit nulling!  </p>
-<p>As found in <a href="https://www.cg.tuwien.ac.at/research/publications/2021/SCHUETZ-2021-PCC/">this paper</a> by Schûtz,
+levels-of-detail as we can get away with, will allow for a very high frame rate during navigation of the
+scene so the user can find the angle they need and then set the camera to rest so we can accumulate the relevant
+points and converge on the "true" image.</p>
+<p>We will build this level-of-detail octree by using spatial hashing. Instead of starting with a tree representation,
+think back to nodes and pointers, we will start with a list of hash maps. In Rust the pseudo tree representation
+would look something like <code>let mut pseudo_tree : Vec&lt;HashMap&lt;u64, Vec&lt;Point&gt;&gt; = ...</code>. So for each 
+level-of-detail we will keep a hash map. Each level-of-detail will have the same offset vector, but a diminishing
+scale. We can pick any factor, but if we choose 2.0 we get some nice side effects later on.
+So if we set the scale of the root node to 100.0 meters for each axis, level-of-detail 1 would have a scale of
+50.0 meters per node for each axis. This will continue on until level-of-detail 10 where we have a scale of
+0.09765625 meters, or 9.7 cm per node. Clearly, we now have a very small area, being covered by quite a
+lot of bits, 20! And how we will turn that to an advantage I will get back to.</p>
+<p>We just have to clear up one thing, subsampling. It is not that important in terms of compression, but this
+data structure will reuse the spatial hashing concept quite a bit, and we will do so too when choosing which
+points go where.</p>
+<p>To build our tree we start finding the minimum and maximum of the scene covered by the
+given point cloud. We create a node defined by the minimum and maximum. The offset becomes the minimum vector and
+the scale vector will be defined by the vector from the minimum to the maximum value. Sometimes, the subsampling
+can come out nice if we just use isometric axes. In which case the scale vector would be the same as the maximum
+value in the difference between the minimum and maximum values. Then we might as well not use a scale vector, but
+a single scale value.</p>
+<p>Ok, so we found the area that our root node needs to cover, now we start adding points until we hit a chosen
+threshold value. Lets say 128k points. Once we hit that limit we subsample and keep only half that amount of points.
+The subsampling strategy should be reasonably performant and make for a reasonably aesthetic coverage of the scene.
+We will start with an empty hash map to subsample the points. Having the cells only be occupied by one point at
+a time is a good basis for subsampling. The optimum would be a
+<a href="https://www.jasondavies.com/poisson-disc/">3D poisson disc subsampling</a>. It looks very nice, but to minimize the
+distances between neighbors, we would need to query for any active neighboring cells, which in 3D is 27 cells we
+need to query for every single one of our initial 128k points. Instead, if we need a bit of speed, we can get a
+much better performance and a reasonable aesthetic by minimizing the distance to the center of the cell.</p>
+<p>So. Our algorithm for subsampling a list of points will be this. Get list of points, offset and scale. Create
+an empty hash map, almost like the one we saw earlier, the keys are <code>u64</code> and the values are <code>Point</code>.
+For each point in our list we compute the spatial hash of that point. We query the hash map for whether that
+cell has already been created. If it has not, we create it and insert the point as the point held by the cell.
+If there was already a point in the cell, we compare their distances to the center of the cell. Whichever point
+is rejected, is added to a list of subsampled points. Once we are done with this process we have to lists of points.
+Once list we keep in the node, the other list we send to the next level-of-detail. The second list will then be
+distributed among the up to 8 child nodes. The child nodes are implicitly linked by their places in the list of
+hash maps and not by pointers. Once we have done this for all nodes until we are done filling out our implicit
+octree, we can finalize the structure. We do this by now enforcing a maximum amount of points and continue adding
+and subsampling until each node holds at most N points.</p>
+<p>Phew, that was a lot, but now we are ready to do some compression! Throughout this process we have kept all of the
+points in floating point coordinates. Ideally, as close to their original precision as possible. But, once we
+are done. We know where each point should be and we can act accordingly and only once. This data will be streamed
+to a users computer. They will be viewing the model through the web and won't have all of the model on their
+own system. So we will zip all of the points with a web friendly lossless compression scheme.
+<a href="https://en.wikipedia.org/wiki/Brotli">Brotli</a> is well supported by browser and was tried, this was some years ago,
+so the performance may be different now, but it required a lot more compression and decompression time. Instead
+the venerable <a href="https://en.wikipedia.org/wiki/Gzip">gzip</a> was chosen.</p>
+<p>So we know we are going to compress each node in our implicit octree. The rendering details aren't
+important/relevant to this section, but there is a limit to the resolution a user can resonably demand to see
+in a web browser, while at the same time we don't want to induce too big of an error as users may want to use the
+system for measurements. A maximum induced error of 0.5 mm is probably reasonable. Our area covered per node
+at level-of-detail 10 was 9.7 cm. Each node can have up to 64k points, so let's start off with the easiest
+optimization we can always make. Doing less. Having 64k points covering a 9.7x9.7x9.7 cm cube, is quite a bit.
+So let's just throw away all points after that. We enforce the limitation that we have at most 11 levels-of-detail.
+We could go even further and start merging all points which were sufficiently close to each other whenever we
+subsample, some users are bound to be mad lads and send you point clouds with a greater than 0.1mm precision.
+But we would need some form of policy for doing so which the user would have to find acceptable.
+Anyways, if we know we level-of-detail 10 will be our most precise level, we can make another observation.</p>
+<p>Do users really care if you have better precision, due to the smaller area covered by the same amount of bits,
+at higher levels-of-detail compared to the root node?</p>
+<p>The answer is of course, no. Most users will not care. And given that we previously chose that each successive
+level-of-detail will have a scale that is exactly half of the preceeding level-of-detail, we can now do bit nulling.
+First we will quantize all of the floats to 16-bit unsigned integers specific to the node, using the nodes scale
+and offset. The node will carry around some information, but that isn't too important. We won't do bit nulling with
+level-of-detail 0, but for level-of-detail 1 we will set the single least significant bit to 0.
+For level-of-detail 2, we will set the two least significant bits to zero. In the end, we will only have 6 bits of
+precision per coordinate axis for level-of-detail 10. So 6 bits, 64 values to cover 9.7 cm each. This leaves us
+with a precision of 0.1515625 cm, or 1.515 mm. Given that we quantize through flooring, we end up with at most
+inducing an error of 1.515mm. If we instead started our bit nulling at level-of-detail 2, we would have double
+the precision and have a maximum induced error of 0.75mm.</p>
+<p>But hold up, we can only guarantee this precision if our scene is at most 100 m in scale. What if your scene is
+bigger? This is where we veer off the standard octree path, once again. We will just have more than one root node.</p>
+<p>Think back to the part about making numbers more similar. We can do this for our list of points by sorting
+the points with techniques like Morton codes, Radix sorting or other schemes. As found in
+<a href="https://www.cg.tuwien.ac.at/research/publications/2021/SCHUETZ-2021-PCC/">this paper</a> by Schütz,
 et al., sorting the points, which we can do in preprocessing, can not only have an effect on the effectiveness
 of compression, but also the effectiveness of rendering.</p>
+<p>We could also do delta encoding of all of the points, which would work better now that the points were all sorted.
+This would be fine in the preprocessing step, but incurred too much CPU work to de-delta encode on the users'
+systems. Once the each node has been received by the users' systems, unzipped and sent to the GPU, the 16-bit
+unsigned integers will be dequantized back into floats using a transformation matrix. This is a rendering detail.</p>
+<p>Another option to make the numbers more similar would be to deinterleave the list of points and putting all of the X
+values next to each other, followed by all of the Y values, all of the Z values and all of the colors. This again,
+requires the users' system to touch every single point before uploading to the GPU, or to use 4 bindings per list
+of points in the shader.</p>
 <h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
 <p><a href="https://en.wikipedia.org/wiki/Information_theory">Information Theory</a><br />
 <a href="https://en.wikipedia.org/wiki/Data_compression">Data Compression</a><br />
@@ -1697,7 +1778,7 @@ Gzip - <a href="https://en.wikipedia.org/wiki/HTTP_compression">HTTP Compression
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 18, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 20, 2023</span>
       
         <br>
         Created:
