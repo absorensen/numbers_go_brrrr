@@ -20,7 +20,7 @@
     
     
       
-        <title>S6 - 🧬3️⃣ Tensor Cores - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S6 - 🧬3️⃣ Cooperative Matrices - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#3-tensor-cores" class="md-skip">
+        <a href="#3-cooperative-matrices" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S6 - 🧬3️⃣ Tensor Cores
+              S6 - 🧬3️⃣ Cooperative Matrices
             
           </span>
         </div>
@@ -1175,7 +1175,7 @@
           
   
   <span class="md-ellipsis">
-    S6 - 🧬3️⃣ Tensor Cores
+    S6 - 🧬3️⃣ Cooperative Matrices
   </span>
   
 
@@ -1186,7 +1186,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 🧬3️⃣ Tensor Cores
+    S6 - 🧬3️⃣ Cooperative Matrices
   </span>
   
 
@@ -1598,13 +1598,47 @@
   
 
 
-<h1 id="3-tensor-cores">🧬3️⃣ Tensor Cores</h1>
+<h1 id="3-cooperative-matrices">🧬3️⃣ Cooperative Matrices</h1>
 <p>This is mostly for people interested in deep learning or programming GPUs to the fullest. This should also include
-people interested in graphics due to DLSS, denoisers and upscaling becoming so prevalent.</p>
-<p>Supported in Tensor Cores
-FP64, TF32, bfloat16, FP16, FP8, and INT8</p>
-<p>Supported in CUDA Cores
-FP64, FP32, FP16, bfloat16, INT8</p>
+people interested in graphics due to DLSS, denoisers and upscaling becoming so prevalent. Cooperative matrices are
+known as tensor cores on Nvidia systems.</p>
+<p>Anyways, a GPU is a complex beast, but this section will specifically talk about one area of the chip that was
+introduced into the mainstream consumer cards starting with the RTX 20-series. Ironically, the GPU started off as
+quite specialized for graphics workloads, as in drawing triangles fast, but was opened up and made increasingly
+flexible. With the introduction of tensor cores and ray tracing cores it somehow became both more flexible and more
+specialized at the same time. I won't get into the ray tracing cores in this section, but it's pretty awesome!</p>
+<p>Cooperative matrices are basically ALU's made for linear operations on small tiles of matrices.
+They are really good at multiplying a small matrix by another small matrix and adding another small matrix, while
+accumulating the result. It can do it in a number of different levels of precision.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/tensor_cores_math.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/tensor_cores_math.png" width="500" /></a></p>
+<figcaption>
+Nvidia's visualization of the mathematical operation a tensor core can perform.
+<a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">
+Image credit </a>
+</figcaption>
+</figure>
+<p>While the tensor cores support matrix-matrix multiplication, they are much more limited in the size of the
+multiplication. For a general linear operation, you might need to still uses loops, but you would then
+be tiling your matrix instead, sending a 4x4 tile at a time of your matrices and keep track of your precisions,
+such as accumulating in a higher level of precision. You can read more about it
+<a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">here</a> and for Vulkan
+<a href="https://developer.nvidia.com/blog/machine-learning-acceleration-vulkan-cooperative-matrices/">here</a>.</p>
+<p>If you keep the calculations numerically stable you can even keep all of your weights during the training of
+a neural network in 8-bit floating point, while accumulating in 16-bit floating point or greater,
+which will greatly reduce the bandwidth needed for training. For inference, it can also yield a big
+speedup all the way down to 8-bit integers. Remember, that integers compress better than
+floating point numbers. So if you do quantization of your entire network before inference, you can get faster
+inference and lower power consumption. The cooperative matrix was first available in CUDA, but has since been made
+available in Vulkan, although the usage of it is not that wide spread yet as it is a fairly recent addition.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/tensor_cores.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/tensor_cores.png" width="500" /></a></p>
+<figcaption>
+Nvidia's visualization of a cooperative matrix.
+<a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">
+Image credit </a>
+</figcaption>
+</figure>
 <h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
 <p><a href="https://www.nvidia.com/en-us/data-center/tensor-cores/">Tensor Cores</a><br />
 <a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">Programming Tensor Cores</a><br />
@@ -1613,7 +1647,9 @@ Vulkan
 Machine Learning
 <a href="https://developer.nvidia.com/blog/machine-learning-acceleration-vulkan-cooperative-matrices/">in Vulkan</a><br />
 Accelerating Inference
-<a href="https://developer.nvidia.com/blog/accelerating-inference-with-sparsity-using-ampere-and-tensorrt/">with Sparsity</a>  </p>
+<a href="https://developer.nvidia.com/blog/accelerating-inference-with-sparsity-using-ampere-and-tensorrt/">with Sparsity</a><br />
+A series of videos regarding how to use tensor cores for <a href="https://developer.nvidia.com/blog/video-mixed-precision-techniques-tensor-cores-deep-learning/">mixed precision training</a>
+.</p>
 
   <hr>
 <div class="md-source-file">
@@ -1624,7 +1660,7 @@ Accelerating Inference
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 1, 2023</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 20, 2023</span>
       
     
   </small>
