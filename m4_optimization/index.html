@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.3.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.2">
     
     
       
@@ -24,10 +24,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.30068a00.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.d451bc0e.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.85d0ee34.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a5377069.min.css">
       
       
 
@@ -317,9 +317,10 @@
       
     
     
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         
@@ -338,7 +339,8 @@
 
             </a>
             
-              <label class="md-nav__link " for="__nav_3">
+              
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -488,9 +490,10 @@
       
     
     
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         
@@ -509,7 +512,8 @@
 
             </a>
             
-              <label class="md-nav__link " for="__nav_4">
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -707,9 +711,10 @@
       
     
     
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         
@@ -728,7 +733,8 @@
 
             </a>
             
-              <label class="md-nav__link " for="__nav_5">
+              
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -998,9 +1004,10 @@
       
     
     
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         
@@ -1019,7 +1026,8 @@
 
             </a>
             
-              <label class="md-nav__link " for="__nav_6">
+              
+              <label class="md-nav__link " for="__nav_6" id="__nav_6_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -1205,15 +1213,12 @@
       
         
       
-        
-      
-        
-      
+    
+    
     
     
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-        
         
         
         
@@ -1232,7 +1237,8 @@
 
             </a>
             
-              <label class="md-nav__link md-nav__link--active" for="__nav_7">
+              
+              <label class="md-nav__link md-nav__link--active" for="__nav_7" id="__nav_7_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -1293,11 +1299,11 @@
   
   
     <li class="md-nav__item">
-      <a href="s2_neural_network_training/" class="md-nav__link">
+      <a href="s2_super_resolution_windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S2 - 🧬3️⃣🔜 Neural Network Training
+    S2 - 🧬3️⃣ Super Resolution Windows
   </span>
   
 
@@ -1313,51 +1319,11 @@
   
   
     <li class="md-nav__item">
-      <a href="s3_neural_network_inference/" class="md-nav__link">
+      <a href="s2_training_pytorch.md" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S3 - 🧬3️⃣ Neural Network Inference
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="s4_path_tracer/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S4 - 🧬3️⃣🔜 Path Tracer
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="s5_point_cloud_renderer/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S5 - 🧬3️⃣🔜 Point Cloud Renderer
+    S2 - 🧬3️⃣ Training PyTorch
   </span>
   
 
@@ -1408,9 +1374,10 @@
       
     
     
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         
@@ -1461,9 +1428,10 @@
       
     
     
+    
+    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         
@@ -1552,6 +1520,18 @@
 
 
 <h1 id="3-optimization">3️⃣ Optimization</h1>
+<p>Much like the memory hierarchies there's levels to measuring performance.
+The easiest, most often overlooked is just using your systems own task manager.
+You will get a view of all of the programs currently running on your system, but
+it requires very little work and is easy to do. But much like the black box approach
+to understanding the performance of someone else's library, trying to deduce the
+characteristics of your program through the task manager might not be enough.</p>
+<p>Next up you can insert print statements and measure the timing of functions yourself.
+This won't give you any information about how many threads are in play, how much
+memory is used, or how many L2 cache misses you have, but it will allow you to
+measure the functions in your own code directly. This might require you to radically
+change your code radically in order to get adequate measurements.</p>
+<p>The harder to install, the more info it can probably give you</p>
 <h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
 <p><a href="https://nvlabs.github.io/EfficientDL/">Full-Stack, GPU-based Acceleration of Deep Learning</a><br />
 <a href="https://www.youtube.com/watch?v=XKODaZgKcnE">Writing Performant Concurrent Data Structures</a>  </p>
@@ -1561,7 +1541,7 @@
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 15, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 26, 2023</span>
       
         <br>
         Created:
@@ -1591,7 +1571,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../m3_types/s6_cooperative_matrices/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S6 - 🧬3️⃣ Cooperative Matrices" rel="prev">
+          <a href="../m3_types/s6_cooperative_matrices/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S6 - 🧬3️⃣ Cooperative Matrices">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1608,7 +1588,7 @@
         
         
           
-          <a href="s0_measuring_performance/" class="md-footer__link md-footer__link--next" aria-label="Next: S0 - Measuring Performance" rel="next">
+          <a href="s0_measuring_performance/" class="md-footer__link md-footer__link--next" aria-label="Next: S0 - Measuring Performance">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
@@ -1681,10 +1661,10 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.dfff1995.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.a264c092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.dff1b7c8.min.js"></script>
+      <script src="../assets/javascripts/bundle.726fbb30.min.js"></script>
       
     
   <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
