@@ -1307,33 +1307,26 @@
     What to measure
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-to-measure" class="md-nav__link">
-    How to measure
-  </a>
-  
-    <nav class="md-nav" aria-label="How to measure">
+    <nav class="md-nav" aria-label="What to measure">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#timing-in-code" class="md-nav__link">
-    Timing in Code
+  <a href="#timing-and-printing" class="md-nav__link">
+    Timing and Printing
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#task-manager" class="md-nav__link">
-    Task Manager
+  <a href="#bottlenecks" class="md-nav__link">
+    Bottlenecks
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#profilers" class="md-nav__link">
-    Profilers
+  <a href="#hardware" class="md-nav__link">
+    Hardware
   </a>
   
 </li>
@@ -1558,33 +1551,26 @@
     What to measure
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#how-to-measure" class="md-nav__link">
-    How to measure
-  </a>
-  
-    <nav class="md-nav" aria-label="How to measure">
+    <nav class="md-nav" aria-label="What to measure">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#timing-in-code" class="md-nav__link">
-    Timing in Code
+  <a href="#timing-and-printing" class="md-nav__link">
+    Timing and Printing
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#task-manager" class="md-nav__link">
-    Task Manager
+  <a href="#bottlenecks" class="md-nav__link">
+    Bottlenecks
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#profilers" class="md-nav__link">
-    Profilers
+  <a href="#hardware" class="md-nav__link">
+    Hardware
   </a>
   
 </li>
@@ -1613,40 +1599,310 @@
 
 
 <h1 id="3-measuring-performance">3️⃣ Measuring Performance</h1>
-<p>What and how.
-Lots of hows.
-Some of them give access to measuring different whats. </p>
+<p>As mentioned in the previous section there's a plethora of options in how to measure performance.
+But in this section, let's look at what to measure.</p>
 <h2 id="what-to-measure">What to measure</h2>
+<h3 id="timing-and-printing">Timing and Printing</h3>
+<p>Let's assume we have a basic program like the following -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">fn</span> <span class="nf">version_0</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="n">a</span><span class="p">();</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="n">b</span><span class="p">();</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">    </span><span class="n">c</span><span class="p">();</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="w">    </span><span class="n">d</span><span class="p">();</span>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>We have written the full program, you can check it out in <code>m4_optimization::code::measuring_performance</code>.
+We have verified the correctness of our program. We have set up tests to continually ensure the continued
+correctness of our program. We are now ready to improve the runtime of our program. I haven't actually done
+this as I don't actually care about whether this specific program is correct. This is not the norm of course.
+The fastest thing right now would be to either put in timing and print statements or to open up
+our system wide performance monitor and see if anything glaringly wrong is happening. Because I have something
+else coming up later where the performance monitor will be the most relevant, let's go down the time and print
+path.</p>
+<p>In this case we will include some timing functionality from the standard library at the top of the file and
+time the whole program.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">time</span>::<span class="p">{</span><span class="n">Duration</span><span class="p">,</span><span class="w"> </span><span class="n">Instant</span><span class="p">};</span>
+</span></code></pre></div>
+<p>Except, hold up. While doing this, I forgot a critical property that almost invariably happens in education
+about performance. Because we are running very simplified programs, dead code elimination by the compiler has
+a huge effect. I didn't properly use any of the results of the functions, so the Rust compiler, the helpful
+helper that it is, decided to make my program much faster, by not doing any of the work as the work was used
+nowhere. This was apparent when I timed all 4 functions, as the result was always either 100 or 200
+nanoseconds. This sort of reeks of noise floor. So our new <code>version_0()</code> will look like this -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">fn</span> <span class="nf">version_0</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">sum</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">();</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">b</span><span class="p">();</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">c</span><span class="p">();</span>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">d</span><span class="p">();</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;sum was {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>This forces the Rust compiler to not eliminate our function calls. So now, we can time the entire program as
+such -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">fn</span> <span class="nf">version_1</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">sum</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">();</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">b</span><span class="p">();</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">c</span><span class="p">();</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">d</span><span class="p">();</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_1 ran for {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time</span><span class="p">.</span><span class="n">as_millis</span><span class="p">());</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;sum was {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Now we get an output of 1 miliseconds. Clearly, we have chosen a time resolution which was too course. If we switch
+to microseconds we get 1794 microseconds. But we don't know which function is taking the most time. I am going to keep
+it in miliseconds in the outer function, but the time resolution will probably get finer the further down we go.</p>
+<p>So let's time each function individually.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">fn</span> <span class="nf">version_2</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">sum</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_a</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">();</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time_a</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_a</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_2_a ran for {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time_a</span><span class="p">.</span><span class="n">as_millis</span><span class="p">());</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_b</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">b</span><span class="p">();</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time_b</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_b</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_2_b ran for {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time_b</span><span class="p">.</span><span class="n">as_millis</span><span class="p">());</span>
+</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>
+</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_c</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">c</span><span class="p">();</span>
+</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time_c</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_c</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_2_c ran for {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time_c</span><span class="p">.</span><span class="n">as_millis</span><span class="p">());</span>
+</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a>
+</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_d</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">    </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">d</span><span class="p">();</span>
+</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time_d</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_d</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_2_d ran for {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time_d</span><span class="p">.</span><span class="n">as_millis</span><span class="p">());</span>
+</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a>
+</span><span id="__span-4-24"><a id="__codelineno-4-24" name="__codelineno-4-24" href="#__codelineno-4-24"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;sum was {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span>
+</span><span id="__span-4-25"><a id="__codelineno-4-25" name="__codelineno-4-25" href="#__codelineno-4-25"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Which gives us this output -</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>version_2_a ran for 0 milliseconds
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>version_2_b ran for 0 milliseconds
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>version_2_c ran for 1 milliseconds
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>version_2_d ran for 0 milliseconds
+</span></code></pre></div>
+<p>Ok, so <code>c()</code> is likely to be taking up more of the execution time than the others. But we don't know how much.
+Every other function could be 999 microseconds and function c could be 1000 microseconds. We could again increase the
+resolution of the timing, but in this case we have something else we should think about. We have a background usage of
+the system. We should try and turn off as many other processes as possible. Other processes might jump in and take
+some time to do something which can disturb your measurements. Your system itself might also have a ramping up period.
+As the load increases it might boost the clock frequency of the CPU to accomodate your program's needs.
+A general rule of thumb is that your program should run for at least two seconds. We can either do this per function
+or for the whole program. Let's just do this per function. We can then either keep track of how many executions of
+the function were attained during a two second window or just do N loops of each function. Let's try both.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="k">fn</span> <span class="nf">version_3</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">sum</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">iteration_count</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="mi">2_000</span><span class="p">;</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_a</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">iteration_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">();</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time_a</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_a</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_3_a ran for {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time_a</span><span class="p">.</span><span class="n">as_millis</span><span class="p">());</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_b</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">iteration_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">b</span><span class="p">();</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time_b</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_b</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_3_b ran for {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time_b</span><span class="p">.</span><span class="n">as_millis</span><span class="p">());</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_c</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">iteration_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">c</span><span class="p">();</span>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time_c</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_c</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_3_c ran for {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time_c</span><span class="p">.</span><span class="n">as_millis</span><span class="p">());</span>
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_d</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">iteration_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">d</span><span class="p">();</span>
+</span><span id="__span-6-29"><a id="__codelineno-6-29" name="__codelineno-6-29" href="#__codelineno-6-29"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-6-30"><a id="__codelineno-6-30" name="__codelineno-6-30" href="#__codelineno-6-30"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time_d</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now_d</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-6-31"><a id="__codelineno-6-31" name="__codelineno-6-31" href="#__codelineno-6-31"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_3_d ran for {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">elapsed_time_d</span><span class="p">.</span><span class="n">as_millis</span><span class="p">());</span>
+</span><span id="__span-6-32"><a id="__codelineno-6-32" name="__codelineno-6-32" href="#__codelineno-6-32"></a>
+</span><span id="__span-6-33"><a id="__codelineno-6-33" name="__codelineno-6-33" href="#__codelineno-6-33"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;sum was {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span>
+</span><span id="__span-6-34"><a id="__codelineno-6-34" name="__codelineno-6-34" href="#__codelineno-6-34"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Getting the output -</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>version_3_a ran for 22 milliseconds
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>version_3_b ran for 23 milliseconds
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>version_3_c ran for 2101 milliseconds
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>version_3_d ran for 2 milliseconds
+</span></code></pre></div>
+<p>As you can see, measuring things this way, yields a quite unbalanced view of each function. So let's try number of
+executions per second -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">fn</span> <span class="nf">version_4</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">sum</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">millisecond_limit</span>: <span class="kt">u128</span> <span class="o">=</span><span class="w"> </span><span class="mi">2_000</span><span class="p">;</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">execution_count_a</span>: <span class="kt">u128</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_a</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="n">now_a</span><span class="p">.</span><span class="n">elapsed</span><span class="p">().</span><span class="n">as_millis</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">millisecond_limit</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">();</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="w">        </span><span class="n">execution_count_a</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_4_a executed {} times in {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">execution_count_a</span><span class="p">,</span><span class="w"> </span><span class="n">millisecond_limit</span><span class="p">);</span>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">execution_count_b</span>: <span class="kt">u128</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_b</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="n">now_b</span><span class="p">.</span><span class="n">elapsed</span><span class="p">().</span><span class="n">as_millis</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">millisecond_limit</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">b</span><span class="p">();</span>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="w">        </span><span class="n">execution_count_b</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_4_b executed {} times in {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">execution_count_b</span><span class="p">,</span><span class="w"> </span><span class="n">millisecond_limit</span><span class="p">);</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">execution_count_c</span>: <span class="kt">u128</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_c</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="n">now_c</span><span class="p">.</span><span class="n">elapsed</span><span class="p">().</span><span class="n">as_millis</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">millisecond_limit</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-24"><a id="__codelineno-8-24" name="__codelineno-8-24" href="#__codelineno-8-24"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">c</span><span class="p">();</span>
+</span><span id="__span-8-25"><a id="__codelineno-8-25" name="__codelineno-8-25" href="#__codelineno-8-25"></a><span class="w">        </span><span class="n">execution_count_c</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-8-26"><a id="__codelineno-8-26" name="__codelineno-8-26" href="#__codelineno-8-26"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-8-27"><a id="__codelineno-8-27" name="__codelineno-8-27" href="#__codelineno-8-27"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_4_c executed {} times in {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">execution_count_c</span><span class="p">,</span><span class="w"> </span><span class="n">millisecond_limit</span><span class="p">);</span>
+</span><span id="__span-8-28"><a id="__codelineno-8-28" name="__codelineno-8-28" href="#__codelineno-8-28"></a>
+</span><span id="__span-8-29"><a id="__codelineno-8-29" name="__codelineno-8-29" href="#__codelineno-8-29"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">execution_count_d</span>: <span class="kt">u128</span> <span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+</span><span id="__span-8-30"><a id="__codelineno-8-30" name="__codelineno-8-30" href="#__codelineno-8-30"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">now_d</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-8-31"><a id="__codelineno-8-31" name="__codelineno-8-31" href="#__codelineno-8-31"></a><span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="n">now_d</span><span class="p">.</span><span class="n">elapsed</span><span class="p">().</span><span class="n">as_millis</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">millisecond_limit</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-32"><a id="__codelineno-8-32" name="__codelineno-8-32" href="#__codelineno-8-32"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">d</span><span class="p">();</span>
+</span><span id="__span-8-33"><a id="__codelineno-8-33" name="__codelineno-8-33" href="#__codelineno-8-33"></a><span class="w">        </span><span class="n">execution_count_d</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</span><span id="__span-8-34"><a id="__codelineno-8-34" name="__codelineno-8-34" href="#__codelineno-8-34"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-8-35"><a id="__codelineno-8-35" name="__codelineno-8-35" href="#__codelineno-8-35"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_4_d executed {} times in {} milliseconds&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">execution_count_d</span><span class="p">,</span><span class="w"> </span><span class="n">millisecond_limit</span><span class="p">);</span>
+</span><span id="__span-8-36"><a id="__codelineno-8-36" name="__codelineno-8-36" href="#__codelineno-8-36"></a>
+</span><span id="__span-8-37"><a id="__codelineno-8-37" name="__codelineno-8-37" href="#__codelineno-8-37"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;sum was {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span>
+</span><span id="__span-8-38"><a id="__codelineno-8-38" name="__codelineno-8-38" href="#__codelineno-8-38"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Now we get the executions per second -</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>version_4_a executed 188668 times in 2000 milliseconds
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>version_4_b executed 187431 times in 2000 milliseconds
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>version_4_c executed 1888 times in 2000 milliseconds
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>version_4_d executed 1804447 times in 2000 milliseconds
+</span></code></pre></div>
+<p>Clearly, it's no secret that function c takes a lot more time than the other functions. One of the real-life
+applications we can compare this to is a real-time system where we care about the frames per second. We can either
+measure the time it takes to process or render a single frame or we can measure how many frames per second we can
+sustain. One crucial bit in an interactive real-time system is the variance. If you are churning out 60 frames
+per second, but frame 0 takes 0.9999 seconds and the other frames each take 0.0000001 seconds, the user is getting a
+very choppy experience. Even if it results in a lower frames per second, like going from 60 to 50, distributing the
+processing time a bit would be a smoother experience. You could also measure the average frames per second in a moving
+window fashion while moving through a scene to see which areas of a scene might need tweaking performance wise.</p>
+<p>What we'll look at instead is getting the variance calculated alongside our other metrics. This requires a bit
+more admin work and we have to keep track of individual measurements in order to get a resonably accurate measurement.
+In order to not disturb the characteristics of the function we are measuring too much we should probably pre-allocate
+space for our measurements, which becomes our sample size. Continually pushing new values into a dynamic array
+would result in lots of allocations, which would be bad. We are also now going to measure the mean execution time of
+each function as well as the variance.</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">fn</span> <span class="nf">get_mean_and_variance</span><span class="p">(</span><span class="n">measurements</span>: <span class="kp">&amp;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">u128</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="p">(</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="kt">f32</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">sum</span>: <span class="kt">u128</span> <span class="o">=</span><span class="w"> </span><span class="n">measurements</span><span class="p">.</span><span class="n">iter</span><span class="p">().</span><span class="n">sum</span><span class="p">();</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">mean</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="n">sum</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">measurements</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f32</span><span class="p">;</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">variance</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">measurements</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">squared</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mean</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">mean</span><span class="p">);</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">        </span><span class="n">variance</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">squared</span><span class="p">;</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="n">variance</span><span class="w"> </span><span class="o">/=</span><span class="w"> </span><span class="n">measurements</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f32</span><span class="p">;</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="w">    </span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">variance</span><span class="p">)</span>
+</span><span id="__span-10-14"><a id="__codelineno-10-14" name="__codelineno-10-14" href="#__codelineno-10-14"></a><span class="p">}</span>
+</span><span id="__span-10-15"><a id="__codelineno-10-15" name="__codelineno-10-15" href="#__codelineno-10-15"></a>
+</span><span id="__span-10-16"><a id="__codelineno-10-16" name="__codelineno-10-16" href="#__codelineno-10-16"></a><span class="k">fn</span> <span class="nf">version_5</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-17"><a id="__codelineno-10-17" name="__codelineno-10-17" href="#__codelineno-10-17"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">sum</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
+</span><span id="__span-10-18"><a id="__codelineno-10-18" name="__codelineno-10-18" href="#__codelineno-10-18"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">measurement_count</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2_000</span><span class="p">;</span>
+</span><span id="__span-10-19"><a id="__codelineno-10-19" name="__codelineno-10-19" href="#__codelineno-10-19"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">measurements</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">u128</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="fm">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">measurement_count</span><span class="p">];</span>
+</span><span id="__span-10-20"><a id="__codelineno-10-20" name="__codelineno-10-20" href="#__codelineno-10-20"></a>
+</span><span id="__span-10-21"><a id="__codelineno-10-21" name="__codelineno-10-21" href="#__codelineno-10-21"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">measurement_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">measurement_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-22"><a id="__codelineno-10-22" name="__codelineno-10-22" href="#__codelineno-10-22"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">now</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-10-23"><a id="__codelineno-10-23" name="__codelineno-10-23" href="#__codelineno-10-23"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">a</span><span class="p">();</span>
+</span><span id="__span-10-24"><a id="__codelineno-10-24" name="__codelineno-10-24" href="#__codelineno-10-24"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-10-25"><a id="__codelineno-10-25" name="__codelineno-10-25" href="#__codelineno-10-25"></a><span class="w">        </span><span class="n">measurements</span><span class="p">[</span><span class="n">measurement_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">elapsed_time</span><span class="p">.</span><span class="n">as_micros</span><span class="p">();</span>
+</span><span id="__span-10-26"><a id="__codelineno-10-26" name="__codelineno-10-26" href="#__codelineno-10-26"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-27"><a id="__codelineno-10-27" name="__codelineno-10-27" href="#__codelineno-10-27"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">variance</span><span class="p">)</span><span class="w"> </span>: <span class="p">(</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="kt">f32</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_mean_and_variance</span><span class="p">(</span><span class="o">&amp;</span><span class="n">measurements</span><span class="p">);</span>
+</span><span id="__span-10-28"><a id="__codelineno-10-28" name="__codelineno-10-28" href="#__codelineno-10-28"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_5_a ran with mean {} microseconds and variance {} microseconds squared&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">variance</span><span class="p">);</span>
+</span><span id="__span-10-29"><a id="__codelineno-10-29" name="__codelineno-10-29" href="#__codelineno-10-29"></a>
+</span><span id="__span-10-30"><a id="__codelineno-10-30" name="__codelineno-10-30" href="#__codelineno-10-30"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">measurement_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">measurement_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-31"><a id="__codelineno-10-31" name="__codelineno-10-31" href="#__codelineno-10-31"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">now</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-10-32"><a id="__codelineno-10-32" name="__codelineno-10-32" href="#__codelineno-10-32"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">b</span><span class="p">();</span>
+</span><span id="__span-10-33"><a id="__codelineno-10-33" name="__codelineno-10-33" href="#__codelineno-10-33"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-10-34"><a id="__codelineno-10-34" name="__codelineno-10-34" href="#__codelineno-10-34"></a><span class="w">        </span><span class="n">measurements</span><span class="p">[</span><span class="n">measurement_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">elapsed_time</span><span class="p">.</span><span class="n">as_micros</span><span class="p">();</span>
+</span><span id="__span-10-35"><a id="__codelineno-10-35" name="__codelineno-10-35" href="#__codelineno-10-35"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-36"><a id="__codelineno-10-36" name="__codelineno-10-36" href="#__codelineno-10-36"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">variance</span><span class="p">)</span><span class="w"> </span>: <span class="p">(</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="kt">f32</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_mean_and_variance</span><span class="p">(</span><span class="o">&amp;</span><span class="n">measurements</span><span class="p">);</span>
+</span><span id="__span-10-37"><a id="__codelineno-10-37" name="__codelineno-10-37" href="#__codelineno-10-37"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_5_b ran with mean {} microseconds and variance {} microseconds squared&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">variance</span><span class="p">);</span>
+</span><span id="__span-10-38"><a id="__codelineno-10-38" name="__codelineno-10-38" href="#__codelineno-10-38"></a>
+</span><span id="__span-10-39"><a id="__codelineno-10-39" name="__codelineno-10-39" href="#__codelineno-10-39"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">measurement_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">measurement_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-40"><a id="__codelineno-10-40" name="__codelineno-10-40" href="#__codelineno-10-40"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">now</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-10-41"><a id="__codelineno-10-41" name="__codelineno-10-41" href="#__codelineno-10-41"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">c</span><span class="p">();</span>
+</span><span id="__span-10-42"><a id="__codelineno-10-42" name="__codelineno-10-42" href="#__codelineno-10-42"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-10-43"><a id="__codelineno-10-43" name="__codelineno-10-43" href="#__codelineno-10-43"></a><span class="w">        </span><span class="n">measurements</span><span class="p">[</span><span class="n">measurement_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">elapsed_time</span><span class="p">.</span><span class="n">as_micros</span><span class="p">();</span>
+</span><span id="__span-10-44"><a id="__codelineno-10-44" name="__codelineno-10-44" href="#__codelineno-10-44"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-45"><a id="__codelineno-10-45" name="__codelineno-10-45" href="#__codelineno-10-45"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">variance</span><span class="p">)</span><span class="w"> </span>: <span class="p">(</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="kt">f32</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_mean_and_variance</span><span class="p">(</span><span class="o">&amp;</span><span class="n">measurements</span><span class="p">);</span>
+</span><span id="__span-10-46"><a id="__codelineno-10-46" name="__codelineno-10-46" href="#__codelineno-10-46"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_5_c ran with mean {} microseconds and variance {} microseconds squared&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">variance</span><span class="p">);</span>
+</span><span id="__span-10-47"><a id="__codelineno-10-47" name="__codelineno-10-47" href="#__codelineno-10-47"></a>
+</span><span id="__span-10-48"><a id="__codelineno-10-48" name="__codelineno-10-48" href="#__codelineno-10-48"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">measurement_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">measurement_count</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-49"><a id="__codelineno-10-49" name="__codelineno-10-49" href="#__codelineno-10-49"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">now</span>: <span class="nc">Instant</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Instant</span>::<span class="n">now</span><span class="p">();</span>
+</span><span id="__span-10-50"><a id="__codelineno-10-50" name="__codelineno-10-50" href="#__codelineno-10-50"></a><span class="w">        </span><span class="n">sum</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">d</span><span class="p">();</span>
+</span><span id="__span-10-51"><a id="__codelineno-10-51" name="__codelineno-10-51" href="#__codelineno-10-51"></a><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">elapsed_time</span>: <span class="nc">Duration</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">now</span><span class="p">.</span><span class="n">elapsed</span><span class="p">();</span>
+</span><span id="__span-10-52"><a id="__codelineno-10-52" name="__codelineno-10-52" href="#__codelineno-10-52"></a><span class="w">        </span><span class="n">measurements</span><span class="p">[</span><span class="n">measurement_index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">elapsed_time</span><span class="p">.</span><span class="n">as_micros</span><span class="p">();</span>
+</span><span id="__span-10-53"><a id="__codelineno-10-53" name="__codelineno-10-53" href="#__codelineno-10-53"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-10-54"><a id="__codelineno-10-54" name="__codelineno-10-54" href="#__codelineno-10-54"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="p">(</span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">variance</span><span class="p">)</span><span class="w"> </span>: <span class="p">(</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="kt">f32</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_mean_and_variance</span><span class="p">(</span><span class="o">&amp;</span><span class="n">measurements</span><span class="p">);</span>
+</span><span id="__span-10-55"><a id="__codelineno-10-55" name="__codelineno-10-55" href="#__codelineno-10-55"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;version_5_d ran with mean {} microseconds and variance {} microseconds squared&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">mean</span><span class="p">,</span><span class="w"> </span><span class="n">variance</span><span class="p">);</span>
+</span><span id="__span-10-56"><a id="__codelineno-10-56" name="__codelineno-10-56" href="#__codelineno-10-56"></a>
+</span><span id="__span-10-57"><a id="__codelineno-10-57" name="__codelineno-10-57" href="#__codelineno-10-57"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;sum was {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">sum</span><span class="p">);</span>
+</span><span id="__span-10-58"><a id="__codelineno-10-58" name="__codelineno-10-58" href="#__codelineno-10-58"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>And we get the following output -</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>version_5_a ran with mean 10.116 microseconds and variance 1.1695418 microseconds squared
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>version_5_b ran with mean 10.315 microseconds and variance 0.94678104 microseconds squared
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>version_5_c ran with mean 1046.928 microseconds and variance 1914.6855 microseconds squared
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a>version_5_d ran with mean 1.217 microseconds and variance 0.17091024 microseconds squared
+</span></code></pre></div>
+<p>If we simulate an uneven workload across executions by making a more erratic function for <code>a()</code>. A random number
+is generated for each call to the <code>a_erratic()</code>, 1 out of 60 calls will result in an execution time which should
+be approximately be 100 times slower. We get the following results -</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>version_6_a ran with mean 23.2655 microseconds and variance 13236.803 microseconds squared
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>version_6_b ran with mean 10.359 microseconds and variance 0.77912927 microseconds squared
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>version_6_c ran with mean 1066.4165 microseconds and variance 2758.1538 microseconds squared
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a>version_6_d ran with mean 1.0035 microseconds and variance 0.0034878778 microseconds squared
+</span></code></pre></div>
+<p>Clearly, we should be getting the hint that something is irregular about the execution of our function <code>a_erratic()</code>.
+Another thing we could do, if these functions took input data, would be to benchmark the execution times across various input data sizes
+and graph it. I won't do it in this function, it is a bit more involved. But it is how the graphs were generated in the framework
+for computational graphs. You can find the code for making the graph based on vectors of performance measurements in
+<code>m1_memory_hierarchies::code::computational_graphs::src::shared::benchmark_plot.rs</code>.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/graphs_size.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_size.png" width="600" /></a></p>
+<figcaption>
+An example of a timing plot, comparing different implementations across different input sizes.
+</figcaption>
+</figure>
+<h3 id="bottlenecks">Bottlenecks</h3>
 <ul>
-<li>Timing</li>
-<li>Variance</li>
-<li>Multiple samples</li>
-<li>Where to measure</li>
-<li>Profile from slowest to fastest</li>
+<li>Disk bound</li>
 <li>Transfer bound</li>
 <li>Memory bound</li>
 <li>Compute bound</li>
 </ul>
-<h2 id="how-to-measure">How to measure</h2>
-<h3 id="timing-in-code">Timing in Code</h3>
-<p>Time and print
-Measure in a loop
-Add variance
-Plotting
-Benchmark with Rust?
-Timing/Benchmarking as part of CI</p>
-<h3 id="task-manager">Task Manager</h3>
-<p>Easy on Windows, what to do on Linux and iOS?</p>
-<h3 id="profilers">Profilers</h3>
-<p>See the next section, very much optional, and it is mainly for when you can't figure out what is the issue with
-the other two tools.</p>
+<h3 id="hardware">Hardware</h3>
+<ul>
+<li>Cache hits and misses</li>
+<li>CPU/GPU interactions</li>
+</ul>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 24, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 25, 2023</span>
       
         <br>
         Created:
