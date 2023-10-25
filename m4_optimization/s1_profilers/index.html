@@ -9,7 +9,7 @@
       
       
       
-        <link rel="prev" href="../s0_measuring_performance/">
+        <link rel="prev" href="../s0_timing_and_printing/">
       
       
         <link rel="next" href="../s2_super_resolution_windows/">
@@ -1257,11 +1257,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../s0_measuring_performance/" class="md-nav__link">
+      <a href="../s0_timing_and_printing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S0 - Measuring Performance
+    S0 - Timing and Printing
   </span>
   
 
@@ -1330,6 +1330,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#bottlenecks" class="md-nav__link">
+    Bottlenecks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#different-points-of-view" class="md-nav__link">
     Different Points of View
   </a>
@@ -1339,6 +1346,13 @@
         <li class="md-nav__item">
   <a href="#how-to-work-with-profilers" class="md-nav__link">
     How to work with Profilers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware" class="md-nav__link">
+    Hardware
   </a>
   
 </li>
@@ -1541,6 +1555,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#bottlenecks" class="md-nav__link">
+    Bottlenecks
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#different-points-of-view" class="md-nav__link">
     Different Points of View
   </a>
@@ -1550,6 +1571,13 @@
         <li class="md-nav__item">
   <a href="#how-to-work-with-profilers" class="md-nav__link">
     How to work with Profilers
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware" class="md-nav__link">
+    Hardware
   </a>
   
 </li>
@@ -1573,24 +1601,33 @@
 
 
 <h1 id="3-profilers">3️⃣ Profilers</h1>
-<p>Hard to install</p>
+<p>Hard to install and something that depends on your use case.  </p>
 <h2 id="choosing-a-profiler">Choosing a Profiler</h2>
 <ul>
 <li>web</li>
 <li>Task manager</li>
+<li>perf</li>
 <li><a href="https://renderdoc.org/">RenderDoc</a></li>
 <li><a href="https://gpuopen.com/rgp/">AMD Radeon GPU Profiler</a></li>
 <li><a href="https://developer.nvidia.com/nvidia-visual-profiler">Nvidia Visual Profiler</a></li>
 <li><a href="https://developer.nvidia.com/nsight-systems">Nsight Systems</a></li>
 <li><a href="https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html">PyTorch profiler</a></li>
 <li><a href="https://nnethercote.github.io/perf-book/profiling.html">A list of Rust profilers from the Rust Performance Book</a>
-Profiling on Windows is a bad experience if you are outside Visual Studio. You can try using Linux tools
+Profiling on Windows is a bad experience if you are outside Visual Studio. You can try using Linux tools like perf
 through WSL2 on Windows.</li>
+</ul>
+<h2 id="bottlenecks">Bottlenecks</h2>
+<ul>
+<li>Disk bound</li>
+<li>Transfer bound</li>
+<li>Memory bound</li>
+<li>Compute bound</li>
 </ul>
 <h2 id="different-points-of-view">Different Points of View</h2>
 <p>Benchmark table<br />
 <a href="https://github.com/abhirag/tracy_rust_demo">Trace viewer</a><br />
-Flamegraph  </p>
+Flamegraph<br />
+Hot Spots  </p>
 <h2 id="how-to-work-with-profilers">How to work with Profilers</h2>
 <p>Make sure you measured enough
 Are there any glaringly obvious things wrong? Did you remember to turn on the GPU?
@@ -1598,13 +1635,18 @@ If you have any ideas for low hanging fruit, see how much they shake up the prof
 becomes compute bound instead of memory bound?
 If you are doing something fairly standard, there might be optimization checklists available to give you ideas
 for optimizations.</p>
+<h2 id="hardware">Hardware</h2>
+<ul>
+<li>Cache hits and misses</li>
+<li>CPU/GPU interactions</li>
+</ul>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 24, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 25, 2023</span>
       
         <br>
         Created:
@@ -1634,7 +1676,7 @@ for optimizations.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../s0_measuring_performance/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S0 - Measuring Performance">
+          <a href="../s0_timing_and_printing/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S0 - Timing and Printing">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1644,7 +1686,7 @@ for optimizations.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                S0 - Measuring Performance
+                S0 - Timing and Printing
               </div>
             </div>
           </a>

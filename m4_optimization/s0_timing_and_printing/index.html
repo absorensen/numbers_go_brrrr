@@ -20,7 +20,7 @@
     
     
       
-        <title>S0 - Measuring Performance - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S0 - Timing and Printing - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#3-measuring-performance" class="md-skip">
+        <a href="#3-timing-and-printing" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S0 - Measuring Performance
+              S0 - Timing and Printing
             
           </span>
         </div>
@@ -1266,79 +1266,15 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    S0 - Measuring Performance
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    S0 - Measuring Performance
+    S0 - Timing and Printing
   </span>
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#what-to-measure" class="md-nav__link">
-    What to measure
-  </a>
-  
-    <nav class="md-nav" aria-label="What to measure">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#timing-and-printing" class="md-nav__link">
-    Timing and Printing
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bottlenecks" class="md-nav__link">
-    Bottlenecks
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#hardware" class="md-nav__link">
-    Hardware
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -1540,48 +1476,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#what-to-measure" class="md-nav__link">
-    What to measure
-  </a>
-  
-    <nav class="md-nav" aria-label="What to measure">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#timing-and-printing" class="md-nav__link">
-    Timing and Printing
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#bottlenecks" class="md-nav__link">
-    Bottlenecks
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#hardware" class="md-nav__link">
-    Hardware
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -1598,11 +1492,9 @@
   
 
 
-<h1 id="3-measuring-performance">3️⃣ Measuring Performance</h1>
+<h1 id="3-timing-and-printing">3️⃣ Timing and Printing</h1>
 <p>As mentioned in the previous section there's a plethora of options in how to measure performance.
 But in this section, let's look at what to measure.</p>
-<h2 id="what-to-measure">What to measure</h2>
-<h3 id="timing-and-printing">Timing and Printing</h3>
 <p>Let's assume we have a basic program like the following -</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">fn</span> <span class="nf">version_0</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="n">a</span><span class="p">();</span>
@@ -1885,18 +1777,10 @@ You can find the code for making the graph based on vectors of performance measu
 An example of a timing plot, comparing different implementations across different input sizes.
 </figcaption>
 </figure>
-<h3 id="bottlenecks">Bottlenecks</h3>
-<ul>
-<li>Disk bound</li>
-<li>Transfer bound</li>
-<li>Memory bound</li>
-<li>Compute bound</li>
-</ul>
-<h3 id="hardware">Hardware</h3>
-<ul>
-<li>Cache hits and misses</li>
-<li>CPU/GPU interactions</li>
-</ul>
+<p>This way of benchmarking different implementations won't help us find bottlenecks in our specific system.
+To do that we can either keep timing and printing, going deeper and deeper. Or get a profiler to measure
+which functions in our code are the biggest hot spots. These profilers are system and hardware dependent, so I will
+suggest ones you can try out in the next section.</p>
 
   <hr>
 <div class="md-source-file">
