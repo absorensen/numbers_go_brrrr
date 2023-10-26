@@ -4,26 +4,30 @@
 pub fn move_clone_and_copy() {
     // Let's start with move
     // We assign a value to a variable
-    let first_variable: u32 = 5;
+    let first_variable: Vec<u32> = vec![0; 5];
+
     // In most languages second_variable would now
-    // contain the value 5. It is the same in Rust.
+    // contain an array with 5 instances of 0.
+    // It is the same in Rust.
     // What is different in Rust, is that
     // first_variable is now no longer accesible.
-    let second_variable: u32 = first_variable;
+    let second_variable: Vec<u32> = first_variable;
+    
     // This will result in a harsh rebuke from
     // the Rust compiler.
-    // println!("{]", first_variable);
+    // println!("{:?}", first_variable);
+
     // That's right, that's not just a runtime error,
     // the compiler will check and refuse to run the
     // code. It keeps track of whether one variables
     // values has been handed over to another variable.
     
-    // One thing we could do, since we are dealing with
-    // a very small variable. We can just clone it!
+    // One thing we could do is to make a full copy of the
+    // data by cloning it!
     // Now we have two values!
-    let third_variable: u32 = second_variable.clone();
-    println!("{}", second_variable);
-    println!("{}", third_variable);
+    let third_variable: Vec<u32> = second_variable.clone();
+    println!("{:?}", second_variable);
+    println!("{:?}", third_variable);
 
     // Aggresively using clone everywhere can be one way
     // to get your code past the compiler intially,
@@ -41,15 +45,16 @@ pub fn move_clone_and_copy() {
     // Basically, Copy is a simple bit-for-bit copy of a
     // value. Most simple types, such as u32, implement it
     // by default.
-    let changed_u32: u32 = copy_the_argument(third_variable);
-    println!("{}", third_variable);
+    let variable: u32 = 5;
+    let changed_u32: u32 = copy_the_argument(variable);
+    println!("{}", variable);
     println!("{}", changed_u32);
 
     // Note that we can still access third_variable.
     // It wasn't moved, it was copied!
     // We can do the same with clone!
-    let another_changed_u32: u32 = copy_the_argument(third_variable.clone());
-    println!("{}", third_variable);
+    let another_changed_u32: u32 = copy_the_argument(variable.clone());
+    println!("{}", variable);
     println!("{}", another_changed_u32);
 
 
