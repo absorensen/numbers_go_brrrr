@@ -20,7 +20,7 @@
     
     
       
-        <title>S2 - 🧬3️⃣ Super Resolution Windows - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S2 - 🧬3️⃣ Optimizing Deep Learning Training - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#3-super-resolution-windows" class="md-skip">
+        <a href="#3-optimizing-deep-learning-training" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S2 - 🧬3️⃣ Super Resolution Windows
+              S2 - 🧬3️⃣ Optimizing Deep Learning Training
             
           </span>
         </div>
@@ -1310,7 +1310,7 @@
         
   
   <span class="md-ellipsis">
-    S2 - 🧬3️⃣ Super Resolution Windows
+    S2 - 🧬3️⃣ Optimizing Deep Learning Training
   </span>
   
 
@@ -1492,12 +1492,98 @@
   
 
 
-<h1 id="3-super-resolution-windows">🧬3️⃣ Super Resolution Windows</h1>
-<p>A small case study<br />
-Tutorial<br />
-Task manager<br />
-What about that data loader<br />
-Could we bootstrap the training process with a lower resolution dataset?  </p>
+<h1 id="3-optimizing-deep-learning-training">🧬3️⃣ Optimizing Deep Learning Training</h1>
+<p>Now, let's go through a small example of optimization through picking the lowest hanging fruits.
+I'll do this on a different system, why will make sense later. This system has an
+Nvidia RTX2070 GPU with 8 GB of VRAM, 16 GB of 2666MHz RAM, 1TB SSD (not NVMe) disk and
+an Intel i7-9700F CPU with 8 cores and a base speed of 3.0 GHz. The operating system
+is Windows 10.</p>
+<p>On to the actual case. I found a very nice tutorial about how super resolution networks.
+They take in a lower resolution image and produce another image with a higher resolution.
+I won't link to the tutorial, although the original author is very welcome to contact me
+and approve, in which case I of course will. I won't link to it as I don't want to risk
+this case study coming off as shaming or finger pointing. Performance wasn't the goal
+of the tutorial, it was to teach the reader about super resolution networks, which it does
+very well.</p>
+<p>Anyways, in the tutorial there are two different networks to train. Either a super resolution
+GAN or a super resolution ResNet. I chose the ResNet. The data set is 13 GB for training and
+6 GB for validation. Normally, I would expect to see the epoch, where you might recall we will
+sample the entire training data set, get faster after the first one, as more data is loaded from
+disk. There is a snag which can make optimization of this problem difficult. We usually random
+sample batches from the entire training data set.
+Finally, we are limited by being unable to fit the entire training data set in either type of RAM.</p>
+<p>To start, let's run the code for two epochs and see what the run time is.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/optimize_srresnet_baseline_timing_epoch_01.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/optimize_srresnet_baseline_timing_epoch_01.png" width="800" /></a></p>
+<figcaption>
+The baseline timing for running two epochs.
+</figcaption>
+</figure>
+<p>So, we ran two epochs and it is murderously slow. The timing did not improve noticeably for the second
+epoch. Let's go over to task manager and look at the system's characteristics before we rerun the
+two epochs.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/optimize_srresnet_baseline_cpu.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/optimize_srresnet_baseline_cpu.png" width="800" /></a></p>
+<figcaption>
+The system baseline in the CPU tab.
+</figcaption>
+</figure>
+<figure>
+<p><a class="glightbox" href="../../figures/optimize_srresnet_baseline_gpu.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/optimize_srresnet_baseline_gpu.png" width="800" /></a></p>
+<figcaption>
+The system baseline in the GPU tab.
+</figcaption>
+</figure>
+<p>We can see not a lot of stuff is going on aside from small peaks here and there. Our baseline RAM is
+5.8 GB and on the GPU we use just about 1 GB. Let's run two epochs and see what comes out.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/optimize_srresnet_baseline_cpu_epoch_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/optimize_srresnet_baseline_cpu_epoch_0.png" width="800" /></a></p>
+<figcaption>
+The CPU tab during unoptimized training.
+</figcaption>
+</figure>
+<figure>
+<p><a class="glightbox" href="../../figures/optimize_srresnet_baseline_gpu_epoch_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/optimize_srresnet_baseline_gpu_epoch_0.png" width="800" /></a></p>
+<figcaption>
+The GPU tab during unoptimized training.
+</figcaption>
+</figure>
+<figure>
+<p><a class="glightbox" href="../../figures/optimize_srresnet_baseline_disk_epoch_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/optimize_srresnet_baseline_disk_epoch_0.png" width="800" /></a></p>
+<figcaption>
+The disk tab during unoptimized training.
+</figcaption>
+</figure>
+<p>As you can see, where are not maxing out the RAM or VRAM, the GPU is barely doing anything, but using
+a total of 3GB VRAM now. Additionally, we can see that we are at a total of 10 GB RAM used, with a
+reasonably heavy load on both disk and CPU. There aren't performance statistics for the memory,
+but my guess is that it is covered by the CPU usage as well. Time spent waiting for memory access
+is probably covered in the CPU load. So let's take a look at the data loader.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/optimize_srresnet_base_data_loader.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/optimize_srresnet_base_data_loader.png" width="800" /></a></p>
+<figcaption>
+The data loader.
+</figcaption>
+</figure>
+<p>It does some setup, but most importantly... it doesn't reuse data. It ALWAYS reloads it from
+disk and redoes some preprocessing. In a perfect world, we would keep the entire data set
+loaded on the GPU, at which point we would probably optimize the GPU compute part, but what
+could we do about the disk and CPU load? While we could make a more complex hierarchical
+data loader which kept track of which data was on the GPU, which data was in memory and
+which was on disk, this is more work than I have time for, and given the randomized data
+set sampling, the probability of getting a "cache hit" on the GPU is around 1/3 at the start
+of an epoch and decreasing over time. Short of upgrading to a GPU with more RAM or compressing
+and preprocessing the data, there are probably other and cheaper low hanging fruit. And by
+cheap I mean either in money or in your/my time. Which is also a valuable resource. Instead
+I propose the following: upgrade the RAM and cache the data. Upgrading the RAM to an amount
+that allows us to keep most or all of the data set in memory will allow us to write a data cache.
+We will still only load the data on demand, but first we will look in our list of loaded data,
+if it is not in the cache, we will load the data from the disk and preprocess it.
+Then we will put the data in our cache after which we will yield the data. We save the preprocessing
+and hopefully significantly decrease the load on our disk.</p>
+<p>Currently, I have two 8 GB sticks of 2666 MHz RAM in the machine. I will now shut off the system
+and replace the two sticks with a single 32 GB stick. Also running at 2666 MHz, because that's
+the greatest speed my motherboard will allow. So hold on while I do that.</p>
 <p><a href="https://arxiv.org/abs/2302.14623">Fast as CHITA: Neural Network Pruning with Combinatorial Optimization</a>  </p>
 
   <hr>
@@ -1505,11 +1591,11 @@ Could we bootstrap the training process with a lower resolution dataset?  </p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 25, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 29, 2023</span>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 31, 2023</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 29, 2023</span>
       
     
   </small>
