@@ -1584,6 +1584,17 @@ and hopefully significantly decrease the load on our disk.</p>
 <p>Currently, I have two 8 GB sticks of 2666 MHz RAM in the machine. I will now shut off the system
 and replace the two sticks with a single 32 GB stick. Also running at 2666 MHz, because that's
 the greatest speed my motherboard will allow. So hold on while I do that.</p>
+<p>Ok, so I installed the 32 GB stick and changed the data loader to lazy caching. As it turns out
+it ends up using around 64 GB if you want to cache all of the data. The new function looks like this -</p>
+<figure>
+<p><a class="glightbox" href="../../figures/optimize_srresnet_upgraded_data_loader.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/optimize_srresnet_upgraded_data_loader.png" width="800" /></a></p>
+<figcaption>
+The data loader.
+</figcaption>
+</figure>
+<p>This results in a severe amount of thrashing where a part of the memory is kept on disk and a
+continual swapping between memory and disk and disk and memory takes place, which absolutely
+tanks performance. Let's see whether putting in another stick of RAM yields better results.</p>
 <p><a href="https://arxiv.org/abs/2302.14623">Fast as CHITA: Neural Network Pruning with Combinatorial Optimization</a>  </p>
 
   <hr>
