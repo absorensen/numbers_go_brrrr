@@ -1,0 +1,19 @@
+[package]
+name = "sphere_intersection"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[profile.dev]
+opt-level = 3
+incremental = true
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+incremental = true
+
+[dependencies]
+ultraviolet = { version = "0.9", features = [ "f64", "int" ] }
+rayon = "1.5.3"
+wide = "0.7.5"
