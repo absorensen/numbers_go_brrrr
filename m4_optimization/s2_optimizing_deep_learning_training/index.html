@@ -899,7 +899,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - 3️⃣🔜 More GPU
+    S7 - 3️⃣ More GPU
   </span>
   
 
@@ -1619,13 +1619,22 @@ The data loader.
 <p>This results in a severe amount of thrashing where a part of the memory is kept on disk and a
 continual swapping between memory and disk and disk and memory takes place, which absolutely
 tanks performance. Let's see whether putting in another stick of RAM yields better results.</p>
+<p>As it turns out, I ordered another 32GB stick, but the online store cancelled by order as
+it was no longer being made. This is probably the end of the road for this case study.
+Training on less data, a reduction of 50% might make it cacheable in memory, seems like
+cheating. I'll try and come back with a different one at some point. One thing I would
+like to say is, that while the code we started looking at was unoptimized, that wouldn't
+matter unless you were either running a very beefy desktop rig or actual HPC equipment,
+in which case having all of the data in memory would be possible. So a point in favour of
+the person who wrote that tutorial. He catered the code to his audience and made it possible
+to run on the widest range of platforms.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 30, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 31, 2023</span>
       
         <br>
         Created:

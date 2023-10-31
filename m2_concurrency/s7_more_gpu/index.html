@@ -20,7 +20,7 @@
     
     
       
-        <title>S7 - 3️⃣🔜 More GPU - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S7 - 3️⃣ More GPU - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S7 - 3️⃣🔜 More GPU
+              S7 - 3️⃣ More GPU
             
           </span>
         </div>
@@ -910,7 +910,7 @@
           
   
   <span class="md-ellipsis">
-    S7 - 3️⃣🔜 More GPU
+    S7 - 3️⃣ More GPU
   </span>
   
 
@@ -921,7 +921,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - 3️⃣🔜 More GPU
+    S7 - 3️⃣ More GPU
   </span>
   
 
@@ -950,36 +950,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#spir-v-glslhlsl" class="md-nav__link">
-    SPIR-V &amp; GLSL/HLSL
+  <a href="#additional-levels-in-the-memory-hierarchy" class="md-nav__link">
+    Additional Levels in the Memory Hierarchy
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#asynchronous-memory-transfers" class="md-nav__link">
-    Asynchronous Memory Transfers
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#warp-shuffling" class="md-nav__link">
-    Warp Shuffling
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#distributed-shared-memory" class="md-nav__link">
-    Distributed Shared Memory
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#shader-execution-reordering" class="md-nav__link">
-    🧬 Shader Execution Reordering
+  <a href="#spir-v-glsl" class="md-nav__link">
+    SPIR-V &amp; GLSL
   </a>
   
 </li>
@@ -1591,36 +1570,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#spir-v-glslhlsl" class="md-nav__link">
-    SPIR-V &amp; GLSL/HLSL
+  <a href="#additional-levels-in-the-memory-hierarchy" class="md-nav__link">
+    Additional Levels in the Memory Hierarchy
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#asynchronous-memory-transfers" class="md-nav__link">
-    Asynchronous Memory Transfers
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#warp-shuffling" class="md-nav__link">
-    Warp Shuffling
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#distributed-shared-memory" class="md-nav__link">
-    Distributed Shared Memory
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#shader-execution-reordering" class="md-nav__link">
-    🧬 Shader Execution Reordering
+  <a href="#spir-v-glsl" class="md-nav__link">
+    SPIR-V &amp; GLSL
   </a>
   
 </li>
@@ -1650,18 +1608,98 @@
   
 
 
-<h1 id="3-more-gpu">3️⃣🔜 More GPU</h1>
-<p>More on this later.</p>
+<h1 id="3-more-gpu">3️⃣ More GPU</h1>
+<p>This section is about giving a bit of additional context around GPUs.</p>
 <h2 id="the-graphics-pipeline">The Graphics Pipeline</h2>
-<p>Rasterization<br />
-Vertex Shader<br />
-Fragment Shader<br />
-Compute Shader  </p>
-<h2 id="spir-v-glslhlsl">SPIR-V &amp; GLSL/HLSL</h2>
-<h2 id="asynchronous-memory-transfers">Asynchronous Memory Transfers</h2>
-<h2 id="warp-shuffling">Warp Shuffling</h2>
-<h2 id="distributed-shared-memory">Distributed Shared Memory</h2>
-<h2 id="shader-execution-reordering">🧬 Shader Execution Reordering</h2>
+<p>Originally, GPU's were made just for graphics. They were intiially quite closed in their
+form, with a lot of the internal pipeline hidden away from the user.
+The classic vertex and fragment shader setup can be seen below.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/graphics_pipeline.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphics_pipeline.png" width="700" /></a></p>
+<figcaption>
+A simplified view of the traditional vertex/fragment shader setup. The geometry shader
+is optional and not that popular anymore.
+<a href="https://learnopengl.com/Getting-started/Hello-Triangle">
+Image credit </a>
+</figcaption>
+</figure>
+<p>The geometry shader is a later addition and has largely fallen out of favor due to
+dynamically generating more data in a way that yielded quite poor performance. But.
+If you look at the figure you can see that vertex data is passed in. This is
+transferred from the GPU. This will be all of the corners of the triangles
+that make up a mesh. Aside from the purely positional data, it can also have
+attributes like the normal vector, the texture coordinates or the color. The vertices
+are passed in and the vertex shader has access to one vertex at a time. Each
+vertex is transformed from the objects own space into the world, view and projection
+spaces. The vertices are sent along. A geometry shader could create additional vertices
+and resulting triangles, with a view of more than one vertex. This is optional.
+In shape assembly, vertices are assembled to full triangles, afterwhich the triangle
+is rasterized into fragments. Think of these fragments as potential pixel candidates.
+Each of them have values which are barycentric interpolations of the three vertices
+they are constructed from. Each fragment is then sent to the fragment shader,
+which can see a single fragment at a time. Lighting can then be calculated per fragment.
+Importantly, it is also possible for the fragment to know where its potential position
+is in the coordinate space of the rectangle to which it will be rendered. Once
+lighting and other fragment related information has been calculated the fragment can
+be sent further along where it will be tested whether the fragment is the fragment
+closest to the viewpoint of the camera, or whether it might be behind another fragment
+and can safely be discarded. The fragment shader could also write or read from textures
+or buffers. Other shaders can do that too, but I'm building to something.</p>
+<p>Additional shader types include mesh, task, raytracing and tesselation. Possibly more.
+Additional behind the scenes processes are performed to transform the data, doing
+things like clipping to determine whether a fragment is even in view. If it is not
+it can safely be discarded. This is not programmable.</p>
+<p>Why do you think it was important that the fragment in the fragment shader had access
+to its coordinate on the output surface? Take a second to think about it.</p>
+<p>The fragment shader is the precursor to the compute shader. Knowing where you are on
+the 2D output surface is tantamount to finding your thread ID. Allowing the fragment
+shader to write to buffers and not just send the fragment to be renddered allows
+you to save the calculations. Once upon a time, scientists thought it would be kind
+of nice if you could use the GPU, which is a massively parallel device for scientific
+computing. So they used fragment shaders in the early 2000's to do stuff like
+matrix-matrix multiplication and FFT's. There were a number of research projects
+in how to do GPGPU, eventually culminating in the official release of CUDA in 2007.
+Nowadays compute shaders are a standard part of graphics APIs and workloads, with
+an increasing amount of rendering pipelines using one or more compute shaders in their
+pipelines. These compute shaders can happen at any point. In fact, in launching
+the new Nanite system for Unreal Engine 5, one of the tech leads on the project,
+Brian Karis, <a href="https://www.youtube.com/watch?v=eviSykqSUUw">revealed</a> that for
+select triangles, they would prevent them from being hardware rasterized and
+instead write their own software based rasterizer which could outperform hardware
+rasterization for very small triangles.</p>
+<p>For a more thorough explanation of the graphics pipeline you can read this page
+from <a href="https://learnopengl.com/Getting-started/Hello-Triangle">Learn OpenGL</a>.</p>
+<h2 id="additional-levels-in-the-memory-hierarchy">Additional Levels in the Memory Hierarchy</h2>
+<p>Last time I introduced concepts in GPU memory to you, we had two options.
+A thread could either write its data to global memory (VRAM) from which
+other threads could read the data, or it could share data with other
+threads in the same workgroup, by writing to the user programmable
+shared memory, residing in the L1 cache. There are two other options.
+I know the first one is available in CUDA, it might be in some shader
+languages and OpenCL, but it's certainly not in WGSL. In CUDA it is known as
+<a href="https://developer.nvidia.com/blog/using-cuda-warp-level-primitives/">warp shuffling</a>.
+When sharing data through shared memory, the cost to access shared memory is 10 cycles,
+or it was last time I checked. Warp shuffling, or work group shuffling, is sharing
+directly between the registers of each thread in a work group. It was 1 cycle to
+access last time I checked. This is immensely useful in reductions and prefix sums.
+You would still need to write data to global memory in order to share data between
+work groups. Unless you are using a GPU supporting
+<a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">distributed shared memory</a>
+. At the time of writing, the Nvidia H100 is the only card supporting it.
+Distributed shared memory allows accessing memory residing in the shared memory of
+other work groups, as if it was one big shared memory. Hopefully, this feature
+will make its way into other cards soon.</p>
+<h2 id="spir-v-glsl">SPIR-V &amp; GLSL</h2>
+<p>WGSL is somewhat limited in what it can do. If you would like access to more features
+or to have a greater codebase you can copy from directly, WGPU has
+<a href="https://docs.rs/wgpu/latest/wgpu/enum.ShaderSource.html#">increasing support</a> for
+both the GPU intermediate representation SPIR-V and the shading language GLSL (which can be
+compiled to SPIR-V), without necessitation additional build scaffolding.
+It also looks like it will make use of <a href="https://github.com/gfx-rs/wgpu/tree/trunk/naga">naga</a>
+directly. If you are sure your system has support for it (think back to extensions),
+a more mature shading language like GLSL, might let you make use of more features. I
+haven't had time to check it out yet, but if it can used without additional build steps
+and administration, this might be a nice way to get access to more features.</p>
 <h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
 <p>To learn more about the graphics pipeline you can check out
 <a href="https://learnopengl.com/">Learn OpenGL</a> or <a href="https://sotrh.github.io/learn-wgpu/">Learn WGPU</a>.</p>
@@ -1671,7 +1709,7 @@ Compute Shader  </p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">September 20, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 31, 2023</span>
       
         <br>
         Created:
