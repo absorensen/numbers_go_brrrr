@@ -981,19 +981,6 @@
     Data-oriented programming
   </a>
   
-    <nav class="md-nav" aria-label="Data-oriented programming">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#shader-execution-reordering" class="md-nav__link">
-    🧬 Shader Execution Reordering
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1007,6 +994,19 @@
   <a href="#additional-reading" class="md-nav__link">
     Additional Reading
   </a>
+  
+    <nav class="md-nav" aria-label="Additional Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shader-execution-reordering" class="md-nav__link">
+    🧬 Shader Execution Reordering
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1601,19 +1601,6 @@
     Data-oriented programming
   </a>
   
-    <nav class="md-nav" aria-label="Data-oriented programming">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#shader-execution-reordering" class="md-nav__link">
-    🧬 Shader Execution Reordering
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
 </li>
       
         <li class="md-nav__item">
@@ -1627,6 +1614,19 @@
   <a href="#additional-reading" class="md-nav__link">
     Additional Reading
   </a>
+  
+    <nav class="md-nav" aria-label="Additional Reading">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#shader-execution-reordering" class="md-nav__link">
+    🧬 Shader Execution Reordering
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -1689,24 +1689,24 @@ If-statement reformulation  </p>
 <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sorting_functions">online</a>.<br />
 AOS SOA AOSOA - cache lines<br />
 A macro-ish perspective  </p>
+<h2 id="simd">SIMD</h2>
+<p>Find the code in <code>m2_concurrency::code::sphere_intersection</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sphere_intersection">online</a>.<br />
+Check your system for SIMD hardware.<br />
+Autovectorization<br />
+Explicit SIMD programming<br />
+Doesn't work if you are memory bound, SIMD won't magically make your memory bandwidth increase.  </p>
+<h2 id="additional-reading">Additional Reading</h2>
+<p>A nice introduction video to <a href="https://www.youtube.com/watch?v=g-WPhYREFjk">branchless programming</a> by Fedor Pikus.<br />
+A nice introduction video to <a href="https://www.youtube.com/watch?v=x5tK5ET6Q1I">SIMD</a> by Guillaume Endignoux.<br />
+Wiki on <a href="https://en.wikipedia.org/wiki/Branch_predictor">branch prediction</a>.<br />
+Wiki on <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">instruction pipelining</a>.<br />
+Slides on <a href="https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf">instruction pipelining</a>
+from The University of Tennessee, Knoxville.  </p>
 <h3 id="shader-execution-reordering">🧬 Shader Execution Reordering</h3>
 <p><a href="https://research.nvidia.com/sites/default/files/publications/laine2013hpg_paper.pdf">Megakernels Considered Harmful</a><br />
 <a href="https://d29g4g2dyqv443.cloudfront.net/sites/default/files/akamai/gameworks/ser-whitepaper.pdf">Shader Execution Reodering</a><br />
 <a href="https://jacco.ompf2.com/2019/07/18/wavefront-path-tracing/">Wavefront Path Tracing</a>  </p>
-<h2 id="simd">SIMD</h2>
-<p>Find the code in <code>m2_concurrency::code::sphere_intersection</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sphere_intersection">online</a>.
-Check your system for SIMD hardware.
-Autovectorization
-Explicit SIMD programming
-Doesn't work if you are memory bound, SIMD won't magically make your memory bandwidth increase.</p>
-<h2 id="additional-reading">Additional Reading</h2>
-<p>A nice introduction video to <a href="https://www.youtube.com/watch?v=g-WPhYREFjk">branchless programming</a> by Fedor Pikus.
-A nice introduction video to <a href="https://www.youtube.com/watch?v=x5tK5ET6Q1I">SIMD</a> by Guillaume Endignoux.
-Wiki on <a href="https://en.wikipedia.org/wiki/Branch_predictor">branch prediction</a>.
-Wiki on <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">instruction pipelining</a>.
-Slides on <a href="https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf">instruction pipelining</a>
-from The University of Tennessee, Knoxville.</p>
 
   <hr>
 <div class="md-source-file">
