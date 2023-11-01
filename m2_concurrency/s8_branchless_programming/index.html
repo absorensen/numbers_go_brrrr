@@ -20,7 +20,7 @@
     
     
       
-        <title>S8 - 3️⃣🔜 Branchless Programming - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S8 - 3️⃣ Branchless Programming - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S8 - 3️⃣🔜 Branchless Programming
+              S8 - 3️⃣ Branchless Programming
             
           </span>
         </div>
@@ -930,7 +930,7 @@
           
   
   <span class="md-ellipsis">
-    S8 - 3️⃣🔜 Branchless Programming
+    S8 - 3️⃣ Branchless Programming
   </span>
   
 
@@ -941,7 +941,7 @@
         
   
   <span class="md-ellipsis">
-    S8 - 3️⃣🔜 Branchless Programming
+    S8 - 3️⃣ Branchless Programming
   </span>
   
 
@@ -963,11 +963,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#sorting-functions" class="md-nav__link">
-    Sorting Functions
+  <a href="#branch-prediction" class="md-nav__link">
+    Branch Prediction
   </a>
   
-    <nav class="md-nav" aria-label="Sorting Functions">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branchless-programming" class="md-nav__link">
+    Branchless Programming
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-oriented-programming" class="md-nav__link">
+    Data-oriented programming
+  </a>
+  
+    <nav class="md-nav" aria-label="Data-oriented programming">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1569,11 +1583,25 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#sorting-functions" class="md-nav__link">
-    Sorting Functions
+  <a href="#branch-prediction" class="md-nav__link">
+    Branch Prediction
   </a>
   
-    <nav class="md-nav" aria-label="Sorting Functions">
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#branchless-programming" class="md-nav__link">
+    Branchless Programming
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#data-oriented-programming" class="md-nav__link">
+    Data-oriented programming
+  </a>
+  
+    <nav class="md-nav" aria-label="Data-oriented programming">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
@@ -1620,26 +1648,72 @@
   
 
 
-<h1 id="3-branchless-programming">3️⃣🔜 Branchless Programming</h1>
+<h1 id="3-branchless-programming">3️⃣ Branchless Programming</h1>
+<p>For this next section, I am going to be cheating a little bit.
+I am going to introduce to you a concept that is mostly about optimizing for branch prediction and cache lines.
+These things aren't technically concurrency. But they do lead to an introduction of single instruction,
+multiple data (SIMD), which is... I don't know... concurrency's cousin or something. It also wasn't immediately
+obvious where else this would go. Anyways, branch prediction, branchless programming, data oriented programming and
+SIMD, here we go!</p>
+<h2 id="branch-prediction">Branch Prediction</h2>
+<p>Branch prediction and pipelines - Hardware</p>
+<figure>
+<p><a class="glightbox" href="../../figures/pipeline_architecture.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/pipeline_architecture.png" width="600" /></a></p>
+<figcaption>
+Pipelined Hardware Architecture
+<a href="https://microchipdeveloper.com/32bit:mz-arch-pipeline">
+Image credit </a>
+</figcaption>
+</figure>
+<p>Pipelined instructions</p>
+<figure>
+<p><a class="glightbox" href="../../figures/pipelined_instructions.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/pipelined_instructions.png" width="600" /></a></p>
+<figcaption>
+Pipelined Instructions
+<a href="https://microchipdeveloper.com/32bit:mz-arch-pipeline">
+Image credit </a>
+</figcaption>
+</figure>
+<p>Very basically explained. I do recommend you check out these
+<a href="https://ics.uci.edu/~swjun/courses/2023F-CS250P/materials/lec5.5%20-%20Fast%20and%20Correct%20Pipelining.pdf">slides</a>
+from University of California, Irvine for a cursory glance at the fairly complex topic of the hardware involved in
+branch prediction.
+For-loop control hazard
+If-statement control hazard</p>
+<h2 id="branchless-programming">Branchless Programming</h2>
 <p>Short circuiting, think back to bitwise operators
-Branch prediction and pipelines - Hardware
-Data oriented programming
-AOS SOA AOSOA - cache lines</p>
-<h2 id="sorting-functions">Sorting Functions</h2>
-<p>A macro-ish perspective</p>
+Unrolling
+If-statement reformulation</p>
+<h2 id="data-oriented-programming">Data-oriented programming</h2>
+<p>Find the code in <code>m2_concurrency::code::sphere_intersection</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sorting_functions">online</a>.
+AOS SOA AOSOA - cache lines
+A macro-ish perspective</p>
 <h3 id="shader-execution-reordering">🧬 Shader Execution Reordering</h3>
-<p>Megakernels are considered harmful</p>
+<p><a href="https://research.nvidia.com/sites/default/files/publications/laine2013hpg_paper.pdf">Megakernels Considered Harmful</a>
+<a href="https://d29g4g2dyqv443.cloudfront.net/sites/default/files/akamai/gameworks/ser-whitepaper.pdf">Shader Execution Reodering</a>
+<a href="https://jacco.ompf2.com/2019/07/18/wavefront-path-tracing/">Wavefront Path Tracing</a></p>
 <h2 id="simd">SIMD</h2>
+<p>Find the code in <code>m2_concurrency::code::sphere_intersection</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sphere_intersection">online</a>.
+Check your system for SIMD hardware.
+Autovectorization
+Explicit SIMD programming
+Doesn't work if you are memory bound, SIMD won't magically make your memory bandwidth increase.</p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p>A nice introduction video to <a href="https://www.youtube.com/watch?v=g-WPhYREFjk">branchless programming</a> by Fedor Pikus.
-A nice introduction video to <a href="https://www.youtube.com/watch?v=x5tK5ET6Q1I">SIMD</a> by Guillaume Endignoux.</p>
+A nice introduction video to <a href="https://www.youtube.com/watch?v=x5tK5ET6Q1I">SIMD</a> by Guillaume Endignoux.
+Wiki on <a href="https://en.wikipedia.org/wiki/Branch_predictor">branch prediction</a>.
+Wiki on <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">instruction pipelining</a>.
+Slides on <a href="https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf">instruction pipelining</a>
+from The University of Tennessee, Knoxville.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 31, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 1, 2023</span>
       
         <br>
         Created:

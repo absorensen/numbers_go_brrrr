@@ -950,6 +950,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#spir-v-glsl" class="md-nav__link">
+    SPIR-V &amp; GLSL
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#additional-levels-in-the-memory-hierarchy" class="md-nav__link">
     Additional Levels in the Memory Hierarchy
   </a>
@@ -957,8 +964,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#spir-v-glsl" class="md-nav__link">
-    SPIR-V &amp; GLSL
+  <a href="#were-you-scattering-or-were-you-gathering" class="md-nav__link">
+    Were you Scattering or were you Gathering?
   </a>
   
 </li>
@@ -989,7 +996,7 @@
         
   
   <span class="md-ellipsis">
-    S8 - 3️⃣🔜 Branchless Programming
+    S8 - 3️⃣ Branchless Programming
   </span>
   
 
@@ -1570,6 +1577,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#spir-v-glsl" class="md-nav__link">
+    SPIR-V &amp; GLSL
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#additional-levels-in-the-memory-hierarchy" class="md-nav__link">
     Additional Levels in the Memory Hierarchy
   </a>
@@ -1577,8 +1591,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#spir-v-glsl" class="md-nav__link">
-    SPIR-V &amp; GLSL
+  <a href="#were-you-scattering-or-were-you-gathering" class="md-nav__link">
+    Were you Scattering or were you Gathering?
   </a>
   
 </li>
@@ -1669,6 +1683,17 @@ instead write their own software based rasterizer which could outperform hardwar
 rasterization for very small triangles.</p>
 <p>For a more thorough explanation of the graphics pipeline you can read this page
 from <a href="https://learnopengl.com/Getting-started/Hello-Triangle">Learn OpenGL</a>.</p>
+<h2 id="spir-v-glsl">SPIR-V &amp; GLSL</h2>
+<p>WGSL is somewhat limited in what it can do. If you would like access to more features
+or to have a greater codebase you can copy from directly, WGPU has
+<a href="https://docs.rs/wgpu/latest/wgpu/enum.ShaderSource.html#">increasing support</a> for
+both the GPU intermediate representation SPIR-V and the shading language GLSL (which can be
+compiled to SPIR-V), without necessitation additional build scaffolding.
+It also looks like it will make use of <a href="https://github.com/gfx-rs/wgpu/tree/trunk/naga">naga</a>
+directly. If you are sure your system has support for it (think back to extensions),
+a more mature shading language like GLSL, might let you make use of more features. I
+haven't had time to check it out yet, but if it can used without additional build steps
+and administration, this might be a nice way to get access to more features.</p>
 <h2 id="additional-levels-in-the-memory-hierarchy">Additional Levels in the Memory Hierarchy</h2>
 <p>Last time I introduced concepts in GPU memory to you, we had two options.
 A thread could either write its data to global memory (VRAM) from which
@@ -1684,22 +1709,19 @@ directly between the registers of each thread in a work group. It was 1 cycle to
 access last time I checked. This is immensely useful in reductions and prefix sums.
 You would still need to write data to global memory in order to share data between
 work groups. Unless you are using a GPU supporting
-<a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">distributed shared memory</a>
-. At the time of writing, the Nvidia H100 is the only card supporting it.
+<a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">distributed shared memory</a>.
+At the time of writing, the Nvidia H100 is the only card supporting it.
 Distributed shared memory allows accessing memory residing in the shared memory of
 other work groups, as if it was one big shared memory. Hopefully, this feature
 will make its way into other cards soon.</p>
-<h2 id="spir-v-glsl">SPIR-V &amp; GLSL</h2>
-<p>WGSL is somewhat limited in what it can do. If you would like access to more features
-or to have a greater codebase you can copy from directly, WGPU has
-<a href="https://docs.rs/wgpu/latest/wgpu/enum.ShaderSource.html#">increasing support</a> for
-both the GPU intermediate representation SPIR-V and the shading language GLSL (which can be
-compiled to SPIR-V), without necessitation additional build scaffolding.
-It also looks like it will make use of <a href="https://github.com/gfx-rs/wgpu/tree/trunk/naga">naga</a>
-directly. If you are sure your system has support for it (think back to extensions),
-a more mature shading language like GLSL, might let you make use of more features. I
-haven't had time to check it out yet, but if it can used without additional build steps
-and administration, this might be a nice way to get access to more features.</p>
+<h2 id="were-you-scattering-or-were-you-gathering">Were you Scattering or were you Gathering?</h2>
+<p>Coming soon...</p>
+<figure>
+<p><a class="glightbox" href="../../figures/scattering_or_gathering.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/scattering_or_gathering.jpg" width="500" /></a></p>
+<figcaption>
+Answer!
+</figcaption>
+</figure>
 <h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
 <p>To learn more about the graphics pipeline you can check out
 <a href="https://learnopengl.com/">Learn OpenGL</a> or <a href="https://sotrh.github.io/learn-wgpu/">Learn WGPU</a>.</p>
@@ -1709,7 +1731,7 @@ and administration, this might be a nice way to get access to more features.</p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 31, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 1, 2023</span>
       
         <br>
         Created:
@@ -1756,13 +1778,13 @@ and administration, this might be a nice way to get access to more features.</p>
         
         
           
-          <a href="../s8_branchless_programming/" class="md-footer__link md-footer__link--next" aria-label="Next: S8 - 3️⃣🔜 Branchless Programming">
+          <a href="../s8_branchless_programming/" class="md-footer__link md-footer__link--next" aria-label="Next: S8 - 3️⃣ Branchless Programming">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S8 - 3️⃣🔜 Branchless Programming
+                S8 - 3️⃣ Branchless Programming
               </div>
             </div>
             <div class="md-footer__button md-icon">
