@@ -1515,15 +1515,26 @@
 
 
 <h1 id="exercises">👨🏼‍💻 Exercises</h1>
-<p>I recommend doing <a href="https://adventofcode.com/">Advent of Code</a> problems until you feel
-comfortable moving forward.</p>
+<p>In order to get a hang of the basic of Rust I recommend doing [Advent of Code][1]
+problems until you feel comfortable moving forward.</p>
+<p>You won't be confronted much with the borrow checker in these small problems. To get better practice structure,
+smart pointers, dynamic dispatch and traits, I recommend moving on to doing [Ray Tracing in One Weekend][2] in Rust.</p>
+<p>Once you have completed this part 1 out of 3, I suggest modifying the resulting code in the following ways -</p>
+<ul>
+<li>Remove the use of <code>dyn</code>. (Hint: Use enums)</li>
+<li>Remove the use of smart pointers.
+(Hint: My solution was to use indices and a geometry service provided by dependency injection)</li>
+<li>Parallelize computation of pixels through <code>rayon</code>.</li>
+</ul>
+<p>[1] : https://adventofcode.com/
+[2] : https://raytracing.github.io/books/RayTracingInOneWeekend.html</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 1, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 2, 2023</span>
       
         <br>
         Created:
