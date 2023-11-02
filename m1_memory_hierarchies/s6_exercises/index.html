@@ -724,13 +724,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#naive-data-loading" class="md-nav__link">
-    Naive data loading
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#killing-the-garbage-collector" class="md-nav__link">
     Killing the garbage collector
   </a>
@@ -1605,13 +1598,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#naive-data-loading" class="md-nav__link">
-    Naive data loading
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#killing-the-garbage-collector" class="md-nav__link">
     Killing the garbage collector
   </a>
@@ -1687,38 +1673,6 @@ in the case where you wouldn't be using the popped values?</p>
 through all data elements using two for-loops and doubles the value in place.</p>
 <p>You have an array of dimensions <code>MNK</code> in a linearized array <code>data</code>, write pseudo code that iterates
 through all data elements using three for-loops and triples the value in place.</p>
-<h3 id="naive-data-loading">Naive data loading</h3>
-<p>Next up, we have a little scenario to play out. I stole the code below from a tutorial on image super resolution
-networks. The tutorial is a great intro to the type of network and the process. It wasn't about optimization,
-but I noticed a severe bottleneck in training and localized it to the data loader. Normally, I would of course
-link to the tutorial, but in order to not shame the person who made the tutorial (who did a great job), I don't
-think I will. If that person would like to be linked to anyways, I will be more than happy to do so.</p>
-<p>You are training a neural network for upscaling images. The data
-is a high resolution (original resolution image) and a low resolution (downsampled) image. The network
-will train for N epochs. Each epoch will go through the entire data set once. To go through the N
-epochs, M batches will consist of K randomly selected images from the entire data set.</p>
-<p>The images will be retrieved for a batch, assuming K calls to <code>__getitem__</code> with random values of <code>i</code>.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="sd">    This method is required to be defined for use in the PyTorch DataLoader.</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="sd">    :param i: index to retrieve</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="sd">    :return: the &#39;i&#39;th pair LR and HR images to be fed into the model</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="sd">    &quot;&quot;&quot;</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="c1"># Read image</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">img</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">img</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>    <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">width</span> <span class="o">&lt;=</span> <span class="mi">96</span> <span class="ow">or</span> <span class="n">img</span><span class="o">.</span><span class="n">height</span> <span class="o">&lt;=</span> <span class="mi">96</span><span class="p">:</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">img</span><span class="o">.</span><span class="n">width</span><span class="p">,</span> <span class="n">img</span><span class="o">.</span><span class="n">height</span><span class="p">)</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>    <span class="n">lr_img</span><span class="p">,</span> <span class="n">hr_img</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>    <span class="k">return</span> <span class="n">lr_img</span><span class="p">,</span> <span class="n">hr_img</span>
-</span></code></pre></div>
-<p>Draw the memory hierarchy of the CPU. Assume you are training on the CPU. What does the
-data movement look like when training an epoch?</p>
-<p>If we switch to training on the GPU, can you add the GPU's memory hierarchy? Now describe
-the step-by-step movement of data in order to train an entire epoch?</p>
-<p>What could you do to make this process more effective?</p>
 <h3 id="killing-the-garbage-collector">Killing the garbage collector</h3>
 <figure>
 <p><a class="glightbox" href="../../figures/harass_the_garbage_collector.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/harass_the_garbage_collector.png" width="500" /></a></p>
@@ -1726,7 +1680,7 @@ the step-by-step movement of data in order to train an entire epoch?</p>
 Where would you add a pointer to hurt garbage collection the most?
 </figcaption>
 </figure>
-<p>Which pointer kills the reference counting garbage collector?<br />
+<p>Adding which pointer would result in the most nodes not being properly garbage collected?<br />
 If the garbage collector implements cycle detection to depth 2 adding which pointer would break it?
 The nodes can't point to themselves.  </p>
 <figure>
