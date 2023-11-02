@@ -120,7 +120,7 @@ impl GPUVector {
         // to the CPU-visible staging buffer.
         if self.staging_buffer.is_some() {
             encoder.copy_buffer_to_buffer(
-                self.storage_buffer.as_ref(),
+                &self.storage_buffer,
                 0,
                 self.staging_buffer.as_ref().unwrap(),
                 0,
