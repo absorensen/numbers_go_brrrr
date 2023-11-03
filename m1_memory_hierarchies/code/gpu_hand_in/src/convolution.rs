@@ -1,4 +1,4 @@
-use crate::utility::GPUHandles;
+use crate::utility::{GPUHandles, mean_square_error, are_vectors_equivalent};
 
 // The length of filter is assumed to be oddly number, i.e. 1, 3, 5, 7, 9, 11
 fn convolution_cpu(signal: &Vec<f32>, filter: &Vec<f32>) -> Vec<f32> {
@@ -23,6 +23,7 @@ pub fn convolution(handles: &GPUHandles) -> bool {
     let filter: Vec<f32> = (0..filter_size).map(|x| x as f32 * 0.1).collect();
 
     let ground_truth: Vec<f32> = convolution_cpu(&signal, &filter);
+    let dummy_data: Vec<f32> = ground_truth.clone();
 
     //
     // YOUR CODE HERE
@@ -33,9 +34,9 @@ pub fn convolution(handles: &GPUHandles) -> bool {
     // in shared memory, is it the filter in shared memory, is it both?
     //
 
-    println!("vector_add MSE: {}", mean_square_error(&ground_truth, &output.cpu_data));
-    let success: bool = are_vectors_equivalent(&ground_truth, &output.cpu_data);
-    println!("vector_add success: {}!", success);
+    println!("convolution MSE: {}", mean_square_error(&ground_truth, &dummy_data));
+    let success: bool = are_vectors_equivalent(&ground_truth, &dummy_data);
+    println!("convolution success: {}!", success);
 
     success
 }

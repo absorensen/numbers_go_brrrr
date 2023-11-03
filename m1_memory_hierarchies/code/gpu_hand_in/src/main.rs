@@ -30,7 +30,7 @@ fn main() {
     let handles: GPUHandles = pollster::block_on(initialize_gpu()).expect("Was unsuccesful in creating GPU Handles");
 
     assert!(vector_add(&handles));
-    // assert!(convolution(&handles));
-    // assert!(matrix_multiplication(&handles));
+    assert!(convolution(&handles));
+    assert!(matrix_multiplication(&handles));
 }
 
