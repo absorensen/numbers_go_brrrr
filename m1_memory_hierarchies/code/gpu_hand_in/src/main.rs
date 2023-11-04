@@ -23,7 +23,7 @@ fn main() {
     // on waiting until all the interaction with the GPU
     // and the tasks set in motion on the GPU are finished.
     if !pollster::block_on(self_test()) {
-        panic!("Was unable to confirm that your system is incompatible with this sample!");
+        panic!("Was unable to confirm that your system is compatible with this sample!");
     }
 
     // Keep track of the handles to central stuff like device and queue.
