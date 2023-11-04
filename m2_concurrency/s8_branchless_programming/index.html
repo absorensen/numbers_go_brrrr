@@ -977,8 +977,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-oriented-programming" class="md-nav__link">
-    Data-oriented programming
+  <a href="#data-oriented-design" class="md-nav__link">
+    Data-oriented Design
   </a>
   
 </li>
@@ -1597,8 +1597,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#data-oriented-programming" class="md-nav__link">
-    Data-oriented programming
+  <a href="#data-oriented-design" class="md-nav__link">
+    Data-oriented Design
   </a>
   
 </li>
@@ -1762,21 +1762,46 @@ take a quick look at a loop unroll transformation, with an unroll of 4.</p>
 </span></code></pre></div>
 <p>Of course, the tail iterations in the second for-loop won't be as fast the main loop, but again, this usually
 something the compiler will do for you in release mode.</p>
-<h2 id="data-oriented-programming">Data-oriented programming</h2>
-<p>Find the code in <code>m2_concurrency::code::sorting_functions</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sorting_functions">online</a>.<br />
+<h2 id="data-oriented-design">Data-oriented Design</h2>
+<p>We can take the branchless thinking, and add in optimization for cache lines, from the micro to the macro and
+make it part of the way we formulate our data structures and code. This we will use things like sorting and
+structuring our data into bigger single objects, while at the same time pulling them apart field by field.
+For this, we will take a look at data-oriented design.</p>
+<p><a href="https://www.rustsim.org/blog/2020/03/23/simd-aosoa-in-nalgebra/">Array-of-Structures-of-Arrays</a>.
 AOS SOA AOSOA - cache lines<br />
 A macro-ish perspective  </p>
 <h2 id="simd">SIMD</h2>
+<p>Sorting functions.
+Find the code in <code>m2_concurrency::code::sorting_functions</code> or
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sorting_functions">online</a>.  </p>
+<figure>
+<p><a class="glightbox" href="../figures/sorting_functions_benchmark.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/sorting_functions_benchmark.jpg" width="500" /></a></p>
+<figcaption>
+Benchmark for the program in ```m2_concurrency::code::sorting_functions```.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively. The CPU supports
+Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
+</figcaption>
+</figure>
 <p>Find the code in <code>m2_concurrency::code::sphere_intersection</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sphere_intersection">online</a>.<br />
-Check your system for SIMD hardware.<br />
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sphere_intersection">online</a>.</p>
+<figure>
+<p><a class="glightbox" href="../figures/sphere_intersection_benchmark.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/sphere_intersection_benchmark.jpg" width="500" /></a></p>
+<figcaption>
+Benchmark for the program in ```m2_concurrency::code::sphere_intersection```.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively. The CPU supports
+Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
+</figcaption>
+</figure>
+<p>Check your system for SIMD hardware.<br />
 Autovectorization<br />
 Explicit SIMD programming<br />
 Doesn't work if you are memory bound, SIMD won't magically make your memory bandwidth increase.  </p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p>A nice introduction video to <a href="https://www.youtube.com/watch?v=g-WPhYREFjk">branchless programming</a> by Fedor Pikus.<br />
 A nice introduction video to <a href="https://www.youtube.com/watch?v=x5tK5ET6Q1I">SIMD</a> by Guillaume Endignoux.<br />
+Mike Acton on <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">Data-oriented Design</a>.  <br />
 Wiki on <a href="https://en.wikipedia.org/wiki/Branch_predictor">branch prediction</a>.<br />
 Wiki on <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">instruction pipelining</a>.<br />
 Slides on <a href="https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf">instruction pipelining</a>

@@ -3,7 +3,18 @@ name = "sorting_functions"
 version = "0.1.0"
 edition = "2021"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[build]
+rustflags = ["-C","target-cpu=native"]
+
+[profile.dev]
+opt-level = 3
+incremental = true
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+incremental = true
+codegen-units = 1
 
 [dependencies]
 ultraviolet = { version = "0.9", features = [ "f64", "int" ] }
