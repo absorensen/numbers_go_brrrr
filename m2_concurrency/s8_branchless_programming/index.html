@@ -984,8 +984,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#simd" class="md-nav__link">
-    SIMD
+  <a href="#the-road-to-simd" class="md-nav__link">
+    The Road to SIMD
   </a>
   
 </li>
@@ -1631,8 +1631,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#simd" class="md-nav__link">
-    SIMD
+  <a href="#the-road-to-simd" class="md-nav__link">
+    The Road to SIMD
   </a>
   
 </li>
@@ -1724,7 +1724,9 @@ branch prediction.  </p>
 <p>Going back to the code from earlier, you can see, any branch predictor worth its salt would predict that path
 B would be executed. In a few cases path A will be executed instead, but will be vastly more expensive.</p>
 <h2 id="branchless-programming">Branchless Programming</h2>
-<p>Again, please checkout the
+<p>"Branchless programming", is perhaps too big a promise, in all but the simplest cases, it will be
+"branch mitigating programming". Branching in code is expensive, so let's look at how we can help the computer,
+regardless of parallelism, attain a bit of speed. Again, please checkout the
 <a href="https://ics.uci.edu/~swjun/courses/2023F-CS250P/materials/lec5.5%20-%20Fast%20and%20Correct%20Pipelining.pdf">slides</a>
 for an overview of various hazards with code examples. But a few of the basic highlights are control flow, through
 short circuiting, unrolling of for-loops (your compiler will often do this automatically), reformulation of
@@ -1795,12 +1797,124 @@ something the compiler will do for you in release mode.</p>
 make it part of the way we formulate our data structures and code. This we will use things like sorting and
 structuring our data into bigger single objects, while at the same time pulling them apart field by field.
 For this, we will take a look at data-oriented design.</p>
-<p><a href="https://www.rustsim.org/blog/2020/03/23/simd-aosoa-in-nalgebra/">Array-of-Structures-of-Arrays</a>.
-AOS SOA AOSOA - cache lines<br />
-A macro-ish perspective  </p>
-<h2 id="simd">SIMD</h2>
-<p>Sorting functions.
-Find the code in <code>m2_concurrency::code::sorting_functions</code> or
+<p>A path tracer is sort of like a physics simulation for generating, sometimes physically accuracte, high
+quality images. From the cameras point of view, a multitude of rays are sent through each pixel. They travel
+forward until they intersect a reason to stop traveling directly forward. Most often this is some form of geometry,
+the surface of an object. Geometry is not the same as material. Once a ray intersects geometry, it needs to know
+what is the color of the surface that was just hit, and in which direction should it bounce next. This is
+dependant on the material. If it hits a perfect mirror, it will change direction much like a billiard ball hitting
+the side of a billiards table. If the surface was perfectly diffuse it might change to a direction in a completely
+random direction. This calculation is not just a simple lookup, but two entirely different mathematical functions.
+They ray will continue to bounce until it either reaches a maximum depth, hits a light source or is otherwise
+terminated. If that doesn't make sense, try out <a href="https://www.youtube.com/watch?v=frLwRLS_ZR0">this video</a>.</p>
+<p>So why spend your and my time describing path tracers?</p>
+<p>They are the perfect case for not just performant heterogeneous systems, but wildly divergent
+performant heterogeneous systems. If you launch 100 rays from different starting origins inside the area
+covered by a single pixel, even if they all hit the same surface, based on the material, they might scatter in
+different directions. They might not all hit the same surface, some leaving the scene and hitting nothing,
+resulting in early termination, while some hit material A requiring one scattering function, while others hit
+materila B requiring another scattering function. As you can imagine, this gets progressively worse as all rays
+scatter round and round in the scene. But we can mitigate the effects of this steadily increasing divergence
+by making sure to package, sort, reorder and compact our rays. Instead of looking at a ray at a time, we might
+structure our program in various pipeline steps. We might for example try to intersect all rays against the scene,
+which is quite expensive, but more on that later, followed by a material/scattering interaction, where we could
+group rays by material, allowing us to execute all rays needed a material A scattering event, followed by
+executing all rays needing a material B scattering event. It gets worse, but let's take a step back and just
+look at how we might handle a whole bunch of rays.</p>
+<p>The typical way we might handle a bunch of rays in a path tracer, would be to define each ray as a struct, such as -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">struct</span> <span class="nc">Ray</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="n">origin</span>: <span class="nc">Vec3</span><span class="p">,</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="n">direction</span>: <span class="nc">Vec3</span><span class="p">,</span>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="w">    </span><span class="n">color</span>: <span class="nc">Vec3</span><span class="p">,</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="n">material</span>: <span class="nc">Material</span><span class="p">,</span><span class="w"> </span><span class="c1">// Enum</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>This is just as useful with graphs, as long as we have chosen a formulation of them which allows us to keep
+them in arrays instead of floating around in pointer-based structures.
+Think back to cache lines now, if we are handling a bunch of rays one at a time, whenever we go to a different
+function we are jumping all around in different branches of code, we are loading lots of parts of this <code>Ray</code>
+struct in our cache line that we might not even need. If we are primarily in a part of the code where we care
+about geometry and intersections, we won't care about material and color. We would care about origin and direction.
+We could reformulate the way we kept track of rays to process several data elements at the same time, when in
+a relevant part of the code. If we kept a <code>Vec&lt;Ray&gt;</code> to do this, sending the <code>Vec&lt;Ray&gt;</code> around from function
+to function, we would call this an Array-of-Structs (AoS).</p>
+<p>What we could do instead, to only cache exactly what we needed is called Struct-of-Arrays (SoA). We keep all of
+our rays in a deconstructed fashion -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">struct</span> <span class="nc">VectorOfRays</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="n">origins</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Vec3</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="n">directions</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Vec3</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">    </span><span class="n">colors</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Vec3</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="n">materials</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Material</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>or we might even take it a step further -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">struct</span> <span class="nc">VectorOfRays</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="n">origins_x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="n">origins_y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">    </span><span class="n">origins_z</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="n">directions_x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">    </span><span class="n">directions_y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="w">    </span><span class="n">directions_z</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="w">    </span><span class="n">color_r</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="w">    </span><span class="n">color_g</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a><span class="w">    </span><span class="n">color_b</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="n">materials</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Material</span><span class="o">&gt;</span><span class="p">,</span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>Now instead of operating on individual rays, or operating on lists of rays, we can do individual operations on each
+and every relevant element, getting them all in our cache line. This require our intersection function to have
+a series of loops for each step in the function and requires a bit of refactoring. We gain an additional advantage,
+we increase the probability of the compiler autovectorizing our code. More on that in a little bit.</p>
+<p>This all seems a bit cumbersome however. If you remember earlier, I told you that these rays might scatter, bounce,
+hit different materials and be terminated. Either successfully or unsuccessfully. We need some flexibility back
+to make it possible to intersect a bunch of threads, terminate some of them, move others to one queue for material
+A, move others to a queue for material B and so on.</p>
+<p>Enter... drumroll please... Arrays-of-Structs-of-Arrays (AoSoA).</p>
+<p>We could instead use a coarser granularity by storing a number of rays in a shared struct and keep a list of
+those structs -</p>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">struct</span> <span class="nc">Ray4</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="n">origins_x</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="n">origins_y</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">    </span><span class="n">origins_z</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">    </span><span class="n">directions_x</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="n">directions_y</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="n">directions_z</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">    </span><span class="n">color_r</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">    </span><span class="n">color_g</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">    </span><span class="n">color_b</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">    </span><span class="n">materials</span>: <span class="p">[</span><span class="n">Material</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">Material</span>::<span class="n">default</span><span class="p">();</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
+</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="p">}</span>
+</span></code></pre></div>
+<p>We can choose a coarser granularity by making this struct any size we like. Within reason, we have a good
+chance it might fit on the stack. Now we are free to move around rays, eliminate ones that are terminated,
+replace terminated rays with new ones and other such divergence limiting operations. Some libraries such
+as <a href="https://docs.rs/ultraviolet/latest/ultraviolet/">ultraviolet</a> are designed around AoSoA containing
+types like <code>Vec3x8</code> and <code>f32x4</code>.</p>
+<p>We could even take things a step further and separate our ray structs.
+The fields that are necessary for intersection aren't the same as for propagating colors through bounce
+paths. Normally, we might connect disconnected parts of the same underlying object by indices, but as
+rays are a transient object which we might bounce between functions it might work better with something
+more static like geometry and materials.</p>
+<h2 id="the-road-to-simd">The Road to SIMD</h2>
+<p>SIMD stands for single instruction multiple data. Basically this whole section has been building to it. SIMD
+is a single instruction that operates on an entire <code>lane</code>. A <code>lane</code> is defined by the architecture
+of your CPU. The name to look for is typically named something like SSE or AVX. The CPU of the system used
+for benchmarking this section, has multiple SIMD instruction sets - Intel® SSE4.1, Intel® SSE4.2,
+Intel® AVX2, Intel® AVX-512. You can program for each specific instruction set or find a cross-platform such as
+<a href="https://docs.rs/ultraviolet/latest/ultraviolet/">ultraviolet</a> to program for multiple architectures.
+What I found most important is that my SIMD lanes max out at 512 bits. If I am doing <code>f32</code>-based SIMD
+operations I can fit up to 16 floats into a lane.</p>
+<p>SIMD programming is a genre unto itself and learning to program it can take a while. If you look at the figure
+from earlier showing pipelined instructions, picture each box as being wider. Imagine you are doing the
+same operations on N rays at a time. If we have a diverging workload such as in a path tracer, we have to have
+some way to handle when some rays are no longer relevant. To handle this SIMD makes heavy use of masks. Masks
+are types which distinguish which of the N elements in a lane need to be executed. Another thing SIMD cannot do,
+or if it is possible, you probably shouldn't force it to do, is executing different functions at the same time.</p>
+<p>Let's look at some code. This program looks at different ways of arranging data and executing a handful of
+different, very basic, functions. Note that the memory-to-compute ratio is quite high, as the functions are quite
+simple compared to the amount of load operations. SIMD doesn't magically make your program any less memory bound, as
+such you have to try and optimize your code before going fully SIMD.</p>
+<p>Find the code in <code>m2_concurrency::code::sorting_functions</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sorting_functions">online</a>.  </p>
 <figure>
 <p><a class="glightbox" href="../../figures/sorting_functions_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sorting_functions_benchmark.png" width="500" /></a></p>
@@ -1811,7 +1925,15 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively. The CP
 Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
 </figcaption>
 </figure>
-<p>Find the code in <code>m2_concurrency::code::sphere_intersection</code> or
+<p>As you can see, if we generate a huge list of different functions to call, we can gain an immense amount of
+performance simply by sorting our data. We can either sort it ourselves, or sit it as it accumulates, by putting
+it in different lists. The other major performance gain we get is by introducing SIMD. Note that the performance
+gain isn't huge when changing to SIMD. This is a case where each function is small enough that we are mostly
+memory bound. SIMD does nothing to alleviate that, except try to draw on even more of the memory bandwidth.</p>
+<p>If we instead look at code which uses an actual function from path tracing, in this case sphere intersection,
+we are doing much more compute per memory load and can see a significant increase in performance.
+Be sure to check out the 4 references at the top of the code.
+Find the code in <code>m2_concurrency::code::sphere_intersection</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sphere_intersection">online</a>.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/sphere_intersection_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sphere_intersection_benchmark.png" width="500" /></a></p>
@@ -1822,10 +1944,15 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively. The CP
 Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
 </figcaption>
 </figure>
-<p>Check your system for SIMD hardware.<br />
-Autovectorization<br />
-Explicit SIMD programming<br />
-Doesn't work if you are memory bound, SIMD won't magically make your memory bandwidth increase.  </p>
+<p>In this case, the vanilla struct-of-arrays code performed worse. In some cases you can hope for autovectorization,
+where the compiler, in the case where you have factored your data in a way that allows it, will create a SIMD
+version of your code. This is usually more likely if you turn on your compilers native targetting flag.</p>
+<p>With compilers you can tell it which platforms to compile for. If you tell it to compile exclusively for YOUR
+platform it can make use of optimizations and commands specific to your system. This might make it perform
+significantly worse on other systems though.,</p>
+<p>I will leave you with one thing if you are memory bound, SIMD won't magically make your memory bandwidth increase.  </p>
+<p>Also, here's <a href="https://www.rustsim.org/blog/2020/03/23/simd-aosoa-in-nalgebra/">a nice blog post</a> about
+the performance implications of AOS, SOA and AOSOA.</p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p>A nice introduction video to <a href="https://www.youtube.com/watch?v=g-WPhYREFjk">branchless programming</a> by Fedor Pikus.<br />
 A nice introduction video to <a href="https://www.youtube.com/watch?v=x5tK5ET6Q1I">SIMD</a> by Guillaume Endignoux.<br />
@@ -1835,6 +1962,8 @@ Wiki on <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">instructi
 Slides on <a href="https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf">instruction pipelining</a>
 from The University of Tennessee, Knoxville.  </p>
 <h3 id="shader-execution-reordering">🧬 Shader Execution Reordering</h3>
+<p>The sorting, compacting and reordering hinted at for path tracing earlier is actually a pretty hot button topic
+in path tracing and has recently gotten hardware support.  </p>
 <p><a href="https://research.nvidia.com/sites/default/files/publications/laine2013hpg_paper.pdf">Megakernels Considered Harmful</a><br />
 <a href="https://jacco.ompf2.com/2019/07/18/wavefront-path-tracing/">Wavefront Path Tracing</a><br />
 <a href="https://developer.nvidia.com/blog/improve-shader-performance-and-in-game-frame-rates-with-shader-execution-reordering/">Shader Execution Reordering</a>  </p>
