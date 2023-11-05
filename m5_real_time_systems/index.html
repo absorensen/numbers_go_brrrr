@@ -12,7 +12,7 @@
         <link rel="prev" href="../m4_optimization/s3_exercises/">
       
       
-        <link rel="next" href="../m6_projects/">
+        <link rel="next" href="sx_tips_and_tricks/">
       
       
       <link rel="icon" href="../figures/nebula.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>3️⃣ Tips and Tricks - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>3️⃣ Real-Time Systems - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#3-tips-and-tricks" class="md-skip">
+        <a href="#3-real-time-systems" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              3️⃣ Tips and Tricks
+              3️⃣ Real-Time Systems
             
           </span>
         </div>
@@ -1372,6 +1372,8 @@
           
         
       
+        
+      
     
     
     
@@ -1390,21 +1392,46 @@
               
   
   <span class="md-ellipsis">
-    M5 - 3️⃣ Tips and Tricks
+    M5 - 3️⃣ Real-Time Systems
   </span>
   
 
             </a>
+            
+              
+              <label class="md-nav__link md-nav__link--active" for="__nav_8" id="__nav_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
             
           </div>
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
-            M5 - 3️⃣ Tips and Tricks
+            M5 - 3️⃣ Real-Time Systems
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="sx_tips_and_tricks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SX - Tips and Tricks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
           </ul>
@@ -1504,47 +1531,16 @@
   
 
 
-<h1 id="3-tips-and-tricks">3️⃣ Tips and Tricks</h1>
+<h1 id="3-real-time-systems">3️⃣ Real-Time Systems</h1>
 <ul>
 <li>Events</li>
 <li>Key and Mouse events</li>
 <li>Event Loops</li>
 <li>GUIs &amp; egui</li>
-<li>memcpy</li>
-<li>Check/validate everything before the hot loop</li>
-<li>Unitialized memory</li>
-<li>Hot loops, event loops</li>
-<li>Allocations in a hot loop</li>
-<li>Object Pools</li>
-<li>System calls - hoist out of the hot loop</li>
-<li>Logging and printing</li>
 <li>Bindings - PyO3 and cxx, <a href="https://www.maturin.rs/">maturin</a></li>
-<li>Walk, don't run, testing for correctness before optimization</li>
-<li>Don't use abbreviations</li>
-<li>Don't talk moon man language to me, ya Blargon!</li>
-<li>Don't use postfix incrementation++</li>
-<li>When to care about software engineering and when to care about performance</li>
-<li>Don't use a string key/identifier or integer, when a type safe enum will do the job</li>
-<li>Hard coding types</li>
-<li>Cognitive load, and delaying errors to after the first draft - deliberate development vs. debugging</li>
-<li>Prefer stateless programming, minimize stateful programming (functional inspiration)</li>
-<li>Implicit casting</li>
-<li>Templating</li>
-<li>Know your system - mobile, laptop, desktop, integrated memory, which GPU</li>
-<li>Use version control even for solo development</li>
-<li>Am I copying/cloning things that don't need to be copied?</li>
-<li>Anything that can be immutable, should be immutable - aliasing!</li>
-<li>Testing and Seeding RNG's</li>
-<li><a href="https://youtu.be/5_RAHZQCPjE">Faster RNG</a></li>
-<li>Timing real-time systems and how to escape or offload compute</li>
-<li>Multi-resolution computing for making your real-time target, video streaming and image loading</li>
-<li>Pressure testing and worst cases</li>
-<li>Static/Dynamic Dispatch - dyn, enum, trait</li>
-<li>The Markov Chain</li>
-<li>If using recursion and risking stack overflow, use a loop and a queue</li>
-<li>If you can, always prefer an array over more complicated structures</li>
-<li>Sorting and random access - GyroDropout, Sorting Functions benchmark</li>
-<li>Is there contention around synchronization primtives such as mutexes?</li>
+<li>Architecture and Design</li>
+<li>Logging</li>
+<li>Tips and Tricks</li>
 </ul>
 
   <hr>
@@ -1552,11 +1548,11 @@
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">October 25, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 5, 2023</span>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 24, 2023</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 5, 2023</span>
       
     
   </small>
@@ -1599,13 +1595,13 @@
         
         
           
-          <a href="../m6_projects/" class="md-footer__link md-footer__link--next" aria-label="Next: 👨🏼‍💻🧬 Projects">
+          <a href="sx_tips_and_tricks/" class="md-footer__link md-footer__link--next" aria-label="Next: SX - Tips and Tricks">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                👨🏼‍💻🧬 Projects
+                SX - Tips and Tricks
               </div>
             </div>
             <div class="md-footer__button md-icon">

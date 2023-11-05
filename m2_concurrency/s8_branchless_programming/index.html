@@ -1460,6 +1460,8 @@
           
         
       
+        
+      
     
     
     
@@ -1474,25 +1476,50 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m5_tips_and_tricks/" class="md-nav__link ">
+            <a href="../../m5_real_time_systems/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
-    M5 - 3️⃣ Tips and Tricks
+    M5 - 3️⃣ Real-Time Systems
   </span>
   
 
             </a>
+            
+              
+              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
             
           </div>
         
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
-            M5 - 3️⃣ Tips and Tricks
+            M5 - 3️⃣ Real-Time Systems
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m5_real_time_systems/sx_tips_and_tricks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SX - Tips and Tricks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
               
             
           </ul>
@@ -1701,7 +1728,8 @@ B would be executed. In a few cases path A will be executed instead, but will be
 <a href="https://ics.uci.edu/~swjun/courses/2023F-CS250P/materials/lec5.5%20-%20Fast%20and%20Correct%20Pipelining.pdf">slides</a>
 for an overview of various hazards with code examples. But a few of the basic highlights are control flow, through
 short circuiting, unrolling of for-loops (your compiler will often do this automatically), reformulation of
-branching through arithmetic.</p>
+branching through arithmetic. Another problem can be data hazards. If line A is writing to some variable in an
+array, which line B depends on, line B cannot commence processing until line A has completed.</p>
 <p>The circuiting boolean operators <code>a &amp;&amp; b</code> and <code>a || b</code> are used everywhere. The short circuiting part
 means that because both <code>a</code> and <code>b</code> need to be true in order for <code>&amp;&amp;</code> to evaluate as <code>true</code>, if
 <code>a</code> evaluates as false, <code>b</code> need not be evaluated. Do you see the problem?</p>
@@ -1775,7 +1803,7 @@ A macro-ish perspective  </p>
 Find the code in <code>m2_concurrency::code::sorting_functions</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sorting_functions">online</a>.  </p>
 <figure>
-<p><a class="glightbox" href="../figures/sorting_functions_benchmark.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/sorting_functions_benchmark.jpg" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/sorting_functions_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sorting_functions_benchmark.png" width="500" /></a></p>
 <figcaption>
 Benchmark for the program in ```m2_concurrency::code::sorting_functions```.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -1786,7 +1814,7 @@ Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
 <p>Find the code in <code>m2_concurrency::code::sphere_intersection</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sphere_intersection">online</a>.</p>
 <figure>
-<p><a class="glightbox" href="../figures/sphere_intersection_benchmark.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/sphere_intersection_benchmark.jpg" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/sphere_intersection_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sphere_intersection_benchmark.png" width="500" /></a></p>
 <figcaption>
 Benchmark for the program in ```m2_concurrency::code::sphere_intersection```.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -1801,7 +1829,7 @@ Doesn't work if you are memory bound, SIMD won't magically make your memory band
 <h2 id="additional-reading">Additional Reading</h2>
 <p>A nice introduction video to <a href="https://www.youtube.com/watch?v=g-WPhYREFjk">branchless programming</a> by Fedor Pikus.<br />
 A nice introduction video to <a href="https://www.youtube.com/watch?v=x5tK5ET6Q1I">SIMD</a> by Guillaume Endignoux.<br />
-Mike Acton on <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">Data-oriented Design</a>.  <br />
+Mike Acton on <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">Data-oriented Design</a>.<br />
 Wiki on <a href="https://en.wikipedia.org/wiki/Branch_predictor">branch prediction</a>.<br />
 Wiki on <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">instruction pipelining</a>.<br />
 Slides on <a href="https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf">instruction pipelining</a>
@@ -1816,7 +1844,7 @@ from The University of Tennessee, Knoxville.  </p>
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 4, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 5, 2023</span>
       
         <br>
         Created:
