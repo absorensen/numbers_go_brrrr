@@ -1555,9 +1555,10 @@ some processing, and adds changes to a list. Once all changes have been proposed
 the changes, resulting in a new graph. One such solution is described <a href="https://www.researchgate.net/publication/354065094_Practical_Spatial_Hash_Map_Updates">here</a>.</p>
 <p>Sampling and repacking extremely huge graphs for training graph neural networks on GPUs is also a
 research topic <a href="https://proceedings.mlsys.org/paper_files/paper/2022/file/afacc5db3e0e85b446e6c7727cd7dca5-Paper.pdf">on its own</a>. Meshes, widely used in graphics, is another type of graph. In order
-to maintain spatial coherency, and improve performance, another active field is how to [best sort meshes][] (graphs)
-into cohesive meshlets (neighbourhoods), which can be culled individually instead of the entire mesh being culled.
-Check out this general intro to <a href="https://gfxcourses.stanford.edu/cs149/fall22/lecture/graphsdram/">parallel graph processing</a>.  </p>
+to maintain spatial coherency, and improve performance, another active field is how to <a href="https://github.com/zeux/meshoptimizer">best sort meshes</a>
+(graphs) and choosing the <a href="https://zeux.io/2023/01/16/meshlet-size-tradeoffs/">right sizes</a> into cohesive meshlets (neighbourhoods), which can be
+culled individually instead of the entire mesh being culled. Check out this general intro to
+<a href="https://gfxcourses.stanford.edu/cs149/fall22/lecture/graphsdram/">parallel graph processing</a>.  </p>
 
   <hr>
 <div class="md-source-file">
