@@ -946,17 +946,6 @@
         
       
       
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    S9 - 3️⃣ Parallel Graphs
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -966,32 +955,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#additional-reading" class="md-nav__link">
-    Additional Reading
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
       
     </li>
   
@@ -1562,21 +1525,6 @@
     
   
   
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#additional-reading" class="md-nav__link">
-    Additional Reading
-  </a>
-  
-</li>
-      
-    </ul>
-  
 </nav>
                   </div>
                 </div>
@@ -1594,15 +1542,22 @@
 
 
 <h1 id="3-parallel-graphs">3️⃣ Parallel Graphs</h1>
-<p><a href="https://gfxcourses.stanford.edu/cs149/fall22/lecture/graphsdram/">Parallel Graph Processing</a><br />
-Big topic, only giving a brief overview to get you started<br />
-Reading and sampling neighbourhoods<br />
-Change lists<br />
-Scattering/gathering  </p>
-<h2 id="additional-reading">Additional Reading</h2>
-<p>Using change lists to update complex data structures
-<a href="https://www.researchgate.net/publication/354065094_Practical_Spatial_Hash_Map_Updates">in parallel</a>.</p>
-<p><a href="https://www.sandia.gov/app/uploads/sites/210/2022/05/graphs-and-machines.pdf">Challenges in Parallel Graph Processing</a>.</p>
+<p>How to efficiently use graphs in parallel is more of an advanced topic and poses <a href="https://www.sandia.gov/app/uploads/sites/210/2022/05/graphs-and-machines.pdf">a wide range of challenges</a>.
+If your graph is read-only and reasonably, sized you can optimize your performance by reducing the amount of
+pointer jumps you do and increase your cache coherence. One possible avenue is to construct your graph
+through indices.</p>
+<p>However, not only is it hard to construct graphs in Rust, but it's also hard to construct dynamic graphs. And even
+hard to construct massive graphs which can be dynamically manipulated in parallel. If you are working on a single
+node at a time, things become quite simple in parallel. You can wrap each node in a lock, such as a mutex. But,
+it is quite common to have to process bigger and bigger neighbourhoods around vertices. One way to do this
+is to alternative between read and write stages. In one stage, each thread reads a relevant neighbourhood, does
+some processing, and adds changes to a list. Once all changes have been proposed, one or more threads can execute
+the changes, resulting in a new graph. One such solution is described <a href="https://www.researchgate.net/publication/354065094_Practical_Spatial_Hash_Map_Updates">here</a>.</p>
+<p>Sampling and repacking extremely huge graphs for training graph neural networks on GPUs is also a
+research topic <a href="https://proceedings.mlsys.org/paper_files/paper/2022/file/afacc5db3e0e85b446e6c7727cd7dca5-Paper.pdf">on its own</a>. Meshes, widely used in graphics, is another type of graph. In order
+to maintain spatial coherency, and improve performance, another active field is how to [best sort meshes][] (graphs)
+into cohesive meshlets (neighbourhoods), which can be culled individually instead of the entire mesh being culled.
+Check out this general intro to <a href="https://gfxcourses.stanford.edu/cs149/fall22/lecture/graphsdram/">parallel graph processing</a>.  </p>
 
   <hr>
 <div class="md-source-file">
