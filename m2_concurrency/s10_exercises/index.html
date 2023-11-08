@@ -1585,40 +1585,42 @@ requires a 20 line description.</p>
 <li>What is the weakness of the method/design?</li>
 <li>In which cases would the proposed method/design be less useful?</li>
 </ul>
-<p>You don't need to be correct, in many cases you can't be without profiling. The point is the process of verbalizing
-analysis from a systems programming perspective.</p>
+<p>You don't need to be correct, in many cases you can't be without profiling. The point is the process of putting
+into words analysis from a systems programming perspective.</p>
 <h2 id="general">General</h2>
 <ul>
-<li>1 - Data-oriented design - Entity component systems</li>
-<li>1 - Array of Structs, Structs of Arrays, Auto-Vectorization</li>
+<li>1 - Entity component systems - <a href="https://austinmorlan.com/posts/entity_component_system/">post 1</a>, <a href="https://www.simplilearn.com/entity-component-system-introductory-guide-article">post 2</a></li>
+<li>1 - Array-of-Structs, Structs-of-Arrays, Arrays-of-Structs-of-Arrays, Auto-Vectorization - <a href="https://www.rustsim.org/blog/2020/03/23/simd-aosoa-in-nalgebra/">blog post</a></li>
 <li>1 - <a href="https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array">Branch Prediction</a></li>
 <li>1 - <a href="https://algorithmica.org/en/eytzinger">Eytzinger Binary Search</a></li>
-<li>2 - A <a href="https://github.com/ProgrammingRust/mandelbrot/">Mandelbrot</a> program served 5 different ways</li>
-<li>2 - Custom memory allocators</li>
+<li>2 - <a href="https://screwjankgames.github.io/engine%20programming/2020/09/24/writing-your-own-memory-allocators.html">Custom memory allocators</a></li>
 <li>2 - <a href="https://ipthomas.com/blog/2023/07/n-times-faster-than-c-where-n-128/">SIMD optimization</a></li>
 </ul>
 <h2 id="deep-learning">🧬 Deep Learning</h2>
 <ul>
-<li>1 - PyTorch - Data-Distributed-Parallelism</li>
-<li>1 - PyTorch - Model-Distributed-Parallelism</li>
-<li>1 - PyTorch - <a href="https://pytorch.org/blog/optimizing-libtorch/?hss_channel=lcp-78618366">Optimizing inference</a></li>
-<li>2 - Flash Attention</li>
-<li>2 - Gyro Dropout - MLSys 2022</li>
+<li>1 - Data Distributed Parallelism - <a href="https://pytorch.org/tutorials/beginner/ddp_series_theory.html">Post 1</a>, <a href="https://pytorch.org/tutorials/intermediate/ddp_tutorial.html">Post 2</a></li>
+<li>1 - <a href="https://pytorch.org/docs/stable/pipeline.html">Model Distributed Parallelism</a></li>
+<li>1 - <a href="https://pytorch.org/blog/optimizing-libtorch/?hss_channel=lcp-78618366">Optimizing Inference</a></li>
+<li>2 - <a href="https://arxiv.org/pdf/2107.01499.pdf">BAGUA: Scaling up Distributed Learning with System Relaxations</a></li>
+<li>2 - <a href="https://arxiv.org/pdf/2205.14135.pdf">Flash Attention</a></li>
+<li>2 - <a href="https://proceedings.mlsys.org/paper_files/paper/2022/file/72aa1632b83c93a2f680dbb5235f1a83-Paper.pdf">Gyro Dropout</a>, <a href="https://docs.mosaicml.com/projects/composer/en/stable/method_cards/gyro_dropout.html">Reference 2</a></li>
 <li>2 - <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX</a></li>
 <li>2 - <a href="https://arxiv.org/abs/2302.14623">Fast as CHITA: Neural Network Pruning with Combinatorial Optimization</a></li>
+<li>2 - <a href="https://arxiv.org/pdf/2310.16795.pdf">QMoE: Practical Sub-1-Bit Compression of Trillion-Parameter Models</a></li>
 </ul>
 <h2 id="computer-graphics">🧬 Computer Graphics</h2>
 <ul>
-<li>1 - Linearized octrees</li>
-<li>1 - Hierarchical Frustum Culling</li>
-<li>2 - Sorting kernels in divergent workloads - Wavefront path tracing</li>
-<li>2 - Shadertoy</li>
+<li>1 - <a href="https://iquilezles.org/articles/multiresaocc/"> multiresolution ambient occlusion</a></li>
+<li>1 - <a href="https://cesium.com/blog/2015/08/04/fast-hierarchical-culling/">Fast Hierarchical Culling</a></li>
+<li>1 - <a href="https://developer.nvidia.com/gpugems/gpugems2/part-v-image-oriented-computing/chapter-37-octree-textures-gpu">Octree Textures on the GPU</a></li>
+<li>2 - <a href="https://meistdan.github.io/publications/raysorting/paper.pdf">On Ray Reordering Techniques for Faster GPU Ray Tracing</a></li>
+<li>2 - <a href="https://iquilezles.org/articles/meshcompression/">Mesh Compression</a></li>
 <li>2 - <a href="https://devblogs.microsoft.com/directx/d3d12-work-graphs-preview/">Work Graphs in DX12</a></li>
-<li>4 - Nanite</li>
+<li>4 - Nanite - <a href="https://www.youtube.com/watch?v=TMorJX3Nj6U">Video 1</a>, <a href="https://www.youtube.com/watch?v=NRnj_lnpORU">Video 2</a>, <a href="https://www.youtube.com/watch?v=eviSykqSUUw">Video 3</a></li>
 </ul>
 <h2 id="computer-vision">🧬 Computer Vision</h2>
 <ul>
-<li>4 - ORB-SLAM - design and a warning about trying to code it</li>
+<li>4 - ORB-SLAM - <a href="https://arxiv.org/pdf/1502.00956.pdf">Paper 1</a>, <a href="https://arxiv.org/pdf/1610.06475v1.pdf">Paper 2</a>, <a href="https://arxiv.org/pdf/2007.11898.pdf">Paper 3</a></li>
 </ul>
 
   <hr>
