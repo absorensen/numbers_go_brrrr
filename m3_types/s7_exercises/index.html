@@ -1732,8 +1732,8 @@ hardware.</p>
 <h2 id="rounding-error-mitigation">Rounding Error Mitigation</h2>
 <h3 id="fused-multiply-add">Fused Multiply-Add</h3>
 <p>In Rust, fused multiply-add is available directly on f32 types through <a href="https://doc.rust-lang.org/std/primitive.f32.html#method.mul_add">mul_add</a>.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>let mut some_value: f32 = 3.14;
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>some_value = some_value.mul_add(2.0, 3.50);
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">some_value</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">3.14</span><span class="p">;</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">some_value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">some_value</span><span class="p">.</span><span class="n">mul_add</span><span class="p">(</span><span class="mf">2.0</span><span class="p">,</span><span class="w"> </span><span class="mf">3.50</span><span class="p">);</span>
 </span></code></pre></div>
 <p>Choose some mathematical formula or algorithm. If you have nothing, try just a basic multiplication and add.
 Do the actual multiplication in as high a precision as you can. Then try to get the same result using
