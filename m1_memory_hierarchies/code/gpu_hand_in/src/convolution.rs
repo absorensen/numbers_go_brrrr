@@ -57,9 +57,11 @@ pub fn convolution(handles: &GPUHandles) -> bool {
     // inside the inner for-loop. This zero padding is (filter_size - 1) / 2 on each side of the
     // signal.
     // Both versions should use shared memory.
+    // What happens when you set the block size to different multiples of 32? Why do you think that is?
     // See which is the fastest, is it the signal in shared memory, is it the filter in
     // shared memory, is it both?
     // Make sure to keep the filter and signal large enough to offset the cost of data transfer
+    //
 
     println!("convolution MSE: {}", mean_square_error(&ground_truth, &dummy_data));
     let success: bool = are_vectors_equivalent(&ground_truth, &dummy_data);

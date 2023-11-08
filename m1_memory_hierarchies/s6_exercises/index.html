@@ -1455,6 +1455,8 @@
       
         
       
+        
+      
     
     
     
@@ -1506,6 +1508,26 @@
   
   <span class="md-ellipsis">
     SX - Tips and Tricks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m5_real_time_systems/s3_exercises/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S3 - 👨🏼‍💻 Exercises
   </span>
   
 
@@ -1719,27 +1741,19 @@ How could you make this sort of general graph, with very few restrictions, safe 
 <p>In the case of the multiply connected nodes, can you come up with a structural solution which allows
 us to make arbitrary graphs in a garbage collected setting or safe in a C++/Rust setting?</p>
 <h2 id="programming">Programming</h2>
-<p>Extend the computational graph with an inplace operation for the ReLU operator (only for the non-fused ReLU)</p>
-<p>The following list is sorted by expected complexity - do at least 1</p>
-<ul>
-<li>Add reusable buffers to the computational graph system (for the intermediate activations)</li>
-<li>Implement a shader cached version of the immediate mode GPU operators and add it to the benchmark</li>
-<li>Implement a version of the linear layer functions which uses shared memory and tiling</li>
-<li>Change the <code>Tensor2DGPU</code> to have switchable access details on its buffers. It should be able to
-accomodate some tensors being exclusively read-only. Do you see any performance differences for whether
-they are read-only or not?</li>
-<li>Implement the tree reduction version of the sum function and add it to the softmax function.
-Also compare the single pass and the tree reduction performance graphs. <a href="https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf">Reference</a></li>
-<li>Implement a max pooling operator, as well as fusing with ReLU, in all levels and implement tests</li>
-<li>Implement a convolution operator, as well as fusing with ReLU, in all levels and implement tests</li>
-</ul>
+<p>Go to <code>m1_memory_hierarchies::code::gpu_hand_in</code> and follow the instructions.
+You need to do 3 different version of 1D convolution, a naive version, one with zero padding of the input
+signal and one with optimal usage of shared memory. For second section you need to do a matrix multiplication and
+a tiled matrix multiplication (using shared memory). All on the GPU. This serves as both one of the few instances
+where we can explicitly program parts of the memory hierarchy (shared memory resides in the L1 cache), but also
+as an introduction to parallel thinking, which you will need in the next module.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 2, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 8, 2023</span>
       
         <br>
         Created:

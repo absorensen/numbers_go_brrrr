@@ -61,10 +61,14 @@ pub fn matrix_multiplication(handles: &GPUHandles) -> bool {
     // YOUR CODE HERE
     // Make one version of matrix multiplication using the GPU. Ensure that it is correct.
     // Make another version which uses tiling through shared memory and local accumulation in
-    // a register. A tiling reference: http://www.csce.uark.edu/~mqhuang/courses/4643/s2016/lecture/GPU_Lecture_3.pdf
+    // a register.
+    // A tiling reference: http://www.csce.uark.edu/~mqhuang/courses/4643/s2016/lecture/GPU_Lecture_3.pdf
     // After ensuring correctness - time the two functions.
     // How big do the matrices have to be before you see a big performance
     // difference?
+    // What happens when you set the block size to different multiples of 32? Why do you think that is?
+    // What is the optimal tile size?
+    //
 
     println!("matrix_multiplication MSE: {}", mean_square_error(&ground_truth, &dummy_data));
     let success: bool = are_vectors_equivalent(&ground_truth, &dummy_data);

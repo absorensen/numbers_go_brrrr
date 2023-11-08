@@ -1201,6 +1201,17 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    S7 - 👨🏼‍💻 Exercises
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1210,6 +1221,86 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rounding-error-mitigation" class="md-nav__link">
+    Rounding Error Mitigation
+  </a>
+  
+    <nav class="md-nav" aria-label="Rounding Error Mitigation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fused-multiply-add" class="md-nav__link">
+    Fused Multiply-Add
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summation" class="md-nav__link">
+    Summation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sorting" class="md-nav__link">
+    Sorting
+  </a>
+  
+    <nav class="md-nav" aria-label="Sorting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#radix" class="md-nav__link">
+    Radix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#morton" class="md-nav__link">
+    Morton
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compression-and-quantization" class="md-nav__link">
+    Compression and Quantization
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -1384,6 +1475,8 @@
       
         
       
+        
+      
     
     
     
@@ -1435,6 +1528,26 @@
   
   <span class="md-ellipsis">
     SX - Tips and Tricks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m5_real_time_systems/s3_exercises/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S3 - 👨🏼‍💻 Exercises
   </span>
   
 
@@ -1525,6 +1638,75 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#rounding-error-mitigation" class="md-nav__link">
+    Rounding Error Mitigation
+  </a>
+  
+    <nav class="md-nav" aria-label="Rounding Error Mitigation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#fused-multiply-add" class="md-nav__link">
+    Fused Multiply-Add
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#summation" class="md-nav__link">
+    Summation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sorting" class="md-nav__link">
+    Sorting
+  </a>
+  
+    <nav class="md-nav" aria-label="Sorting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#radix" class="md-nav__link">
+    Radix
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#morton" class="md-nav__link">
+    Morton
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#compression-and-quantization" class="md-nav__link">
+    Compression and Quantization
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1542,18 +1724,90 @@
 
 
 <h1 id="exercises">👨🏼‍💻 Exercises</h1>
-<p>Fma<br />
-Radix<br />
-Morton
-Spatial Hashing?
-Quantization Loss  </p>
+<p>While you might think to yourself - I thought this was about making fast systems, why do I need to do stuff with
+precision and number representations? It is actually quite useful. If you know how much precision you can afford to
+lose you might be able to drop down from f64 to f32, you might be able to use fewer iterations in your solution
+or you might be able to quantize data in order to compress it better, or even use it with cooperative matrix
+hardware.</p>
+<h2 id="rounding-error-mitigation">Rounding Error Mitigation</h2>
+<h3 id="fused-multiply-add">Fused Multiply-Add</h3>
+<p>In Rust, fused multiply-add is available directly on f32 types through <a href="https://doc.rust-lang.org/std/primitive.f32.html#method.mul_add">mul_add</a>.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>let mut some_value: f32 = 3.14;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>some_value = some_value.mul_add(2.0, 3.50);
+</span></code></pre></div>
+<p>Choose some mathematical formula or algorithm. If you have nothing, try just a basic multiplication and add.
+Do the actual multiplication in as high a precision as you can. Then try to get the same result using
+accumulation in a loop with and without FMA instruction. Check how close to the correct result each of the
+methods were. Remember that you might need to specify to a print statement more decimals of precision.</p>
+<p>Fused multiply-add is also available on the gpu. In WGSL, you can find it <a href="https://webgpufundamentals.org/webgpu/lessons/webgpu-wgsl-function-reference.html#func-fma">here</a>.</p>
+<h3 id="summation">Summation</h3>
+<p>Let's take a look at compensating for errors in extremely large summations. To do this we need to have a ground
+truth result we can hold up the quality of our summation to. Let's use π and the <a href="https://en.wikipedia.org/wiki/Leibniz_formula_for_%CF%80">Madhava-Leibniz formula</a> to
+generate a series of numbers which should eventually approximate π.</p>
+<p>Generate a huge list of <code>f32</code> numbers with the Madhava-Leibniz formula, more than 100.000. Speed isn't
+that important for these exercises. Sum them naively, don't use the built-in sum function.
+Take the absolute difference between the naive sum and <code>std::f64::consts::PI</code>, or
+<code>const PI: f64 = 3.14159265358979323846264338327950288f64;</code>. You need to cast the naive
+<code>f32</code> sum to <code>f64</code>.</p>
+<p>Now we are going to try out three different techniques for summing these numbers. Start using f32 for the data
+and the accumulation. What happens if you accumulate in f64 instead? What if you use f16 for data and f32 for
+accumulation? What if you use f16 for both? You will have to find a crate for f16, just make sure it doesn't convert
+to f32 for arithmetic operations.</p>
+<p>First up is <a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm">Kahan summation</a>.
+Next try the Kahan-Babushka-Klein sum, from the same page.
+Finally, try the <a href="https://en.wikipedia.org/wiki/Pairwise_summation">pairwise summation</a>. Iteratively add every two numbers to get a new list that is half the size
+until you have 1 number.</p>
+<p>Pairwise summation is also the principle behind the <a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform">butterfly FFT algorithm</a> and the defacto standard
+way of summation on GPU's. If you want to get nuts, we can get nuts, you can also try to implement the
+<a href="https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf">iterative tree reduction</a> on the GPU.</p>
+<h2 id="sorting">Sorting</h2>
+<h3 id="radix">Radix</h3>
+<p>Simply but <a href="https://en.wikipedia.org/wiki/Radix_sort">Radix</a> -, or bucket-, sorting numbers sorts them one digit at a time. Eventually, once all digits
+have been sorted, all of the numbers will be sorted. There are some very advanced, very parallelizable, versions
+of Radix sort, but try to do <a href="https://brilliant.org/wiki/radix-sort/">a simple one</a>.</p>
+<p>Generate a list of integers. Start with a small one where you can visually verify that your sorting is correct.
+Then for one digit at a time sort them into different buckets. The number of buckets depends on which number
+representation you choose. Then sort each of those buckets. At which point do you begin to merge the buckets
+with each other? Do you do it while iterating or at the end?</p>
+<p>Next generate a really big list of integers. Once the algorithm has executed and you have one big sorted list,
+verify programmatically, that every element is equal to or bigger than its predecessor. Unless it is element 0,
+of course.</p>
+<h3 id="morton">Morton</h3>
+<p>Morton coding not quite sorting, but we can generate a new number which gives better spatial coherence to data.
+Which can then be sorted by the <a href="https://en.wikipedia.org/wiki/Z-order_curve">Morton code</a>. Briefly put, in the 2 dimensional case, we interleave the bits of
+two 4 bit numbers, <code>x</code> and <code>y</code>, as <code>y3x3y2x2y1x1y0x0</code>. This results in a z-order curve as described in
+<a href="https://absorensen.github.io/the-guide/m3_types/s4_bit_tricks/">bit tricks</a>. Note that you have a maximum amount of precision in your input numbers. If you are generating
+a 64-bit Morton code at most for 3 dimensions, you have at most 64-bits to spare. If you want an isotropic
+resolution in all dimensions, your input numbers cannot exceed 21-bits.</p>
+<ul>
+<li>Generate a list of integers and generate Morton codes for each of them.</li>
+<li>Sort the Morton codes with your Radix sort. What number representation would be best at first glance? What is the disadvantage?</li>
+<li>Reconstruct your initial numbers from the Morton codes.</li>
+</ul>
+<p>Generating Morton codes as efficiently as possible also makes for an <a href="https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/">interesting read</a>.</p>
+<h2 id="compression-and-quantization">Compression and Quantization</h2>
+<p>Generate a list of points (<code>Vec3&lt;f32&gt;</code>). Make them big, don't just center them around 0 to 1. Start off with
+just a few numbers you verify yourself, but then generate a couple of million numbers. You can
+get the <code>Vec3</code> from libraries like <a href="https://www.nalgebra.org/">nalgebra</a> and <a href="https://docs.rs/ultraviolet/latest/ultraviolet/">ultraviolet</a>.
+Find the minimum and maximum values in the ranges. Use spatial hashing as described in <a href="https://absorensen.github.io/the-guide/m3_types/s4_bit_tricks/">bit tricks</a> to sort the
+points into buckets in a <code>HashMap&lt;u32, Vec&lt;Vec3&lt;f32&gt;&gt;</code>. Use 10 bits of precision for each coordinate.</p>
+<p>Once you have done this, perhaps too literal, bucket sort, quantize each point in each buckets collection of points
+relative to the placement of the bucket in which it resides. From there turn the quantized points into
+Morton codes. Do you need to adjust the resolution of your quantization to accomodate the range of the Morton codes?</p>
+<p>Once you have the Morton code version of your points, use Radix sort on each bucket's list of morton codes.</p>
+<p>Now, use delta encoding to limit the variety of numbers present in each list. Now, find a compression crate to
+write the lists to disk in zipped format. Write one file for each bucket and name each file the corresponding
+spatial hash of the bucket.</p>
+<p>Load all of the buckets from disk, de-delta encode all points, un-interleave them and finally de-quantize all of the
+numbers.</p>
+<p>Can you calculate the maximum induced loss of precision for the points?</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 1, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 8, 2023</span>
       
         <br>
         Created:
