@@ -55,24 +55,48 @@ pub fn matrix_multiplication(handles: &GPUHandles) -> bool {
     let left_matrix: Vec<f32> = (0..outer_dimension_left*inner_dimension).map(|x| x as f32 * 0.1).collect();
     let right_matrix: Vec<f32> = (0..inner_dimension*outer_dimension_right).map(|x| x as f32 * 0.1).collect();
     let ground_truth: Vec<f32> = matrix_multiplication_cpu(&left_matrix, &right_matrix, outer_dimension_left, inner_dimension, outer_dimension_right);
-    let dummy_data: Vec<f32> = ground_truth.clone();
     
     //
-    // YOUR CODE HERE
-    // Make one version of matrix multiplication using the GPU. Ensure that it is correct.
-    // Make another version which uses tiling through shared memory and local accumulation in
-    // a register.
+    // 1) Make one version of matrix multiplication using the GPU. Ensure that it is correct.
+    //
+    // 2) Make another version which uses tiling through shared memory and local accumulation in a register.
     // A tiling reference: http://www.csce.uark.edu/~mqhuang/courses/4643/s2016/lecture/GPU_Lecture_3.pdf
-    // After ensuring correctness - time the two functions.
-    // How big do the matrices have to be before you see a big performance
-    // difference?
-    // What happens when you set the block size to different multiples of 32? Why do you think that is?
-    // What is the optimal tile size?
+    //
+    // 3) After ensuring correctness - time the two functions.
+    // 
+    // 4) How big do the matrices have to be before you see a big performance difference?
+    //
+    // 5) What happens when you set the block size to different multiples of 32? Why do you think that is?
+    //
+    // 6) What is the optimal tile size?
+    //
+    // 7) Make a third version starting from the tiled version, but pads the matrices with 0's to the nearest
+    // multiple of the block size? So, if you had a block size of 32 and a 30x30 * 28x29
+    // multiplication you padded both with 0's to get 32x32 * 32x32.
+    // HINT - You can now remove some if-guards.
     //
 
-    println!("matrix_multiplication MSE: {}", mean_square_error(&ground_truth, &dummy_data));
-    let success: bool = are_vectors_equivalent(&ground_truth, &dummy_data);
-    println!("matrix_multiplication success: {}!", success);
+    //
+    // YOUR CODE HERE
+    let data_naive: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
+    let data_tiled: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
+    let data_padded: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
+    //
+
+    // Naive
+    println!("matrix multiplication naive MSE: {}", mean_square_error(&ground_truth, &data_naive));
+    let success: bool = are_vectors_equivalent(&ground_truth, &data_naive);
+    println!("matrix multiplication naive success: {}!", success);
+
+    // Tiled
+    println!("matrix multiplication tiled MSE: {}", mean_square_error(&ground_truth, &data_tiled));
+    let success: bool = are_vectors_equivalent(&ground_truth, &data_tild);
+    println!("matrix multiplication tiled success: {}!", success);
+
+    // Padded
+    println!("matrix multiplication padded MSE: {}", mean_square_error(&ground_truth, &data_padded));
+    let success: bool = are_vectors_equivalent(&ground_truth, &data_padded);
+    println!("matrix multiplication padded success: {}!", success);
 
     success
 }

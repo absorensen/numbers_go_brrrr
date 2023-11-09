@@ -48,24 +48,43 @@ pub fn convolution(handles: &GPUHandles) -> bool {
     let filter: Vec<f32> = (0..filter_size).map(|x| x as f32 * 0.1).collect();
 
     let ground_truth: Vec<f32> = convolution_cpu(&signal, &filter);
-    let dummy_data: Vec<f32> = ground_truth.clone();
+
+    //
+    // 1) Do 1D convolution on the GPU, don't use shared memory.
+    // Make sure to keep the filter and signal large enough to offset the cost of data transfer
+    //
+    // 2) Make a new version of 1D convolution which uses shared memory.
+    // See which is the fastest, is it the signal in shared memory, is it the filter in
+    // shared memory, is it both?
+    // What happens when you set the block size to different multiples of 32? Why do you think that is?
+    //
+    // 3) Make another version using a zero padded version of the original signal. Do not use any if's
+    // inside the inner for-loop. This zero padding is (filter_size - 1) / 2 on each side of the
+    // signal. What happens if you increase the padding with 0's to ensure that the signal is
+    // always a multiple of your block size? HINT - You should be able to remove the outer if-guard.
+    // 
 
     //
     // YOUR CODE HERE
-    // Make one version of 1D convolution on the GPU which uses if's to guard against the filter
-    // Make another version using a zero padded version of the original signal to not use any if's
-    // inside the inner for-loop. This zero padding is (filter_size - 1) / 2 on each side of the
-    // signal.
-    // Both versions should use shared memory.
-    // What happens when you set the block size to different multiples of 32? Why do you think that is?
-    // See which is the fastest, is it the signal in shared memory, is it the filter in
-    // shared memory, is it both?
-    // Make sure to keep the filter and signal large enough to offset the cost of data transfer
+    let data_naive: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
+    let data_tiled: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
+    let data_padded: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
     //
 
-    println!("convolution MSE: {}", mean_square_error(&ground_truth, &dummy_data));
-    let success: bool = are_vectors_equivalent(&ground_truth, &dummy_data);
-    println!("convolution success: {}!", success);
+    // Naive
+    println!("convolution naive MSE: {}", mean_square_error(&ground_truth, &data_naive));
+    let success: bool = are_vectors_equivalent(&ground_truth, &data_naive);
+    println!("convolution naive success: {}!", success);
+
+    // Tiled
+    println!("convolution tiled MSE: {}", mean_square_error(&ground_truth, &data_tiled));
+    let success: bool = are_vectors_equivalent(&ground_truth, &data_tild);
+    println!("convolution tiled success: {}!", success);
+
+    // Padded
+    println!("convolution padded MSE: {}", mean_square_error(&ground_truth, &data_padded));
+    let success: bool = are_vectors_equivalent(&ground_truth, &data_padded);
+    println!("convolution padded success: {}!", success);
 
     success
 }
