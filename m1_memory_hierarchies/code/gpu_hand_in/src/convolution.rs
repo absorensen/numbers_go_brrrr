@@ -78,7 +78,7 @@ pub fn convolution(handles: &GPUHandles) -> bool {
 
     // Tiled
     println!("convolution tiled MSE: {}", mean_square_error(&ground_truth, &data_tiled));
-    let success: bool = are_vectors_equivalent(&ground_truth, &data_tild);
+    let success: bool = are_vectors_equivalent(&ground_truth, &data_tiled);
     println!("convolution tiled success: {}!", success);
 
     // Padded
