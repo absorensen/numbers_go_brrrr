@@ -63,6 +63,10 @@ pub fn convolution(handles: &GPUHandles) -> bool {
     // signal. What happens if you increase the padding with 0's to ensure that the signal is
     // always a multiple of your block size? HINT - You should be able to remove the outer if-guard.
     // 
+    // HINT - You need a run_compute_shader() call per type of compute shader.
+    // Figure out what the arguments are supposed to be (see vector_add.rs) and
+    // call the correct shader function in the correct shader file.
+    //
 
     //
     // YOUR CODE HERE

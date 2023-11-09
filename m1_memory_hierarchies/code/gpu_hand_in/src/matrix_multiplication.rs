@@ -75,6 +75,10 @@ pub fn matrix_multiplication(handles: &GPUHandles) -> bool {
     // multiplication you padded both with 0's to get 32x32 * 32x32.
     // HINT - You can now remove some if-guards.
     //
+    // HINT - You need a run_compute_shader() call per type of compute shader.
+    // Figure out what the arguments are supposed to be (see vector_add.rs) and
+    // call the correct shader function in the correct shader file.
+    //
 
     //
     // YOUR CODE HERE

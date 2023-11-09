@@ -6,8 +6,11 @@
 // amount of binding slots used.
 // There is a limitation on those.
 
-struct TensorDimensions {
+struct Uniform {
     element_count: u32,
+    not_used: u32,
+    not_used: u32,
+    not_used: u32,
 };
 
 // We can have different bind groups
@@ -16,7 +19,7 @@ struct TensorDimensions {
 // set of values which all threads can safely
 // load in its entirety and it won't be updated.
 @group(0) @binding(0)
-var<uniform> dimensions: TensorDimensions;
+var<uniform> dimensions: Uniform;
 
 // Bind a read only array of 32-bit floats
 @group(0) @binding(1)
@@ -37,7 +40,7 @@ var<storage, read_write> output: array<f32>;
 // it might for example make sense to use @workgroup_size(8, 8, 1)
 // or @workgroup_size(16, 2, 1)
 @compute @workgroup_size(32, 1, 1) 
-fn main(
+fn vector_add(
     // For this example we only need access to the global
     // thread ID.
     @builtin(global_invocation_id) global_id: vec3<u32>,
