@@ -71,7 +71,7 @@ pub fn convolution(handles: &GPUHandles) -> bool {
     //
     // YOUR CODE HERE
     let data_naive: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
-    let data_tiled: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
+    let data_shared: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
     let data_padded: Vec<f32> = ground_truth.clone(); // Remove this and replace with your own data
     //
 
@@ -81,9 +81,9 @@ pub fn convolution(handles: &GPUHandles) -> bool {
     println!("convolution naive success: {}!", success);
 
     // Tiled
-    println!("convolution tiled MSE: {}", mean_square_error(&ground_truth, &data_tiled));
-    let success: bool = are_vectors_equivalent(&ground_truth, &data_tiled);
-    println!("convolution tiled success: {}!", success);
+    println!("convolution shared MSE: {}", mean_square_error(&ground_truth, &data_shared));
+    let success: bool = are_vectors_equivalent(&ground_truth, &data_shared);
+    println!("convolution shared success: {}!", success);
 
     // Padded
     println!("convolution padded MSE: {}", mean_square_error(&ground_truth, &data_padded));
