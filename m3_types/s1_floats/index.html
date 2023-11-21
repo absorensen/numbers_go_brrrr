@@ -1704,7 +1704,7 @@ if a division by a constant is happening in a loop -</p>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">inverse_some_constant</span><span class="p">;</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>But if <code>some_constant</code> was 4.0, 2.0 or 256.0 or some other version of 2^N, they would be. 
+<p>But if <code>some_constant</code> was 4.0, 2.0 or 256.0 or some other version of 2^N, they would be.
 Finally, <code>NaN</code>'s propagate.
 Any operation involving a <code>NaN</code> value returns a <code>NaN</code> value, including <code>NaN == NaN</code>.
 Division by <code>1.0/0.0</code> does not return <code>NaN</code> in Rust, but <code>inf</code>. <code>-1.0/0.0</code>
