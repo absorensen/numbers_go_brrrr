@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.8">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.10">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.4b4a2bd9.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.fad675c6.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
@@ -1119,7 +1119,9 @@
       
         <li class="md-nav__item">
   <a href="#additional-reading-highly-recommended" class="md-nav__link">
-    Additional Reading - Highly Recommended
+    <span class="md-ellipsis">
+      Additional Reading - Highly Recommended
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Additional Reading - Highly Recommended">
@@ -1127,7 +1129,9 @@
         
           <li class="md-nav__item">
   <a href="#computer-graphics" class="md-nav__link">
-    🧬 Computer Graphics
+    <span class="md-ellipsis">
+      🧬 Computer Graphics
+    </span>
   </a>
   
 </li>
@@ -1632,7 +1636,9 @@
       
         <li class="md-nav__item">
   <a href="#additional-reading-highly-recommended" class="md-nav__link">
-    Additional Reading - Highly Recommended
+    <span class="md-ellipsis">
+      Additional Reading - Highly Recommended
+    </span>
   </a>
   
     <nav class="md-nav" aria-label="Additional Reading - Highly Recommended">
@@ -1640,7 +1646,9 @@
         
           <li class="md-nav__item">
   <a href="#computer-graphics" class="md-nav__link">
-    🧬 Computer Graphics
+    <span class="md-ellipsis">
+      🧬 Computer Graphics
+    </span>
   </a>
   
 </li>
@@ -1682,23 +1690,42 @@ are required to work with tensor core accelerators.</p>
 have a few key concepts for you to make note of. If you can at all keep your floats as close to being between
 -1.0 and 1.0, you will keep as much of your precision as possible. 4.0 / 3.0 is not the same in terms of precision
 as 4.0 * (1.0 / 3.0), unless the inverse number that you are multiplying with is exactly 1/2^N. This is an often
-used optimization as a multiplication is vastly cheaper than a division. You will typically see this optimization
+used optimization as a multiplication is much cheaper than a division. You will typically see this optimization
 if a division by a constant is happening in a loop -</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_constant</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">for</span><span class="w"> </span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">some_constant</span><span class="p">;</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>is not numerically equivalent to</p>
+<p>which, again, is not numerically equivalent to</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_constant</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">inverse_some_constant</span>: <span class="kt">f32</span> <span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">some_constant</span><span class="p">;</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">for</span><span class="w"> </span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">inverse_some_constant</span><span class="p">;</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>But if <code>some_constant</code> was 4.0, 2.0 or 256.0 or something like that, they would be. Finally, NaN's propagate.
-Any operation involving a NaN value returns a NaN value, including <code>NaN == NaN</code>.</p>
-<p>ACCUMLATING IN HIGHER PRECISION</p>
+<p>But if <code>some_constant</code> was 4.0, 2.0 or 256.0 or some other version of 2^N, they would be. 
+Finally, <code>NaN</code>'s propagate.
+Any operation involving a <code>NaN</code> value returns a <code>NaN</code> value, including <code>NaN == NaN</code>.
+Division by <code>1.0/0.0</code> does not return <code>NaN</code> in Rust, but <code>inf</code>. <code>-1.0/0.0</code>
+on the other hand returns <code>-inf</code>.</p>
+<p>Accumulation in floats have some aspects to it which can be quite relevant.
+Due to the variable amount of precision in the type, adding a small float to a large float, will
+yield a significantly higher error than adding two small floats. By extension, if you have three
+floats, two small and a large, you would get a smaller error by first adding the two smaller
+numbers and then adding the now somewhat less small number to the big number. Taking things
+further, if you had a large list of numbers, you could sort them and add them from smallest to
+biggest. But, the number in which you accumulate your sum might quickly become much bigger than
+the individual elements. An alternative method if you have a large list
+of numbers, is summing them pairwise, recursively (like a tree reduction). This will yield a
+smaller error. This is one of the reasons for the increased numerical precision in the
+<a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform#Accuracy">butterfly FFT algorithm</a>, compared to naive summation.</p>
+<p>Another aspect of reducing errors in summation of floats is the precision at which you accumulate.
+This is quite important for working with cooperative matrics/tensor cores. You can reduce the memory
+requirements and the memory bandwidth usage, by storing your weights in 16-bit floats, but
+accumulating in 16-bit would yield poor results. Instead you can accumulate in a 32-bit float or even
+a 64-bit float, which will be kept locally in a register anyway, and then once accumulation is
+complete the accumulated sum, in 32-bits, can be cast down to 16-bits and written to memory.</p>
 <h2 id="additional-reading-highly-recommended">Additional Reading - Highly Recommended</h2>
 <p>Every floating point operation incurs some form of error. But if you used specialized floating point operations
 such as the <a href="https://en.wikipedia.org/wiki/Multiply%E2%80%93accumulate_operation">fused multiply-add</a>, which
@@ -1717,7 +1744,7 @@ fairly common <a href="https://www.danielecarbone.com/reverse-depth-buffer-in-op
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 1, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 21, 2023</span>
       
         <br>
         Created:
@@ -1841,7 +1868,7 @@ fairly common <a href="https://www.danielecarbone.com/reverse-depth-buffer-in-op
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.81fa17fe.min.js"></script>
+      <script src="../../assets/javascripts/bundle.6c14ae12.min.js"></script>
       
     
   <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
