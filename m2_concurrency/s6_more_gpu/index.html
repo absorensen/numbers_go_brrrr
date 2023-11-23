@@ -9,18 +9,18 @@
       
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../s5_async/">
       
       
-        <link rel="next" href="../s3_exercises/">
+        <link rel="next" href="../s7_parallel_graphs/">
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.10">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.11">
     
     
       
-        <title>SX - Tips and Tricks - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S6 - 3️⃣ More GPU - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#tips-and-tricks" class="md-skip">
+        <a href="#3-more-gpu" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              SX - Tips and Tricks
+              S6 - 3️⃣ More GPU
             
           </span>
         </div>
@@ -679,6 +679,8 @@
       
   
   
+    
+  
   
     
     
@@ -705,25 +707,21 @@
       
         
       
-        
-      
-        
-      
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m2_concurrency/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -740,7 +738,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             M2 - Concurrency
@@ -755,7 +753,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s0_data_parallelism/" class="md-nav__link">
+      <a href="../s0_data_parallelism/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -775,7 +773,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s1_threads/" class="md-nav__link">
+      <a href="../s1_threads/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -795,7 +793,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s2_locks/" class="md-nav__link">
+      <a href="../s2_locks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -815,7 +813,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s3_atomics/" class="md-nav__link">
+      <a href="../s3_atomics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -835,7 +833,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s4_message_passing/" class="md-nav__link">
+      <a href="../s4_message_passing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -855,7 +853,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s5_async/" class="md-nav__link">
+      <a href="../s5_async/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -873,13 +871,118 @@
                 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="../../m2_concurrency/s6_events/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    S6 - 3️⃣ More GPU
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
-    S6 - Events
+    S6 - 3️⃣ More GPU
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-graphics-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Graphics Pipeline
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spir-v-glsl" class="md-nav__link">
+    <span class="md-ellipsis">
+      SPIR-V &amp; GLSL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-levels-in-the-memory-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional Levels in the Memory Hierarchy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#were-you-scattering-or-were-you-gathering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Were you Scattering or were you Gathering?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional Reading
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s7_parallel_graphs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S7 - 3️⃣ Parallel Graphs
   </span>
   
 
@@ -895,71 +998,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s7_more_gpu/" class="md-nav__link">
+      <a href="../s8_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S7 - 3️⃣ More GPU
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../m2_concurrency/s8_branchless_programming/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S8 - 3️⃣ Branchless Programming
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../m2_concurrency/s9_parallel_graphs/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S9 - 3️⃣ Parallel Graphs
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../m2_concurrency/s10_exercises/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S10 - 👨🏼‍💻 Exercises
+    S8 - 👨🏼‍💻 Exercises
   </span>
   
 
@@ -1231,6 +1274,14 @@
       
         
       
+        
+      
+        
+      
+        
+      
+        
+      
     
     
     
@@ -1245,11 +1296,11 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m4_optimization/" class="md-nav__link ">
+            <a href="../../m4_real_time_systems/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
-    M4 - 3️⃣ Optimization
+    M4 - 3️⃣ Real-Time Systems
   </span>
   
 
@@ -1265,7 +1316,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
-            M4 - 3️⃣ Optimization
+            M4 - 3️⃣ Real-Time Systems
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1277,11 +1328,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s0_timing_and_printing/" class="md-nav__link">
+      <a href="../../m4_real_time_systems/s0_events_and_interactions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S0 - Timing and Printing
+    S0 - Events and Interactions
   </span>
   
 
@@ -1297,11 +1348,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s1_profilers/" class="md-nav__link">
+      <a href="../../m4_real_time_systems/s1_graphical_user_interfaces/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S1 - Profilers
+    S1 - Graphical User Interfaces
   </span>
   
 
@@ -1317,11 +1368,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s2_optimizing_deep_learning_training/" class="md-nav__link">
+      <a href="../../m4_real_time_systems/s2_architecture_and_design/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S2 - 🧬3️⃣ Optimizing Deep Learning Training
+    S2 - Architecture and Design
   </span>
   
 
@@ -1337,11 +1388,91 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m4_optimization/s3_exercises/" class="md-nav__link">
+      <a href="../../m4_real_time_systems/s3_branchless_programming/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S3 - 👨🏼‍💻 Exercises
+    S3 - Branchless Programming
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m4_real_time_systems/s4_logging/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S4 - Logging
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m4_real_time_systems/s5_bindings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S5 - Bindings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m4_real_time_systems/s6_tips_and_tricks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S6 - Tips and Tricks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m4_real_time_systems/s7_exercises/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S7 - 👨🏼‍💻 Exercises
   </span>
   
 
@@ -1362,8 +1493,6 @@
       
   
   
-    
-  
   
     
     
@@ -1376,25 +1505,29 @@
       
         
       
+        
+      
+        
+      
     
     
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../m5_optimization/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
-    M5 - 3️⃣ Real-Time Systems
+    M5 - 3️⃣ Optimization
   </span>
   
 
@@ -1407,10 +1540,10 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
-            M5 - 3️⃣ Real-Time Systems
+            M5 - 3️⃣ Optimization
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1420,27 +1553,17 @@
                 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../m5_optimization/s0_timing_and_printing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    SX - Tips and Tricks
+    S0 - Timing and Printing
   </span>
   
 
       </a>
-      
     </li>
   
 
@@ -1452,7 +1575,47 @@
   
   
     <li class="md-nav__item">
-      <a href="../s3_exercises/" class="md-nav__link">
+      <a href="../../m5_optimization/s1_profilers/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S1 - Profilers
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m5_optimization/s2_optimizing_deep_learning_training/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S2 - 🧬3️⃣ Optimizing Deep Learning Training
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../m5_optimization/s3_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1574,6 +1737,59 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-graphics-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Graphics Pipeline
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#spir-v-glsl" class="md-nav__link">
+    <span class="md-ellipsis">
+      SPIR-V &amp; GLSL
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-levels-in-the-memory-hierarchy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional Levels in the Memory Hierarchy
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#were-you-scattering-or-were-you-gathering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Were you Scattering or were you Gathering?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#additional-reading" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional Reading
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -1590,54 +1806,152 @@
   
 
 
-<h1 id="tips-and-tricks">Tips and Tricks</h1>
-<ul>
-<li>memcpy</li>
-<li>Check/validate everything before the hot loop</li>
-<li>Unitialized memory</li>
-<li>Hot loops, event loops</li>
-<li>Allocations in a hot loop</li>
-<li>Object Pools</li>
-<li>System calls - hoist out of the hot loop</li>
-<li>Logging and printing</li>
-<li>Walk, don't run, testing for correctness before optimization</li>
-<li>Don't use abbreviations</li>
-<li>Don't talk moon man language to me, ya Blargon!</li>
-<li>Don't use postfix incrementation++</li>
-<li>When to care about software engineering and when to care about performance</li>
-<li>Don't use a string key/identifier or integer, when a type safe enum will do the job</li>
-<li>Hard coding types</li>
-<li>Cognitive load, and delaying errors to after the first draft - deliberate development vs. debugging</li>
-<li>Prefer stateless programming, minimize stateful programming (functional inspiration)</li>
-<li>Implicit casting</li>
-<li>Templating</li>
-<li>Know your system - mobile, laptop, desktop, integrated memory, which GPU</li>
-<li>Use version control even for solo development</li>
-<li>Am I copying/cloning things that don't need to be copied?</li>
-<li>Anything that can be immutable, should be immutable - aliasing!</li>
-<li>Testing and Seeding RNG's</li>
-<li><a href="https://youtu.be/5_RAHZQCPjE">Faster RNG</a></li>
-<li>Timing real-time systems and how to escape or offload compute</li>
-<li>Multi-resolution computing for making your real-time target, video streaming and image loading</li>
-<li>Pressure testing and worst cases</li>
-<li>Static/Dynamic Dispatch - dyn, enum, trait</li>
-<li>The Markov Chain</li>
-<li>If using recursion and risking stack overflow, use a loop and a queue</li>
-<li>If you can, always prefer an array over more complicated structures</li>
-<li>Sorting and random access - GyroDropout, Sorting Functions benchmark</li>
-<li>Is there contention around synchronization primtives such as mutexes?</li>
-</ul>
+<h1 id="3-more-gpu">3️⃣ More GPU</h1>
+<p>This section is about giving a bit of additional context around GPUs.</p>
+<h2 id="the-graphics-pipeline">The Graphics Pipeline</h2>
+<p>Originally, GPU's were made just for graphics. They were intiially quite closed in their
+form, with a lot of the internal pipeline hidden away from the user.
+The classic vertex and fragment shader setup can be seen below.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/graphics_pipeline.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphics_pipeline.png" width="700" /></a></p>
+<figcaption>
+A simplified view of the traditional vertex/fragment shader setup. The geometry shader
+is optional and not that popular anymore.
+<a href="https://learnopengl.com/Getting-started/Hello-Triangle">
+Image credit </a>
+</figcaption>
+</figure>
+<p>The geometry shader is a later addition and has largely fallen out of favor due to
+dynamically generating more data in a way that yielded quite poor performance. But.
+If you look at the figure you can see that vertex data is passed in. This is
+transferred from the GPU. This will be all of the corners of the triangles
+that make up a mesh. Aside from the purely positional data, it can also have
+attributes like the normal vector, the texture coordinates or the color. The vertices
+are passed in and the vertex shader has access to one vertex at a time. Each
+vertex is transformed from the objects own space into the world, view and projection
+spaces. The vertices are sent along. A geometry shader could create additional vertices
+and resulting triangles, with a view of more than one vertex. This is optional.
+In shape assembly, vertices are assembled to full triangles, afterwhich the triangle
+is rasterized into fragments. Think of these fragments as potential pixel candidates.
+Each of them have values which are barycentric interpolations of the three vertices
+they are constructed from. Each fragment is then sent to the fragment shader,
+which can see a single fragment at a time. Lighting can then be calculated per fragment.
+Importantly, it is also possible for the fragment to know where its potential position
+is in the coordinate space of the rectangle to which it will be rendered. Once
+lighting and other fragment related information has been calculated the fragment can
+be sent further along where it will be tested whether the fragment is the fragment
+closest to the viewpoint of the camera, or whether it might be behind another fragment
+and can safely be discarded. The fragment shader could also write or read from textures
+or buffers. Other shaders can do that too, but I'm building to something.</p>
+<p>Additional shader types include mesh, task, raytracing and tesselation. Possibly more.
+Additional behind the scenes processes are performed to transform the data, doing
+things like clipping to determine whether a fragment is even in view. If it is not
+it can safely be discarded. This is not programmable.</p>
+<p>Why do you think it was important that the fragment in the fragment shader had access
+to its coordinate on the output surface? Take a second to think about it.</p>
+<p>The fragment shader is the precursor to the compute shader. Knowing where you are on
+the 2D output surface is tantamount to finding your thread ID. Allowing the fragment
+shader to write to buffers and not just send the fragment to be renddered allows
+you to save the calculations. Once upon a time, scientists thought it would be kind
+of nice if you could use the GPU, which is a massively parallel device for scientific
+computing. So they used fragment shaders in the early 2000's to do stuff like
+matrix-matrix multiplication and FFT's. There were a number of research projects
+in how to do GPGPU, eventually culminating in the official release of CUDA in 2007.
+Nowadays compute shaders are a standard part of graphics APIs and workloads, with
+an increasing amount of rendering pipelines using one or more compute shaders in their
+pipelines. These compute shaders can happen at any point. In fact, in launching
+the new Nanite system for Unreal Engine 5, one of the tech leads on the project,
+Brian Karis, <a href="https://www.youtube.com/watch?v=eviSykqSUUw">revealed</a> that for
+select triangles, they would prevent them from being hardware rasterized and
+instead write their own software based rasterizer which could outperform hardware
+rasterization for very small triangles.</p>
+<p>For a more thorough explanation of the graphics pipeline you can read this page
+from <a href="https://learnopengl.com/Getting-started/Hello-Triangle">Learn OpenGL</a>.</p>
+<h2 id="spir-v-glsl">SPIR-V &amp; GLSL</h2>
+<p>WGSL is somewhat limited in what it can do. If you would like access to more features
+or to have a greater codebase you can copy from directly, WGPU has
+<a href="https://docs.rs/wgpu/latest/wgpu/enum.ShaderSource.html#">increasing support</a> for
+both the GPU intermediate representation SPIR-V and the shading language GLSL (which can be
+compiled to SPIR-V), without necessitation additional build scaffolding.
+It also looks like it will make use of <a href="https://github.com/gfx-rs/wgpu/tree/trunk/naga">naga</a>
+directly. If you are sure your system has support for it (think back to extensions),
+a more mature shading language like GLSL, might let you make use of more features. I
+haven't had time to check it out yet, but if it can used without additional build steps
+and administration, this might be a nice way to get access to more features.</p>
+<h2 id="additional-levels-in-the-memory-hierarchy">Additional Levels in the Memory Hierarchy</h2>
+<p>Last time I introduced concepts in GPU memory to you, we had two options.
+A thread could either write its data to global memory (VRAM) from which
+other threads could read the data, or it could share data with other
+threads in the same workgroup, by writing to the user programmable
+shared memory, residing in the L1 cache. There are two other options.
+I know the first one is available in CUDA, it might be in some shader
+languages and OpenCL, but it's certainly not in WGSL. In CUDA it is known as
+<a href="https://developer.nvidia.com/blog/using-cuda-warp-level-primitives/">warp shuffling</a>.
+When sharing data through shared memory, the cost to access shared memory is 10 cycles,
+or it was last time I checked. Warp shuffling, or work group shuffling, is sharing
+directly between the registers of each thread in a work group. It was 1 cycle to
+access last time I checked. This is immensely useful in reductions and prefix sums.
+You would still need to write data to global memory in order to share data between
+work groups. Unless you are using a GPU supporting
+<a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">distributed shared memory</a>.
+At the time of writing, the Nvidia H100 is the only card supporting it.
+Distributed shared memory allows accessing memory residing in the shared memory of
+other work groups, as if it was one big shared memory. Hopefully, this feature
+will make its way into other cards soon.</p>
+<h2 id="were-you-scattering-or-were-you-gathering">Were you Scattering or were you Gathering?</h2>
+<p>While a complete guide on GPGPU algorithm design might be... more thorough at least, one core design aspect
+you should definitely know is scattering and gathering.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/scattering_or_gathering.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/scattering_or_gathering.jpg" width="700" /></a></p>
+<figcaption>
+Answer!
+</figcaption>
+</figure>
+<p>An example of how we use either to accomplish the same thing is a 1D convolution. As you might recall, we have three
+elements in play. We have an input signal, an array of size N. We have a filter with weights, an array of size M.
+M will usually be an odd number from 1 to 19.
+Finally, we have an output, usually also size N. The input signal can also be padded with 0's in each end in order
+to minimize branching. Or the output is N-M+1 smaller in order to have an output which doesn't have (M-1)/2 0's at
+the ends.</p>
+<p>Anyways, for weight in our kernel we sample a different element in our signal, multiply it with a weight in
+our filter, accumulate the result, and output a new signal.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/1d_convolution.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/1d_convolution.png" width="700" /></a></p>
+<figcaption>
+A figure showing a signal being convolved with a filter.
+<a href="https://www.researchgate.net/figure/Calculations-involved-in-a-1D-convolution-operation_fig3_324177888">
+Image credit </a>
+</figcaption>
+</figure>
+<p>I hope that makes sense now. Because, scattering and gathering are two different ways of executing this fairly
+simple process which has quite an impact on performance. If we were doing 1D convolution on a GPU, from which
+point of view do we program the threads? If they are scattering, they take the point of view of each input element.
+Each element takes its own value, multiplies by a filter value and accumulates in the output array. Now we have a
+whole segment of threads which can all read from their own input element completely unobstructed, but which have
+a huge amount of contention as they have to synchronize their writes to either shared or global memory for the
+output. This also removes the ability for each thread to accumulate the result locally in a register. If they
+instead followed the gathering paradigm, each thread would take the point of view of their own output element.
+They would each do lots of reads from both the input signal and the filter weights, they would do local
+accumulation in a register, and each have a single write to memory with no overlap. As you might remember, you
+should always prefer more reads than writes. Reads are very parallelizable, writes usually require synchronization.</p>
+<p>This can be extended to lots of different algorithms. For matrix-matrix multiplication, it's recommended to use
+gathering, from the point of view of the output element for each thread. For some more material on
+scattering and gathering, there is a paper on it
+<a href="https://cse.hkust.edu.hk/catalac/papers/scatter_sc07.pdf">from '07</a>.</p>
+<h2 id="additional-reading">Additional Reading</h2>
+<p>To learn more about the graphics pipeline you can check out
+<a href="https://learnopengl.com/">Learn OpenGL</a> or <a href="https://sotrh.github.io/learn-wgpu/">Learn WGPU</a>.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 5, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 23, 2023</span>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 24, 2023</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 14, 2023</span>
       
     
   </small>
@@ -1663,7 +1977,7 @@
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: 3️⃣ Real-Time Systems">
+          <a href="../s5_async/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S5 - Async">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1673,20 +1987,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                3️⃣ Real-Time Systems
+                S5 - Async
               </div>
             </div>
           </a>
         
         
           
-          <a href="../s3_exercises/" class="md-footer__link md-footer__link--next" aria-label="Next: S3 - 👨🏼‍💻 Exercises">
+          <a href="../s7_parallel_graphs/" class="md-footer__link md-footer__link--next" aria-label="Next: S7 - 3️⃣ Parallel Graphs">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S3 - 👨🏼‍💻 Exercises
+                S7 - 3️⃣ Parallel Graphs
               </div>
             </div>
             <div class="md-footer__button md-icon">

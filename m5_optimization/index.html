@@ -9,25 +9,25 @@
       
       
       
-        <link rel="prev" href="../s2_optimizing_deep_learning_training/">
+        <link rel="prev" href="../m4_real_time_systems/s7_exercises/">
       
       
-        <link rel="next" href="../../m5_real_time_systems/">
+        <link rel="next" href="s0_timing_and_printing/">
       
       
-      <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.10">
+      <link rel="icon" href="../figures/nebula.png">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.11">
     
     
       
-        <title>S3 - 👨🏼‍💻 Exercises - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>3️⃣ Optimization - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.fad675c6.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.fad675c6.min.css">
       
         
-        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.356b1318.min.css">
       
       
 
@@ -46,14 +46,14 @@
       
     
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
     
-   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+   <link href="../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
         html.glightbox-open { overflow: initial; height: 100%; }
         .gslide-title { margin-top: 0px; user-select: text; }
         .gslide-desc { color: #666; user-select: text; }
@@ -64,7 +64,7 @@
             body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
             body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
             body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
-            </style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
+            </style> <script src="../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -86,7 +86,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#exercises" class="md-skip">
+        <a href="#3-optimization" class="md-skip">
           Skip to content
         </a>
       
@@ -102,9 +102,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="The Real-Timers Guide to the Computational Galaxy" class="md-header__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
+    <a href=".." title="The Real-Timers Guide to the Computational Galaxy" class="md-header__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
       
-  <img src="../../figures/nebula.png" alt="logo">
+  <img src="../figures/nebula.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S3 - 👨🏼‍💻 Exercises
+              3️⃣ Optimization
             
           </span>
         </div>
@@ -233,9 +233,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="The Real-Timers Guide to the Computational Galaxy" class="md-nav__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
+    <a href=".." title="The Real-Timers Guide to the Computational Galaxy" class="md-nav__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
       
-  <img src="../../figures/nebula.png" alt="logo">
+  <img src="../figures/nebula.png" alt="logo">
 
     </a>
     The Real-Timers Guide to the Computational Galaxy
@@ -261,7 +261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href=".." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -280,7 +280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../acknowledgements/" class="md-nav__link">
+      <a href="../acknowledgements/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -329,7 +329,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m0_introduction/" class="md-nav__link ">
+            <a href="../m0_introduction/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -361,7 +361,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s0_intro_to_computing/" class="md-nav__link">
+      <a href="../m0_introduction/s0_intro_to_computing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -381,7 +381,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s1_intro_to_rust/" class="md-nav__link">
+      <a href="../m0_introduction/s1_intro_to_rust/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -401,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s2_basic_concepts_in_rust/" class="md-nav__link">
+      <a href="../m0_introduction/s2_basic_concepts_in_rust/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -421,7 +421,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s3_less_basic_concepts_in_rust/" class="md-nav__link">
+      <a href="../m0_introduction/s3_less_basic_concepts_in_rust/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -441,7 +441,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m0_introduction/s4_exercises/" class="md-nav__link">
+      <a href="../m0_introduction/s4_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -502,7 +502,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m1_memory_hierarchies/" class="md-nav__link ">
+            <a href="../m1_memory_hierarchies/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -534,7 +534,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s0_soft_memory_hierarchies/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s0_soft_memory_hierarchies/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -554,7 +554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s1_computational_graphs/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s1_computational_graphs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -574,7 +574,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s2_intro_to_gpus/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s2_intro_to_gpus/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -594,7 +594,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s3_immediate_gpu_computation/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s3_immediate_gpu_computation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -614,7 +614,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s4_building_a_computational_graph/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s4_building_a_computational_graph/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -634,7 +634,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s5_computational_graph_compilers/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s5_computational_graph_compilers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -654,7 +654,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m1_memory_hierarchies/s6_exercises/" class="md-nav__link">
+      <a href="../m1_memory_hierarchies/s6_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -705,10 +705,6 @@
       
         
       
-        
-      
-        
-      
     
     
     
@@ -723,7 +719,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m2_concurrency/" class="md-nav__link ">
+            <a href="../m2_concurrency/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -755,7 +751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s0_data_parallelism/" class="md-nav__link">
+      <a href="../m2_concurrency/s0_data_parallelism/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -775,7 +771,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s1_threads/" class="md-nav__link">
+      <a href="../m2_concurrency/s1_threads/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -795,7 +791,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s2_locks/" class="md-nav__link">
+      <a href="../m2_concurrency/s2_locks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -815,7 +811,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s3_atomics/" class="md-nav__link">
+      <a href="../m2_concurrency/s3_atomics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -835,7 +831,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s4_message_passing/" class="md-nav__link">
+      <a href="../m2_concurrency/s4_message_passing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -855,7 +851,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s5_async/" class="md-nav__link">
+      <a href="../m2_concurrency/s5_async/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -875,11 +871,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s6_events/" class="md-nav__link">
+      <a href="../m2_concurrency/s6_more_gpu/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S6 - Events
+    S6 - 3️⃣ More GPU
   </span>
   
 
@@ -895,11 +891,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s7_more_gpu/" class="md-nav__link">
+      <a href="../m2_concurrency/s7_parallel_graphs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S7 - 3️⃣ More GPU
+    S7 - 3️⃣ Parallel Graphs
   </span>
   
 
@@ -915,51 +911,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m2_concurrency/s8_branchless_programming/" class="md-nav__link">
+      <a href="../m2_concurrency/s8_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S8 - 3️⃣ Branchless Programming
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../m2_concurrency/s9_parallel_graphs/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S9 - 3️⃣ Parallel Graphs
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../m2_concurrency/s10_exercises/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S10 - 👨🏼‍💻 Exercises
+    S8 - 👨🏼‍💻 Exercises
   </span>
   
 
@@ -1018,7 +974,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m3_types/" class="md-nav__link ">
+            <a href="../m3_types/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1050,7 +1006,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s0_integers/" class="md-nav__link">
+      <a href="../m3_types/s0_integers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1070,7 +1026,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s1_floats/" class="md-nav__link">
+      <a href="../m3_types/s1_floats/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1090,7 +1046,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s2_energy_efficiency/" class="md-nav__link">
+      <a href="../m3_types/s2_energy_efficiency/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1110,7 +1066,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s3_bitwise_operations/" class="md-nav__link">
+      <a href="../m3_types/s3_bitwise_operations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1130,7 +1086,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s4_bit_tricks/" class="md-nav__link">
+      <a href="../m3_types/s4_bit_tricks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1150,7 +1106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s5_compression/" class="md-nav__link">
+      <a href="../m3_types/s5_compression/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1170,7 +1126,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s6_cooperative_matrices/" class="md-nav__link">
+      <a href="../m3_types/s6_cooperative_matrices/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1190,7 +1146,242 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m3_types/s7_exercises/" class="md-nav__link">
+      <a href="../m3_types/s7_exercises/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S7 - 👨🏼‍💻 Exercises
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../m4_real_time_systems/" class="md-nav__link ">
+              
+  
+  <span class="md-ellipsis">
+    M4 - 3️⃣ Real-Time Systems
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            M4 - 3️⃣ Real-Time Systems
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m4_real_time_systems/s0_events_and_interactions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S0 - Events and Interactions
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m4_real_time_systems/s1_graphical_user_interfaces/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S1 - Graphical User Interfaces
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m4_real_time_systems/s2_architecture_and_design/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S2 - Architecture and Design
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m4_real_time_systems/s3_branchless_programming/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S3 - Branchless Programming
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m4_real_time_systems/s4_logging/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S4 - Logging
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m4_real_time_systems/s5_bindings/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S5 - Bindings
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m4_real_time_systems/s6_tips_and_tricks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S6 - Tips and Tricks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../m4_real_time_systems/s7_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1242,32 +1433,32 @@
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="./" class="md-nav__link md-nav__link--active">
               
   
   <span class="md-ellipsis">
-    M4 - 3️⃣ Optimization
+    M5 - 3️⃣ Optimization
   </span>
   
 
             </a>
             
               
-              <label class="md-nav__link " for="__nav_7" id="__nav_7_label" tabindex="0">
+              <label class="md-nav__link md-nav__link--active" for="__nav_8" id="__nav_8_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_7">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
-            M4 - 3️⃣ Optimization
+            M5 - 3️⃣ Optimization
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1279,7 +1470,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s0_timing_and_printing/" class="md-nav__link">
+      <a href="s0_timing_and_printing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1299,7 +1490,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s1_profilers/" class="md-nav__link">
+      <a href="s1_profilers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1319,7 +1510,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../s2_optimizing_deep_learning_training/" class="md-nav__link">
+      <a href="s2_optimizing_deep_learning_training/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1337,161 +1528,9 @@
                 
   
   
-    
-  
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    S3 - 👨🏼‍💻 Exercises
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
-        
-  
-  <span class="md-ellipsis">
-    S3 - 👨🏼‍💻 Exercises
-  </span>
-  
-
-      </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#setting-up-a-profiler" class="md-nav__link">
-    <span class="md-ellipsis">
-      Setting Up a Profiler
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
-    </li>
-  
-
-              
-            
-          </ul>
-        </nav>
-      
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-    
-    
-      
-        
-          
-        
-      
-        
-      
-        
-      
-    
-    
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
-      
-        
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
-        
-          
-          
-          <div class="md-nav__link md-nav__container">
-            <a href="../../m5_real_time_systems/" class="md-nav__link ">
-              
-  
-  <span class="md-ellipsis">
-    M5 - 3️⃣ Real-Time Systems
-  </span>
-  
-
-            </a>
-            
-              
-              <label class="md-nav__link " for="__nav_8" id="__nav_8_label" tabindex="0">
-                <span class="md-nav__icon md-icon"></span>
-              </label>
-            
-          </div>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8">
-            <span class="md-nav__icon md-icon"></span>
-            M5 - 3️⃣ Real-Time Systems
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-            
-              
-                
-  
-  
   
     <li class="md-nav__item">
-      <a href="../../m5_real_time_systems/sx_tips_and_tricks/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    SX - Tips and Tricks
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../m5_real_time_systems/s3_exercises/" class="md-nav__link">
+      <a href="s3_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1540,7 +1579,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../m6_projects/" class="md-nav__link ">
+            <a href="../m6_projects/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1572,7 +1611,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m6_projects/s0_project_ideas/" class="md-nav__link">
+      <a href="../m6_projects/s0_project_ideas/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1620,9 +1659,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#setting-up-a-profiler" class="md-nav__link">
+  <a href="#additional-reading" class="md-nav__link">
     <span class="md-ellipsis">
-      Setting Up a Profiler
+      Additional Reading
     </span>
   </a>
   
@@ -1646,33 +1685,77 @@
   
 
 
-<h1 id="exercises">👨🏼‍💻 Exercises</h1>
-<p>Try out the profilers relevant to your own system with some sample programs.<br />
-Now try it with some of your own code from before you started on the guide!</p>
-<h2 id="setting-up-a-profiler">Setting Up a Profiler</h2>
-<p>Find and setup a profiler that works on your system.
-Find some Rust code that uses the GPU and run it.
-If you don't have any code relevant to the kind of projects you do normally, for GPU code you can try out
-the <code>egui-winit-template</code> project, the <code>computational_graphs</code> framework or the <code>gpu_add</code> project.</p>
-<ul>
-<li>Does it work with Rust?</li>
-<li>Which metrics can you get out of it?</li>
-<li>Can you see what is happening on the GPU?</li>
-<li>Do you need a different profiler to see what is going on on the GPU?</li>
-<li>Can you see L2 cache hits/misses?</li>
-<li>Can it show you the hot spots in your code?</li>
-</ul>
+<h1 id="3-optimization">3️⃣ Optimization</h1>
+<p>Much like the memory hierarchies there's levels to measuring performance.
+The easiest is just using your system's own task manager. On Windows you just click
+"ctrl+shift+esc" and click on the performance tab. No putting in print statements,
+no timing of functions, no installation, no nothing. You can see many of your cores
+are being used, how much memory (RAM) is being used, how is you GPU doing, how much
+is the disk being used. All of that. You will have to deduce what is happening, but
+if you are training a neural network, and you wonder why training is so slow, whip
+up task managers performance tab, see that the disk is being used quite aggresively
+while you are using hardly any of the RAM or GPU RAM, then you are probably loading
+all of your data from disk at all times without trying to save it in any type of RAM.
+Keeping your data in a higher level of the memory hierarchy should probably be your
+first move without spending too much additional time figuring out what the problem is.</p>
+<p>Using something like task manager requires very little work and is easy to do,
+but it will get you a view of all of the programs currently running on your system.
+At best you can check what the system is using without your program and deduce what
+your program is doing. But much like the black box approach to understanding the
+performance of someone else's library, trying to deduce the characteristics of your
+program through the task manager might not be enough.</p>
+<p>Next up, you can insert print statements and measure the timing of functions yourself.
+This won't give you any information about how many threads are in play, how much
+memory is used, or how many L2 cache misses you have, but it will allow you to
+measure the functions in your own code directly. This might require you to radically
+change your code in order to get adequate measurements and you might have to examine
+more closely what it is you want to measure. If you are developing a real-time system,
+the variance in the time to compute each frame might be relevant, pipeline bubbles could
+be relevant, memory usage over time (to ensure you don't have a memory leak) could be
+important, you may want to automatically create graphs of the system's performance or
+you might decide to benchmark functions individually, perhaps even automatically
+as part of your automated CI to ensure that none of your nifty, high performing, functions
+get slower with new commits. Creating benchmarks for individual functions can take
+a bit more work as you also have to generate some test cases to use as input.</p>
+<p>Depending on what system you are on, you can have easy access to programs like
+<a href="https://en.wikipedia.org/wiki/Perf_(Linux)">perf</a>, which is available on Linux.
+This command line tool allows you to run your full program and can output performance
+statistics like which functions are the "hottest", as in, in which functions does your
+program spend the most amount of time. To get meaningful output in situations like these
+your program needs to be compiled with debug symbols. This means that every function
+in your program doesn't just have a mangled named like <code>xYz289421</code>, but a human readable
+name like <code>my_function()</code>. The computer doesn't care, that name is for you.</p>
+<p>Things like that, and which line is run in which order can easily get mangled based on which flags
+you gave the compiler. You should always debug in debug mode, but for measuring performance,
+you should in most cases measure it as close to the final program as possible, but with
+the caveat of retaining symbols and other likely relevant information. What tools
+like <code>perf</code> might not be able to help you with (not quite sure) is the nitty gritty
+details of exactly what is going on in your CPU. In that case you may need to get use
+a profiler from the specific hardware vendor who made the CPU, or in the case of GPU
+programming (which <code>perf</code> is not attuned to), a GPU profiler from the GPU vendor.
+Thus for GPU programs you might end up profiling twice, separately. Once for your
+CPU code and once for your GPU code. These sorts of profilers, which can be great,
+awesome and very visual tools, can be a pain to install and are so platform specific
+that I won't go into too great detail. They are specific tools you have to install
+and learn for your specific platform. You should make sure that you really need that
+extra information before spending the extra time, and possibly frustration.</p>
+<p>Finally, some frameworks might even have their own profiler, such as the profiler
+that is in your browser for web programming, or the profiler that is provided with
+deep learning frameworks such as PyTorch.</p>
+<h2 id="additional-reading">Additional Reading</h2>
+<p><a href="https://nvlabs.github.io/EfficientDL/">Full-Stack, GPU-based Acceleration of Deep Learning</a><br />
+<a href="https://www.youtube.com/watch?v=XKODaZgKcnE">Writing Performant Concurrent Data Structures</a>  </p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 8, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 23, 2023</span>
       
         <br>
         Created:
-        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">June 30, 2023</span>
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 31, 2023</span>
       
     
   </small>
@@ -1698,7 +1781,7 @@ the <code>egui-winit-template</code> project, the <code>computational_graphs</co
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../s2_optimizing_deep_learning_training/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S2 - 🧬3️⃣ Optimizing Deep Learning Training">
+          <a href="../m4_real_time_systems/s7_exercises/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S7 - 👨🏼‍💻 Exercises">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -1708,20 +1791,20 @@ the <code>egui-winit-template</code> project, the <code>computational_graphs</co
                 Previous
               </span>
               <div class="md-ellipsis">
-                S2 - 🧬3️⃣ Optimizing Deep Learning Training
+                S7 - 👨🏼‍💻 Exercises
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../m5_real_time_systems/" class="md-footer__link md-footer__link--next" aria-label="Next: 3️⃣ Real-Time Systems">
+          <a href="s0_timing_and_printing/" class="md-footer__link md-footer__link--next" aria-label="Next: S0 - Timing and Printing">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                3️⃣ Real-Time Systems
+                S0 - Timing and Printing
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -1789,10 +1872,10 @@ the <code>egui-winit-template</code> project, the <code>computational_graphs</co
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.6c14ae12.min.js"></script>
+      <script src="../assets/javascripts/bundle.6c14ae12.min.js"></script>
       
     
   <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>

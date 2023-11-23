@@ -9,21 +9,25 @@
       
       
       
+        <link rel="prev" href="../s1_graphical_user_interfaces/">
       
       
-      <link rel="icon" href="/figures/nebula.png">
+        <link rel="next" href="../s3_branchless_programming/">
+      
+      
+      <link rel="icon" href="../../figures/nebula.png">
       <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.11">
     
     
       
-        <title>The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S2 - Architecture and Design - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
-      <link rel="stylesheet" href="/assets/stylesheets/main.fad675c6.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.fad675c6.min.css">
       
         
-        <link rel="stylesheet" href="/assets/stylesheets/palette.356b1318.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
       
       
 
@@ -42,14 +46,25 @@
       
     
     
-    <script>__md_scope=new URL("/",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
     
     
     
-  </head>
+   <link href="../../assets/stylesheets/glightbox.min.css" rel="stylesheet"/><style>
+        html.glightbox-open { overflow: initial; height: 100%; }
+        .gslide-title { margin-top: 0px; user-select: text; }
+        .gslide-desc { color: #666; user-select: text; }
+        .gslide-image img { background: white; }
+        
+            .gscrollbar-fixer { padding-right: 15px; }
+            .gdesc-inner { font-size: 0.75rem; }
+            body[data-md-color-scheme="slate"] .gdesc-inner { background: var(--md-default-bg-color);}
+            body[data-md-color-scheme="slate"] .gslide-title { color: var(--md-default-fg-color);}
+            body[data-md-color-scheme="slate"] .gslide-desc { color: var(--md-default-fg-color);}
+            </style> <script src="../../assets/javascripts/glightbox.min.js"></script></head>
   
   
     
@@ -70,6 +85,11 @@
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
       
+        
+        <a href="#architecture-and-design" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
     <div data-md-component="announce">
       
@@ -82,9 +102,9 @@
 
 <header class="md-header md-header--shadow" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="/." title="The Real-Timers Guide to the Computational Galaxy" class="md-header__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
+    <a href="../.." title="The Real-Timers Guide to the Computational Galaxy" class="md-header__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
       
-  <img src="/figures/nebula.png" alt="logo">
+  <img src="../../figures/nebula.png" alt="logo">
 
     </a>
     <label class="md-header__button md-icon" for="__drawer">
@@ -101,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              
+              S2 - Architecture and Design
             
           </span>
         </div>
@@ -213,9 +233,9 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="/." title="The Real-Timers Guide to the Computational Galaxy" class="md-nav__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
+    <a href="../.." title="The Real-Timers Guide to the Computational Galaxy" class="md-nav__button md-logo" aria-label="The Real-Timers Guide to the Computational Galaxy" data-md-component="logo">
       
-  <img src="/figures/nebula.png" alt="logo">
+  <img src="../../figures/nebula.png" alt="logo">
 
     </a>
     The Real-Timers Guide to the Computational Galaxy
@@ -241,7 +261,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -260,7 +280,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/acknowledgements/" class="md-nav__link">
+      <a href="../../acknowledgements/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -309,7 +329,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="/m0_introduction/" class="md-nav__link ">
+            <a href="../../m0_introduction/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -341,7 +361,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m0_introduction/s0_intro_to_computing/" class="md-nav__link">
+      <a href="../../m0_introduction/s0_intro_to_computing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -361,7 +381,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m0_introduction/s1_intro_to_rust/" class="md-nav__link">
+      <a href="../../m0_introduction/s1_intro_to_rust/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -381,7 +401,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m0_introduction/s2_basic_concepts_in_rust/" class="md-nav__link">
+      <a href="../../m0_introduction/s2_basic_concepts_in_rust/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -401,7 +421,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m0_introduction/s3_less_basic_concepts_in_rust/" class="md-nav__link">
+      <a href="../../m0_introduction/s3_less_basic_concepts_in_rust/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -421,7 +441,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m0_introduction/s4_exercises/" class="md-nav__link">
+      <a href="../../m0_introduction/s4_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -482,7 +502,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="/m1_memory_hierarchies/" class="md-nav__link ">
+            <a href="../../m1_memory_hierarchies/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -514,7 +534,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m1_memory_hierarchies/s0_soft_memory_hierarchies/" class="md-nav__link">
+      <a href="../../m1_memory_hierarchies/s0_soft_memory_hierarchies/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -534,7 +554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m1_memory_hierarchies/s1_computational_graphs/" class="md-nav__link">
+      <a href="../../m1_memory_hierarchies/s1_computational_graphs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -554,7 +574,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m1_memory_hierarchies/s2_intro_to_gpus/" class="md-nav__link">
+      <a href="../../m1_memory_hierarchies/s2_intro_to_gpus/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -574,7 +594,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m1_memory_hierarchies/s3_immediate_gpu_computation/" class="md-nav__link">
+      <a href="../../m1_memory_hierarchies/s3_immediate_gpu_computation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -594,7 +614,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m1_memory_hierarchies/s4_building_a_computational_graph/" class="md-nav__link">
+      <a href="../../m1_memory_hierarchies/s4_building_a_computational_graph/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -614,7 +634,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m1_memory_hierarchies/s5_computational_graph_compilers/" class="md-nav__link">
+      <a href="../../m1_memory_hierarchies/s5_computational_graph_compilers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -634,7 +654,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m1_memory_hierarchies/s6_exercises/" class="md-nav__link">
+      <a href="../../m1_memory_hierarchies/s6_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -699,7 +719,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="/m2_concurrency/" class="md-nav__link ">
+            <a href="../../m2_concurrency/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -731,7 +751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m2_concurrency/s0_data_parallelism/" class="md-nav__link">
+      <a href="../../m2_concurrency/s0_data_parallelism/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -751,7 +771,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m2_concurrency/s1_threads/" class="md-nav__link">
+      <a href="../../m2_concurrency/s1_threads/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -771,7 +791,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m2_concurrency/s2_locks/" class="md-nav__link">
+      <a href="../../m2_concurrency/s2_locks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -791,7 +811,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m2_concurrency/s3_atomics/" class="md-nav__link">
+      <a href="../../m2_concurrency/s3_atomics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -811,7 +831,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m2_concurrency/s4_message_passing/" class="md-nav__link">
+      <a href="../../m2_concurrency/s4_message_passing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -831,7 +851,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m2_concurrency/s5_async/" class="md-nav__link">
+      <a href="../../m2_concurrency/s5_async/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -851,7 +871,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m2_concurrency/s6_more_gpu/" class="md-nav__link">
+      <a href="../../m2_concurrency/s6_more_gpu/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -871,7 +891,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m2_concurrency/s7_parallel_graphs/" class="md-nav__link">
+      <a href="../../m2_concurrency/s7_parallel_graphs/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -891,7 +911,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m2_concurrency/s8_exercises/" class="md-nav__link">
+      <a href="../../m2_concurrency/s8_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -954,7 +974,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="/m3_types/" class="md-nav__link ">
+            <a href="../../m3_types/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -986,7 +1006,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m3_types/s0_integers/" class="md-nav__link">
+      <a href="../../m3_types/s0_integers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1006,7 +1026,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m3_types/s1_floats/" class="md-nav__link">
+      <a href="../../m3_types/s1_floats/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1026,7 +1046,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m3_types/s2_energy_efficiency/" class="md-nav__link">
+      <a href="../../m3_types/s2_energy_efficiency/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1046,7 +1066,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m3_types/s3_bitwise_operations/" class="md-nav__link">
+      <a href="../../m3_types/s3_bitwise_operations/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1066,7 +1086,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m3_types/s4_bit_tricks/" class="md-nav__link">
+      <a href="../../m3_types/s4_bit_tricks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1086,7 +1106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m3_types/s5_compression/" class="md-nav__link">
+      <a href="../../m3_types/s5_compression/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1106,7 +1126,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m3_types/s6_cooperative_matrices/" class="md-nav__link">
+      <a href="../../m3_types/s6_cooperative_matrices/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1126,7 +1146,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m3_types/s7_exercises/" class="md-nav__link">
+      <a href="../../m3_types/s7_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1151,6 +1171,8 @@
       
   
   
+    
+  
   
     
     
@@ -1179,17 +1201,17 @@
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="/m4_real_time_systems/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1206,7 +1228,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             M4 - 3️⃣ Real-Time Systems
@@ -1221,7 +1243,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m4_real_time_systems/s0_events_and_interactions/" class="md-nav__link">
+      <a href="../s0_events_and_interactions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1241,7 +1263,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m4_real_time_systems/s1_graphical_user_interfaces/" class="md-nav__link">
+      <a href="../s1_graphical_user_interfaces/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1259,9 +1281,29 @@
                 
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="/m4_real_time_systems/s2_architecture_and_design/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    S2 - Architecture and Design
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -1270,6 +1312,35 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#an-example-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      An Example Architecture
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1281,7 +1352,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m4_real_time_systems/s3_branchless_programming/" class="md-nav__link">
+      <a href="../s3_branchless_programming/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1301,7 +1372,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m4_real_time_systems/s4_logging/" class="md-nav__link">
+      <a href="../s4_logging/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1321,7 +1392,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m4_real_time_systems/s5_bindings/" class="md-nav__link">
+      <a href="../s5_bindings/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1341,7 +1412,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m4_real_time_systems/s6_tips_and_tricks/" class="md-nav__link">
+      <a href="../s6_tips_and_tricks/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1361,7 +1432,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m4_real_time_systems/s7_exercises/" class="md-nav__link">
+      <a href="../s7_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1416,7 +1487,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="/m5_optimization/" class="md-nav__link ">
+            <a href="../../m5_optimization/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1448,7 +1519,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m5_optimization/s0_timing_and_printing/" class="md-nav__link">
+      <a href="../../m5_optimization/s0_timing_and_printing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1468,7 +1539,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m5_optimization/s1_profilers/" class="md-nav__link">
+      <a href="../../m5_optimization/s1_profilers/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1488,7 +1559,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m5_optimization/s2_optimizing_deep_learning_training/" class="md-nav__link">
+      <a href="../../m5_optimization/s2_optimizing_deep_learning_training/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1508,7 +1579,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m5_optimization/s3_exercises/" class="md-nav__link">
+      <a href="../../m5_optimization/s3_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1557,7 +1628,7 @@
           
           
           <div class="md-nav__link md-nav__container">
-            <a href="/m6_projects/" class="md-nav__link ">
+            <a href="../../m6_projects/" class="md-nav__link ">
               
   
   <span class="md-ellipsis">
@@ -1589,7 +1660,7 @@
   
   
     <li class="md-nav__item">
-      <a href="/m6_projects/s0_project_ideas/" class="md-nav__link">
+      <a href="../../m6_projects/s0_project_ideas/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1627,6 +1698,25 @@
   
   
   
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#an-example-architecture" class="md-nav__link">
+    <span class="md-ellipsis">
+      An Example Architecture
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -1638,8 +1728,51 @@
             <div class="md-content" data-md-component="content">
               <article class="md-content__inner md-typeset">
                 
-  <h1>404 - Not found</h1>
+                  
 
+  
+  
+
+
+<h1 id="architecture-and-design">Architecture and Design</h1>
+<p>Thinking in components
+Who owns what data
+Entity component systems -&gt; Motivated by Branchless programming
+Prefer stateless programming, minimize stateful programming (functional inspiration)</p>
+<h2 id="an-example-architecture">An Example Architecture</h2>
+<figure>
+<p><a class="glightbox" href="../../figures/example_architecture.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_architecture.png" width="800" /></a></p>
+<figcaption>
+An example architecture of what a machine learning app might look like. The different colors denote
+different threads.
+</figcaption>
+</figure>
+<p>Keep diagrams like these in mind when thinking about which components owns what data, which components are run
+by which threads and so on
+Where are your bottlenecks likely to be? Where is your hot loop?
+Where could you distribute the work in a load balancing fashion?
+Encapsulation, maybe the data loader should be a component which handles its own workload?</p>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      Last update:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 23, 2023</span>
+      
+        <br>
+        Created:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 23, 2023</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
               </article>
             </div>
           
@@ -1650,6 +1783,44 @@
       
         <footer class="md-footer">
   
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../s1_graphical_user_interfaces/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S1 - Graphical User Interfaces">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                S1 - Graphical User Interfaces
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../s3_branchless_programming/" class="md-footer__link md-footer__link--next" aria-label="Next: S3 - Branchless Programming">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                S3 - Branchless Programming
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
     
   
   <div class="md-footer-meta md-typeset">
@@ -1708,11 +1879,11 @@
     </div>
     
     
-    <script id="__config" type="application/json">{"base": "/", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "/assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="/assets/javascripts/bundle.6c14ae12.min.js"></script>
+      <script src="../../assets/javascripts/bundle.6c14ae12.min.js"></script>
       
     
-  </body>
+  <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
 </html>
