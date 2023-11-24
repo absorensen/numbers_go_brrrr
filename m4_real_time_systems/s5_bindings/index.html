@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.11">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.12">
     
     
       
@@ -1690,9 +1690,9 @@ system who might not be systems programmers.</p>
 <p>Another case could of course if we inverted the scenario. You might be able to use a low level language to
 accelerate whatever you are doing in a high level language such as Python. Other than writing entire
 libraries, like PyTorch, you could be writing your own custom data loader.</p>
-<p>Another reason for creating bindings could be if you need the functionality of a library that isn't available in the
-language you are using. Rust still has a relatively young ecosystem. It is not uncommon that a library isn't
-available or isn't as good as one that is in C++. In that case you will need to use the
+<p>Another reason for creating <a href="https://en.wikipedia.org/wiki/Language_binding">bindings</a> could be if you need the functionality of a library that
+isn't available in the language you are using. Rust still has a relatively young ecosystem. It is not uncommon
+that a library isn't available or isn't as good as one that is in C++. In that case you will need to use the
 <a href="https://en.wikipedia.org/wiki/Foreign_function_interface">foreign function interface</a> (<a href="https://doc.rust-lang.org/nomicon/ffi.html">Rust FFI</a>) to call into other languages. Specifically, it can call to C
 from which you can call to other languages like C++. C generally defines the glue between languages, but
 there are multiple crates for creating language bindings found on <a href="https://blessed.rs">blessed.rs</a>, like <a href="https://www.maturin.rs/">Maturin</a>, which uses
