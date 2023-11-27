@@ -1818,7 +1818,7 @@ by formulating your code as components. If you really wanted to keep statelessne
 could keep the state necessary to for each component to run it outside of the component and give it as an argument
 to each function call. In my opinion, stress on opinion, this would be, in most cases, an example of a dogmatic
 adherence to a principle. Just keep the necessary state inside the components. Still as little as possible, though.</p>
-<p>Data-oriented design and branchless programming are important enough concepts that they have gotten their own
+<p><a href="https://en.wikipedia.org/wiki/Data-oriented_design">Data-oriented design</a> and branchless programming are important enough concepts that they have gotten their own
 section which is the very next one. It basically boils down to this, instead of having an array of particles,
 let's have a particle system which has arrays of each component in those particles, as it has to manipulate all
 the particles anyway. Formulating your system as components is a good way to get started with this as you
@@ -1826,13 +1826,13 @@ can implement this new way of thinking about data under the hood without any cha
 reformatting of your data can also be seen as a transposition of your data. Branchless programming seeks to
 move the potential branches outside of loops and reduce potential branching for better performance. Doing this
 is helped along by using data-oriented design, which was in turn helped along by encapsulation through components.</p>
-<p>Entity component systems, is a system, most often used in games programming, wherein relevant data is composited
-to do what seems to be a more flexible version of the classic first pass encapsulated data-oriented design. In
-general it is something you most likely use a library to implement, like <a href="https://github.com/amethyst/legion">Legion</a>. Alternatively, here's
-a blog post about building <a href="https://ianjk.com/ecs-in-rust/">your own ECS</a>.</p>
+<p><a href="https://en.wikipedia.org/wiki/Entity_component_system">Entity component systems</a>, are a type of system, most often used in games programming, wherein relevant data
+is composited to do what seems to be a more flexible version of the classic first pass encapsulated
+data-oriented design. In general it is something you most likely use a library to implement,
+like <a href="https://github.com/amethyst/legion">Legion</a>. Alternatively, here's a blog post about building <a href="https://ianjk.com/ecs-in-rust/">your own ECS</a>.</p>
 <h2 id="an-example-architecture">An Example Architecture</h2>
 <p>Let's take a look at an example architecture. This is an abstracted view of what a UI-based application, hooked up
-to a machine learning library, using a GPU backend, with a multithreaded data loader might look like. </p>
+to a machine learning library, using a GPU backend, with a multithreaded data loader might look like.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/example_architecture.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_architecture.png" width="800" /></a></p>
 <figcaption>
