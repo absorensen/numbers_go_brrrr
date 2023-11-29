@@ -1808,9 +1808,7 @@ Image credit </a>
 <p>While the tensor cores support matrix-matrix multiplication, they are much more limited in the size of the
 multiplication. For a general linear operation, you might need to still uses loops, but you would then
 be tiling your matrix instead, sending a 4x4 tile at a time of your matrices and keep track of your precisions,
-such as accumulating in a higher level of precision. You can read more about it
-<a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">here</a> and for Vulkan
-<a href="https://developer.nvidia.com/blog/machine-learning-acceleration-vulkan-cooperative-matrices/">here</a>.</p>
+such as accumulating in a higher level of precision. You can read more about it <a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">here</a> and for Vulkan <a href="https://developer.nvidia.com/blog/machine-learning-acceleration-vulkan-cooperative-matrices/">here</a>.</p>
 <p>If you keep the calculations numerically stable you can even keep all of your weights during the training of
 a neural network in 8-bit floating point, while accumulating in 16-bit floating point or greater,
 which will greatly reduce the bandwidth needed for training. For inference, it can also yield a big
@@ -1827,23 +1825,17 @@ Image credit </a>
 </figcaption>
 </figure>
 <h2 id="additional-reading">Additional Reading</h2>
-<p><a href="https://www.nvidia.com/en-us/data-center/tensor-cores/">Tensor Cores</a><br />
-<a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">Programming Tensor Cores</a><br />
-Vulkan
-<a href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_NV_cooperative_matrix.html">Cooperative Matrix</a><br />
-Machine Learning
-<a href="https://developer.nvidia.com/blog/machine-learning-acceleration-vulkan-cooperative-matrices/">in Vulkan</a><br />
-Accelerating Inference
-<a href="https://developer.nvidia.com/blog/accelerating-inference-with-sparsity-using-ampere-and-tensorrt/">with Sparsity</a><br />
-A series of videos regarding how to use tensor cores for <a href="https://developer.nvidia.com/blog/video-mixed-precision-techniques-tensor-cores-deep-learning/">mixed precision training</a>
-.</p>
+<p>You can check out some material on <a href="https://www.nvidia.com/en-us/data-center/tensor-cores/">tensor cores</a> and <a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">programming tensor cores</a> in CUDA. Or you
+can check out <a href="https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VK_NV_cooperative_matrix.html">cooperative matrices</a> and <a href="https://developer.nvidia.com/blog/machine-learning-acceleration-vulkan-cooperative-matrices/">machine learning</a> in Vulkan. There's also some material on<br />
+Accelerating inference <a href="https://developer.nvidia.com/blog/accelerating-inference-with-sparsity-using-ampere-and-tensorrt/">with sparsity</a> and a series of videos regarding how to use tensor cores for
+<a href="https://developer.nvidia.com/blog/video-mixed-precision-techniques-tensor-cores-deep-learning/">mixed precision training</a>.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 1, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 29, 2023</span>
       
         <br>
         Created:

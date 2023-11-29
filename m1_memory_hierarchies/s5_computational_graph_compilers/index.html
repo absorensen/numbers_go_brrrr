@@ -1923,8 +1923,7 @@ realizing one thing...</p>
 <p>We can decimate all of our neatly written shaders into something called op codes. You start by defining
 all of the data that goes in, you have a few lines of the thread figuring out its own ID and so on.
 Peruse the directory <code>src::op_code_compiler::runner.rs</code> or
-<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/op_code_compiler/runner.rs">online</a>
-. This is just a toy example, it didn't make
+<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/op_code_compiler/runner.rs">online</a>. This is just a toy example, it didn't make
 sense to make the whole thing and I won't be benchmarking it since the results will be the exact same
 as the operator version. Each op code is just a string. Each operator is just a list of op codes.
 In this op code example we do operator fusion by adding our ReLU op-code to the list.</p>
@@ -1953,19 +1952,21 @@ a</p>
 <p>at the top of the shader file and then compile. This makes your code less readable, but not as unreadable
 as fully using op codes.</p>
 <h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
-<p><a href="https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust">Fun and hackable tensors in Rust</a><br />
-<a href="https://getcode.substack.com/p/massively-parallel-fun-with-gpus">Massively Parallel Fun with GPUs</a><br />
-<a href="https://github.com/googlefonts/compute-shader-101/blob/main/docs/glossary.md">Compute Shader Glossary</a><br />
-<a href="https://pytorch.org/docs/stable/fx.html">Torch.fx</a><br />
-<a href="https://pytorch.org/docs/stable/generated/torch.compile.html">torch.compile</a><br />
-<a href="https://pytorch.org/docs/stable/torch.compiler.html">Getting started with PyTorch's compiler</a>  </p>
+<ul>
+<li><a href="https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust">Fun and hackable tensors in Rust</a></li>
+<li><a href="https://getcode.substack.com/p/massively-parallel-fun-with-gpus">Massively Parallel Fun with GPUs</a></li>
+<li><a href="https://github.com/googlefonts/compute-shader-101/blob/main/docs/glossary.md">Compute Shader Glossary</a></li>
+<li><a href="https://pytorch.org/docs/stable/fx.html">Torch.fx</a></li>
+<li><a href="https://pytorch.org/docs/stable/generated/torch.compile.html">torch.compile</a></li>
+<li><a href="https://pytorch.org/docs/stable/torch.compiler.html">Getting started with PyTorch's compiler</a></li>
+</ul>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 2, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 29, 2023</span>
       
         <br>
         Created:

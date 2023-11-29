@@ -2193,29 +2193,24 @@ version of your code. This is usually more likely if you turn on your compilers 
 platform it can make use of optimizations and commands specific to your system. This might make it perform
 significantly worse on other systems though.,</p>
 <p>I will leave you with one thing if you are memory bound, SIMD won't magically make your memory bandwidth increase.  </p>
-<p>Also, here's <a href="https://www.rustsim.org/blog/2020/03/23/simd-aosoa-in-nalgebra/">a nice blog post</a> about
-the performance implications of AOS, SOA and AOSOA.</p>
+<p>Also, here's <a href="https://www.rustsim.org/blog/2020/03/23/simd-aosoa-in-nalgebra/">a nice blog post</a> about the performance implications of AOS, SOA and AOSOA.</p>
 <h2 id="additional-reading">Additional Reading</h2>
-<p>A nice introduction video to <a href="https://www.youtube.com/watch?v=g-WPhYREFjk">branchless programming</a> by Fedor Pikus.<br />
-A nice introduction video to <a href="https://www.youtube.com/watch?v=x5tK5ET6Q1I">SIMD</a> by Guillaume Endignoux.<br />
-Mike Acton on <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">Data-oriented Design</a>.<br />
-Wiki on <a href="https://en.wikipedia.org/wiki/Branch_predictor">branch prediction</a>.<br />
-Wiki on <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">instruction pipelining</a>.<br />
-Slides on <a href="https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf">instruction pipelining</a>
-from The University of Tennessee, Knoxville.  </p>
+<p>To learn more about instruction pipelining, here is a <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">wiki</a> and some <a href="https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf">slides</a>. Also, there's a
+wiki on <a href="https://en.wikipedia.org/wiki/Branch_predictor">branch prediction</a>.</p>
+<p>For the broader view there's a nice introduction video to <a href="https://www.youtube.com/watch?v=g-WPhYREFjk">branchless programming</a> by Fedor Pikus,<br />
+an introduction video to <a href="https://www.youtube.com/watch?v=x5tK5ET6Q1I">SIMD</a> by Guillaume Endignoux and a talk by Mike Acton on <a href="https://www.youtube.com/watch?v=rX0ItVEVjHc">data-oriented design</a>.  </p>
 <h3 id="shader-execution-reordering">🧬 Shader Execution Reordering</h3>
 <p>The sorting, compacting and reordering hinted at for path tracing earlier is actually a pretty hot button topic
-in path tracing and has recently gotten hardware support.  </p>
-<p><a href="https://research.nvidia.com/sites/default/files/publications/laine2013hpg_paper.pdf">Megakernels Considered Harmful</a><br />
-<a href="https://jacco.ompf2.com/2019/07/18/wavefront-path-tracing/">Wavefront Path Tracing</a><br />
-<a href="https://developer.nvidia.com/blog/improve-shader-performance-and-in-game-frame-rates-with-shader-execution-reordering/">Shader Execution Reordering</a>  </p>
+in path tracing and has recently gotten hardware support. The seminal paper <a href="https://research.nvidia.com/sites/default/files/publications/laine2013hpg_paper.pdf">Megakernels Considered Harmful</a>
+is worth a read. You can also find a more practical blog post <a href="https://jacco.ompf2.com/2019/07/18/wavefront-path-tracing/">blog post</a> about it thanks to Jacco Bikker.
+This is even being rolled out and described in this <a href="https://developer.nvidia.com/blog/improve-shader-performance-and-in-game-frame-rates-with-shader-execution-reordering/">blog post by Nvidia</a>.  </p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 23, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 29, 2023</span>
       
         <br>
         Created:
