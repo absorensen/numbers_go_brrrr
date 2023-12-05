@@ -2,7 +2,7 @@ use crate::shared::graph_operators::GraphOperator;
 use crate::shared::graph_operators::GraphOperator::*;
 use crate::shared::tensor2d::Tensor2D;
 
-pub fn linear_layer_dimension_check(input: &Tensor2D, weights: &Tensor2D, bias: &Tensor2D) {
+pub fn linear_dimension_check(input: &Tensor2D, weights: &Tensor2D, bias: &Tensor2D) {
     assert!(
         0 < input.row_count,
         "\ninput.row_count must be larger than 0. Current value: {}.",
@@ -92,19 +92,19 @@ fn validate_linear_dimensions(
     for predecessor_index in (0..current_index).rev() {
         match &graph[predecessor_index] {
             HostToDevice { input } => {
-                linear_layer_dimension_check(input, current_weights, current_bias);
+                linear_dimension_check(input, current_weights, current_bias);
                 return true;
             }
-            LinearLayer { weights: _, bias } => {
-                linear_layer_dimension_check(bias, current_weights, current_bias);
+            Linear { weights: _, bias } => {
+                linear_dimension_check(bias, current_weights, current_bias);
                 return true;
             }
             LinearReLUFused { weights: _, bias } => {
-                linear_layer_dimension_check(bias, current_weights, current_bias);
+                linear_dimension_check(bias, current_weights, current_bias);
                 return true;
             }
             LinearReLUSoftmaxFused { weights: _, bias } => {
-                linear_layer_dimension_check(bias, current_weights, current_bias);
+                linear_dimension_check(bias, current_weights, current_bias);
                 return true;
             }
             DeviceToHost => {
@@ -198,7 +198,7 @@ pub fn validate_graph_operators(graph: &Vec<GraphOperator>) -> bool {
                 validate_host_to_device(current_index, graph)
             }
             GraphOperator::DeviceToHost => validate_device_to_host(current_index, graph),
-            GraphOperator::LinearLayer { weights, bias } => {
+            GraphOperator::Linear { weights, bias } => {
                 validate_linear_dimensions(current_index, graph, weights, bias)
             }
             GraphOperator::ReLU => validate_relu(current_index, graph),

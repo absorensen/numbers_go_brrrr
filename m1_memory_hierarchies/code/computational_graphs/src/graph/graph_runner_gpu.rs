@@ -66,8 +66,8 @@ impl GraphRunnerGPU {
         shader_cache: &mut HashMap<String, ShaderModule>,
         pipeline_cache: &mut HashMap<String, ComputePipeline>,
     ) {
-        //LinearLayer,
-        nodes_gpu::build_linear_layer_elements(gpu_handles, shader_cache, pipeline_cache, false);
+        //Linear,
+        nodes_gpu::build_linear_elements(gpu_handles, shader_cache, pipeline_cache, false);
 
         //ReLU,
         nodes_gpu::build_relu_elements(gpu_handles, shader_cache, pipeline_cache);
@@ -77,7 +77,7 @@ impl GraphRunnerGPU {
 
         if fuse_operators {
             //LinearReLU,
-            nodes_gpu::build_linear_layer_elements(gpu_handles, shader_cache, pipeline_cache, true);
+            nodes_gpu::build_linear_elements(gpu_handles, shader_cache, pipeline_cache, true);
         }
     }
 
@@ -128,7 +128,7 @@ impl GraphRunnerGPU {
         operator_counts.insert(NodeOperatorGPU::HostToDevice, 0);
         operator_counts.insert(NodeOperatorGPU::DeviceToHost, 0);
         operator_counts.insert(NodeOperatorGPU::DeviceToDevice, 0);
-        operator_counts.insert(NodeOperatorGPU::LinearLayer, 0);
+        operator_counts.insert(NodeOperatorGPU::Linear, 0);
         operator_counts.insert(NodeOperatorGPU::ReLU, 0);
         operator_counts.insert(NodeOperatorGPU::Softmax, 0);
         operator_counts.insert(NodeOperatorGPU::LinearReLU, 0);
@@ -172,8 +172,8 @@ impl GraphRunnerGPU {
                         NodeGPU::new(new_key, NodeOperatorGPU::DeviceToHost, buffer_indices);
                     self.nodes.push(node);
                 }
-                LinearLayer { weights, bias } => {
-                    let mut key: NodeOperatorGPU = NodeOperatorGPU::LinearLayer;
+                Linear { weights, bias } => {
+                    let mut key: NodeOperatorGPU = NodeOperatorGPU::Linear;
 
                     if fuse_operators {
                         if let ReLU = graph_operators[operator_index + 1] {
@@ -392,8 +392,8 @@ impl GraphRunnerGPU {
                 NodeOperatorGPU::DeviceToDevice => {
                     // The graph runner handles transfers itself
                 }
-                NodeOperatorGPU::LinearLayer => {
-                    nodes_gpu::linear_layer(
+                NodeOperatorGPU::Linear => {
+                    nodes_gpu::linear(
                         gpu_handles,
                         use_cache,
                         shader_cache,
@@ -427,7 +427,7 @@ impl GraphRunnerGPU {
                     );
                 }
                 NodeOperatorGPU::LinearReLU => {
-                    nodes_gpu::linear_layer(
+                    nodes_gpu::linear(
                         gpu_handles,
                         use_cache,
                         shader_cache,

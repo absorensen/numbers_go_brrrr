@@ -99,7 +99,7 @@ mod tests {
     }
 
     #[test]
-    fn linear_layer() {
+    fn linear() {
         let outer_dimension_input: usize = 3;
         let outer_dimension_weights: usize = 4;
         let inner_dimension: usize = 4;
@@ -110,7 +110,7 @@ mod tests {
         let weights: Tensor2D = Tensor2D::new(1.0, inner_dimension, outer_dimension_weights);
         let bias: Tensor2D = Tensor2D::new(0.1, outer_dimension_input, outer_dimension_weights);
 
-        let output: Tensor2D = Tensor2D::linear_layer(&input, &weights, &bias);
+        let output: Tensor2D = Tensor2D::linear(&input, &weights, &bias);
 
         let abs_result_difference: f32 = (expected_result - output.sum()).abs();
 
@@ -118,7 +118,7 @@ mod tests {
     }
 
     #[test]
-    fn linear_layer_preallocated() {
+    fn linear_preallocated() {
         let outer_dimension_input_max: usize = 10;
         let outer_dimension_weights_max: usize = 10;
         let inner_dimension_max: usize = 10;
@@ -130,8 +130,8 @@ mod tests {
                         outer_dimension_input,
                         outer_dimension_weights,
                         inner_dimension,
-                        Tensor2D::linear_layer,
-                        Tensor2D::linear_layer_preallocated,
+                        Tensor2D::linear,
+                        Tensor2D::linear_preallocated,
                     );
                     assert!(abs_result_difference < ERROR_TOLERANCE);
                 }
@@ -140,7 +140,7 @@ mod tests {
     }
 
     #[test]
-    fn linear_layer_preallocated_inline() {
+    fn linear_preallocated_inline() {
         let outer_dimension_input_max: usize = 10;
         let outer_dimension_weights_max: usize = 10;
         let inner_dimension_max: usize = 10;
@@ -152,8 +152,8 @@ mod tests {
                         outer_dimension_input,
                         outer_dimension_weights,
                         inner_dimension,
-                        Tensor2D::linear_layer,
-                        Tensor2D::linear_layer_preallocated_inline,
+                        Tensor2D::linear,
+                        Tensor2D::linear_preallocated_inline,
                     );
                     assert!(abs_result_difference < ERROR_TOLERANCE);
                 }
@@ -162,7 +162,7 @@ mod tests {
     }
 
     #[test]
-    fn linear_layer_local_accumulation() {
+    fn linear_local_accumulation() {
         let outer_dimension_input_max: usize = 10;
         let outer_dimension_weights_max: usize = 10;
         let inner_dimension_max: usize = 10;
@@ -174,8 +174,8 @@ mod tests {
                         outer_dimension_input,
                         outer_dimension_weights,
                         inner_dimension,
-                        Tensor2D::linear_layer,
-                        Tensor2D::linear_layer_local_accumulation,
+                        Tensor2D::linear,
+                        Tensor2D::linear_local_accumulation,
                     );
                     assert!(abs_result_difference < ERROR_TOLERANCE);
                 }
@@ -184,7 +184,7 @@ mod tests {
     }
 
     #[test]
-    fn linear_layer_optimized() {
+    fn linear_optimized() {
         let outer_dimension_input_max: usize = 10;
         let outer_dimension_weights_max: usize = 10;
         let inner_dimension_max: usize = 10;
@@ -196,16 +196,14 @@ mod tests {
                         outer_dimension_input,
                         outer_dimension_weights,
                         inner_dimension,
-                        Tensor2D::linear_layer,
-                        Tensor2D::linear_layer_optimized,
+                        Tensor2D::linear,
+                        Tensor2D::linear_optimized,
                     );
                     assert!(abs_result_difference < ERROR_TOLERANCE);
                 }
             }
         }
     }
-
-    // TODO: A test with linear_layer_optimized_relu
 
     #[test]
     fn relu() {
@@ -410,32 +408,6 @@ mod tests {
     }
 
     #[test]
-    fn softmax_optimized() {
-        let row_count_max: usize = 10;
-        let column_count_max: usize = 10;
-        let step: f32 = 0.2;
-        let start: f32 = -3.14;
-        let stop: f32 = 2.1;
-
-        for row_count in 1..row_count_max {
-            for column_count in 1..column_count_max {
-                let mut scale: f32 = start;
-                while scale < stop {
-                    let abs_result_difference: f32 = single_test_function_inplace(
-                        row_count,
-                        column_count,
-                        scale,
-                        Tensor2D::softmax,
-                        Tensor2D::softmax_optimized,
-                    );
-                    assert!(abs_result_difference < ERROR_TOLERANCE);
-                    scale += step;
-                }
-            }
-        }
-    }
-
-    #[test]
     fn linear_relu_softmax_fused() {
         let outer_dimension_input_max: usize = 10;
         let outer_dimension_weights_max: usize = 10;
@@ -453,14 +425,14 @@ mod tests {
 
                     let mut output_not_fused: Tensor2D =
                         Tensor2D::new(0.0, outer_dimension_input, outer_dimension_weights);
-                    Tensor2D::linear_layer_optimized(
+                    Tensor2D::linear_optimized(
                         &input,
                         &weights,
                         &bias,
                         &mut output_not_fused,
                     );
                     Tensor2D::relu_inplace(&mut output_not_fused);
-                    Tensor2D::softmax_optimized(&mut output_not_fused);
+                    Tensor2D::softmax_inplace_inline(&mut output_not_fused);
 
                     let mut output_fused: Tensor2D =
                         Tensor2D::new(0.0, outer_dimension_input, outer_dimension_weights);

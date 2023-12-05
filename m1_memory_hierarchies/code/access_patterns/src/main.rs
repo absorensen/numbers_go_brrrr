@@ -1,8 +1,5 @@
 use std::time::{Instant, Duration};
 
-use rand::rngs::ThreadRng;
-use rand::Rng;
-
 fn main() {
     run_access_tests();
 }
@@ -113,13 +110,18 @@ fn strided(data: &mut Vec<i32>, sum: &mut Vec<i32>, iteration_count: usize, stri
     elapsed_time.as_millis() as f64
 }
 
+#[inline(always)]
+fn randomish_hash(index: usize, limit: usize) -> usize {
+    (index * 37199 + 999331) % limit
+}
+
 fn random(data: &mut Vec<i32>, sum: &mut Vec<i32>, iteration_count: usize) -> f64 {
-    let mut rng: ThreadRng = rand::thread_rng();
+    let data_length: usize = data.len();
     let now: Instant = Instant::now();
     for _ in 0..iteration_count {
         sum[0] = 0;
-        for _ in 0..data.len() {
-            let index: usize = rng.gen_range(0..data.len()); 
+        for index in 0..data_length {
+            let index: usize = randomish_hash(index, data_length); 
             sum[0] += data[index];
             data[index] *= 3;
         }    

@@ -5,66 +5,66 @@ use crate::shared::{
     tensor2d::Tensor2D,
 };
 
-fn naive_linear_layer_benchmark(
+fn naive_linear_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     _output: &mut Tensor2D,
 ) {
-    let _output: Tensor2D = Tensor2D::linear_layer(input, weights, bias);
+    let _output: Tensor2D = Tensor2D::linear(input, weights, bias);
 }
 
-fn preallocated_linear_layer_benchmark(
+fn preallocated_linear_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    Tensor2D::linear_layer_preallocated(input, weights, bias, output);
+    Tensor2D::linear_preallocated(input, weights, bias, output);
 }
 
-fn inline_linear_layer_benchmark(
+fn inline_linear_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    Tensor2D::linear_layer_preallocated_inline(input, weights, bias, output);
+    Tensor2D::linear_preallocated_inline(input, weights, bias, output);
 }
 
-fn local_accumulation_linear_layer_benchmark(
+fn local_accumulation_linear_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    Tensor2D::linear_layer_local_accumulation(input, weights, bias, output);
+    Tensor2D::linear_local_accumulation(input, weights, bias, output);
 }
 
-fn optimized_linear_layer_benchmark(
+fn optimized_linear_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    Tensor2D::linear_layer_optimized(input, weights, bias, output);
+    Tensor2D::linear_optimized(input, weights, bias, output);
 }
 
-fn linear_layer_benchmark(config: &Configuration) {
+fn linear_benchmark(config: &Configuration) {
     let names: Vec<String> = vec![
-        "naive".to_string(),
-        "preallocated".to_string(),
-        "inline".to_string(),
-        "local_accumulation".to_string(),
-        "optimized".to_string(),
+        "shared::tensor2d::linear".to_string(),
+        "shared::tensor2d::linear_preallocated".to_string(),
+        "shared::tensor2d::linear_preallocated_inline".to_string(),
+        "shared::tensor2d::linear_local_accumulation".to_string(),
+        "shared::tensor2d::linear_optimized".to_string(),
     ];
 
     let functions: Vec<fn(&mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> = vec![
-        naive_linear_layer_benchmark,
-        preallocated_linear_layer_benchmark,
-        inline_linear_layer_benchmark,
-        local_accumulation_linear_layer_benchmark,
-        optimized_linear_layer_benchmark,
+        naive_linear_benchmark,
+        preallocated_linear_benchmark,
+        inline_linear_benchmark,
+        local_accumulation_linear_benchmark,
+        optimized_linear_benchmark,
     ];
 
     let mut all_measurements: Vec<PerformanceMeasurements> =
@@ -73,17 +73,17 @@ fn linear_layer_benchmark(config: &Configuration) {
     benchmark_function_vector(config, names, functions, &mut all_measurements);
 
     draw_benchmark_plot(
-        "Benchmark - Linear Layer",
-        "benchmarks/stack/",
-        "linear_layer_cpu_benchmark_stack.png",
+        "CPU Benchmark - Linear",
+        "benchmarks/cpu/",
+        "cpu_linear_benchmark.png",
         all_measurements,
         config.log_scale,
     );
 }
 
-fn linear_layer(config: &Configuration) {
+fn linear(config: &Configuration) {
     if config.run_performance_benchmark {
-        linear_layer_benchmark(config);
+        linear_benchmark(config);
         return;
     }
 
@@ -105,7 +105,7 @@ fn linear_layer(config: &Configuration) {
         println!("{:?}", bias);
     }
 
-    let output: Tensor2D = Tensor2D::linear_layer(&input, &weights, &bias);
+    let output: Tensor2D = Tensor2D::linear(&input, &weights, &bias);
 
     if 2 < config.debug_level {
         println!("Output");
@@ -118,7 +118,7 @@ fn linear_layer(config: &Configuration) {
     }
 }
 
-fn naive_relu_benchmark(
+fn relu_naive_benchmark(
     input: &mut Tensor2D,
     _weights: &Tensor2D,
     _bias: &Tensor2D,
@@ -127,7 +127,7 @@ fn naive_relu_benchmark(
     let _: Tensor2D = Tensor2D::relu(input);
 }
 
-fn preallocated_relu_benchmark(
+fn relu_preallocated_benchmark(
     input: &mut Tensor2D,
     _weights: &Tensor2D,
     _bias: &Tensor2D,
@@ -136,7 +136,7 @@ fn preallocated_relu_benchmark(
     Tensor2D::relu_preallocated(input, output);
 }
 
-fn inplace_relu_benchmark(
+fn relu_inplace_benchmark(
     input: &mut Tensor2D,
     _weights: &Tensor2D,
     _bias: &Tensor2D,
@@ -145,7 +145,7 @@ fn inplace_relu_benchmark(
     Tensor2D::relu_inplace(input);
 }
 
-fn inline_relu_benchmark(
+fn relu_inplace_inline_benchmark(
     input: &mut Tensor2D,
     _weights: &Tensor2D,
     _bias: &Tensor2D,
@@ -156,17 +156,17 @@ fn inline_relu_benchmark(
 
 fn relu_benchmark(config: &Configuration) {
     let names: Vec<String> = vec![
-        "naive".to_string(),
-        "preallocated".to_string(),
-        "inplace".to_string(),
-        "inline".to_string(),
+        "shared::tensor2d::relu".to_string(),
+        "shared::tensor2d::relu_preallocated".to_string(),
+        "shared::tensor2d::relu_inplace".to_string(),
+        "shared::tensor2d::relu_inplace_inline".to_string(),
     ];
 
     let functions: Vec<fn(&mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> = vec![
-        naive_relu_benchmark,
-        preallocated_relu_benchmark,
-        inplace_relu_benchmark,
-        inline_relu_benchmark,
+        relu_naive_benchmark,
+        relu_preallocated_benchmark,
+        relu_inplace_benchmark,
+        relu_inplace_inline_benchmark,
     ];
 
     let mut all_measurements: Vec<PerformanceMeasurements> =
@@ -175,9 +175,9 @@ fn relu_benchmark(config: &Configuration) {
     benchmark_function_vector(config, names, functions, &mut all_measurements);
 
     draw_benchmark_plot(
-        "Benchmark - ReLu",
-        "benchmarks/stack/",
-        "relu_cpu_stack.png",
+        "CPU Benchmark - ReLu",
+        "benchmarks/cpu/",
+        "cpu_relu_benchmark.png",
         all_measurements,
         config.log_scale,
     );
@@ -208,7 +208,7 @@ fn relu(config: &Configuration) {
     }
 }
 
-fn naive_softmax_benchmark(
+fn softmax_naive_benchmark(
     input: &mut Tensor2D,
     _weights: &Tensor2D,
     _bias: &Tensor2D,
@@ -217,7 +217,7 @@ fn naive_softmax_benchmark(
     let _: Tensor2D = Tensor2D::softmax(input);
 }
 
-fn preallocated_softmax_benchmark(
+fn softmax_preallocated_benchmark(
     input: &mut Tensor2D,
     _weights: &Tensor2D,
     _bias: &Tensor2D,
@@ -226,7 +226,7 @@ fn preallocated_softmax_benchmark(
     Tensor2D::softmax_preallocated(input, output);
 }
 
-fn inplace_softmax_benchmark(
+fn softmax_inplace_benchmark(
     input: &mut Tensor2D,
     _weights: &Tensor2D,
     _bias: &Tensor2D,
@@ -235,7 +235,7 @@ fn inplace_softmax_benchmark(
     Tensor2D::softmax_inplace(input);
 }
 
-fn inline_softmax_benchmark(
+fn softmax_inplace_inline_benchmark(
     input: &mut Tensor2D,
     _weights: &Tensor2D,
     _bias: &Tensor2D,
@@ -246,17 +246,17 @@ fn inline_softmax_benchmark(
 
 fn softmax_benchmark(config: &Configuration) {
     let names: Vec<String> = vec![
-        "naive".to_string(),
-        "preallocated".to_string(),
-        "inplace".to_string(),
-        "inline".to_string(),
+        "shared::tensor2d::softmax".to_string(),
+        "shared::tensor2d::softmax_preallocated".to_string(),
+        "shared::tensor2d::softmax_inplace".to_string(),
+        "shared::tensor2d::softmax_inplace_inline".to_string(),
     ];
 
     let functions: Vec<fn(&mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> = vec![
-        naive_softmax_benchmark,
-        preallocated_softmax_benchmark,
-        inplace_softmax_benchmark,
-        inline_softmax_benchmark,
+        softmax_naive_benchmark,
+        softmax_preallocated_benchmark,
+        softmax_inplace_benchmark,
+        softmax_inplace_inline_benchmark,
     ];
 
     let mut all_measurements: Vec<PerformanceMeasurements> =
@@ -265,9 +265,9 @@ fn softmax_benchmark(config: &Configuration) {
     benchmark_function_vector(config, names, functions, &mut all_measurements);
 
     draw_benchmark_plot(
-        "Benchmark - Softmax",
-        "benchmarks/stack/",
-        "softmax_cpu_stack.png",
+        "CPU Benchmark - Softmax",
+        "benchmarks/cpu/",
+        "cpu_softmax_benchmark.png",
         all_measurements,
         config.log_scale,
     );
@@ -299,29 +299,29 @@ fn softmax(config: &Configuration) {
 }
 
 // Maybe show the plot with all of these three set to inline always, just to show that it is not always beneficial to demand inlining
-fn naive_linear_relu_softmax_benchmark(
+fn linear_relu_softmax_naive_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     _output: &mut Tensor2D,
 ) {
-    let output_linear: Tensor2D = Tensor2D::linear_layer(input, weights, bias);
+    let output_linear: Tensor2D = Tensor2D::linear(input, weights, bias);
     let output_relu: Tensor2D = Tensor2D::relu(&output_linear);
     let _output_softmax: Tensor2D = Tensor2D::softmax(&output_relu);
 }
 
-fn local_accumulation_linear_relu_softmax_benchmark(
+fn linear_relu_softmax_local_accumulation_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    Tensor2D::linear_layer_local_accumulation(input, weights, bias, output);
+    Tensor2D::linear_local_accumulation(input, weights, bias, output);
     Tensor2D::relu_inplace_inline(output);
     Tensor2D::softmax_inplace_inline(output);
 }
 
-fn fused_fission_linear_relu_softmax_benchmark(
+fn linear_relu_softmax_fused_fission_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
@@ -330,7 +330,7 @@ fn fused_fission_linear_relu_softmax_benchmark(
     Tensor2D::linear_relu_softmax_fused_fission(input, weights, bias, output);
 }
 
-fn fused_linear_relu_softmax_benchmark(
+fn linear_relu_softmax_fused_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
@@ -339,40 +339,40 @@ fn fused_linear_relu_softmax_benchmark(
     Tensor2D::linear_relu_softmax_fused(input, weights, bias, output);
 }
 
-fn fused_fission_linear_relu_benchmark(
+fn linear_local_accumulation_relu_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    Tensor2D::linear_layer_local_accumulation_relu(input, weights, bias, output);
+    Tensor2D::linear_local_accumulation_relu(input, weights, bias, output);
 }
 
-fn fused_linear_relu_benchmark(
+fn linear_optimized_relu_benchmark(
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    Tensor2D::linear_layer_optimized_relu(input, weights, bias, output);
+    Tensor2D::linear_optimized_relu(input, weights, bias, output);
 }
 
-fn linear_relu_softmax_fused_benchmark(config: &Configuration) {
+fn linear_relu_softmax_benchmark(config: &Configuration) {
     let names: Vec<String> = vec![
-        "naive".to_string(),
-        "inline-optimized".to_string(),
-        "fused-fission".to_string(),
-        "fused".to_string(),
-        "linear-relu-fission".to_string(),
-        "linear-relu-optimized".to_string(),
+        "shared::tensor2d::linear_relu_softmax".to_string(),
+        "shared::tensor2d::linear_relu_softmax_local_accumulation".to_string(),
+        "shared::tensor2d::linear_relu_softmax_fused_fission".to_string(),
+        "shared::tensor2d::linear_relu_softmax_fused".to_string(),
+        "shared::tensor2d::linear_local_accumulation_relu".to_string(),
+        "shared::tensor2d::linear_optimized_relu".to_string(),
     ];
     let functions: Vec<fn(&mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> = vec![
-        naive_linear_relu_softmax_benchmark,
-        local_accumulation_linear_relu_softmax_benchmark,
-        fused_fission_linear_relu_softmax_benchmark,
-        fused_linear_relu_softmax_benchmark,
-        fused_fission_linear_relu_benchmark,
-        fused_linear_relu_benchmark,
+        linear_relu_softmax_naive_benchmark,
+        linear_relu_softmax_local_accumulation_benchmark,
+        linear_relu_softmax_fused_fission_benchmark,
+        linear_relu_softmax_fused_benchmark,
+        linear_local_accumulation_relu_benchmark,
+        linear_optimized_relu_benchmark,
     ];
     let mut all_measurements: Vec<PerformanceMeasurements> =
         vec![PerformanceMeasurements::default(); functions.len()];
@@ -380,9 +380,9 @@ fn linear_relu_softmax_fused_benchmark(config: &Configuration) {
     benchmark_function_vector(config, names, functions, &mut all_measurements);
 
     draw_benchmark_plot(
-        "Benchmark - Fused Linear/ReLu/Softmax",
-        "benchmarks/stack/",
-        "linear_relu_softmax_fused_cpu_stack.png",
+        "CPU Benchmark - Fused Linear/ReLu/Softmax",
+        "benchmarks/cpu/",
+        "cpu_linear_relu_softmax_fused_benchmark.png",
         all_measurements,
         config.log_scale,
     );
@@ -390,7 +390,7 @@ fn linear_relu_softmax_fused_benchmark(config: &Configuration) {
 
 fn linear_relu_softmax_fused(config: &Configuration) {
     if config.run_performance_benchmark {
-        linear_relu_softmax_fused_benchmark(config);
+        linear_relu_softmax_benchmark(config);
         return;
     }
 
@@ -432,7 +432,7 @@ fn linear_relu_softmax_fused(config: &Configuration) {
 }
 
 pub fn execute(config: &Configuration) {
-    linear_layer(config);
+    linear(config);
     relu(config);
     softmax(config);
     linear_relu_softmax_fused(config);

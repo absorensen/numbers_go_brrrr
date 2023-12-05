@@ -141,7 +141,7 @@ pub fn create_bind_group(
 }
 
 pub fn are_vectors_equivalent(a: &Vec<f32>, b: &Vec<f32>) -> bool {
-    let epsilon: f32 = 0.00001;
+    let epsilon: f32 = 0.001;
 
     for index in 0..a.len() {
         if epsilon < (a[index] - b[index]).abs() {

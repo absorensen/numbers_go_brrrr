@@ -1840,8 +1840,6 @@
       
         
       
-        
-      
     
     
     
@@ -1931,32 +1929,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m5_optimization/s2_optimizing_deep_learning_training/" class="md-nav__link">
+      <a href="../../m5_optimization/s2_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S2 - 🧬3️⃣ Optimizing Deep Learning Training
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../m5_optimization/s3_exercises/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S3 - 👨🏼‍💻 Exercises
+    S2 - 👨🏼‍💻 Exercises
   </span>
   
 
@@ -2693,7 +2670,12 @@ meaning once we step over the end we wrap back around using a modulo operator.
 This is to ensure that it accesses the same amount of elements as the sequential access.
 With the non-wrapping stride we only access every N elements, but we also end up doing much less work.</p>
 <p>Finally, we have random access. This is basically the worst case scenario. We randomly select an element
-to access the same amount of times as the number of elements in the array.</p>
+to access the same amount of times as the number of elements in the array. This random access
+is based on sending what would otherwise have been the access index through a hash function which
+hopefully results in a reasonably random access distribution. On my first try I got random accesses
+through a random number generator. It turned out to be overkill and resulted in extremely poor
+performance for random access. Your take away from that should be that generating random floats
+is very expensive.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/access_patterns.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/access_patterns.png" width="400" /></a></p>
 <figcaption>
@@ -2701,8 +2683,11 @@ Timing access patterns in Rust.
 </figcaption>
 </figure>
 <p>Given that we just talked about cache lines, most of these numbers make good sense.
-Random access is catastrophic, wrapping strided access is bad, but most interestingly
-non-wrapping strided access, which actually accesses less elements than the others,
+Wrapping strided access is bad. Random access is the same as the worst (17) wrapping strided access.
+Why do you think that is?</p>
+<p>My best guess is that once you are that far outside of being able to reuse a cache line, essentially
+every single access will be a cache miss, it's the same.</p>
+<p>Most interestingly non-wrapping strided access, which actually accesses less elements than the others,
 is slower than sequential access for strides 2 and 3. With stride 4, where we are
 only accessing one fourth the elements of the sequential access pattern, we begin to
 get faster. But what do you know, sometimes the nice and predictable path,
@@ -3893,7 +3878,7 @@ the memory hierarchy. For even more <a href="http://csapp.cs.cmu.edu/2e/ch9-prev
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 29, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 5, 2023</span>
       
         <br>
         Created:

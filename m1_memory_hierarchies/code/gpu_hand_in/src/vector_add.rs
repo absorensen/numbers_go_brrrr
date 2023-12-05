@@ -17,7 +17,7 @@ pub fn vector_add(handles: &GPUHandles) -> bool {
     // Setup our CPU-side data
     let element_count: usize = 100;
     let input_a: Vec<f32> = (0..element_count).into_iter().map(|element| element as f32).collect();
-    let input_b: Vec<f32> = (0..element_count).into_iter().map(|element| element as f32).collect();
+    let input_b: Vec<f32> = (0..element_count).into_iter().map(|element| element as f32 * 0.1).collect();
     let output: Vec<f32> = vec![0.0; element_count];
 
     let ground_truth: Vec<f32> = vector_add_cpu(&input_a, &input_b);

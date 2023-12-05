@@ -7,7 +7,7 @@ pub enum NodeOperator {
     Input,
     Output,
     Transfer,
-    LinearLayer,
+    Linear,
     ReLU,
     Softmax,
     LinearReLU,
@@ -75,10 +75,10 @@ fn sorted_mutable_references<'a>(
     references
 }
 
-pub fn linear_layer(node: &Node, data_buffers: &mut [Tensor2D]) {
+pub fn linear(node: &Node, data_buffers: &mut [Tensor2D]) {
     if node.buffer_indices.len() != 4 {
         panic!(
-            "cpu_nodes::linear_layer function expected 1 input buffer, received {}",
+            "cpu_nodes::linear function expected 1 input buffer, received {}",
             node.buffer_indices.len()
         );
     }
@@ -91,7 +91,7 @@ pub fn linear_layer(node: &Node, data_buffers: &mut [Tensor2D]) {
     let bias: &Tensor2D = drain.next().unwrap().1;
     let output: &mut Tensor2D = drain.next().unwrap().1;
 
-    Tensor2D::linear_layer_optimized(input, weights, bias, output)
+    Tensor2D::linear_optimized(input, weights, bias, output)
 }
 
 pub fn relu(node: &Node, data_buffers: &mut [Tensor2D]) {
@@ -152,7 +152,7 @@ pub fn linear_relu(node: &Node, data_buffers: &mut [Tensor2D]) {
     let bias: &Tensor2D = drain.next().unwrap().1;
     let output: &mut Tensor2D = drain.next().unwrap().1;
 
-    Tensor2D::linear_layer_optimized_relu(input, weights, bias, output);
+    Tensor2D::linear_local_accumulation_relu(input, weights, bias, output);
 }
 
 pub fn linear_relu_softmax(node: &Node, data_buffers: &mut [Tensor2D]) {
@@ -171,5 +171,5 @@ pub fn linear_relu_softmax(node: &Node, data_buffers: &mut [Tensor2D]) {
     let bias: &Tensor2D = drain.next().unwrap().1;
     let output: &mut Tensor2D = drain.next().unwrap().1;
 
-    Tensor2D::linear_relu_softmax_fused(input, weights, bias, output);
+    Tensor2D::linear_relu_softmax_fused_fission(input, weights, bias, output);
 }

@@ -8,7 +8,7 @@ use wgpu::{
 
 use crate::shared::{
     gpu_utilities::{create_bind_group, create_compute_pipeline, create_shader_module, GPUHandles},
-    tensor2d_gpu::{LinearLayerUniform, ReluUniform, SoftmaxUniform, Tensor2DGPU},
+    tensor2d_gpu::{LinearUniform, ReluUniform, SoftmaxUniform, Tensor2DGPU},
 };
 
 #[derive(Clone, Debug, Eq, Hash, PartialEq)]
@@ -16,7 +16,7 @@ pub enum NodeOperatorGPU {
     HostToDevice,
     DeviceToHost,
     DeviceToDevice,
-    LinearLayer,
+    Linear,
     ReLU,
     Softmax,
     LinearReLU,
@@ -41,17 +41,17 @@ impl NodeGPU {
 }
 
 // Linear Layer
-pub fn build_linear_layer_elements(
+pub fn build_linear_elements(
     gpu_handles: &GPUHandles,
     shader_cache: &mut HashMap<String, ShaderModule>,
     pipeline_cache: &mut HashMap<String, ComputePipeline>,
     use_fused_with_relu: bool,
 ) {
-    let key: String = "LinearLayer".to_string();
+    let key: String = "Linear".to_string();
 
     let cs_module: ShaderModule = create_shader_module(
         gpu_handles,
-        include_str!("../shared/shaders/linear_layer.wgsl"),
+        include_str!("../shared/shaders/linear.wgsl"),
     );
 
     let entry_point: &str = "main";
@@ -64,7 +64,7 @@ pub fn build_linear_layer_elements(
     if use_fused_with_relu {
         let cs_module: ShaderModule = create_shader_module(
             gpu_handles,
-            include_str!("../shared/shaders/linear_layer.wgsl"),
+            include_str!("../shared/shaders/linear.wgsl"),
         );
         let key: String = "LinearReLU".to_string();
         let entry_point: &str = "main_with_relu";
@@ -76,7 +76,7 @@ pub fn build_linear_layer_elements(
     }
 }
 
-pub fn linear_layer(
+pub fn linear(
     gpu_handles: &GPUHandles,
     use_cache: bool,
     shader_cache: &HashMap<String, ShaderModule>,
@@ -88,7 +88,7 @@ pub fn linear_layer(
 ) {
     if node.buffer_indices.len() != 4 {
         panic!(
-            "nodes::linear_layer function expected 1 input buffer, received {}",
+            "nodes::linear function expected 1 input buffer, received {}",
             node.buffer_indices.len()
         );
     }
@@ -105,7 +105,7 @@ pub fn linear_layer(
     let launch_blocks_x: u32 = ((output.row_count + block_size - 1) / block_size) as u32;
     let launch_blocks_y: u32 = ((output.column_count + block_size - 1) / block_size) as u32;
 
-    let uniform_device: LinearLayerUniform = LinearLayerUniform::from_tensor_2d_gpu(
+    let uniform_device: LinearUniform = LinearUniform::from_tensor_2d_gpu(
         gpu_handles,
         "Linear Layer Uniform",
         input,
@@ -119,7 +119,7 @@ pub fn linear_layer(
     } else {
         Some(create_shader_module(
             gpu_handles,
-            include_str!("../shared/shaders/linear_layer.wgsl"),
+            include_str!("../shared/shaders/linear.wgsl"),
         ))
     };
 
@@ -127,12 +127,12 @@ pub fn linear_layer(
         let key: &str = if use_fused_with_relu {
             "LinearReLU"
         } else {
-            "LinearLayer"
+            "Linear"
         };
         if shader_cache.contains_key(key) {
             &shader_cache[key]
         } else {
-            panic!("Tried to get a cached {} shader in graph::nodes::linear_layer(), but failed to find it in the shader cache!", key);
+            panic!("Tried to get a cached {} shader in graph::nodes::linear(), but failed to find it in the shader cache!", key);
         }
     } else {
         shader_module
@@ -155,17 +155,17 @@ pub fn linear_layer(
         let key: &str = if use_fused_with_relu {
             "LinearReLU"
         } else {
-            "LinearLayer"
+            "Linear"
         };
         if pipeline_cache.contains_key(key) {
             &pipeline_cache[key]
         } else {
-            panic!("Tried to get a cached {} pipeline in graph::nodes::linear_layer(), but failed to find it in the pipeline cache!", key);
+            panic!("Tried to get a cached {} pipeline in graph::nodes::linear(), but failed to find it in the pipeline cache!", key);
         }
     } else {
         pipeline
             .as_ref()
-            .expect("Failed to get a reference to compute pipeline in graph::nodes::linear_layer")
+            .expect("Failed to get a reference to compute pipeline in graph::nodes::linear")
     };
 
     // Instantiates the bind group, once again specifying the binding of buffers.
@@ -184,12 +184,12 @@ pub fn linear_layer(
             label: Some(if use_fused_with_relu {
                 "linear_relu_graph"
             } else {
-                "linear_layer_graph"
+                "linear_graph"
             }),
         });
         cpass.set_pipeline(compute_pipeline);
         cpass.set_bind_group(0, &bind_group, &[]);
-        cpass.insert_debug_marker("linear_layer_graph");
+        cpass.insert_debug_marker("linear_graph");
         cpass.dispatch_workgroups(launch_blocks_x, launch_blocks_y, 1); // Number of cells to run, the (x,y,z) size of item being processed
     }
 }
@@ -544,7 +544,7 @@ pub fn linear_relu_softmax(
     let linear_launch_blocks_y: u32 =
         ((intermediate.column_count + linear_block_size - 1) / linear_block_size) as u32;
 
-    let linear_uniform: LinearLayerUniform = LinearLayerUniform::from_tensor_2d_gpu(
+    let linear_uniform: LinearUniform = LinearUniform::from_tensor_2d_gpu(
         gpu_handles,
         "Linear Layer Uniform",
         input,
@@ -564,7 +564,7 @@ pub fn linear_relu_softmax(
     } else {
         Some(create_shader_module(
             gpu_handles,
-            include_str!("../shared/shaders/linear_layer.wgsl"),
+            include_str!("../shared/shaders/linear.wgsl"),
         ))
     };
 
@@ -636,11 +636,11 @@ pub fn linear_relu_softmax(
         let linear_bind_group: BindGroup =
             create_bind_group(gpu_handles, &linear_bind_group_layout, to_be_bound);
         let mut cpass: ComputePass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
-            label: Some("linear_layer_immediate"),
+            label: Some("linear_immediate"),
         });
         cpass.set_pipeline(linear_compute_pipeline);
         cpass.set_bind_group(0, &linear_bind_group, &[]);
-        cpass.insert_debug_marker("linear_layer_immediate");
+        cpass.insert_debug_marker("linear_immediate");
         cpass.dispatch_workgroups(linear_launch_blocks_x, linear_launch_blocks_y, 1);
         // Number of cells to run, the (x,y,z) size of item being processed
     }

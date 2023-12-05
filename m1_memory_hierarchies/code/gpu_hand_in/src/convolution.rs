@@ -44,8 +44,8 @@ pub fn convolution(handles: &GPUHandles) -> bool {
 
     let data_element_count: usize = 1000000;
     let filter_size: usize = 19;
-    let signal: Vec<f32> = (0..data_element_count).map(|x| x as f32 * 0.1).collect();
-    let filter: Vec<f32> = (0..filter_size).map(|x| x as f32 * 0.1).collect();
+    let signal: Vec<f32> = (0..data_element_count).map(|x| x as f32 * 1.0).collect();
+    let filter: Vec<f32> = (0..filter_size).map(|x| x as f32 * -0.1).collect();
 
     let ground_truth: Vec<f32> = convolution_cpu(&signal, &filter);
 

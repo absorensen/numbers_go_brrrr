@@ -9,7 +9,7 @@ mod graph;
 mod immediate;
 mod op_code_compiler;
 mod shared;
-mod stack;
+mod cpu;
 
 use shared::{
     configuration::Configuration,
@@ -22,7 +22,7 @@ pub async fn run() {
     // If not wgpu compatible, then alert the user
     let debug_level: u32 = 4;
     let run_performance_benchmark: bool = true;
-    let loop_count: usize = 10;
+    let loop_count: usize = 25;
     let loop_range: Vec<usize> = (2u32..8u32).map(|x| 2usize.pow(x)).collect();
     let log_scale: bool = false;
     let compatible_gpu_found: bool = pollster::block_on(gpu_utilities::self_test());
@@ -43,15 +43,15 @@ pub async fn run() {
         default_graph_operator_size,
         graph_depth_range,
     );
-    // stack::runner::execute(&configuration);8
+    cpu::runner::execute(&configuration);
 
     if configuration.compatible_gpu_found {
         let gpu_handles: GPUHandles = initialize_gpu(configuration.warmup_gpu)
             .await
             .expect("Failed to acquire GPU Handles");
 
-        // pollster::block_on(immediate::runner::execute(&gpu_handles, &configuration));
+        pollster::block_on(immediate::runner::execute(&gpu_handles, &configuration));
         pollster::block_on(graph::runner::execute(&gpu_handles, &configuration));
-        // op_code_compiler::runner::compile_linear_shader(&gpu_handles, true);
+        op_code_compiler::runner::compile_linear_shader(&gpu_handles, true);
     }
 }

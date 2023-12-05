@@ -26,11 +26,11 @@ impl Tensor2D {
         }
     }
 
-    pub fn linear_layer(input: &Tensor2D, weights: &Tensor2D, bias: &Tensor2D) -> Tensor2D {
+    pub fn linear(input: &Tensor2D, weights: &Tensor2D, bias: &Tensor2D) -> Tensor2D {
         // Create a matrix and set all initial values to 0.0
         let mut output: Tensor2D = Tensor2D::new(0.0, input.row_count, weights.column_count);
 
-        Tensor2D::linear_layer_preallocated(input, weights, bias, &mut output);
+        Tensor2D::linear_preallocated(input, weights, bias, &mut output);
         output
     }
 
@@ -39,7 +39,7 @@ impl Tensor2D {
     }
 
     #[inline(always)]
-    fn linear_layer_assert(
+    fn linear_assert(
         input: &Tensor2D,
         weights: &Tensor2D,
         bias: &Tensor2D,
@@ -151,13 +151,13 @@ impl Tensor2D {
         debug_assert_eq!(bias.len(), output.len(), "\nMismatch - bias.len() & output.len()\nbias - rows: {} columns: {}.\n out - rows: {} columns: {}.", bias.row_count, bias.column_count, output.row_count, output.column_count);
     }
 
-    pub fn linear_layer_preallocated(
+    pub fn linear_preallocated(
         input: &Tensor2D,
         weights: &Tensor2D,
         bias: &Tensor2D,
         output: &mut Tensor2D,
     ) {
-        Self::linear_layer_assert(input, weights, bias, output);
+        Self::linear_assert(input, weights, bias, output);
 
         for row_output in 0..output.row_count {
             for column_output in 0..output.column_count {
@@ -181,13 +181,13 @@ impl Tensor2D {
     }
 
     #[inline(always)]
-    pub fn linear_layer_preallocated_inline(
+    pub fn linear_preallocated_inline(
         input: &Tensor2D,
         weights: &Tensor2D,
         bias: &Tensor2D,
         output: &mut Tensor2D,
     ) {
-        Self::linear_layer_assert(input, weights, bias, output);
+        Self::linear_assert(input, weights, bias, output);
 
         for row_output in 0..output.row_count {
             for column_output in 0..output.column_count {
@@ -210,13 +210,13 @@ impl Tensor2D {
         }
     }
 
-    pub fn linear_layer_local_accumulation(
+    pub fn linear_local_accumulation(
         input: &Tensor2D,
         weights: &Tensor2D,
         bias: &Tensor2D,
         output: &mut Tensor2D,
     ) {
-        Self::linear_layer_assert(input, weights, bias, output);
+        Self::linear_assert(input, weights, bias, output);
 
         for row_output in 0..output.row_count {
             for column_output in 0..output.column_count {
@@ -237,13 +237,13 @@ impl Tensor2D {
         }
     }
 
-    pub fn linear_layer_optimized(
+    pub fn linear_optimized(
         input: &Tensor2D,
         weights: &Tensor2D,
         bias: &Tensor2D,
         output: &mut Tensor2D,
     ) {
-        Self::linear_layer_assert(input, weights, bias, output);
+        Self::linear_assert(input, weights, bias, output);
 
         for row_output in 0..output.row_count {
             for column_output in 0..output.column_count {
@@ -361,13 +361,13 @@ impl Tensor2D {
     }
 
     #[inline]
-    pub fn linear_layer_local_accumulation_relu(
+    pub fn linear_local_accumulation_relu(
         input: &Tensor2D,
         weights: &Tensor2D,
         bias: &Tensor2D,
         output: &mut Tensor2D,
     ) {
-        Self::linear_layer_assert(input, weights, bias, output);
+        Self::linear_assert(input, weights, bias, output);
 
         for row_output in 0..output.row_count {
             for column_output in 0..output.column_count {
@@ -389,13 +389,13 @@ impl Tensor2D {
     }
 
     #[inline]
-    pub fn linear_layer_optimized_relu(
+    pub fn linear_optimized_relu(
         input: &Tensor2D,
         weights: &Tensor2D,
         bias: &Tensor2D,
         output: &mut Tensor2D,
     ) {
-        Self::linear_layer_assert(input, weights, bias, output);
+        Self::linear_assert(input, weights, bias, output);
 
         for row_output in 0..output.row_count {
             for column_output in 0..output.column_count {
@@ -435,11 +435,13 @@ impl Tensor2D {
                     index_weights += weights.column_count;
                 }
 
-                // TODO: Try this with bias fissioned
                 let index: usize = row_output * output.column_count + column_output;
-         
                 output.data[index] = result;
             }
+        }
+
+        for index in 0..(bias.row_count * bias.column_count) {
+            output.data[index] += bias.data[index];
         }
 
         let mut max: f32 = f32::NEG_INFINITY;

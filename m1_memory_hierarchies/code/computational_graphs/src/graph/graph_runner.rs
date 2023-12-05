@@ -73,7 +73,7 @@ impl GraphRunner {
         operator_counts.insert(NodeOperator::Input, 0);
         operator_counts.insert(NodeOperator::Output, 0);
         operator_counts.insert(NodeOperator::Transfer, 0);
-        operator_counts.insert(NodeOperator::LinearLayer, 0);
+        operator_counts.insert(NodeOperator::Linear, 0);
         operator_counts.insert(NodeOperator::ReLU, 0);
         operator_counts.insert(NodeOperator::Softmax, 0);
         operator_counts.insert(NodeOperator::LinearReLU, 0);
@@ -112,8 +112,8 @@ impl GraphRunner {
                     let node: Node = Node::new(new_key, key, buffer_indices);
                     self.nodes.push(node);
                 }
-                LinearLayer { weights, bias } => {
-                    let mut key: NodeOperator = NodeOperator::LinearLayer;
+                Linear { weights, bias } => {
+                    let mut key: NodeOperator = NodeOperator::Linear;
 
                     if fuse_operators {
                         if let ReLU = graph_operators[operator_index + 1] {
@@ -280,8 +280,8 @@ impl GraphRunner {
                 NodeOperator::Input => {}
                 NodeOperator::Output => {}
                 NodeOperator::Transfer => {}
-                NodeOperator::LinearLayer => {
-                    nodes::linear_layer(node, data_buffers);
+                NodeOperator::Linear => {
+                    nodes::linear(node, data_buffers);
                 }
                 NodeOperator::ReLU => {
                     nodes::relu(node, data_buffers);

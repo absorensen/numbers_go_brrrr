@@ -52,8 +52,8 @@ pub fn matrix_multiplication(handles: &GPUHandles) -> bool {
     let outer_dimension_left: usize = 400; // M
     let inner_dimension: usize = 320; // N
     let outer_dimension_right: usize = 540;// K
-    let left_matrix: Vec<f32> = (0..outer_dimension_left*inner_dimension).map(|x| x as f32 * 0.1).collect();
-    let right_matrix: Vec<f32> = (0..inner_dimension*outer_dimension_right).map(|x| x as f32 * 0.1).collect();
+    let left_matrix: Vec<f32> = (0..outer_dimension_left*inner_dimension).map(|x| x as f32 * 1.0).collect();
+    let right_matrix: Vec<f32> = (0..inner_dimension*outer_dimension_right).map(|x| x as f32 * -0.1).collect();
     let ground_truth: Vec<f32> = matrix_multiplication_cpu(&left_matrix, &right_matrix, outer_dimension_left, inner_dimension, outer_dimension_right);
     
     //

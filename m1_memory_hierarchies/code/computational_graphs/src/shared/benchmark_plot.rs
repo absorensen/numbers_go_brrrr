@@ -3,7 +3,6 @@ use plotters::prelude::*;
 use super::performance_measurement::PerformanceMeasurements;
 
 // Function based on https://plotters-rs.github.io/book/basic/basic_data_plotting.html
-// Maybe make this a Vec<PerformanceMeasurements>
 pub fn draw_benchmark_plot(
     chart_name: &str,
     path: &str,
@@ -11,12 +10,12 @@ pub fn draw_benchmark_plot(
     measurements: Vec<PerformanceMeasurements>,
     log_scale: bool,
 ) {
-    let plot_resolution: (u32, u32) = (2400, 1600);
-    let x_label_area_size: i32 = 200;
-    let y_label_area_size: i32 = 200;
-    let right_y_label_area_size: i32 = 400;
-    let margin: i32 = 50;
-    let title_font_size: i32 = 50;
+    let plot_resolution: (u32, u32) = (1200, 800);
+    let x_label_area_size: i32 = 100;
+    let y_label_area_size: i32 = 100;
+    let right_y_label_area_size: i32 = 200;
+    let margin: i32 = 25;
+    let title_font_size: i32 = 25;
 
     let x_label: &str = "Element Count";
     let y_label: &str = "Nanseconds";

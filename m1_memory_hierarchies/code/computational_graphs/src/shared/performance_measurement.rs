@@ -163,7 +163,7 @@ fn benchmark_function_vector_gpu_graph_inner_loop(
     for _ in 0..depth {
         let weights: Tensor2D = Tensor2D::new(0.5, size, size);
         let bias: Tensor2D = Tensor2D::new(0.1, size, size);
-        graph.push(GraphOperator::LinearLayer { weights, bias });
+        graph.push(GraphOperator::Linear { weights, bias });
 
         let layer_type: usize = rng.gen_range(0..2);
         if layer_type == 1 {

@@ -9,20 +9,40 @@ use crate::shared::{
 };
 
 use super::nodes::{
-    linear_layer_from_tensor_2d, linear_layer_with_relu_from_tensor_2d,
+    linear_from_tensor_2d, linear_with_relu_from_tensor_2d,
     linear_relu_softmax_from_tensor_2d, linear_relu_softmax_fused_from_tensor_2d,
     linearrelu_softmax_from_tensor_2d, relu_from_tensor_2d, relu_inplace_from_tensor_2d,
     softmax_from_tensor_2d, sum_from_tensor_2d,
 };
 
-fn immediate_linear_layer_benchmark(
+fn cpu_linear_local_accumulation_benchmark(
+    _gpu_handles: &GPUHandles,
+    input: &mut Tensor2D,
+    weights: &Tensor2D,
+    bias: &Tensor2D,
+    output: &mut Tensor2D,
+) {
+    Tensor2D::linear_local_accumulation(input, weights, bias, output);
+}
+
+fn cpu_linear_local_accumulation_relu_benchmark(
+    _gpu_handles: &GPUHandles,
+    input: &mut Tensor2D,
+    weights: &Tensor2D,
+    bias: &Tensor2D,
+    output: &mut Tensor2D,
+) {
+    Tensor2D::linear_local_accumulation_relu(input, weights, bias, output);
+}
+
+fn immediate_linear_benchmark(
     gpu_handles: &GPUHandles,
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    pollster::block_on(linear_layer_from_tensor_2d(
+    pollster::block_on(linear_from_tensor_2d(
         gpu_handles,
         input,
         weights,
@@ -31,14 +51,14 @@ fn immediate_linear_layer_benchmark(
     ));
 }
 
-fn immediate_linear_layer_with_relu_benchmark(
+fn immediate_linear_with_relu_benchmark(
     gpu_handles: &GPUHandles,
     input: &mut Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    pollster::block_on(linear_layer_with_relu_from_tensor_2d(
+    pollster::block_on(linear_with_relu_from_tensor_2d(
         gpu_handles,
         input,
         weights,
@@ -47,12 +67,20 @@ fn immediate_linear_layer_with_relu_benchmark(
     ));
 }
 
-fn linear_layer_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
-    let names: Vec<String> = vec!["immediate".to_string(), "with_relu".to_string()];
+fn linear_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
+    let names: Vec<String> = vec![
+        "shared::tensor2d::linear_local_accumulation".to_string(),
+        "shared::tensor2d::linear_local_accumulation_relu".to_string(),
+        "immediate::nodes::linear_from_tensor_2d".to_string(), 
+        "immediate::nodes::linear_with_relu_from_tensor_2d".to_string()
+        ];
 
-    let functions: Vec<fn(&GPUHandles, &mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> = vec![
-        immediate_linear_layer_benchmark,
-        immediate_linear_layer_with_relu_benchmark,
+    let functions: Vec<fn(&GPUHandles, &mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> =
+    vec![
+        cpu_linear_local_accumulation_benchmark,
+        cpu_linear_local_accumulation_relu_benchmark,
+        immediate_linear_benchmark,
+        immediate_linear_with_relu_benchmark,
     ];
 
     let mut all_measurements: Vec<PerformanceMeasurements> =
@@ -61,17 +89,17 @@ fn linear_layer_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
     benchmark_function_vector_gpu(config, names, gpu_handles, functions, &mut all_measurements);
 
     draw_benchmark_plot(
-        "Benchmark - Linear Layer - Immediate - GPU",
+        "Immediate Benchmark - Linear",
         "benchmarks/immediate/",
-        "linear_layer_gpu_immediate.png",
+        "immediate_linear_benchmark.png",
         all_measurements,
         config.log_scale,
     );
 }
 
-async fn linear_layer(config: &Configuration, gpu_handles: &GPUHandles) {
+async fn linear(config: &Configuration, gpu_handles: &GPUHandles) {
     if config.run_performance_benchmark {
-        linear_layer_benchmark(config, gpu_handles);
+        linear_benchmark(config, gpu_handles);
         return;
     }
 
@@ -104,7 +132,7 @@ async fn linear_layer(config: &Configuration, gpu_handles: &GPUHandles) {
         println!("Evaluation sum: {:?}", evaluation_sum);
     }
 
-    linear_layer_from_tensor_2d(gpu_handles, &input, &weights, &bias, &mut output).await;
+    linear_from_tensor_2d(gpu_handles, &input, &weights, &bias, &mut output).await;
 
     if 2 < config.debug_level {
         println!("Output");
@@ -115,6 +143,16 @@ async fn linear_layer(config: &Configuration, gpu_handles: &GPUHandles) {
     if 1 < config.debug_level {
         println!("Evaluation sum: {:?}", evaluation_sum);
     }
+}
+
+fn cpu_relu_inplace_benchmark(
+    _gpu_handles: &GPUHandles,
+    input: &mut Tensor2D,
+    _weights: &Tensor2D,
+    _bias: &Tensor2D,
+    _output: &mut Tensor2D,
+) {
+    Tensor2D::relu_inplace(input);
 }
 
 fn immediate_relu_benchmark(
@@ -138,10 +176,19 @@ fn immediate_relu_inplace_benchmark(
 }
 
 fn relu_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
-    let names: Vec<String> = vec!["naive".to_string(), "inplace".to_string()];
+    let names: Vec<String> =
+        vec![
+            "shared::tensor2d::relu_inplace".to_string(),
+            "immediate::nodes::relu_from_tensor_2d".to_string(),
+            "immediate::nodes::relu_inplace_from_tensor_2d".to_string()
+        ];
 
     let functions: Vec<fn(&GPUHandles, &mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> =
-        vec![immediate_relu_benchmark, immediate_relu_inplace_benchmark];
+        vec![
+            cpu_relu_inplace_benchmark,
+            immediate_relu_benchmark,
+            immediate_relu_inplace_benchmark
+        ];
 
     let mut all_measurements: Vec<PerformanceMeasurements> =
         vec![PerformanceMeasurements::default(); functions.len()];
@@ -149,9 +196,9 @@ fn relu_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
     benchmark_function_vector_gpu(config, names, gpu_handles, functions, &mut all_measurements);
 
     draw_benchmark_plot(
-        "Benchmark - ReLu - Immediate - GPU",
+        "Immediate Benchmark - ReLu",
         "benchmarks/immediate/",
-        "relu_gpu_immediate.png",
+        "immediate_relu_benchmark.png",
         all_measurements,
         config.log_scale,
     );
@@ -182,6 +229,17 @@ async fn relu(config: &Configuration, gpu_handles: &GPUHandles) {
     }
 }
 
+fn cpu_sum_benchmark(
+    _gpu_handles: &GPUHandles,
+    input: &mut Tensor2D,
+    _weights: &Tensor2D,
+    _bias: &Tensor2D,
+    _output: &mut Tensor2D,
+) {
+    let result: f32 = input.sum();
+    let _x: f32 = 2.0 * result + 5.0;
+}
+
 fn immediate_sum_benchmark(
     gpu_handles: &GPUHandles,
     input: &mut Tensor2D,
@@ -194,10 +252,14 @@ fn immediate_sum_benchmark(
 }
 
 fn sum_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
-    let names: Vec<String> = vec!["naive".to_string()];
+    let names: Vec<String> = 
+        vec![
+            "shared::tensor2d::sum".to_string(),
+            "immediate::nodes::sum_from_tensor_2d".to_string()
+        ];
 
     let functions: Vec<fn(&GPUHandles, &mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> =
-        vec![immediate_sum_benchmark];
+        vec![cpu_sum_benchmark, immediate_sum_benchmark];
 
     let mut all_measurements: Vec<PerformanceMeasurements> =
         vec![PerformanceMeasurements::default(); functions.len()];
@@ -205,9 +267,9 @@ fn sum_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
     benchmark_function_vector_gpu(config, names, gpu_handles, functions, &mut all_measurements);
 
     draw_benchmark_plot(
-        "Benchmark - Sum - Immediate - GPU",
+        "Immediate Benchmark - Sum",
         "benchmarks/immediate/",
-        "sum_gpu_immediate.png",
+        "immediate_sum_benchmark.png",
         all_measurements,
         config.log_scale,
     );
@@ -233,6 +295,16 @@ async fn sum(config: &Configuration, gpu_handles: &GPUHandles) {
     }
 }
 
+fn cpu_softmax_inplace_benchmark(
+    _gpu_handles: &GPUHandles,
+    input: &mut Tensor2D,
+    _weights: &Tensor2D,
+    _bias: &Tensor2D,
+    _output: &mut Tensor2D,
+) {
+    Tensor2D::softmax_inplace(input);
+}
+
 fn immediate_softmax_benchmark(
     gpu_handles: &GPUHandles,
     input: &mut Tensor2D,
@@ -244,10 +316,17 @@ fn immediate_softmax_benchmark(
 }
 
 fn softmax_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
-    let names: Vec<String> = vec!["naive".to_string()];
+    let names: Vec<String> =
+        vec![
+            "shared::tensor2d::softmax_inplace".to_string(),
+            "immediate::nodes::softmax".to_string(),
+        ];
 
     let functions: Vec<fn(&GPUHandles, &mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> =
-        vec![immediate_softmax_benchmark];
+        vec![
+            cpu_softmax_inplace_benchmark,
+            immediate_softmax_benchmark,
+            ];
 
     let mut all_measurements: Vec<PerformanceMeasurements> =
         vec![PerformanceMeasurements::default(); functions.len()];
@@ -255,9 +334,9 @@ fn softmax_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
     benchmark_function_vector_gpu(config, names, gpu_handles, functions, &mut all_measurements);
 
     draw_benchmark_plot(
-        "Benchmark - Softmax - Immediate - GPU",
+        "Immediate Benchmark - Softmax",
         "benchmarks/immediate/",
-        "softmax_gpu_immediate.png",
+        "immediate_softmax_benchmark.png",
         all_measurements,
         config.log_scale,
     );
@@ -293,6 +372,16 @@ async fn softmax(config: &Configuration, gpu_handles: &GPUHandles) {
     if 1 < config.debug_level {
         println!("Evaluation sum: {:?}", evaluation_sum);
     }
+}
+
+fn cpu_linear_relu_softmax_fused_benchmark(
+    _gpu_handles: &GPUHandles,
+    input: &mut Tensor2D,
+    weights: &Tensor2D,
+    bias: &Tensor2D,
+    output: &mut Tensor2D,
+) {
+    Tensor2D::linear_relu_softmax_fused(input, weights, bias, output)
 }
 
 fn immediate_linear_relu_softmax_benchmark(
@@ -345,12 +434,14 @@ fn immediate_linear_relu_softmax_fused_benchmark(
 
 fn linear_relu_softmax_fused_benchmark(config: &Configuration, gpu_handles: &GPUHandles) {
     let names: Vec<String> = vec![
-        "linear_relu_softmax".to_string(),
-        "linearrelu_softmax".to_string(),
-        "linearrelusoftmax".to_string(),
+        "shared::tensor2d::linear_relu_softmax_fused".to_string(),
+        "immediate::nodes::linear_relu_softmax_from_tensor_2d".to_string(),
+        "immediate::nodes::linearrelu_softmax_from_tensor_2d".to_string(),
+        "immediate::nodes::linearrelusoftmax_from_tensor_2d".to_string(),
     ];
 
     let functions: Vec<fn(&GPUHandles, &mut Tensor2D, &Tensor2D, &Tensor2D, &mut Tensor2D)> = vec![
+        cpu_linear_relu_softmax_fused_benchmark,
         immediate_linear_relu_softmax_benchmark,
         immediate_linearrelu_softmax_benchmark,
         immediate_linear_relu_softmax_fused_benchmark,
@@ -362,9 +453,9 @@ fn linear_relu_softmax_fused_benchmark(config: &Configuration, gpu_handles: &GPU
     benchmark_function_vector_gpu(config, names, gpu_handles, functions, &mut all_measurements);
 
     draw_benchmark_plot(
-        "Benchmark - Linear/ReLU/Softmax - Fused - Immediate - GPU",
+        "Immediate Benchmark - Linear/ReLU/Softmax Fused",
         "benchmarks/immediate/",
-        "linear_relu_softmax_fused_gpu_immediate.png",
+        "immediate_linear_relu_softmax_fused_benchmark.png",
         all_measurements,
         config.log_scale,
     );
@@ -420,7 +511,7 @@ async fn linear_relu_softmax_fused(config: &Configuration, gpu_handles: &GPUHand
 }
 
 pub async fn execute(gpu_handles: &GPUHandles, config: &Configuration) {
-    linear_layer(config, gpu_handles).await;
+    linear(config, gpu_handles).await;
     relu(config, gpu_handles).await;
     sum(config, gpu_handles).await;
     softmax(config, gpu_handles).await;

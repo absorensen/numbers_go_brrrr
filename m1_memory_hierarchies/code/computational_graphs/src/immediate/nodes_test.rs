@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::immediate::nodes::{
-        linear_layer_from_tensor_2d_blocking, linear_relu_softmax_from_tensor_2d_blocking,
+        linear_from_tensor_2d_blocking, linear_relu_softmax_from_tensor_2d_blocking,
         linear_relu_softmax_fused_from_tensor_2d_blocking,
         linearrelu_softmax_from_tensor_2d_blocking, relu_from_tensor_2d, softmax_from_tensor_2d,
         sum_from_tensor_2d,
@@ -179,9 +179,9 @@ mod tests {
     }
 
     #[test]
-    fn linear_layer() {
+    fn linear() {
         let gpu_handles: GPUHandles = pollster::block_on(initialize_gpu(true))
-            .expect("Failed to get GPU handles in immediate::linear_layer() test");
+            .expect("Failed to get GPU handles in immediate::linear() test");
 
         let outer_dimension_range: usize = 8;
         let inner_dimension_range: usize = 8;
@@ -190,8 +190,8 @@ mod tests {
             &gpu_handles,
             outer_dimension_range,
             inner_dimension_range,
-            Tensor2D::linear_layer_preallocated,
-            linear_layer_from_tensor_2d_blocking,
+            Tensor2D::linear_preallocated,
+            linear_from_tensor_2d_blocking,
             false,
         );
     }

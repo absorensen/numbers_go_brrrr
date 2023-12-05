@@ -6,10 +6,10 @@ use wgpu::{
 use crate::shared::{
     gpu_utilities::{create_bind_group, create_compute_pipeline, create_shader_module, GPUHandles},
     tensor2d::Tensor2D,
-    tensor2d_gpu::{LinearLayerUniform, ReluUniform, SoftmaxUniform, SumUniform, Tensor2DGPU},
+    tensor2d_gpu::{LinearUniform, ReluUniform, SoftmaxUniform, SumUniform, Tensor2DGPU},
 };
 
-pub async fn linear_layer(
+pub async fn linear(
     gpu_handles: &GPUHandles,
     entry_point: &str,
     input: &Tensor2DGPU,
@@ -21,7 +21,7 @@ pub async fn linear_layer(
     let launch_blocks_x: u32 = ((output.row_count + block_size - 1) / block_size) as u32;
     let launch_blocks_y: u32 = ((output.column_count + block_size - 1) / block_size) as u32;
 
-    let uniform_device: LinearLayerUniform = LinearLayerUniform::from_tensor_2d_gpu(
+    let uniform_device: LinearUniform = LinearUniform::from_tensor_2d_gpu(
         gpu_handles,
         "Linear Layer Uniform",
         input,
@@ -32,7 +32,7 @@ pub async fn linear_layer(
 
     let cs_module: ShaderModule = create_shader_module(
         gpu_handles,
-        include_str!("../shared/shaders/linear_layer.wgsl"),
+        include_str!("../shared/shaders/linear.wgsl"),
     );
     let compute_pipeline: ComputePipeline =
         create_compute_pipeline(gpu_handles, &cs_module, entry_point);
@@ -53,11 +53,11 @@ pub async fn linear_layer(
         .create_command_encoder(&wgpu::CommandEncoderDescriptor { label: None });
     {
         let mut cpass: ComputePass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
-            label: Some("linear_layer_immediate"),
+            label: Some("linear_immediate"),
         });
         cpass.set_pipeline(&compute_pipeline);
         cpass.set_bind_group(0, &bind_group, &[]);
-        cpass.insert_debug_marker("linear_layer_immediate");
+        cpass.insert_debug_marker("linear_immediate");
         cpass.dispatch_workgroups(launch_blocks_x, launch_blocks_y, 1); // Number of cells to run, the (x,y,z) size of item being processed
     }
     output.copy_from_gpu_mut(&mut encoder);
@@ -74,21 +74,21 @@ pub async fn linear_layer(
     output.retrieve_results().await;
 }
 
-pub async fn linear_layer_from_tensor_2d(
+pub async fn linear_from_tensor_2d(
     gpu_handles: &GPUHandles,
     input: &Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    Tensor2DGPU::linear_layer_assert(input, weights, bias, output);
+    Tensor2DGPU::linear_assert(input, weights, bias, output);
 
     let input_device: Tensor2DGPU = Tensor2DGPU::from_tensor2d(gpu_handles, "input", input);
     let weights_device: Tensor2DGPU = Tensor2DGPU::from_tensor2d(gpu_handles, "weights", weights);
     let bias_device: Tensor2DGPU = Tensor2DGPU::from_tensor2d(gpu_handles, "bias", bias);
     let mut output_device: Tensor2DGPU = Tensor2DGPU::from_tensor2d(gpu_handles, "output", output);
 
-    linear_layer(
+    linear(
         gpu_handles,
         "main",
         &input_device,
@@ -103,14 +103,14 @@ pub async fn linear_layer_from_tensor_2d(
     *output = output_device.data.clone();
 }
 
-pub fn linear_layer_from_tensor_2d_blocking(
+pub fn linear_from_tensor_2d_blocking(
     gpu_handles: &GPUHandles,
     input: &Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    pollster::block_on(linear_layer_from_tensor_2d(
+    pollster::block_on(linear_from_tensor_2d(
         gpu_handles,
         input,
         weights,
@@ -119,21 +119,21 @@ pub fn linear_layer_from_tensor_2d_blocking(
     ));
 }
 
-pub async fn linear_layer_with_relu_from_tensor_2d(
+pub async fn linear_with_relu_from_tensor_2d(
     gpu_handles: &GPUHandles,
     input: &Tensor2D,
     weights: &Tensor2D,
     bias: &Tensor2D,
     output: &mut Tensor2D,
 ) {
-    Tensor2DGPU::linear_layer_assert(input, weights, bias, output);
+    Tensor2DGPU::linear_assert(input, weights, bias, output);
 
     let input_device: Tensor2DGPU = Tensor2DGPU::from_tensor2d(gpu_handles, "input", input);
     let weights_device: Tensor2DGPU = Tensor2DGPU::from_tensor2d(gpu_handles, "weights", weights);
     let bias_device: Tensor2DGPU = Tensor2DGPU::from_tensor2d(gpu_handles, "bias", bias);
     let mut output_device: Tensor2DGPU = Tensor2DGPU::from_tensor2d(gpu_handles, "output", output);
 
-    linear_layer(
+    linear(
         gpu_handles,
         "main_with_relu",
         &input_device,
@@ -473,7 +473,7 @@ pub async fn linear_relu_softmax_from_tensor_2d(
         1,
     );
 
-    linear_layer(
+    linear(
         gpu_handles,
         "main",
         &input_device,
@@ -534,7 +534,7 @@ pub async fn linearrelu_softmax_from_tensor_2d(
         1,
     );
 
-    linear_layer(
+    linear(
         gpu_handles,
         "main_with_relu",
         &input_device,
@@ -589,7 +589,7 @@ pub async fn linear_relu_softmax_fused(
     let linear_launch_blocks_y: u32 =
         ((intermediate.column_count + linear_block_size - 1) / linear_block_size) as u32;
 
-    let linear_uniform: LinearLayerUniform = LinearLayerUniform::from_tensor_2d_gpu(
+    let linear_uniform: LinearUniform = LinearUniform::from_tensor_2d_gpu(
         gpu_handles,
         "Linear Layer Uniform",
         input,
@@ -606,7 +606,7 @@ pub async fn linear_relu_softmax_fused(
 
     let linear_cs_module: ShaderModule = create_shader_module(
         gpu_handles,
-        include_str!("../shared/shaders/linear_layer.wgsl"),
+        include_str!("../shared/shaders/linear.wgsl"),
     );
     let softmax_cs_module: ShaderModule =
         create_shader_module(gpu_handles, include_str!("../shared/shaders/softmax.wgsl"));
@@ -631,11 +631,11 @@ pub async fn linear_relu_softmax_fused(
         let linear_bind_group: BindGroup =
             create_bind_group(gpu_handles, &linear_bind_group_layout, to_be_bound);
         let mut cpass: ComputePass = encoder.begin_compute_pass(&wgpu::ComputePassDescriptor {
-            label: Some("linear_layer_immediate"),
+            label: Some("linear_immediate"),
         });
         cpass.set_pipeline(&linear_compute_pipeline);
         cpass.set_bind_group(0, &linear_bind_group, &[]);
-        cpass.insert_debug_marker("linear_layer_immediate");
+        cpass.insert_debug_marker("linear_immediate");
         cpass.dispatch_workgroups(linear_launch_blocks_x, linear_launch_blocks_y, 1);
         // Number of cells to run, the (x,y,z) size of item being processed
     }

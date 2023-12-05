@@ -2,7 +2,7 @@ use wgpu::ShaderModule;
 
 use crate::shared::gpu_utilities::{create_shader_module, GPUHandles};
 
-enum LinearLayerOpCodes {
+enum LinearOpCodes {
     Uniform,
     Bindings,
     FunctionDefinition,
@@ -17,16 +17,16 @@ enum LinearLayerOpCodes {
     FunctionClose,
 }
 
-struct LinearLayer {
-    op_codes: Vec<(LinearLayerOpCodes, String)>,
+struct Linear {
+    op_codes: Vec<(LinearOpCodes, String)>,
 }
 
-// The represented shader is the same as found in shared::shaders::linear_layer.wgsl
-impl LinearLayer {
+// The represented shader is the same as found in shared::shaders::linear.wgsl
+impl Linear {
     pub fn new() -> Self {
-        let mut op_codes: Vec<(LinearLayerOpCodes, String)> = vec![];
-        let uniform: (LinearLayerOpCodes, String) = (
-            LinearLayerOpCodes::Uniform,
+        let mut op_codes: Vec<(LinearOpCodes, String)> = vec![];
+        let uniform: (LinearOpCodes, String) = (
+            LinearOpCodes::Uniform,
             "        
             struct TensorDimensions {
                 input_row_count: u32,
@@ -43,8 +43,8 @@ impl LinearLayer {
         );
         op_codes.push(uniform);
 
-        let bindings: (LinearLayerOpCodes, String) = (
-            LinearLayerOpCodes::Bindings,
+        let bindings: (LinearOpCodes, String) = (
+            LinearOpCodes::Bindings,
             "        
             @group(0) @binding(0)
             var<uniform> dimensions: TensorDimensions;
@@ -66,8 +66,8 @@ impl LinearLayer {
         );
         op_codes.push(bindings);
 
-        let function_definition: (LinearLayerOpCodes, String) = (
-            LinearLayerOpCodes::FunctionDefinition,
+        let function_definition: (LinearOpCodes, String) = (
+            LinearOpCodes::FunctionDefinition,
             "        
             const BLOCK_SIZE: u32 = 8u;
             @compute @workgroup_size(8, 8, 1) 
@@ -81,8 +81,8 @@ impl LinearLayer {
         );
         op_codes.push(function_definition);
 
-        let thread_id: (LinearLayerOpCodes, String) = (
-            LinearLayerOpCodes::ThreadID,
+        let thread_id: (LinearOpCodes, String) = (
+            LinearOpCodes::ThreadID,
             "        
                 let output_row_index: u32 = global_id.x;
                 let output_column_index: u32 = global_id.y;
@@ -91,22 +91,22 @@ impl LinearLayer {
         );
         op_codes.push(thread_id);
 
-        let index_check: (LinearLayerOpCodes, String) = (LinearLayerOpCodes::IndexCheck,
+        let index_check: (LinearOpCodes, String) = (LinearOpCodes::IndexCheck,
             "        
                 if (output_row_index < dimensions.output_row_count && output_column_index < dimensions.output_column_count) {
             ".to_string()
         );
         op_codes.push(index_check);
 
-        let ouput_index_calculation: (LinearLayerOpCodes, String) = (LinearLayerOpCodes::OutputIndexCalculation,
+        let ouput_index_calculation: (LinearOpCodes, String) = (LinearOpCodes::OutputIndexCalculation,
             "        
                     let output_index: u32 = output_row_index * dimensions.output_column_count + output_column_index;
             ".to_string()
         );
         op_codes.push(ouput_index_calculation);
 
-        let result_instantiation: (LinearLayerOpCodes, String) = (
-            LinearLayerOpCodes::ResultInstation,
+        let result_instantiation: (LinearOpCodes, String) = (
+            LinearOpCodes::ResultInstation,
             "        
                     var result: f32 = 0.0;
             "
@@ -114,7 +114,7 @@ impl LinearLayer {
         );
         op_codes.push(result_instantiation);
 
-        let matrix_multiplication_loop: (LinearLayerOpCodes, String) = (LinearLayerOpCodes::MatrixMultiplicationLoop,
+        let matrix_multiplication_loop: (LinearOpCodes, String) = (LinearOpCodes::MatrixMultiplicationLoop,
             "        
                     for (var inner_dimension: u32 = 0u; inner_dimension < dimensions.input_column_count; inner_dimension += 1u) {
                             result += input[output_row_index * dimensions.input_column_count + inner_dimension] * weights[inner_dimension * dimensions.weights_column_count + output_column_index];
@@ -123,8 +123,8 @@ impl LinearLayer {
         );
         op_codes.push(matrix_multiplication_loop);
 
-        let add_bias: (LinearLayerOpCodes, String) = (
-            LinearLayerOpCodes::AddBias,
+        let add_bias: (LinearOpCodes, String) = (
+            LinearOpCodes::AddBias,
             "        
                     result = result + bias[output_index];
             "
@@ -132,8 +132,8 @@ impl LinearLayer {
         );
         op_codes.push(add_bias);
 
-        let store_result: (LinearLayerOpCodes, String) = (
-            LinearLayerOpCodes::StoreResult,
+        let store_result: (LinearOpCodes, String) = (
+            LinearOpCodes::StoreResult,
             "        
                     output[output_index] = result;
             "
@@ -141,8 +141,8 @@ impl LinearLayer {
         );
         op_codes.push(store_result);
 
-        let index_check_close: (LinearLayerOpCodes, String) = (
-            LinearLayerOpCodes::IndexCheckClose,
+        let index_check_close: (LinearOpCodes, String) = (
+            LinearOpCodes::IndexCheckClose,
             "        
                 }
             "
@@ -150,8 +150,8 @@ impl LinearLayer {
         );
         op_codes.push(index_check_close);
 
-        let function_close: (LinearLayerOpCodes, String) = (
-            LinearLayerOpCodes::FunctionClose,
+        let function_close: (LinearOpCodes, String) = (
+            LinearOpCodes::FunctionClose,
             "        
             }
             "
@@ -168,12 +168,12 @@ impl LinearLayer {
 // this has been omitted, but it would look something like the Transfer and DeviceToDevice
 // operators from the graph sections.
 pub fn compile_linear_shader(gpu_handles: &GPUHandles, with_relu: bool) -> ShaderModule {
-    let linear_op_codes: LinearLayer = LinearLayer::new();
+    let linear_op_codes: Linear = Linear::new();
 
     let mut string_builder: String = "".to_string();
     for op_code in linear_op_codes.op_codes {
         if with_relu {
-            if let LinearLayerOpCodes::StoreResult = op_code.0 {
+            if let LinearOpCodes::StoreResult = op_code.0 {
                 string_builder.push_str("        result = max(0.0, result);\n")
             }
         }

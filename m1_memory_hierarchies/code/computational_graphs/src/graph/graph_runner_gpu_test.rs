@@ -35,9 +35,9 @@ mod tests {
     }
 
     #[test]
-    fn linear_layer() {
+    fn linear() {
         let gpu_handles: GPUHandles = pollster::block_on(initialize_gpu(true))
-            .expect("Failed to get GPU handles in graph_runner_test::linear_layer() test");
+            .expect("Failed to get GPU handles in graph_runner_test::linear() test");
 
         let outer_dimension_range: usize = 8;
         let inner_dimension_range: usize = 8;
@@ -52,11 +52,11 @@ mod tests {
                     let bias: Tensor2D =
                         Tensor2D::new(0.1, outer_dimension_input, outer_dimension_weights);
 
-                    let output_cpu: Tensor2D = Tensor2D::linear_layer(&input, &weights, &bias);
+                    let output_cpu: Tensor2D = Tensor2D::linear(&input, &weights, &bias);
 
                     let graph_operators: Vec<GraphOperator> = vec![
                         GraphOperator::HostToDevice { input },
-                        GraphOperator::LinearLayer { weights, bias },
+                        GraphOperator::Linear { weights, bias },
                         GraphOperator::DeviceToHost,
                     ];
 
@@ -170,7 +170,7 @@ mod tests {
                     let bias: Tensor2D =
                         Tensor2D::new(0.1, outer_dimension_input, outer_dimension_weights);
 
-                    let output_cpu: Tensor2D = Tensor2D::linear_layer(&input, &weights, &bias);
+                    let output_cpu: Tensor2D = Tensor2D::linear(&input, &weights, &bias);
                     let output_cpu: Tensor2D = Tensor2D::relu(&output_cpu);
 
                     let graph_operators: Vec<GraphOperator> = vec![
@@ -215,7 +215,7 @@ mod tests {
                     let bias: Tensor2D =
                         Tensor2D::new(0.1, outer_dimension_input, outer_dimension_weights);
 
-                    let output_cpu: Tensor2D = Tensor2D::linear_layer(&input, &weights, &bias);
+                    let output_cpu: Tensor2D = Tensor2D::linear(&input, &weights, &bias);
                     let output_cpu: Tensor2D = Tensor2D::relu(&output_cpu);
                     let output_cpu: Tensor2D = Tensor2D::softmax(&output_cpu);
 

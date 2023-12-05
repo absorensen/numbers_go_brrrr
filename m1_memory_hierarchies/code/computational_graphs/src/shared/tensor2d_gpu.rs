@@ -5,17 +5,17 @@ use super::{gpu_utilities::GPUHandles, tensor2d::Tensor2D};
 
 #[repr(C)]
 #[derive(Copy, Clone, Debug, bytemuck::Pod, bytemuck::Zeroable)]
-pub struct LinearLayerDimensions {
+pub struct LinearDimensions {
     pub data: [u32; 8],
 }
 
 #[derive(Debug)]
-pub struct LinearLayerUniform {
-    pub dimensions: LinearLayerDimensions,
+pub struct LinearUniform {
+    pub dimensions: LinearDimensions,
     pub storage_buffer: Buffer,
 }
 
-impl LinearLayerUniform {
+impl LinearUniform {
     pub fn from_tensor_2d(
         handles: &GPUHandles,
         label: &str,
@@ -24,7 +24,7 @@ impl LinearLayerUniform {
         bias: &Tensor2D,
         output: &Tensor2D,
     ) -> Self {
-        let dimensions: LinearLayerDimensions = LinearLayerDimensions {
+        let dimensions: LinearDimensions = LinearDimensions {
             data: [
                 input.row_count as u32,
                 input.column_count as u32,
@@ -61,7 +61,7 @@ impl LinearLayerUniform {
         bias: &Tensor2DGPU,
         output: &Tensor2DGPU,
     ) -> Self {
-        let dimensions: LinearLayerDimensions = LinearLayerDimensions {
+        let dimensions: LinearDimensions = LinearDimensions {
             data: [
                 input.row_count as u32,
                 input.column_count as u32,
@@ -92,7 +92,7 @@ impl LinearLayerUniform {
 
     #[inline(always)]
     pub fn size(&self) -> u64 {
-        std::mem::size_of::<LinearLayerDimensions>() as u64
+        std::mem::size_of::<LinearDimensions>() as u64
     }
 }
 
@@ -384,7 +384,7 @@ impl Tensor2DGPU {
     }
 
     #[inline(always)]
-    pub fn linear_layer_assert(
+    pub fn linear_assert(
         input: &Tensor2D,
         weights: &Tensor2D,
         bias: &Tensor2D,

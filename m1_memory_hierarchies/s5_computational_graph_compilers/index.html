@@ -1543,8 +1543,6 @@
       
         
       
-        
-      
     
     
     
@@ -1634,32 +1632,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../../m5_optimization/s2_optimizing_deep_learning_training/" class="md-nav__link">
+      <a href="../../m5_optimization/s2_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S2 - 🧬3️⃣ Optimizing Deep Learning Training
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../../m5_optimization/s3_exercises/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S3 - 👨🏼‍💻 Exercises
+    S2 - 👨🏼‍💻 Exercises
   </span>
   
 
@@ -1855,19 +1832,38 @@ N - 2 operators that are randomly either a linear or ReLU operator.</p>
 moves the loop from the measuring function closer into the graph runner itself. One thing to note though
 is that while we do cut down on some transfers, the implementation is still suboptimal. I will elaborate
 about why in 3️⃣. So just take this as an indicator of why you should use computational graphs
-and computational graph compilers when you can.</p>
+and computational graph compilers when you can. There also two additional plots which show the same
+benchmark but with the CPU and Immediate runs removed to zoom in on the graph and graph loop runs.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/graphs_size.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_size.png" width="600" /></a></p>
+<p><a class="glightbox" href="../../figures/graphs_size_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_size_benchmark.png" width="600" /></a></p>
 <figcaption>
-Benchmarking randomly generated graphs of depth 64 at various tensor sizes across 10 samples.
+Benchmarking randomly generated graphs of depth 64 at various tensor sizes across 25 samples.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
 <figure>
-<p><a class="glightbox" href="../../figures/graphs_depth.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_depth.png" width="600" /></a></p>
+<p><a class="glightbox" href="../../figures/graphs_only_size_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_only_size_benchmark.png" width="600" /></a></p>
 <figcaption>
-Benchmarking randomly generated graphs of various depths and a size of 256 across 10 samples.
+Benchmarking randomly generated graphs of depth 64 at various tensor sizes across 25 samples.
+Run without CPU and Immediate functions. 
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+<figure>
+<p><a class="glightbox" href="../../figures/graphs_depth_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_depth_benchmark.png" width="600" /></a></p>
+<figcaption>
+Benchmarking randomly generated graphs of various depths and a size of 256 across 25 samples.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+<figure>
+<p><a class="glightbox" href="../../figures/graphs_only_depth_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_only_depth_benchmark.png" width="600" /></a></p>
+<figcaption>
+Benchmarking randomly generated graphs of various depths and a size of 256 across 25 samples.
+Run without CPU and Immediate functions. 
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
@@ -1891,7 +1887,7 @@ So far so good. But what did the fused versions do?</p>
 <p>When calculating the linear operation, it kept the output in the threads register and applied the ReLU function
 once the data in register before storing it in the GPU's RAM and dispatching a new compute shader.
 One of the suggested exercises is to optimize the linear shader. In any case that should involve tiling and
-shared memory. That would mean that the matrix-matrix multiplication would need the work group to act in
+shared memory. That would mean that the matrix multiplication would need the work group to act in
 coordination and load in tiles of the matrices into shared memory (L1 cache) and synchronize, in order for
 them to get more out of memory they might otherwise have overlapping accesses of. Finally, when we use
 the graph loop, we don't actually tell the GPU to run this same queue for N iterations, but add to the
@@ -1952,21 +1948,17 @@ a</p>
 <p>at the top of the shader file and then compile. This makes your code less readable, but not as unreadable
 as fully using op codes.</p>
 <h2 id="5-additional-reading">5️⃣ Additional Reading</h2>
-<ul>
-<li><a href="https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust">Fun and hackable tensors in Rust</a></li>
-<li><a href="https://getcode.substack.com/p/massively-parallel-fun-with-gpus">Massively Parallel Fun with GPUs</a></li>
-<li><a href="https://github.com/googlefonts/compute-shader-101/blob/main/docs/glossary.md">Compute Shader Glossary</a></li>
-<li><a href="https://pytorch.org/docs/stable/fx.html">Torch.fx</a></li>
-<li><a href="https://pytorch.org/docs/stable/generated/torch.compile.html">torch.compile</a></li>
-<li><a href="https://pytorch.org/docs/stable/torch.compiler.html">Getting started with PyTorch's compiler</a></li>
-</ul>
+<p>Here's a few blog posts on <a href="https://getcode.substack.com/p/massively-parallel-fun-with-gpus">GPU tensors</a> and how <a href="https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust">to build neural networks</a>, as well as an
+<a href="https://github.com/googlefonts/compute-shader-101/blob/main/docs/glossary.md">introduction to GPU computing terminology</a>. Another few blog posts, specifically for the
+PyTorch compiler are <a href="https://pytorch.org/docs/stable/fx.html">Torch.fx</a>, <a href="https://pytorch.org/docs/stable/generated/torch.compile.html">torch.compile</a> and
+<a href="https://pytorch.org/docs/stable/torch.compiler.html">getting started with PyTorch's compiler</a>.</p>
 
   <hr>
 <div class="md-source-file">
   <small>
     
       Last update:
-      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 29, 2023</span>
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 5, 2023</span>
       
         <br>
         Created:
