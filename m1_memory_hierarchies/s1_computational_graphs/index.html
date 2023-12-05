@@ -2065,7 +2065,7 @@ you should be using the preallocated version to not have memory allocations in y
 <p>Let's go down to the <code>linear_preallocated</code> function. There are three main sections. One is
 the call to the <code>debug_assert</code> function from earlier, to check for valid input and output dimensions, the
 second is the matrix multiplication which needs three whole for-loops and finally the bias section. Note
-the use of linearized accesses, if you need a reminder what that is all about, go back to 
+the use of linearized accesses, if you need a reminder what that is all about, go back to
 <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#the-vector">The Vector</a> section.</p>
 <p>It's not too bad, but we could do better, although we won't do more efficient implementations of matrix
 multiplication, note that the read accesses of the weights tensor is strided. We could have implemented that some

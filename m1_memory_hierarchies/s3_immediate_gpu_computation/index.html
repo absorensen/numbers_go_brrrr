@@ -1876,7 +1876,7 @@ the GPU! Don't worry too much about the particulars. The setup is quite
 a bit like what is described in the 3️⃣ section of m1::s2.</p>
 <p>There are three central files for this. <code>src::shared::tensor2d_gpu.rs</code>,
 <code>src::shared::shaders::linear.wgsl</code> and <code>src::immediate::nodes.rs</code>.
-If you don't have them locally you can them <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d_gpu.rs">here</a>, <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/linear_layer.wgsl">here</a> and <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/immediate/nodes.rs">here</a> respectively.</p>
+If you don't have them locally you can them <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d_gpu.rs">here</a>, <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/linear.wgsl">here</a> and <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/immediate/nodes.rs">here</a> respectively.</p>
 <p>First of all, let's go directly to the shader (GPU) code in <code>linear.wgsl</code>.
 The version of the two functions we are interested in is <code>main</code>.
 At the top there is a struct called <code>TensorDimensions</code>, it is
