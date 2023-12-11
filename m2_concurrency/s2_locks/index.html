@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2-locks" class="md-skip">
+        <a href="#locks" class="md-skip">
           Skip to content
         </a>
       
@@ -432,7 +432,7 @@
         
   
   <span class="md-ellipsis">
-    S3 - 3️⃣ Less Basic Concepts in Rust
+    S3 - Less Basic Concepts in Rust
   </span>
   
 
@@ -868,9 +868,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-work-queue" class="md-nav__link">
+  <a href="#work-queue" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Work Queue
+      Work Queue
     </span>
   </a>
   
@@ -959,7 +959,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 3️⃣ More GPU
+    S6 - More GPU
   </span>
   
 
@@ -980,7 +980,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - 3️⃣ Parallel Graphs
+    S7 - Parallel Graphs
   </span>
   
 
@@ -1182,7 +1182,7 @@
         
   
   <span class="md-ellipsis">
-    S4 - 3️⃣ Bit Tricks
+    S4 - Bit Tricks
   </span>
   
 
@@ -1203,7 +1203,7 @@
         
   
   <span class="md-ellipsis">
-    S5 - 3️⃣ Compression
+    S5 - Compression
   </span>
   
 
@@ -1224,7 +1224,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 🧬3️⃣ Cooperative Matrices
+    S6 - 🧬 Cooperative Matrices
   </span>
   
 
@@ -1309,7 +1309,7 @@
               
   
   <span class="md-ellipsis">
-    M4 - 3️⃣ Real-Time Systems
+    M4 - Real-Time Systems
   </span>
   
 
@@ -1325,7 +1325,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
-            M4 - 3️⃣ Real-Time Systems
+            M4 - Real-Time Systems
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1543,7 +1543,7 @@
               
   
   <span class="md-ellipsis">
-    M5 - 3️⃣ Optimization
+    M5 - Optimization
   </span>
   
 
@@ -1559,7 +1559,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
-            M5 - 3️⃣ Optimization
+            M5 - Optimization
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1754,9 +1754,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-work-queue" class="md-nav__link">
+  <a href="#work-queue" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Work Queue
+      Work Queue
     </span>
   </a>
   
@@ -1780,7 +1780,7 @@
   
 
 
-<h1 id="2-locks">2️⃣ Locks</h1>
+<h1 id="locks">Locks</h1>
 <p>We just took a look at how to launch and distribute some work to multiple threads.
 But we did some extra work to separate the data into neat chunks, with no overlap
 between which thread read and wrote to which data. So, how would we ensure
@@ -1821,7 +1821,8 @@ are used.</p>
 <h2 id="locks-in-rust">Locks in Rust</h2>
 <p>I tried to come up with my own explanation for locks in Rust, but this page
 from <a href="https://doc.rust-lang.org/book/ch16-03-shared-state.html">The Book</a> is quite good.</p>
-<h2 id="3-work-queue">3️⃣ Work Queue</h2>
+<hr />
+<h2 id="work-queue">Work Queue</h2>
 <p>So let's try to go back to how we could improve the performance of crossbeam when splitting our data
 into chunks and having threads work on a chunk each. This time we will use a mutex to create
 a <a href="https://github.com/ProgrammingRust/mandelbrot/blob/task-queue/src/main.rs">task queue</a>.</p>
@@ -1907,7 +1908,7 @@ function to better understand when which solution is best under which conditions
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 30, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
   </span>
 
     

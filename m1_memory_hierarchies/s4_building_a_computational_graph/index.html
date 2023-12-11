@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2-building-a-computational-graph" class="md-skip">
+        <a href="#building-a-computational-graph" class="md-skip">
           Skip to content
         </a>
       
@@ -432,7 +432,7 @@
         
   
   <span class="md-ellipsis">
-    S3 - 3️⃣ Less Basic Concepts in Rust
+    S3 - Less Basic Concepts in Rust
   </span>
   
 
@@ -694,9 +694,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-borrow-checking-a-graph" class="md-nav__link">
+  <a href="#borrow-checking-a-graph" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Borrow Checking a Graph?
+      Borrow Checking a Graph?
     </span>
   </a>
   
@@ -968,7 +968,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 3️⃣ More GPU
+    S6 - More GPU
   </span>
   
 
@@ -989,7 +989,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - 3️⃣ Parallel Graphs
+    S7 - Parallel Graphs
   </span>
   
 
@@ -1191,7 +1191,7 @@
         
   
   <span class="md-ellipsis">
-    S4 - 3️⃣ Bit Tricks
+    S4 - Bit Tricks
   </span>
   
 
@@ -1212,7 +1212,7 @@
         
   
   <span class="md-ellipsis">
-    S5 - 3️⃣ Compression
+    S5 - Compression
   </span>
   
 
@@ -1233,7 +1233,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 🧬3️⃣ Cooperative Matrices
+    S6 - 🧬 Cooperative Matrices
   </span>
   
 
@@ -1318,7 +1318,7 @@
               
   
   <span class="md-ellipsis">
-    M4 - 3️⃣ Real-Time Systems
+    M4 - Real-Time Systems
   </span>
   
 
@@ -1334,7 +1334,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
-            M4 - 3️⃣ Real-Time Systems
+            M4 - Real-Time Systems
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1552,7 +1552,7 @@
               
   
   <span class="md-ellipsis">
-    M5 - 3️⃣ Optimization
+    M5 - Optimization
   </span>
   
 
@@ -1568,7 +1568,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
-            M5 - 3️⃣ Optimization
+            M5 - Optimization
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1772,9 +1772,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-borrow-checking-a-graph" class="md-nav__link">
+  <a href="#borrow-checking-a-graph" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Borrow Checking a Graph?
+      Borrow Checking a Graph?
     </span>
   </a>
   
@@ -1798,7 +1798,7 @@
   
 
 
-<h1 id="2-building-a-computational-graph">2️⃣ Building a Computational Graph</h1>
+<h1 id="building-a-computational-graph">Building a Computational Graph</h1>
 <p>Ok, so now we have the basic building blocks ready. We also have a very simplifying set of constraints. This
 allows us to just represent this graph as a straight line. So we can just represent our graph as a
 series of nodes in a list. This list needs to be runnable on both the CPU and the GPU, so we'll look
@@ -1911,7 +1911,7 @@ until the result are retrieved.</p>
 verifying and translating, actually optimize, given the knowledge of the graph. I will also run
 a benchmark so you can see the differences in our assortment of implementations.</p>
 <hr />
-<h2 id="3-borrow-checking-a-graph">3️⃣ Borrow Checking a Graph?</h2>
+<h2 id="borrow-checking-a-graph">Borrow Checking a Graph?</h2>
 <p>Ok, so what if we actually wanted a more complex, and applicable in real-world circumstances?
 We ironically need to deal with the issues that Rust enforces through the borrow checker.
 If we have one node writing to multiple other nodes, that is fine.</p>
@@ -1971,7 +1971,7 @@ the incorrectness is confined to as small a pocket of your system as possible.</
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 5, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
   </span>
 
     

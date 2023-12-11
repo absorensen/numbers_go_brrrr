@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2-computational-graphs" class="md-skip">
+        <a href="#computational-graphs" class="md-skip">
           Skip to content
         </a>
       
@@ -432,7 +432,7 @@
         
   
   <span class="md-ellipsis">
-    S3 - 3️⃣ Less Basic Concepts in Rust
+    S3 - Less Basic Concepts in Rust
   </span>
   
 
@@ -691,18 +691,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-testing-operators" class="md-nav__link">
+  <a href="#testing-operators" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Testing Operators
+      Testing Operators
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-graphs-in-graphicsgpu-programming" class="md-nav__link">
+  <a href="#graphs-in-graphicsgpu-programming" class="md-nav__link">
     <span class="md-ellipsis">
-      🧬3️⃣ Graphs in Graphics/GPU Programming
+      🧬Graphs in Graphics/GPU Programming
     </span>
   </a>
   
@@ -1037,7 +1037,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 3️⃣ More GPU
+    S6 - More GPU
   </span>
   
 
@@ -1058,7 +1058,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - 3️⃣ Parallel Graphs
+    S7 - Parallel Graphs
   </span>
   
 
@@ -1260,7 +1260,7 @@
         
   
   <span class="md-ellipsis">
-    S4 - 3️⃣ Bit Tricks
+    S4 - Bit Tricks
   </span>
   
 
@@ -1281,7 +1281,7 @@
         
   
   <span class="md-ellipsis">
-    S5 - 3️⃣ Compression
+    S5 - Compression
   </span>
   
 
@@ -1302,7 +1302,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 🧬3️⃣ Cooperative Matrices
+    S6 - 🧬 Cooperative Matrices
   </span>
   
 
@@ -1387,7 +1387,7 @@
               
   
   <span class="md-ellipsis">
-    M4 - 3️⃣ Real-Time Systems
+    M4 - Real-Time Systems
   </span>
   
 
@@ -1403,7 +1403,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
-            M4 - 3️⃣ Real-Time Systems
+            M4 - Real-Time Systems
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1621,7 +1621,7 @@
               
   
   <span class="md-ellipsis">
-    M5 - 3️⃣ Optimization
+    M5 - Optimization
   </span>
   
 
@@ -1637,7 +1637,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
-            M5 - 3️⃣ Optimization
+            M5 - Optimization
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1901,18 +1901,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-testing-operators" class="md-nav__link">
+  <a href="#testing-operators" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Testing Operators
+      Testing Operators
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-graphs-in-graphicsgpu-programming" class="md-nav__link">
+  <a href="#graphs-in-graphicsgpu-programming" class="md-nav__link">
     <span class="md-ellipsis">
-      🧬3️⃣ Graphs in Graphics/GPU Programming
+      🧬Graphs in Graphics/GPU Programming
     </span>
   </a>
   
@@ -1936,7 +1936,7 @@
   
 
 
-<h1 id="2-computational-graphs">2️⃣ Computational Graphs</h1>
+<h1 id="computational-graphs">Computational Graphs</h1>
 <p>Conveying the importance of computational graphs to people who were probably using Python to
 program neural networks was the motivation for doing this whole thing in the first place.
 So now let's get to business.</p>
@@ -2226,7 +2226,7 @@ you should always test and measure! Now, you can either continue on reading the 
 or go to the next section to get a general introduction to GPUs. We will be using the GPU on
 your laptop, with no CUDA involved, to see if we can make this even faster.</p>
 <hr />
-<h2 id="3-testing-operators">3️⃣ Testing Operators</h2>
+<h2 id="testing-operators">Testing Operators</h2>
 <p>All of the operators have been tested to be numerically equivalent. Rust has some nice
 test facilities to help with this. If you look at the file next to <code>tensor2d.rs</code>,
 called <code>tensor2d_test.rs</code>, you can see a bunch of tests. This used to be in
@@ -2237,7 +2237,7 @@ would otherwise write <code>cargo run --release</code>. This works just fine for
 CPU based tests. The testing system launches lots of tests in parallel to speed up
 the amount of time it takes to run the tests. As we will see later, this parallel
 test launch can create some issues when testing our GPU functions.</p>
-<h2 id="3-graphs-in-graphicsgpu-programming">🧬3️⃣ Graphs in Graphics/GPU Programming</h2>
+<h2 id="graphs-in-graphicsgpu-programming">🧬Graphs in Graphics/GPU Programming</h2>
 <p>Computational graphs are even making their way into the way you can program the GPU!
 Ways to define computational graphs have been added to <a href="https://devblogs.microsoft.com/directx/d3d12-work-graphs-preview/">DirectX12</a> and <a href="https://gpuopen.com/gpu-work-graphs-in-vulkan/">Vulkan</a>.
 This development seems to be lead by game and graphics workloads being increasingly
@@ -2264,7 +2264,7 @@ compute shader driven.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 5, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
   </span>
 
     

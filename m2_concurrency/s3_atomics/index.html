@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2-atomics" class="md-skip">
+        <a href="#atomics" class="md-skip">
           Skip to content
         </a>
       
@@ -432,7 +432,7 @@
         
   
   <span class="md-ellipsis">
-    S3 - 3️⃣ Less Basic Concepts in Rust
+    S3 - Less Basic Concepts in Rust
   </span>
   
 
@@ -880,18 +880,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#3-lock-free-algorithms" class="md-nav__link">
+  <a href="#lock-free-algorithms" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Lock Free Algorithms
+      Lock Free Algorithms
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-crossbeam-and-atomics" class="md-nav__link">
+  <a href="#crossbeam-and-atomics" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Crossbeam and Atomics
+      Crossbeam and Atomics
     </span>
   </a>
   
@@ -968,7 +968,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 3️⃣ More GPU
+    S6 - More GPU
   </span>
   
 
@@ -989,7 +989,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - 3️⃣ Parallel Graphs
+    S7 - Parallel Graphs
   </span>
   
 
@@ -1191,7 +1191,7 @@
         
   
   <span class="md-ellipsis">
-    S4 - 3️⃣ Bit Tricks
+    S4 - Bit Tricks
   </span>
   
 
@@ -1212,7 +1212,7 @@
         
   
   <span class="md-ellipsis">
-    S5 - 3️⃣ Compression
+    S5 - Compression
   </span>
   
 
@@ -1233,7 +1233,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 🧬3️⃣ Cooperative Matrices
+    S6 - 🧬 Cooperative Matrices
   </span>
   
 
@@ -1318,7 +1318,7 @@
               
   
   <span class="md-ellipsis">
-    M4 - 3️⃣ Real-Time Systems
+    M4 - Real-Time Systems
   </span>
   
 
@@ -1334,7 +1334,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
-            M4 - 3️⃣ Real-Time Systems
+            M4 - Real-Time Systems
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1552,7 +1552,7 @@
               
   
   <span class="md-ellipsis">
-    M5 - 3️⃣ Optimization
+    M5 - Optimization
   </span>
   
 
@@ -1568,7 +1568,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
-            M5 - 3️⃣ Optimization
+            M5 - Optimization
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1754,18 +1754,18 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#3-lock-free-algorithms" class="md-nav__link">
+  <a href="#lock-free-algorithms" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Lock Free Algorithms
+      Lock Free Algorithms
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-crossbeam-and-atomics" class="md-nav__link">
+  <a href="#crossbeam-and-atomics" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Crossbeam and Atomics
+      Crossbeam and Atomics
     </span>
   </a>
   
@@ -1798,7 +1798,7 @@
   
 
 
-<h1 id="2-atomics">2️⃣ Atomics</h1>
+<h1 id="atomics">Atomics</h1>
 <p>If a mutex is a horse, an atomic is a pony. Except, like a pony that's much faster than a horse.
 The smaller a region serialized through synchronization, the more potential concurrency we can have
 and the less likely things will go wrong. So what is an atomic?</p>
@@ -1845,7 +1845,8 @@ good for things like reduction operations. Once each work group has a local resu
 compare results, or add, across work groups through a global atomic variable. You can check out which
 functions are available, which is a bit more limited compared to what was available in Rust,
 <a href="https://www.w3.org/TR/WGSL/#atomic-builtin-functions">here</a>.</p>
-<h2 id="3-lock-free-algorithms">3️⃣ Lock Free Algorithms</h2>
+<hr />
+<h2 id="lock-free-algorithms">Lock Free Algorithms</h2>
 <p>Lock free algorithms are a type of algorithms where there is a minimal amount of synchronization. Think of it as
 atomic, yes!, mutex/lock, no!, atomic lock, no! This requires a fair amount of thought, but a very simple version
 could for example to implement a queue of chunks this way. If we have an iterator or an index pointing to an array
@@ -1854,7 +1855,7 @@ data. This is lock-free. There might some waiting time if 8 threads are all tryi
 the same time, but no locks have to be acquired. But this way of using atomics to acquire a new piece of data
 from an array is made possible with all these functions which don't just swap, compare or fetch, but also
 do one more thing. We can increment and fetch to get our new data chunk!</p>
-<h2 id="3-crossbeam-and-atomics">3️⃣ Crossbeam and Atomics</h2>
+<h2 id="crossbeam-and-atomics">Crossbeam and Atomics</h2>
 <p>Back to the storyline! Once again, go to <code>m2_concurrency::code::parallelism</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">online</a>.
 Set the <code>crossbeam_atomic_chunks</code> flag to true.</p>
@@ -1927,7 +1928,7 @@ which is even better.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 29, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
   </span>
 
     

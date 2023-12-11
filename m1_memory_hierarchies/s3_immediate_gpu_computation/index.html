@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2-immediate-gpu-computation" class="md-skip">
+        <a href="#immediate-gpu-computation" class="md-skip">
           Skip to content
         </a>
       
@@ -432,7 +432,7 @@
         
   
   <span class="md-ellipsis">
-    S3 - 3️⃣ Less Basic Concepts in Rust
+    S3 - Less Basic Concepts in Rust
   </span>
   
 
@@ -691,18 +691,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-setting-up-to-dispatch-multiple-shaders" class="md-nav__link">
+  <a href="#setting-up-to-dispatch-multiple-shaders" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Setting up to Dispatch Multiple Shaders
+      Setting up to Dispatch Multiple Shaders
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-caching-shaders" class="md-nav__link">
+  <a href="#caching-shaders" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Caching Shaders
+      Caching Shaders
     </span>
   </a>
   
@@ -995,7 +995,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 3️⃣ More GPU
+    S6 - More GPU
   </span>
   
 
@@ -1016,7 +1016,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - 3️⃣ Parallel Graphs
+    S7 - Parallel Graphs
   </span>
   
 
@@ -1218,7 +1218,7 @@
         
   
   <span class="md-ellipsis">
-    S4 - 3️⃣ Bit Tricks
+    S4 - Bit Tricks
   </span>
   
 
@@ -1239,7 +1239,7 @@
         
   
   <span class="md-ellipsis">
-    S5 - 3️⃣ Compression
+    S5 - Compression
   </span>
   
 
@@ -1260,7 +1260,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - 🧬3️⃣ Cooperative Matrices
+    S6 - 🧬 Cooperative Matrices
   </span>
   
 
@@ -1345,7 +1345,7 @@
               
   
   <span class="md-ellipsis">
-    M4 - 3️⃣ Real-Time Systems
+    M4 - Real-Time Systems
   </span>
   
 
@@ -1361,7 +1361,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
-            M4 - 3️⃣ Real-Time Systems
+            M4 - Real-Time Systems
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1579,7 +1579,7 @@
               
   
   <span class="md-ellipsis">
-    M5 - 3️⃣ Optimization
+    M5 - Optimization
   </span>
   
 
@@ -1595,7 +1595,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
-            M5 - 3️⃣ Optimization
+            M5 - Optimization
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1817,18 +1817,18 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-setting-up-to-dispatch-multiple-shaders" class="md-nav__link">
+  <a href="#setting-up-to-dispatch-multiple-shaders" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Setting up to Dispatch Multiple Shaders
+      Setting up to Dispatch Multiple Shaders
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-caching-shaders" class="md-nav__link">
+  <a href="#caching-shaders" class="md-nav__link">
     <span class="md-ellipsis">
-      3️⃣ Caching Shaders
+      Caching Shaders
     </span>
   </a>
   
@@ -1852,7 +1852,7 @@
   
 
 
-<h1 id="2-immediate-gpu-computation">2️⃣ Immediate GPU computation</h1>
+<h1 id="immediate-gpu-computation">Immediate GPU computation</h1>
 <p>Now let's look at speeding up our operators with GPU, after this
 we will take a look at building an actual computational graph, both
 on the CPU and the GPU.</p>
@@ -2002,13 +2002,13 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 The fully fused operator wins by a large margin compared to the other GPU versions, but it still needs
 quite a bit of scale before it can beat the CPU implementation. Now, let's start building some graphs!</p>
 <hr />
-<h2 id="3-setting-up-to-dispatch-multiple-shaders">3️⃣ Setting up to Dispatch Multiple Shaders</h2>
+<h2 id="setting-up-to-dispatch-multiple-shaders">Setting up to Dispatch Multiple Shaders</h2>
 <p>If you actually delve into how these immediate mode operators are implemented on the CPU side,
 go to <code>src::immediate::nodes.rs</code>. The code is almost the exact same as in the <code>add_gpu</code>
 example from <code>m1::s2</code>, except now we will dispatch several shaders in a row, sharing
 data. Especially the softmax and fused operators will be significantly different on the
 CPU (host) side.</p>
-<h2 id="3-caching-shaders">3️⃣ Caching Shaders</h2>
+<h2 id="caching-shaders">Caching Shaders</h2>
 <p>One other thing that is fundamentally suboptimal about this, is that we compile the shaders
 for every operator, every time we use the operator. If you do lots of small matrix calls,
 this will incur a significant overhead. Shader compilation is expensive. What you could do
@@ -2039,7 +2039,7 @@ case you might need some form of cache eviction mechanism, such as LRU.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 5, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
   </span>
 
     
