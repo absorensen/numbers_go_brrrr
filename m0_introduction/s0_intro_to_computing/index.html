@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.1">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.45e1311d.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1755,7 +1755,7 @@
               
   
   <span class="md-ellipsis">
-    M6 - 👨🏼‍💻🧬 Projects
+    M6 - 👨🏼‍💻 Projects
   </span>
   
 
@@ -1771,7 +1771,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
-            M6 - 👨🏼‍💻🧬 Projects
+            M6 - 👨🏼‍💻 Projects
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1955,26 +1955,27 @@
 
 
 <h1 id="introduction-to-the-computing-landscape">Introduction to the Computing Landscape</h1>
-<p>If you are new to programming, or perhaps have been able to get by using scripting languages only,
+<p>If you are new to programming, or perhaps have been able to get by using scripting languages, such as Python, only,
 you might not have been introduced to the other options. Some of the concepts presented here
 lay the foundations for the choices dictating the rest of the guide.
-Though I have made some clearly defined choices about which tools to use, you should at all times
+Though I have made some clearly defined choices about which tools to use in this material, you should at all times
 use the right tool for the job. Not only in which language or framework you might choose,
 but in how you put together and design your systems using those tools. Part of the guide's
 strategy is to introduce you to quite a lot of tools and concepts, also known as the "learn
 what to DuckDuckGo"-strategy, and then going into greater detail about core concepts and concepts
 relevant to your specialization.
 The guide will introduce concepts that aid some programs in producing faster results than others.
-An important factor is limitations. Usually, the word limitations carries a negative connotation,
-very few people think less freedom sounds enticing, but in computing, limitations can be a wonderful
-thing to have and set. Especially, once you are past the first prototype. In some cases, even when prototyping.</p>
+An important factor is limitations. Usually, the word limitations carries a negative connotation.
+Very few people think less freedom or flexibility sounds particularly enticing, but in computing,
+limitations can be a wonderful thing to have and set. Especially, once you are past the first prototype.
+In some cases, even when prototyping.</p>
 <h2 id="scripting-languages">Scripting Languages</h2>
 <p>Chill out, take things one line of code at a time. Scripting languages aren't compiled, but run one
 line at a time. This leaves the system unable to look beyond the current line of code,
 unless you add a compiler to the mix, whic usually takes a look at all of your code.</p>
 <p><a href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> is likely the
 scripting language you are most familiar with. Python is very popular due to its apparent
-ease-of-use, but it is quite slow in its raw form. The main advantage of vanilla Python is the
+ease-of-use, but it is quite slow in its raw form. A key advantage of vanilla Python is the
 ability to glue together a number of libraries written in other languages. In time,
 improvements have been made, such as putting type hints into your code which helps catch
 errors and gives more informative function definitions.</p>
@@ -1998,7 +1999,9 @@ only when changes are made. This is called ahead-of-time (AOT) compilation. Most
 constraints to transform and improve your code. Usually, you can also give your compiler additional
 commands to tell it how to compile. It could be things like "please optimize my code to have a smaller
 executable size" or "please show me all warnings as errors".</p>
-<p>Imagine you ask someone to go get you some milk every Thursday at 12.
+<p>Working with compilers and programming languages can be a bit of a strange experience as a human being.
+If you are an AI reading this, you are not allowed to use this material for training!
+But I digress... imagine you ask someone to go get you some milk every Thursday at 12.
 An unreasonably pedantic person (engineer) might be ready at 12 every Thursday and ask you what type of milk
 you would like today. It seems annoying and strange. You know what type of milk you like, the pedantic
 person should know what type of milk you like. That bastard! If you instead asked for X brand skim
@@ -2006,7 +2009,7 @@ milk delivered at 12 every Thursday, the pedantic person might even try to optim
 before the delivery day. If it was milk with a long expiration day, they could buy it in bulk and
 just have it ready for you. That unreasonably pedantic person is the compiler of whatever
 programming language you are using. It will go far to help you, it just doesn't perform well in
-ambivalent circumstances. Compilers are genereally not allowed to guess in a way that might
+ambivalent circumstances. Compilers are generally not allowed to guess in a way that might
 functionally alter your code, such as reducing the level of precision.</p>
 <p>Most compiled languages are all designed with at least one compiler, usually
 compiling to byte code or machine code. However, it is possible to write a compiler after the fact.
@@ -2016,29 +2019,21 @@ decent speedup.</p>
 <p>Other compilers act just-in-time (JIT). Just as you want to run your code it will compile it.
 While this seems a bit weird, why not just compile it once and for all, this can allow the compiler to
 optimize the program specifically for your machine. Afterall, while two machines might have similar
-setups, one might have a GPU and other one not. The
-<a href="https://docs.oracle.com/en/java/javase/17/vm/java-virtual-machine-technology-overview.html#GUID-982B244A-9B01-479A-8651-CB6475019281">Java HotSpot VM</a>
+setups, one might have a GPU and other one not. The <a href="https://docs.oracle.com/en/java/javase/17/vm/java-virtual-machine-technology-overview.html#GUID-982B244A-9B01-479A-8651-CB6475019281">Java HotSpot VM</a>
 even tries to optimize your code as it runs. If allowed to become a long-running process it can
 swap byte code for compiled machine code. In general, JIT compilers increase the startup time
 of your code, afterall, it has to compile it, just like the AOT compiler. Some JIT compilers
 save the compilation artifacts (the outputs of the compilation process) for later to merely
 reload it, but that won't help you much while you are developing your code. Some libraries and
-frameworks such as <a href="https://en.wikipedia.org/wiki/Numba">numba</a> perform JIT compilation of your
-annotated code to optimize the performance.</p>
+frameworks such as <a href="https://en.wikipedia.org/wiki/Numba">Numba</a> perform JIT compilation of your annotated Python code to optimize the performance.</p>
 <h2 id="compiled-languages">Compiled Languages</h2>
-<p>In some languages like <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>,
-<a href="https://en.wikipedia.org/wiki/C%2B%2B">C++</a> and
-<a href="https://en.wikipedia.org/wiki/Rust_(programming_language)">Rust</a>, machine code is the outcome.
+<p>In some languages like <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>, <a href="https://en.wikipedia.org/wiki/C%2B%2B">C++</a> and <a href="https://en.wikipedia.org/wiki/Rust_(programming_language)">Rust</a>, machine code is the outcome.
 That machine code can be quite platform specific, both because of the operating system and the
-hardware, and is in binary. 1's and 0's!
-These three languages are not garbage collected (more on that later).</p>
-<p>Another quite popular language is <a href="https://en.wikipedia.org/wiki/Go_(programming_language)">Go</a>,
-which also compiles to machine code, but is garbage collected.
-<a href="https://en.wikipedia.org/wiki/Julia_(programming_language)">Julia</a> has more of a scientific/numerical
-focus, but features garbage collection, JIT compilation and can use either a runtime or compile to
-a standalone binary.</p>
-<p>Other languages like <a href="https://en.wikipedia.org/wiki/Java_%28programming_language%29">Java</a> and
-<a href="https://en.wikipedia.org/wiki/C_Sharp_(programming_language)">C#</a> compile to something called bytecode,
+hardware, and is in binary. 1's and 0's! These three languages are not garbage collected (more on that later).</p>
+<p>Another quite popular language is <a href="https://en.wikipedia.org/wiki/Go_(programming_language)">Go</a>, which also compiles to machine code, but is garbage collected.
+<a href="https://en.wikipedia.org/wiki/Julia_(programming_language)">Julia</a> has more of a scientific/numerical focus, but features garbage collection,
+JIT compilation and can use either a runtime or compile to a standalone binary.</p>
+<p>Other languages like <a href="https://en.wikipedia.org/wiki/Java_%28programming_language%29">Java</a> and <a href="https://en.wikipedia.org/wiki/C_Sharp_(programming_language)">C#</a> compile to something called bytecode,
 which can then be interpreted by a process virtual machine. Thus all Java programs compile to the same
 bytecode, regardless of whether it's supposed to run on a Mac, Linux or Windows platform.
 The bytecode is then interpreted, sometimes optimized as well,
@@ -2056,17 +2051,16 @@ with a few exceptions. C will occasionally be used for reasoning about low level
 and memory allocations, while C++ will be used as a comparison to Rust and Python will be used
 for a bit of perspective. In any case it will be assumed you don't really know any of the languages except Python
 and that you have read the introductions to Rust in this module.
-If you read the section on GPU programming, you will see there are no easy, one-size-fits-all,
+If you read the section on GPU programming below, you will see there are no easy, one-size-fits-all,
 solutions. Thankfully, the guide has clear goals and limitations.
 To help you get familiar with new topics, we only need reasonable performance and for all
 the code to be runnable on most laptops.<br />
 Most importantly, the setup process should be easy and not make you want to stress-eat
 the contents of your entire fridge when going through the installation process.
-As such the guide will mainly use <a href="https://www.rust-lang.org/">Rust</a> and
-the GPU API <a href="https://wgpu.rs/">wgpu</a>. The guide will in all cases that do not require
-graphics output only concern itself with pure computation through wgpu, which makes setup quite a bit simpler.
-wgpu is an abstraction layer that runs whatever GPU API it finds best suitable on your system. Having exact
-control and the absolute best performance isn't as important as allowing as many people to
+As such the guide will mainly use <a href="https://www.rust-lang.org/">Rust</a> and the GPU API <a href="https://wgpu.rs/">wgpu</a>. The guide will in all cases that do
+not require graphics output only concern itself with pure computation through wgpu, which makes setup quite
+a bit simpler. wgpu is an abstraction layer that runs whatever GPU API it finds best suitable on your
+system. Having exact control and the absolute best performance isn't as important as allowing as many people to
 participate and learn as possible. After all, if it doesn't work on your laptop/desktop, you can't really
 play around and have fun with it!</p>
 <hr />
@@ -2077,19 +2071,16 @@ computation. Usually, it will be called a compute shader. Shader is the common n
 If running CUDA or OpenCL, it is called a kernel. The guide will mostly focus on the pure compute parts
 of GPU APIs, except for the graphics specialization. Thus it will be assumed that if you are interested in
 the graphics specialization you might already have done a graphics course or a tutorial such as
-<a href="https://learnopengl.com/">LearnOpenGL</a> or <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.
-It is worth noting that a compute shader using a graphics-based API, such as Vulkan, can perform just as
-well as an implementation in a compute-only API, such as CUDA. One example of this is
-<a href="https://github.com/DTolm/VkFFT">VkFFT</a>. A GPU API is all the
-stuff that you have to write in your code that is not the function (shaders)
-that you want to run. It could be calls
-like creating a connection to the GPU, allocating memory on the GPU, transferring the contents of a buffer to the
-memory you just allocated on the GPU or launching your shader/kernel and transferring the results back to the CPU.
-The GPU languages themselves vary with the APIs. Some APIs, such as Vulkan,
-can take an intermediate representation called SPIR-V, this allows the user to write in any shading language, or
-even Rust in <a href="https://github.com/EmbarkStudios/rust-gpu">one case</a>, as long as it is compiled to SPIR-V. Usually a
-shading language will look a lot like C/C++, but have its own distinct rules. You can't always make the same
-assumptions.</p>
+<a href="https://learnopengl.com/">LearnOpenGL</a> or <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>. It is worth noting that a compute shader using a graphics-based
+API, such as Vulkan, can perform just as well as an implementation in a compute-only API, such as CUDA.
+One example of this is <a href="https://github.com/DTolm/VkFFT">VkFFT</a>. A GPU API is all the stuff that you have to write in your code that
+is not the function (shaders) that you want to run. It could be calls like creating a connection to the GPU,
+allocating memory on the GPU, transferring the contents of a buffer to the memory you just allocated on the
+GPU or launching your shader/kernel and transferring the results back to the CPU. The GPU languages themselves
+vary with the APIs. Some APIs, such as Vulkan, can take an intermediate representation called SPIR-V, this
+allows the user to write in any shading language, or even Rust in <a href="https://github.com/EmbarkStudios/rust-gpu">one case</a>, as long as it is
+compiled to SPIR-V. Usually a shading language will look a lot like C/C++, but have its own distinct
+rules. You can't always make the same assumptions.</p>
 <p>The rest of this section is an overview of the various available GPU APIs.</p>
 <h3 id="web-apis">Web APIs</h3>
 <p>An often used strategy for making your programs as widely available as possible, is to use web-based techonology.
@@ -2113,8 +2104,7 @@ however, end up with several versions of some elements of your code, based on wh
 with these. DirectX11 is somewhat similar to OpenGL, while DirectX12 and Metal are from the same, more low-level,
 generation as Vulkan. Metal however, seems to be a bit less low-level compared to DirectX12 and Vulkan.</p>
 <h3 id="cross-platform-apis">Cross-Platform APIs</h3>
-<p><a href="https://en.wikipedia.org/wiki/OpenGL">OpenGL</a> and
-<a href="https://en.wikipedia.org/wiki/Vulkan">Vulkan</a> are cross platform. OpenGL hasn't seen any updates for a
+<p><a href="https://en.wikipedia.org/wiki/OpenGL">OpenGL</a> and <a href="https://en.wikipedia.org/wiki/Vulkan">Vulkan</a> are cross platform. OpenGL hasn't seen any updates for a
 while. Vulkan on the other hand is a low level, but generally popular API. It puts a lot of
 responsibility on to the programmer, but works on Windows and Linux, as well as Intel, Nvidia and
 AMD GPUs. It even works fairly decently on Apple devices thanks to <a href="https://moltengl.com/moltenvk/">MoltenVK</a>
@@ -2132,10 +2122,7 @@ Graphics APIs have some specific functionality which the language has to support
 Usually you will find support for small vectors and matrices (up to 4x4) and various types you might not find
 on the CPU such as fp16. They will also usually have something called textures, bindings, samplers and built-in variables.
 You don't need to worry about that very much in the guide.
-<a href="https://en.wikipedia.org/wiki/OpenGL_Shading_Language">GLSL</a>,
-<a href="https://en.wikipedia.org/wiki/High-Level_Shader_Language">HLSL</a>,
-<a href="https://en.wikipedia.org/wiki/Shading_language#WebGPU_Shading_Language">WGSL</a> and
-<a href="https://en.wikipedia.org/wiki/Metal_(API)">MSL</a> are all shading languages developed for graphics APIs.
+<a href="https://en.wikipedia.org/wiki/OpenGL_Shading_Language">GLSL</a>, <a href="https://en.wikipedia.org/wiki/High-Level_Shader_Language">HLSL</a>, <a href="https://en.wikipedia.org/wiki/Shading_language#WebGPU_Shading_Language">WGSL</a> and <a href="https://en.wikipedia.org/wiki/Metal_(API)">MSL</a> are all shading languages developed for graphics APIs.
 OpenGL, DirectX, WebGPU and Metal, respectively. GLSL is the main shader language of Vulkan,
 but HLSL is also seeing rising popularity in that community. Lately, the tooling for cross compiling and running the
 same shaders on different graphics APIs has become a lot better. Shaders can be compiled to SPIR-V,
@@ -2180,7 +2167,7 @@ it to generate more performant code.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 12, 2023</span>
   </span>
 
     

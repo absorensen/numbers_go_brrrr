@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.1">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.45e1311d.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1755,7 +1755,7 @@
               
   
   <span class="md-ellipsis">
-    M6 - 👨🏼‍💻🧬 Projects
+    M6 - 👨🏼‍💻 Projects
   </span>
   
 
@@ -1771,7 +1771,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
-            M6 - 👨🏼‍💻🧬 Projects
+            M6 - 👨🏼‍💻 Projects
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1965,13 +1965,13 @@ Metal and DirectX have opened up. With modern graphics API's you don't even nece
 to use them. You can just use the pure compute capabilities. This guide won't get into graphics, except
 for the graphics specialization.</p>
 <p>Ok, so anyways, GPU's are pretty hot stuff right now as the software support becomes deeper and deeper,
-the hardware increasingly has hardware support for neural network specific operations and ChatGPT has
+the hardware increasingly has support for neural network specific operations and ChatGPT has
 increased the hype and demand for AI to exasperating levels.</p>
 <p>You can think of the GPU as an expansion of the memory hierarchies we have been examining earlier.
 It is not running in lock step, and you have to program more things explicitly, while also changing
 your mindset about how programming works. Memory transfers to and from the CPU and GPU will be
 relatively explicit, you have explicit control of a part of the L1 cache, you have to start programming
-in a warp oriented fashion and if-statements become quite dangerous.</p>
+in a work group oriented fashion and if-statements become quite dangerous.</p>
 <p>If the CPU, with its numerous cores is like a team of highly skilled specialists building a car, sure,
 they can build an amazing car, they can adapt to changing circumstances quite well, they can act independently,
 then the GPU is like a factory. Each path and process has to be carefully optimized, they might each only deal with
@@ -1987,7 +1987,7 @@ if you follow up this guide with some <code>CUDA</code> programming.</p>
 <p>First off, when dealing with the GPU, you will have to manipulate the GPU from the CPU with commands
 like "allocate this much memory", "transfer this memory from the CPU to GPU", "execute this shader/kernel" and
 "synchronize". These are all done in whatever language you are writing in on the CPU side, except for the
-actual program the GPU has to run. This is distinct from the GPU API, some GPU API's even accept shaders
+actual program the GPU has to run. This is distinct from the GPU API, some GPU APIs even accept shaders
 written in multiple shading languages, as they can either be transpiled (translated) from one language to
 another, or they can be compiled to an intermediate representation, such as SPIR-V, which they can then ingest.</p>
 <p>But once we have built up all of these commands, at least if they are non-blocking, as in the CPU program won't
@@ -2151,7 +2151,7 @@ function, when called from a normal function also returns a future, but we can't
 <p>Ok, so why do we need <code>async</code> when dealing with the GPU? In some cases, we don't care about synchronization.
 We just want to keep transferring data to the GPU as fast as we can get it, the GPU might output to the display
 or we might get some data transferred back, but if we are doing this in a real-time setting, we might not care
-to synchronize, as in block, and we just need things when they are ready. Anything to do with gpu - <code>async</code>
+to synchronize, as in block, and we just need things when they are ready. Anything to do with wgpu - <code>async</code>
 will be involved. At least in Rust.</p>
 <p>Let's move on. We set up our CPU-side data. This is a simple vector addition, and I elected to make the data
 in a way that was easily verifiable as correct for humans. Input A and B are just vectors of 32-bit floats
@@ -2193,7 +2193,7 @@ save the compiled code or do it as part of your build step.
 When running you can load it from disk as needed. Once we have compiled
 our shader code we can create a compute pipeline with a specific entry point. The entry point is just the function
 that will be called when dispatching the shader call later on. Once we have a <code>ComputePipeline</code> we can
-begin doing our bind group layouts. In CUDA you can pass device side pointers to your CUDA functions
+begin doing our bind group layouts. In CUDA, you can pass device side pointers to your CUDA functions
 when dispatching. Or phrased differently, when using CUDA you can pass along memory addresses for buffers you have
 explicitly allocated on the GPU. When using the graphics APIs the most basic thing to do, if you are
 not going bindless, which is... well, don't worry about it, is to use bindings. There is a certain amount of bind
@@ -2423,8 +2423,15 @@ example snippet -</p>
 </span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">    </span><span class="p">}</span>
 </span></code></pre></div>
 <p>As usual, this code isn't very well tested and there might be some cases where it isn't fully functional,
-but you can see the primitives for declaring shared memory, accessing it and synchronizing.
-Now back to the memory hierarchies!</p>
+but you can see the primitives for declaring shared memory, accessing it and synchronizing. When you start coding
+with shared memory, you shouldn't necessarily be surprised that your code becomes a bit slower. If you are running
+a 1D problem, the cache manager might be able to outperform you, putting the data in the L1 cache by itself.
+It is also common for first tries in shared memory to have too many if-statements. If you minimize the amount
+of if-statements (minimize the amount of work group divergence) and make sure to think of your loading of data
+into shared memory as a separate issue, using strides the same size as a work group (using coalesced accesses)
+you can get very close to, if not better than the cache manager. For 2D problems like tiled matrix multiplication
+you are likely to see a speed up quite early in the optimization process.</p>
+<p>Now back to the memory hierarchies!</p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p>To learn more about GPU's and memory checkout these - <a href="https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/lectures/08_mem_hierarchy.pdf">The GPU Memory Hierarchy</a>,
 <a href="http://meseec.ce.rit.edu/551-projects/spring2015/3-2.pdf">GPU Memory Hierarchy</a>, <a href="http://dlsys.cs.washington.edu/pdf/lecture5.pdf">GPU Programming</a>, <a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">Hopper Architecture In-Depth</a> and
@@ -2454,7 +2461,7 @@ used tutorial is <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 12, 2023</span>
   </span>
 
     

@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.1">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.45e1311d.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.50c56a3b.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1704,7 +1704,7 @@
               
   
   <span class="md-ellipsis">
-    M6 - 👨🏼‍💻🧬 Projects
+    M6 - 👨🏼‍💻 Projects
   </span>
   
 
@@ -1720,7 +1720,7 @@
         <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
-            M6 - 👨🏼‍💻🧬 Projects
+            M6 - 👨🏼‍💻 Projects
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -1853,9 +1853,8 @@
 
 
 <h1 id="immediate-gpu-computation">Immediate GPU computation</h1>
-<p>Now let's look at speeding up our operators with GPU, after this
-we will take a look at building an actual computational graph, both
-on the CPU and the GPU.</p>
+<p>Now let's look at speeding up our operators with GPU, after this we will take a look at building an actual
+computational graph, both on the CPU and the GPU.</p>
 <p>The first version of our GPU implementation, will be for immediate mode computation.
 In this version the behavior will be treated a bit like executing a Python script.
 Every command will be processed one at a time, no optimizations can be executed outside
@@ -1868,12 +1867,11 @@ data to the CPU. If that linear operator is then followed by a ReLU operator, it
 have to do the whole thing over again. Compile the ReLU code for the GPU,
 allocate buffers, transfer, execute, transfer back. Then possibly deallocate.</p>
 <p>This is not a good way to accomplish this. But it is highly flexible and
-we're gonna do it anyways! Don't worry about the 'how' too much, 3️⃣
-goes into greater detail.</p>
+we're gonna do it anyways! Don't worry about the 'how' too much, I'll go into greater detail further down the page.</p>
 <h2 id="building-the-linear-node">Building the Linear Node</h2>
 <p>Okay, so let's try building the linear operator again, but this time on
 the GPU! Don't worry too much about the particulars. The setup is quite
-a bit like what is described in the 3️⃣ section of m1::s2.</p>
+a bit like what is described in <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s2_intro_to_gpus/">m1::s2</a>.</p>
 <p>There are three central files for this. <code>src::shared::tensor2d_gpu.rs</code>,
 <code>src::shared::shaders::linear.wgsl</code> and <code>src::immediate::nodes.rs</code>.
 If you don't have them locally you can them <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d_gpu.rs">here</a>, <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/linear.wgsl">here</a> and <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/immediate/nodes.rs">here</a> respectively.</p>
@@ -1946,7 +1944,7 @@ implement a more optimal version using tiling and shared memory.</p>
 <h2 id="building-relu">Building ReLU</h2>
 <p>We then implement ReLU, Softmax and the fused operators in the same way.
 ReLU you can just check out yourself in <code>shaders::relu.wgsl</code> or
-<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu.wgsl">online</a> along with an inline implementation in <code>shaders::relu_inline.wgsl</code> or <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu_inline.wgsl">here</a>.</p>
+<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu.wgsl">online</a> along with an inline implementation in <code>shaders::relu_inline.wgsl</code> or <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu_inline.wgsl">online</a>.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/immediate_relu_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_relu_benchmark.png" width="800" /></a></p>
 <figcaption>
@@ -1970,7 +1968,7 @@ is left as an exercise. So you don't need to know
 what that is right now, just know that it is not just
 implemented suboptimally, but even without more than 32 threads.
 I did however cheat a little bit and use shared memory, to make it a bit faster.
-Don't worry about shared memory, I will introduce it in 3️⃣.</p>
+Don't worry about shared memory, I will introduce it later on.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/immediate_softmax_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_softmax_benchmark.png" width="800" /></a></p>
 <figcaption>
@@ -2039,7 +2037,7 @@ case you might need some form of cache eviction mechanism, such as LRU.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 12, 2023</span>
   </span>
 
     
