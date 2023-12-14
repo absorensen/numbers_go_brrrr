@@ -730,6 +730,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#were-you-scattering-or-were-you-gathering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Were you Scattering or were you Gathering?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#additional-reading" class="md-nav__link">
     <span class="md-ellipsis">
       Additional Reading
@@ -1928,6 +1937,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#were-you-scattering-or-were-you-gathering" class="md-nav__link">
+    <span class="md-ellipsis">
+      Were you Scattering or were you Gathering?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#additional-reading" class="md-nav__link">
     <span class="md-ellipsis">
       Additional Reading
@@ -1982,7 +2000,7 @@ right now, but it means that you should be able to run all code, including GPU c
 it's made by Apple or AMD.</p>
 <p>In general, I will be using terminology specific to the compute part of the graphics API's and I will
 keep to <code>wgpu</code> and <code>wgsl</code> terminology. You might see significant differences in terminology
-if you follow up this guide with some <code>CUDA</code> programming.</p>
+if you follow up this guide while having previous <code>CUDA</code> programming experience.</p>
 <h2 id="gpu-hardware">GPU Hardware</h2>
 <p>First off, when dealing with the GPU, you will have to manipulate the GPU from the CPU with commands
 like "allocate this much memory", "transfer this memory from the CPU to GPU", "execute this shader/kernel" and
@@ -2431,6 +2449,46 @@ of if-statements (minimize the amount of work group divergence) and make sure to
 into shared memory as a separate issue, using strides the same size as a work group (using coalesced accesses)
 you can get very close to, if not better than the cache manager. For 2D problems like tiled matrix multiplication
 you are likely to see a speed up quite early in the optimization process.</p>
+<h2 id="were-you-scattering-or-were-you-gathering">Were you Scattering or were you Gathering?</h2>
+<p>While a complete guide on GPGPU algorithm design might be... more thorough at least, one core design aspect
+you should definitely know is scattering and gathering.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/scattering_or_gathering.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/scattering_or_gathering.jpg" width="700" /></a></p>
+<figcaption>
+Answer!
+</figcaption>
+</figure>
+<p>An example of how we use either to accomplish the same thing is a 1D convolution. As you might recall, we have three
+elements in play. We have an input signal, an array of size N. We have a filter with weights, an array of size M.
+M will usually be an odd number from 1 to 19.
+Finally, we have an output, usually also size N. The input signal can also be padded with 0's in each end in order
+to minimize branching. Or the output is N-M+1 smaller in order to have an output which doesn't have (M-1)/2 0's at
+the ends.</p>
+<p>Anyways, for weight in our kernel we sample a different element in our signal, multiply it with a weight in
+our filter, accumulate the result and output a new signal.</p>
+<figure>
+<p><a class="glightbox" href="../../figures/1d_convolution.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/1d_convolution.png" width="700" /></a></p>
+<figcaption>
+A figure showing a signal being convolved with a filter.
+<a href="https://www.researchgate.net/figure/Calculations-involved-in-a-1D-convolution-operation_fig3_324177888">
+Image credit </a>
+</figcaption>
+</figure>
+<p>I hope convolution makes sense now. Scattering and gathering are two different ways of executing this fairly
+simple process which has quite an impact on performance. If we were doing 1D convolution on a GPU, from which
+point of view do we program the threads? If they are scattering, they take the point of view of each input element.
+Each element takes its own value, multiplies by a filter value and accumulates in the output array. Now we have a
+whole segment of threads which can all read from their own input element completely unobstructed, but which have
+a huge amount of contention as they have to synchronize their writes to either shared or global memory for the
+output. This also removes the ability for each thread to accumulate the result locally in a register. If they
+instead followed the gathering paradigm, each thread would take the point of view of their own output element.
+They would each do lots of reads from both the input signal and the filter weights, they would do local
+accumulation in a register, and each have a single write to memory with no overlap. As you might remember, you
+should always prefer more reads than writes. Reads are very parallelizable, writes usually require synchronization.</p>
+<p>This can be extended to lots of different algorithms. For matrix-matrix multiplication, it's recommended to use
+gathering, from the point of view of the output element for each thread. For some more material on
+scattering and gathering, there is a paper on it
+<a href="https://cse.hkust.edu.hk/catalac/papers/scatter_sc07.pdf">from '07</a>.</p>
 <p>Now back to the memory hierarchies!</p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p>To learn more about GPU's and memory checkout these - <a href="https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/lectures/08_mem_hierarchy.pdf">The GPU Memory Hierarchy</a>,
@@ -2461,7 +2519,7 @@ used tutorial is <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 12, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     
