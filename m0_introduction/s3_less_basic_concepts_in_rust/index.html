@@ -1707,11 +1707,9 @@
 
 
 <h1 id="less-basic-concepts-in-rust">Less Basic Concepts in Rust</h1>
-<p>The real contents of this section is the project in <code>m0_introduction/code/less_basic_concepts/</code>.
+<p>The real contents of this section is the project in <code>m0_introduction::code::less_basic_concepts</code>.
 Go into the file corresponding to each function being called in the <code>main</code> function in <code>main.rs</code>
-and read all of the comments in order.
-The code can also be found
-<a href="https://github.com/absorensen/the-guide/tree/main/m0_introduction/code/less_basic_concepts">online</a>.</p>
+and read all of the comments in order. The code can also be found <a href="https://github.com/absorensen/the-guide/tree/main/m0_introduction/code/less_basic_concepts">online</a>.</p>
 <h1 id="supplementary-comments">Supplementary Comments</h1>
 <p>In this section, I'll take you through a few addendums, which aren't as much about a
 specific language construct, but some concepts it might help to know.</p>
@@ -1741,8 +1739,7 @@ Take a look at this code -</p>
 </span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>You can also check the Rustonomicon for a
-<a href="https://doc.rust-lang.org/nomicon/aliasing.html">better explanation of aliasing</a>.
+<p>You can also check the Rustonomicon for a <a href="https://doc.rust-lang.org/nomicon/aliasing.html">better explanation of aliasing</a>.
 It is where the code snippets above are from. The code has been reformatted to preference.
 It may be on the more advanced side however.</p>
 <p>Basically, whenever you write to a value and there are multiple references to that value hidden away
@@ -1770,11 +1767,11 @@ on the way you are calling function().</p>
 <p>Rust seems to be designed in a way as to minimize the amount of ambiguity faced by the compiler (and you too).
 Sometimes in Rust code you will see several different constructor functions, such as <code>build</code>,
 <code>build_from_ints</code>, <code>new</code> and <code>default</code>. In one way, that is a pain in the ass.
-In another way, it's quite nice.
-It forces the programmer to be explicit about how the functions behaviours are different,
-instead of being unwritten, implicit, or 'well, you can just read the code, it's not that complicated'.
-If you ever think or say that. Remember this... <em>ahem</em> RED FLAG! Fix your stuff so people don't have to guess,
-it will probably make the next person to read your code hate you slightly less. Which is a good thing!</p>
+In another way, it's quite nice. It forces the programmer to be explicit about how the functions
+behaviours are different, instead of being unwritten, implicit, or 'well, you can just read the
+code, it's not that complicated'. If you ever think or say that. Remember this... <em>ahem</em> RED FLAG!
+Fix your stuff so people don't have to guess, it will probably make the next person to read your
+code hate you slightly less. Which is a good thing!</p>
 <h2 id="index-checking">Index Checking</h2>
 <p>Whenever you access an element in an indexed collection such as a Vec:</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -1793,10 +1790,9 @@ and circumvent this.</p>
 </span></code></pre></div>
 <p>It requires an unsafe region, which is a region in your code where you tell the compiler
 to allow you to do some things it would otherwise not allow you to, and call the function
-<code>.get_unchecked(index)</code>.
-An unsafe region does not turn off all checking, but in general, if you are at the level of reading the guide,
-you don't need it and we won't be talking about it more. If you really want to read more about unsafe,
-the <a href="https://doc.rust-lang.org/nomicon/intro.html">Rustonomicon</a> is the defacto standard
+<code>.get_unchecked(index)</code>. An unsafe region does not turn off all checking, but in general,
+if you are at the level of reading the guide, you don't need it and we won't be talking about it
+more. If you really want to read more about unsafe, the <a href="https://doc.rust-lang.org/nomicon/intro.html">Rustonomicon</a> is the defacto standard
 introduction to unsafe in Rust.</p>
 <p>The two above functions are equivalent to</p>
 <div class="language-c++ highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">for</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">index</span><span class="p">{</span><span class="mi">0</span><span class="p">};</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">size</span><span class="p">();</span><span class="w"> </span><span class="o">++</span><span class="n">index</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -1832,7 +1828,7 @@ another being safety opt-in.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     

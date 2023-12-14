@@ -2419,15 +2419,14 @@ Memory hierarchy of the AMD Athlon.
 Image credit </a>
 </figcaption>
 </figure>
-<p>As mentioned in the module intro, the CPU's memory hierarchy is represented by a series of
-hardware components with different sizes and speeds.
-But don't fret, memory hierarchies and their hardware design subtleties won't be the primary focus of this module.
-This section will focus on the various programming constructs to better use the memory hierarchy.
-First off we will start bridging hardware and software.</p>
+<p>As mentioned in the module intro, the CPU's memory hierarchy is represented by a series of hardware components
+with different sizes and speeds. But don't fret, memory hierarchies and their hardware design subtleties won't
+be the primary focus of this module. This section will focus on the various programming constructs to better
+use the memory hierarchy. First off we will start bridging hardware and software.</p>
 <h2 id="getting-to-the-pointer">Getting to the Point(er)</h2>
-<p>One of the core mechanisms in using memory is the pointer! All it does is point to pieces of memory.
+<p>One of the core mechanisms in using memory is the notorious pointer. All it does is point to pieces of memory.
 Why? Because a pointer is basically just an address. Anti-climactic, I know, but as one of the core building
-blocks of computing, we need to really examine these concepts from the bottom and up.
+blocks of computing, we need to really examine these concepts from the bottom up.
 If you have ever tried programming in C, you will invariably have been introduced to the pointer.
 The examples in this heading will be in C, but don't worry, we won't even define an entire function.
 Pointers are rife with opportunities for getting into trouble, to a degree where in Rust, which is made to be a
@@ -2437,22 +2436,46 @@ by using raw pointers. So let's take a look!</p>
 <h3 id="allocation">Allocation</h3>
 <p>First of all, how do we get a pointer? Please note that checks for whether we have been given a valid pointer
 have been omitted. In the example below we get a pointer to a piece of memory which can hold up to 42 elements.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">integer_array</span><span class="p">;</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Let's break it down!</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>We assign the number of elements to a variable in order to not have magic numbers.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">integer_array</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>This is actually bad practice. We have an uninitialized variable here. We could try and dereference the pointer,
 more on that in just a second, and try to access memory which we either don't have the right to access
 or which doesn't exist. The pointer at this point is likely to either be 0 or complete garbage.
 <code>int*</code> reads as "a pointer to integers" or "address of one or more integers".</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>We ask for a memory allocation (<a href="https://en.cppreference.com/w/c/memory/malloc">malloc</a>) from the
 operating system. What we get back is just a runtime dependent address.
 The address itself is what is known as a <a href="https://en.wikipedia.org/wiki/Word_(computer_architecture)">word</a>.
@@ -2474,6 +2497,9 @@ how we dereference the pointer and what happens when we do.</p>
 <h3 id="dereferencing">Dereferencing</h3>
 <p>A pointer is a reference to another place in memory. Quite literally it is just a number.
 Dereferencing is a term for following the address to what it points to.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">integer_array</span><span class="p">;</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
@@ -2484,15 +2510,30 @@ Dereferencing is a term for following the address to what it points to.</p>
 </span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">integer_array</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="o">*</span><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>In this example there's three different ways of dereferencing shown.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="o">*</span><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>In C, we use the <code>*</code> operator in front of the pointer to follow the address to the memory.
 The base pointer we got from <code>malloc</code> is the address of the first of the 42 elements in our memory.
 Another way of seeing it is that <code>integer_array</code> holds an address, let's say... 42. Our program
 now asks the CPU to write to the address 42, the number 0. So far so good. But then this happens.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="o">*</span><span class="p">(</span><span class="n">integer_array</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>This is one of the myriad reasons why we needed to have an <code>int*</code>. If the address in <code>integer_array</code> is
 42, to get the next integer element, we don't go to the address 43, which would just be the second byte of the
 first element. No, we want to go to the address 46, where the second element in the array begins. Since
@@ -2504,17 +2545,32 @@ as trying to access an element outside of our allocation will be catastrophic, a
 Back to the line on hand. We put our <code>integer_array</code> in a parentheses to make sure the
 dereferencing doesn't happen until after we have changed the address. So we increment the base pointer (42)
 with a stride of 4 (46), and then dereference (*) to assign a value of 1 to the second element in our array.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="n">integer_array</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>A short hand for the previous line, is this line. <code>integer_array[2]</code> is shorthand
 for <code>*(integer_array + 2)</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:1"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">integer_array</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="o">*</span><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>With these lines we manipulate the base pointer itself, by reassigning a value of the base address (42),
 incremented by 3 (54), before doing a simple dereferencing and assigning a value of 3. This is not a recommended
 way of doing things. How do we ensure that we always have the pointer to the base address?
 The least you can do is to copy the base pointer and increment that. Why?</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:1"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
@@ -2526,6 +2582,9 @@ The least you can do is to copy the base pointer and increment that. Why?</p>
 </span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="o">*</span><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="p">;</span>
 </span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="n">integer_array</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Because we need the address to give the memory back to the operating system.</p>
 <h3 id="deallocation">Deallocation</h3>
 <p>Once we are done with the section of memory we have so graciously been granted by the operating system,
@@ -2533,6 +2592,9 @@ we should remember to return it to the operating system. If we don't we might ge
 which is when our program uses more and more memory until the program is stopped or crashes.
 The operating system might keep track of the memory though and clean up once our less than stellar code terminates.</p>
 <p>In C, we can return our memory like this, using the <a href="https://en.cppreference.com/w/c/memory/free">free</a> function.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="11:1"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
@@ -2546,11 +2608,19 @@ The operating system might keep track of the memory though and clean up once our
 </span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a>
 </span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="n">free</span><span class="p">(</span><span class="n">integer_array</span><span class="p">);</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Spot the error?</p>
+<details class="note">
+<summary>Answer</summary>
 <p>We had two pointers and forgot to <code>free</code> using the base pointer, <code>base_integer_array</code>.
 This is <a href="https://en.wikipedia.org/wiki/Undefined_behavior">undefined behavior</a>,
 which means that there are literally no definitions of what will happen.
 It is really bad. What we should have done was this.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="12:1"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
@@ -2564,6 +2634,10 @@ It is really bad. What we should have done was this.</p>
 </span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>
 </span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="n">free</span><span class="p">(</span><span class="n">base_integer_array</span><span class="p">);</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
+</details>
 <p>Note that <code>free</code> takes a <code>void*</code>. Our <code>int*</code> is cast, without us asking explicitly, to a <code>void*</code>.
 The operating system just wants an address. This allows the operating system to mark the section,
 denoted by the start of the section, and probably by its own record of the length.
@@ -2573,6 +2647,9 @@ We could try to dereference it after giving it to <code>free</code>, which is th
 This is also undefined behavior as we try to access memory that is no longer accessible by our program.
 What we could do is to set <code>base_integer_array</code> and <code>integer_array</code> to new values to denote
 that they were invalid.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="13:1"><input checked="checked" id="__tabbed_13_1" name="__tabbed_13" type="radio" /><div class="tabbed-labels"><label for="__tabbed_13_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="kt">int</span><span class="o">*</span><span class="w"> </span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">));</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
@@ -2588,39 +2665,58 @@ that they were invalid.</p>
 </span><span id="__span-12-13"><a id="__codelineno-12-13" name="__codelineno-12-13" href="#__codelineno-12-13"></a><span class="n">base_integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
 </span><span id="__span-12-14"><a id="__codelineno-12-14" name="__codelineno-12-14" href="#__codelineno-12-14"></a><span class="n">integer_array</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>This does not however, stop us from trying to dereference those pointers, but it does allow for a more
 general check to see whether the pointers are still valid.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="14:1"><input checked="checked" id="__tabbed_14_1" name="__tabbed_14" type="radio" /><div class="tabbed-labels"><label for="__tabbed_14_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">base_integer_array</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="p">){</span>
 </span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">    </span><span class="n">free</span><span class="p">(</span><span class="n">base_integer_array</span><span class="p">);</span>
 </span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>If this all seems a bit scary, that's because it is.
-Anytime a system depends on humans just not making any errors and being
-rockstars at everything, it's a dangerous system and you should be on guard.</p>
+</div>
+</div>
+</div>
+<p>If this all seems a bit scary, that's because it is. Anytime a system depends on humans just not
+making any errors and being rockstars at everything, it's a dangerous system and you should be on guard.</p>
 <h2 id="access-patterns">Access Patterns</h2>
 <p>While it is import that you increase your understanding of what it takes to get valid,
 predictable, boring code. Which is the best kind. What you are most likely interested in
-is for you to write more performant code. An absolutely
-essential part of getting performant code is how we access the underlying memory. Yes, we can address
-memory a single byte at a time with <a href="https://en.wikipedia.org/wiki/Byte_addressing">byte addressing</a>.
-But, whenever we ask for a byte, the memory is transported as a cache line through the memory hierarchy.
-As in, the L3, L2 and L1 cache all receive an entire cache line. That cache line is usually 64 bytes.</p>
-<p>What is in the cache line is dictated by
-<a href="https://en.algorithmica.org/hpc/cpu-cache/alignment/">cache line alignment</a>.
-If for example you had made a struct (it's like an object, but just the data) like the one below
-and you elected to turn off the auto-alignment with <code>__attribute__ ((packed))</code></p>
+is for you to write more performant code. An absolutely essential part of getting performant code is
+how we access the underlying memory. Yes, we can address memory a single byte at a time with
+<a href="https://en.wikipedia.org/wiki/Byte_addressing">byte addressing</a>. But, whenever we ask for a byte, the memory is transported as a cache line
+through the memory hierarchy. As in, the L3, L2 and L1 cache all receive an entire cache line.
+That cache line is usually 64 bytes.</p>
+<p>What is in the cache line is dictated by <a href="https://en.algorithmica.org/hpc/cpu-cache/alignment/">cache line alignment</a>. If for example you had made a
+struct (it's like an object, but just the data) like the one below and you elected to turn off the
+auto-alignment with <code>__attribute__ ((packed))</code></p>
+<div class="tabbed-set tabbed-alternate" data-tabs="15:1"><input checked="checked" id="__tabbed_15_1" name="__tabbed_15" type="radio" /><div class="tabbed-labels"><label for="__tabbed_15_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">__attribute__</span><span class="w"> </span><span class="p">((</span><span class="n">packed</span><span class="p">))</span><span class="w"> </span><span class="n">my_struct</span>
 </span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="p">{</span><span class="w"> </span>
 </span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">first</span><span class="p">;</span><span class="w"> </span><span class="c1">// 2 bytes </span>
 </span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">second</span><span class="p">;</span><span class="w"> </span><span class="c1">// 4 bytes</span>
 </span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>and you made allocated an array of <code>my_struct</code> like so</p>
+</div>
+</div>
+</div>
+<p>and you allocated an array of <code>my_struct</code> like so</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="16:1"><input checked="checked" id="__tabbed_16_1" name="__tabbed_16" type="radio" /><div class="tabbed-labels"><label for="__tabbed_16_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kt">int</span><span class="w"> </span><span class="n">element_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 </span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="n">my_struct</span><span class="o">*</span><span class="w"> </span><span class="n">structs</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="n">element_count</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">my_struct</span><span class="p">));</span><span class="w"> </span><span class="c1">// 4 * 6</span>
 </span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>If you had an alignment of say, 8 bytes, the last two lines would result in two cache lines being retrieved.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/cache_alignment.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment.png" width="600" /></a></p>
@@ -2628,8 +2724,11 @@ and you elected to turn off the auto-alignment with <code>__attribute__ ((packed
 Bad cache alignment.
 </figcaption>
 </figure>
-<p>Which is not good. What we could do instead would be to pad our struct a little bit,
-which is the default behavior in C.</p>
+<p>Which is not good. What we could do instead would be to pad our struct a little bit, which is the default
+behavior in C, up to some amount of alignment.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="17:1"><input checked="checked" id="__tabbed_17_1" name="__tabbed_17" type="radio" /><div class="tabbed-labels"><label for="__tabbed_17_1">C</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="k">struct</span><span class="w"> </span><span class="nc">my_struct</span>
 </span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="p">{</span><span class="w"> </span>
 </span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">    </span><span class="kt">short</span><span class="w"> </span><span class="n">first</span><span class="p">;</span><span class="w"> </span><span class="c1">// 2 bytes </span>
@@ -2645,34 +2744,36 @@ which is the default behavior in C.</p>
 </span><span id="__span-16-13"><a id="__codelineno-16-13" name="__codelineno-16-13" href="#__codelineno-16-13"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">first</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span><span id="__span-16-14"><a id="__codelineno-16-14" name="__codelineno-16-14" href="#__codelineno-16-14"></a><span class="n">structs</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">second</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </span></code></pre></div>
-<p>Then our alignment becomes this.</p>
+</div>
+</div>
+</div>
+<p>Then our alignment becomes this -</p>
 <figure>
 <p><a class="glightbox" href="../../figures/cache_alignment_fixed.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment_fixed.png" width="600" /></a></p>
 <figcaption>
 Better cache alignment.
 </figcaption>
 </figure>
-<p>And we now only involve a single cache line. Which to remind you, is quite a bit smaller than the
-more standard 64 byte cache line.</p>
+<p>and we now only involve a single cache line. Which is quite a bit smaller than the more standard 64 byte
+cache line.</p>
 <p>Now that we have learned a bit about cache lines, we are equipped to actually talk about access patterns.
-I have made some Rust code for you which is located at <code>m1_memory_hierarchies/code/access_patterns/</code> or
+I have made some Rust code for you, which is located at <code>m1_memory_hierarchies::code::access_patterns</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/access_patterns">online</a>.</p>
 <p>First off is sequential access. It is the one we usually strive for. We start at one end and go through every
-element until the end, from index 0 to the end.
-If everything is cache aligned, great! If not, the cost of not being aligned will
-probably be as low as it can be, when we aren't reusing any retrieved elements. If a value, say a
-4-byte integer is spread across two cache lines, that specific value may have to be reconstructed
+element until the end, from index 0 to the end. If everything is cache aligned, great! If not, the cost of
+not being aligned will probably be as low as it can be, when we aren't reusing any retrieved elements. If a
+value, say a 4-byte integer, is spread across two cache lines, that specific value may have to be reconstructed
 which can be expensive.</p>
 <p>Next up is strided access. With strided access we only read every N elements. Based on the size of the stride
 and the size of the elements, it might result in each cache line only being used for a single element.
-In the implementations in the code there is both a non-wrapping and a wrapping stride implementation,
-meaning once we step over the end we wrap back around using a modulo operator.
-This is to ensure that it accesses the same amount of elements as the sequential access.
-With the non-wrapping stride we only access every N elements, but we also end up doing much less work.</p>
+In the code there is both a non-wrapping and a wrapping stride implementation. Once the wrapping stride steps over
+the end it wraps back around using a modulo operator. This is to ensure that it accesses the same amount
+of elements as the sequential access. With the non-wrapping stride we only access every N elements,
+but we also end up doing much less work.</p>
 <p>Finally, we have random access. This is basically the worst case scenario. We randomly select an element
 to access the same amount of times as the number of elements in the array. This random access
 is based on sending what would otherwise have been the access index through a hash function which
-hopefully results in a reasonably random access distribution. On my first try I got random accesses
+hopefully results in a reasonably random access distribution. In the first version I got random accesses
 through a random number generator. It turned out to be overkill and resulted in extremely poor
 performance for random access. Your take away from that should be that generating random floats
 is very expensive.</p>
@@ -2685,16 +2786,19 @@ Timing access patterns in Rust.
 <p>Given that we just talked about cache lines, most of these numbers make good sense.
 Wrapping strided access is bad. Random access is the same as the worst (17) wrapping strided access.
 Why do you think that is?</p>
+<details class="note">
+<summary>Answer</summary>
 <p>My best guess is that once you are that far outside of being able to reuse a cache line, essentially
-every single access will be a cache miss, it's the same.</p>
+every single access will be a cache miss, it's effectively the same.</p>
+</details>
 <p>Most interestingly non-wrapping strided access, which actually accesses less elements than the others,
 is slower than sequential access for strides 2 and 3. With stride 4, where we are
 only accessing one fourth the elements of the sequential access pattern, we begin to
 get faster. But what do you know, sometimes the nice and predictable path,
 which might seem like we are doing more work actually runs faster. What a time to be alive!</p>
 <h2 id="stacking-heaps-of-trouble">Stacking Heaps of Trouble</h2>
-<p>If you aren't familiar with the <a href="https://en.wikibooks.org/wiki/Data_Structures/Stacks_and_Queues">stack and queue</a>
-data structure types, this would be a good time to follow the link and familiarize yourself.</p>
+<p>If you aren't familiar with the <a href="https://en.wikibooks.org/wiki/Data_Structures/Stacks_and_Queues">stack and queue</a> data structure types, this would be a good time to
+follow the link and familiarize yourself.</p>
 <p>The stack is not just a data structure, but also a core part of how all of the variables
 in your local scope are kept track of when the program enters into a function. The stack
 is a designated part of the memory allocated to your program. It starts at size 0.
@@ -2714,7 +2818,7 @@ Image credit </a>
 </figure>
 <p>If you push enough of these frames unto the stack, you can get a stack overflow.
 This can for example happen if you write a recursive program that doesn't terminate.
-In general, using variables from the stack will be much faster than using variables
+In general, using variables from the stack will be faster than using variables
 from the heap. But we also can't return pointers to a stack variable as it might disappear
 or be overwritten at any moment.</p>
 <p>The heap, in this context, is not the actual data structure known as a heap.
@@ -2727,53 +2831,66 @@ The stack and the heap sharing memory.
 Image credit </a>
 </figcaption>
 </figure>
-<p>Thus if either one becomes too big they begin encroaching on the other.
-Everytime you ask for dynamically sized memory, it is allocated on the heap.
-This is a slow process and you have to remember to deallocate the memory to not
-get a memory leak. But the memory survives across functions.
-If you remember the pointer examples from earlier - the memory segment we asked for
-lived on the heap, whereas the pointer (address) itself lived on the stack.
-We are allowed to keep the pointer on the stack because a pointer is a known size
-at compile time. We can also have arrays on the stack, but they generally need to
-have a size known at compile time. Moving a pointer from place to place, is also
-a lot cheaper than copying every single element of a large array every time
-ownership changes hands.</p>
+<p>Thus if either one becomes too big they begin encroaching on the other's space. Everytime you ask for
+dynamically sized memory, it is allocated on the heap. This is a slow process and you have to remember
+to deallocate the memory to not get a memory leak. But the memory survives across functions. If you remember
+the pointer examples from earlier - the memory segment we asked for lived on the heap, whereas the
+pointer (address) itself lived on the stack. We are allowed to keep the pointer on the stack because
+a pointer is a known size at compile time. We can also have arrays on the stack, but they generally need
+to have a size known at compile time. Moving a pointer from place to place, is also a lot cheaper than
+copying every single element of a large array every time ownership changes hands.</p>
 <h2 id="the-dynamic-array">The Dynamic Array</h2>
-<p>The dynamic array is ubiquitous in C++ and Rust. It is quite often what we think
-about, when we think of arrays in those languages. C++ has
-<a href="https://en.cppreference.com/w/cpp/container/vector"><code>vector&lt;T&gt;</code></a>
-and Rust has <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html"><code>Vec&lt;T&gt;</code></a>.
-I highly recommend reading the first parts of the Rust Vec page.
-They are basically the same though and I will refer to them as vector from here on out.
-A dynamic array bundles up the behavior we saw earlier with the pointers,
-allocations and deallocations, but adds the ability to automatically create
-a new array that is larger (usually by a factor of 2) than the old array and move the
-old values over to the new array. The vector has three values. How much memory is in
-its allocation, <code>capacity</code>, how much of the memory is currently in use, <code>length</code>, and a pointer to
-the data which lives on the heap.
-The vector itself can live on the stack and make sure to free the memory it points to
-once the vector is dropped from the stack.
-The vector supports quite a few operations, but the core ones are <code>push</code>,
-<code>pop</code>, array access <code>[]</code>, <code>reserve</code> and <code>shrink_to_fit</code>.</p>
-<p>Let's start off though with how we allocate a vector (in Rust).</p>
+<p>The dynamic array is ubiquitous in C++ and Rust. It is quite often what we think about, when we think of
+arrays in those languages. C++ has <a href="https://en.cppreference.com/w/cpp/container/vector"><code>vector&lt;T&gt;</code></a> and Rust has <a href="https://doc.rust-lang.org/std/vec/struct.Vec.html"><code>Vec&lt;T&gt;</code></a>. I highly recommend
+reading the first parts of the Rust Vec page. They are basically the same though and I will refer to them
+as vector from here on out. A dynamic array bundles up the behavior we saw earlier with the pointers,
+allocations and deallocations, but adds the ability to automatically create a new array that is larger
+(usually by a factor of 2) than the old array and move the old values over to the new array. The vector has
+three values. How much memory is in its allocation, <code>capacity</code>, how much of the memory is currently in
+use, <code>length</code>, and a pointer to the data which lives on the heap. The vector itself can live on the
+stack and make sure to free the memory it points to once the vector is dropped from the stack. The vector
+supports quite a few operations, but the core ones are <code>push</code>, <code>pop</code>, array access <code>[]</code>,
+<code>reserve</code> and <code>shrink_to_fit</code>.</p>
+<p>Let's start off though with how we allocate a vector in Rust.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="18:1"><input checked="checked" id="__tabbed_18_1" name="__tabbed_18" type="radio" /><div class="tabbed-labels"><label for="__tabbed_18_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>In this case we should get a completely empty vector. It will have a default <code>capacity</code>, because
 we didn't specify any capacity it should start with. Let's just say this <code>capacity</code> is 4.
 However, if we want to print the current size</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="19:1"><input checked="checked" id="__tabbed_19_1" name="__tabbed_19" type="radio" /><div class="tabbed-labels"><label for="__tabbed_19_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">());</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>we would get an output of 0! We have a <code>capacity</code> of 4, but a <code>size</code> of 0. Meaning,
 we have 4 integers of 4 bytes each on the heap, but they are unitialized (containing garbage values),
 and we have not used any of them. If we however use <code>push</code> to add some actual data and then print</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="20:1"><input checked="checked" id="__tabbed_20_1" name="__tabbed_20" type="radio" /><div class="tabbed-labels"><label for="__tabbed_20_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">());</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>we would print the number 2. Now we have live, initialized values on the heap at indices 0 and 1.
 We can print them by accessing the values directly.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="21:1"><input checked="checked" id="__tabbed_21_1" name="__tabbed_21" type="radio" /><div class="tabbed-labels"><label for="__tabbed_21_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
@@ -2781,12 +2898,18 @@ We can print them by accessing the values directly.</p>
 </span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 </span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>In this case we print 2, 0 and 1. Push finds the first unused index, which is conveniently indicated
 by the <code>size</code> value, increments <code>size</code> and puts the value into the designated index. If we pushed
 5 values however, once we reached the 5th push, assuming the default capacity was 4, we would see the
 5th push taking a lot of time compared to the other 4 pushes. In this case the vector would allocate
 a new memory segment on the heap with a size of 8, copy all of the values from elements 0-3 and then add
 the 5th value to the vector. Conversely, we can also use the <code>pop</code> function.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="22:1"><input checked="checked" id="__tabbed_22_1" name="__tabbed_22" type="radio" /><div class="tabbed-labels"><label for="__tabbed_22_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
@@ -2794,6 +2917,9 @@ the 5th value to the vector. Conversely, we can also use the <code>pop</code> fu
 </span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">());</span>
 </span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="n">println</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Now we end up printing the values 1 and 0. In theory, a dynamic array should move to a smaller array at some point.
 Such as, when at a quarter of the reserved capacity. But in practice, Rust doesn't move to a smaller array
 unless explicitly asked to do so using the ´´´shrink_to_fit´´´ function. In that case it will allocate and move
@@ -2805,6 +2931,9 @@ If you can at all do this, it is one of the easiest ways to get better performan
 bunch of allocations, deallocations and copying.
 There's a variety of ways to control how allocation happens. The simplest one, if you know how
 many elements you want in your vector in advance, is to just create the vector with that capacity.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="23:1"><input checked="checked" id="__tabbed_23_1" name="__tabbed_23" type="radio" /><div class="tabbed-labels"><label for="__tabbed_23_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">with_capacity</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
 </span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
@@ -2812,10 +2941,16 @@ many elements you want in your vector in advance, is to just create the vector w
 </span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>
 </span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">);</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>In this case, we have been unambigously upfront about how many elements we will put in the vector.
 It was created with a <code>capacity</code> of 5 and a <code>size</code> of 0. We can also tell the vector to make sure we
 have a <code>capacity</code> of at least N. If it already has <code>capacity</code> to meet the minimum, nothing happens.
 If it doesn't it will allocate, copy and deallocate.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="24:1"><input checked="checked" id="__tabbed_24_1" name="__tabbed_24" type="radio" /><div class="tabbed-labels"><label for="__tabbed_24_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">element_count</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
 </span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a><span class="n">data</span><span class="p">.</span><span class="n">reserve</span><span class="p">(</span><span class="n">element_count</span><span class="p">);</span>
@@ -2823,30 +2958,46 @@ If it doesn't it will allocate, copy and deallocate.</p>
 </span><span id="__span-23-5"><a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a><span class="w">    </span><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">index</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">i32</span><span class="p">);</span>
 </span><span id="__span-23-6"><a id="__codelineno-23-6" name="__codelineno-23-6" href="#__codelineno-23-6"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>There are more idiomatic ways to do this in Rust, which might also be faster, but you get the gist!</p>
 <h2 id="the-vector">The Vector</h2>
 <p>But, we aren't just interested in single lists of numbers, sometimes, we would even like a matrix.
 In Rust we can have fixed size arrays defined like so:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="25:1"><input checked="checked" id="__tabbed_25_1" name="__tabbed_25" type="radio" /><div class="tabbed-labels"><label for="__tabbed_25_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">];</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>If the sizes given to the array definition are constants, known at compile time, the array will be
-stack allocated.
-From what we have learned previously, the elements will be stored in memory in the order of 0 and 1.
-But what if we create a two-dimensional array?</p>
+stack allocated. From what we have learned previously, the elements will be stored in memory in the
+order of 0 and 1. But what if we create a two-dimensional array?</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="26:1"><input checked="checked" id="__tabbed_26_1" name="__tabbed_26" type="radio" /><div class="tabbed-labels"><label for="__tabbed_26_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
 </span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="w">                        </span><span class="p">[</span>
 </span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a><span class="w">                            </span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">],</span><span class="w"> </span>
 </span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a><span class="w">                            </span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span>
 </span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a><span class="w">                        </span><span class="p">];</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>In Rust the elements will be ordered in memory 0, 1, 2, 3. But that is not a universal truth.
-This is called row-major ordering and is the standard layout in C, C++, Rust, Python and
-most modern languages.
+This is called row-major ordering and is the standard layout in C, C++, Rust, Python and most modern languages.
 The alternative is column-major which is seen in Fortran and Matlab.
 In column-major ordering the elements would be ordered in memory as 0, 2, 1, 3.
 With row-major ordering the memory will be most tightly packed in the last dimension from the left.
 To iterate through a 3 dimensional vector, this triple for-loop would access the memory
 in order.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="27:1"><input checked="checked" id="__tabbed_27_1" name="__tabbed_27" type="radio" /><div class="tabbed-labels"><label for="__tabbed_27_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
 </span><span id="__span-26-2"><a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a><span class="w">                            </span><span class="p">[</span>
 </span><span id="__span-26-3"><a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">]],</span>
@@ -2865,28 +3016,42 @@ in order.</p>
 </span><span id="__span-26-16"><a id="__codelineno-26-16" name="__codelineno-26-16" href="#__codelineno-26-16"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-26-17"><a id="__codelineno-26-17" name="__codelineno-26-17" href="#__codelineno-26-17"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Where as if Rust favored column-major ordering the in-memory-order traversal would be</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="28:1"><input checked="checked" id="__tabbed_28_1" name="__tabbed_28" type="radio" /><div class="tabbed-labels"><label for="__tabbed_28_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="p">[[[</span><span class="kt">i32</span><span class="p">;</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">];</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>
 </span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="w">                            </span><span class="p">[</span>
-</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
-</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">                                </span><span class="p">[[</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">]]</span>
-</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">                            </span><span class="p">];</span>
-</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a>
-</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="kd">let</span><span class="w"> </span><span class="n">x_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="kd">let</span><span class="w"> </span><span class="n">y_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="kd">let</span><span class="w"> </span><span class="n">z_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
-</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a>
-</span><span id="__span-27-11"><a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="k">for</span><span class="w"> </span><span class="n">z_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">z_dimension</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-27-12"><a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">y_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">y_dimension</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-27-13"><a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">x_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">x_dimension</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-27-14"><a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a><span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">x_index</span><span class="p">][</span><span class="n">y_index</span><span class="p">][</span><span class="n">z_index</span><span class="p">]);</span>
-</span><span id="__span-27-15"><a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-27-16"><a id="__codelineno-27-16" name="__codelineno-27-16" href="#__codelineno-27-16"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-27-17"><a id="__codelineno-27-17" name="__codelineno-27-17" href="#__codelineno-27-17"></a><span class="p">}</span>
+</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="w">                                </span><span class="p">[</span>
+</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="w">                                    </span><span class="p">[[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">]],</span>
+</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a><span class="w">                                    </span><span class="p">[[</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">6</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">]]</span>
+</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="w">                                </span><span class="p">]</span>
+</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a><span class="w">                            </span><span class="p">];</span>
+</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a>
+</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="kd">let</span><span class="w"> </span><span class="n">x_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a><span class="kd">let</span><span class="w"> </span><span class="n">y_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-27-11"><a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="kd">let</span><span class="w"> </span><span class="n">z_dimension</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">;</span>
+</span><span id="__span-27-12"><a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a>
+</span><span id="__span-27-13"><a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a><span class="k">for</span><span class="w"> </span><span class="n">z_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">z_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-14"><a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">y_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">y_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-15"><a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="n">x_index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">x_dimension</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-27-16"><a id="__codelineno-27-16" name="__codelineno-27-16" href="#__codelineno-27-16"></a><span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">data</span><span class="p">[</span><span class="n">x_index</span><span class="p">][</span><span class="n">y_index</span><span class="p">][</span><span class="n">z_index</span><span class="p">]);</span>
+</span><span id="__span-27-17"><a id="__codelineno-27-17" name="__codelineno-27-17" href="#__codelineno-27-17"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-27-18"><a id="__codelineno-27-18" name="__codelineno-27-18" href="#__codelineno-27-18"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-27-19"><a id="__codelineno-27-19" name="__codelineno-27-19" href="#__codelineno-27-19"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>If you think back to stride and cache lines, traversing our 3-dimensional array like the above
 in the actual case, where Rust is row-major, would be like the stride access we looked at earlier.
 We could also do this with nested vectors.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="29:1"><input checked="checked" id="__tabbed_29_1" name="__tabbed_29" type="radio" /><div class="tabbed-labels"><label for="__tabbed_29_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">]);</span>
 </span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]);</span>
@@ -2901,11 +3066,17 @@ We could also do this with nested vectors.</p>
 </span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-28-13"><a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>This is even worse though. We now have a 2-dimensional array, which is highly flexible, but we
 have to dereference two pointers for every access.</p>
 <p>There is another way of doing this with a vector, which is the way I will be using
 multi-dimensional arrays in this module. It involves using a single dimensional vector
 as if it had more dimensions.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="30:1"><input checked="checked" id="__tabbed_30_1" name="__tabbed_30" type="radio" /><div class="tabbed-labels"><label for="__tabbed_30_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span>::<span class="n">new</span><span class="p">();</span>
 </span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="n">data</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="fm">vec!</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">]);</span>
 </span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>
@@ -2918,6 +3089,9 @@ as if it had more dimensions.</p>
 </span><span id="__span-29-10"><a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-29-11"><a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>We just create a vector with as much room as we need and then access it with a bit of calculation.
 We've flattened our matrix and can now both have it dynamic and with arbitrary dimensions. We
 can even dynamically decide to see the matrix in a different way, for example by deciding
@@ -2925,18 +3099,29 @@ to swap the number of columns and rows. The formula to access each element is to
 the index by the dimensions that come after it and add it to the next index.
 For example with three dimensions <code>x</code>, <code>y</code> and <code>z</code>, the index would be
 calculated by</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="31:1"><input checked="checked" id="__tabbed_31_1" name="__tabbed_31" type="radio" /><div class="tabbed-labels"><label for="__tabbed_31_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="n">x_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y_size</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">z_size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">z_size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">z_index</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>and for the two dimensions <code>x</code> and <code>y</code>, we would access the 2-dimensional matrix with</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="32:1"><input checked="checked" id="__tabbed_32_1" name="__tabbed_32" type="radio" /><div class="tabbed-labels"><label for="__tabbed_32_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="n">x_index</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">y_size</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">y_index</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>I really hope this makes sense. Once it clicks it is a very simple formula, if a bit wordy.
 Some libraries will work like this under the hood but wrap it in an interface
 for you to simply access it like it was a multi-dimensional array.</p>
 <p>To wrap it up I have made a performance test of these approaches. The code
 doesn't match completely as we need bigger dimensions to get a good test.
-The code is at <code>m1_memory_hierarchies/code/the_vector/</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/the_vector">online</a>.</p>
+The code is at <code>m1_memory_hierarchies/code/the_vector/</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/the_vector">online</a>.</p>
 <p>Implementing all of the methods described above in both row-major and column-major form,
 as well as an element-wise version, where we flatten the multidimensionality to save
 the administration of two of the for-loops, so we just get one for-loop running across
@@ -2964,41 +3149,66 @@ correctness and performance.</p>
 when there are no longer any references to said object. Don't worry about it too
 much, it is a concept I will introduce further down the page.
 But, it does have consequences when this happens</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="33:1"><input checked="checked" id="__tabbed_33_1" name="__tabbed_33" type="radio" /><div class="tabbed-labels"><label for="__tabbed_33_1">Python</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-python highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">42</span><span class="p">]</span>
 </span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
 </span></code></pre></div>
-<p>There aren't actually two lists, but two references to a list which has
-some data on the heap.
-This can be a bit problematic, as you now have two variables, which can
-both write to the same list without the other knowing.
-Once both <code>x</code> and <code>y</code> go out of scope, the list on the heap will be
-deallocated (eventually).</p>
-<p>In C and C++, the following actually results in two different lists on the
-heap, kept by two different variables.</p>
+</div>
+</div>
+</div>
+<p>There aren't actually two lists, but two references to a list which has some data on the heap.
+This can be a bit problematic, as you now have two variables, which can both write to the same list without
+the other knowing. Once both <code>x</code> and <code>y</code> go out of scope, the list on the heap will be deallocated
+(eventually).</p>
+<p>In C and C++, the following actually results in two different lists on the heap, kept by two different
+variables. C++ is copy by default, and this is a deep copy. Which is what Rust would call a clone. Rust
+however, is move by default.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="34:2"><input checked="checked" id="__tabbed_34_1" name="__tabbed_34" type="radio" /><input id="__tabbed_34_2" name="__tabbed_34" type="radio" /><div class="tabbed-labels"><label for="__tabbed_34_1">C++</label><label for="__tabbed_34_2">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-c++ highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">{</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">};</span>
 </span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a><span class="n">vector</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 </span></code></pre></div>
-<p>C++ is copy by default, and this is a deep copy. Which is what Rust would
-call a clone. Rust however, is move by default.</p>
+</div>
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
 </span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 </span></code></pre></div>
-<p>Once the values in <code>x</code>, the <code>capacity</code>, <code>size</code> and the pointer
-to the memory on the heap, have been moved from <code>x</code> into <code>y</code>,
-<code>x</code> is no longer accessible. The Rust compiler will complain.
-We can however, move it right back.</p>
+</div>
+</div>
+</div>
+<p>Once the values in <code>x</code>, the <code>capacity</code>, <code>size</code> and the pointer to the memory on the heap, have
+been moved from <code>x</code> into <code>y</code>, <code>x</code> is no longer accessible. The Rust compiler will complain. We
+can however, move it right back.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="35:1"><input checked="checked" id="__tabbed_35_1" name="__tabbed_35" type="radio" /><div class="tabbed-labels"><label for="__tabbed_35_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
 </span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 </span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="p">;</span>
 </span></code></pre></div>
-<p>Now, <code>y</code> is inaccessible at the end. We could also create a scope,
-after which <code>y</code> is dropped, but the ownership is not moved back to <code>x</code>.</p>
+</div>
+</div>
+</div>
+<p>Now, <code>y</code> is inaccessible at the end. We could also create a scope, after which <code>y</code> is dropped,
+but the ownership is not moved back to <code>x</code>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="36:1"><input checked="checked" id="__tabbed_36_1" name="__tabbed_36" type="radio" /><div class="tabbed-labels"><label for="__tabbed_36_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
 </span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a><span class="p">{</span>
 </span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 </span><span id="__span-36-4"><a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Unless we move the values back ourselves.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="37:1"><input checked="checked" id="__tabbed_37_1" name="__tabbed_37" type="radio" /><div class="tabbed-labels"><label for="__tabbed_37_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
 </span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="p">{</span>
 </span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
@@ -3006,40 +3216,41 @@ after which <code>y</code> is dropped, but the ownership is not moved back to <c
 </span><span id="__span-37-5"><a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span>
 </span><span id="__span-37-6"><a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>To actually create two lists, like we did in the C++ example, we have to
-explicitly ask for a deep copy - a clone in Rust terminology.</p>
+</div>
+</div>
+</div>
+<p>To actually create two lists, like we did in the C++ example, we have to explicitly ask for a deep copy -
+a clone in Rust terminology.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="38:1"><input checked="checked" id="__tabbed_38_1" name="__tabbed_38" type="radio" /><div class="tabbed-labels"><label for="__tabbed_38_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Vec</span>::<span class="n">from</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">42</span><span class="p">]);</span>
 </span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span>
 </span></code></pre></div>
-<p>Usually, in Rust at least, adding lots of clones everywhere is the way
-to get around the borrow checker and have everything be correct. But
-once your first prototype is finished, one of the easiest improvements
-to your performance will be to search for all instances of .clone() and
-see whether there is some other solution that might work better.
-Rust isn't fighting you in this case, even if it can be strict,
-it is trying to protect you from having multiple write-enabled
-references to the same data, as in the Python example, which could make for incorrect code.
-C++ does have these <a href="https://en.cppreference.com/w/cpp/utility/move">move operations</a>
-as well, it is even highly recommended a lot of the time. It is however,
-not the default behavior of the language.</p>
-<p>Rust has something called traits (don't worry about it).
-One of these traits is the <code>Copy</code> trait. If a type implements
-the <code>Copy</code> trait, it will be
-<a href="https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/">copied rather than moved</a>
-when assigned to a new value or passed as an argument to a function.
-It is sort of like an implicit version of <code>.clone()</code>, except
-in the case of deeper structures, such as <code>Vec&lt;T&gt;</code>, in that case,
-it would copy all of the stack values, <code>capacity</code>, <code>size</code>
-and the pointer to the memory on the heap.</p>
-<p>But hold on a minute! That is illegal! We would have two pointers with
-full write rights. Which is illegal in Rust! Which is also why <code>Vec&lt;T&gt;</code>
-doesn't implement <code>Copy</code> and this has all been a ruse, for your edification.</p>
+</div>
+</div>
+</div>
+<p>Usually, in Rust at least, adding lots of clones everywhere is the way to get around the borrow checker and
+have everything be correct. But once your first prototype is finished, one of the easiest improvements to
+your performance will be to search for all instances of .clone() and see whether there is some other solution
+that might work better. Rust isn't fighting you in this case, even if it can be strict, it is trying to
+protect you from having multiple write-enabled references to the same data, as in the Python example,
+which could make for incorrect code. C++ does have these <a href="https://en.cppreference.com/w/cpp/utility/move">move operations</a> as well, it is even highly
+recommended a lot of the time. It is however, not the default behavior of the language.</p>
+<p>Rust has something called traits (don't worry about it). One of these traits is the <code>Copy</code> trait.
+If a type implements the <code>Copy</code> trait, it will be <a href="https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/">copied rather than moved</a> when assigned to a new
+value or passed as an argument to a function. It is sort of like an implicit version of <code>.clone()</code>,
+except in the case of deeper structures, such as <code>Vec&lt;T&gt;</code>, in that case, it would copy all of the
+stack values, <code>capacity</code>, <code>size</code> and the pointer to the memory on the heap.</p>
+<p>But hold on a minute! That is illegal! We would have two pointers with full write rights. Which is illegal
+in Rust! Which is also why <code>Vec&lt;T&gt;</code> doesn't implement <code>Copy</code> and this has all been a ruse,
+for your edification.</p>
 <h2 id="stacks">Stacks</h2>
 <p>Now let's start looking at a couple of fundamental data structures. Next up is the stack. It isn't an array, but
-most implementations are just an array used in a restricted fashion. A stack is what is called a
-Last In, First Out (LIFO) data structure. The usual example is, imagine a stack of cantina trays.
-If you put a tray into the stack,
-in order to get a tray, you have to take the top tray, you can't remove a tray that is below the top tray.</p>
+most implementations are just an array used in a restricted fashion. A stack is what is called a Last In,
+First Out (LIFO) data structure. The usual example is, imagine a stack of cantina trays. If you put a tray
+into the stack, in order to get a tray, you have to take the top tray, you can't remove a tray that is
+below the top tray.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/stack_push.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/stack_push.png" width="500" /></a></p>
 <figcaption>
@@ -3060,8 +3271,8 @@ will communicate how the value is supposed to be used.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/stack_pop.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/stack_pop.png" width="500" /></a></p>
 <figcaption>
-Popping a value from the top (end) of the stack. The states are from before the pop, and were
-the result of the previous push.
+Popping a value from the top (end) of the stack. The states are from before the pop, and were the result of
+the previous push.
 </figcaption>
 </figure>
 <p>Stacks scale well and all operations would be constant time, except when enough values have been pushed to
@@ -3099,41 +3310,41 @@ Dequeueing a value from to the front of the queue. The states are from before th
 should probably just use a queue type, restricting any usage to maintain and communicate that it's a queue.</p>
 <hr />
 <h2 id="smart-pointers">Smart pointers</h2>
-<p>Ok, so I promised previously, that I would explain how Python, and most other
-garbage collected languages, deal with assigning one variable to another.
-If you recall the previous example</p>
+<p>Ok, so I promised previously, that I would explain how Python, and most other garbage collected languages,
+deal with assigning one variable to another. If you recall the previous example -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="39:1"><input checked="checked" id="__tabbed_39_1" name="__tabbed_39" type="radio" /><div class="tabbed-labels"><label for="__tabbed_39_1">Python</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-python highlight"><pre><span></span><code><span id="__span-39-1"><a id="__codelineno-39-1" name="__codelineno-39-1" href="#__codelineno-39-1"></a><span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">42</span><span class="p">]</span>
 </span><span id="__span-39-2"><a id="__codelineno-39-2" name="__codelineno-39-2" href="#__codelineno-39-2"></a><span class="n">y</span> <span class="o">=</span> <span class="n">x</span>
 </span></code></pre></div>
-<p>We start by making a list and assigning a reference to <code>x</code>. In this case
-<code>x</code> is not the actual owner of the list. Instead, the system takes
-ownership of the list, and <code>x</code> is a live reference to that list.
-The system keeps track of how many live references there are to the list.
-Once <code>x</code> goes out of scope, the live reference count for the list
-decreases by one. Once the live reference count reaches 0, it is deallocated or marked available for future
-deallocation.</p>
-<p>Until we hit the end of the scope, and <code>x</code> and <code>y</code> disappear, there
-are two live references to the the list created at line 1. While a fine enough
-solution at first glance, sometimes, answering the question "what is alive"
-can be quite difficult. More on that in the
-<a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#garbage-collectors">garbage collectors section</a>.</p>
-<p>When dealing with raw pointers, like we saw earlier, once a system grows
-beyond absolute simplicity, sharing multiple pointers to the same object
-becomes a bit complex. If you have 5 pointers to the same object floating about
-how do you ensure it isn't used after freeing? Who deallocates the pointer
-and who ensures that the pointers are no longer valid? This at the absolute
-crux of safety and your program not blowing up in C and C++.</p>
-<p>In C++11+ and Rust, we can elect to use something called smart pointers. Which
-can handle some of the intricacies for us.
-First off there is the <a href="https://en.cppreference.com/w/cpp/memory/unique_ptr">unique_ptr<T></a>,
-as in C++, or the <a href="https://doc.rust-lang.org/std/boxed/index.html">Box<T></a> in Rust.
+</div>
+</div>
+</div>
+<p>We start by making a list and assigning a reference to <code>x</code>. In this case <code>x</code> is not the actual owner
+of the list. Instead, the system takes ownership of the list, and <code>x</code> is a live reference to that list.
+The system keeps track of how many live references there are to the list. Once <code>x</code> goes out of scope,
+the live reference count for the list decreases by one. Once the live reference count reaches 0, it is
+deallocated or marked available for future deallocation.</p>
+<p>Until we hit the end of the scope, and <code>x</code> and <code>y</code> disappear, there are two live references to the
+list created at line 1. While a fine enough solution at first glance, sometimes, answering the question
+"what is alive" can be quite difficult. More on that in the <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#garbage-collectors">garbage collector section</a>.</p>
+<p>When dealing with raw pointers, like we saw earlier, once a system grows beyond absolute simplicity,
+sharing multiple pointers to the same object becomes a bit complex. If you have 5 pointers to the same
+object floating about how do you ensure it isn't used after freeing? Who deallocates the pointer and who
+ensures that the pointers are no longer valid? This at the absolute crux of safety and your program not
+blowing up in C and C++.</p>
+<p>In C++11+ and Rust, we can elect to use something called smart pointers. Which can handle some of the
+intricacies for us. First off there is the <a href="https://en.cppreference.com/w/cpp/memory/unique_ptr">unique_ptr<T></a>, as in C++, or the <a href="https://doc.rust-lang.org/std/boxed/index.html">Box<T></a> in Rust.
 I will just refer to <code>Box</code> from here on out, their behaviors seem to be more or less the same.
-<code>Box&lt;T&gt;</code> is like a <code>T *</code> in C (pointer to object of type T).
-With two notable exceptions. It cannot be copied. As in, you cannot have multiple
-instances of <code>Box</code> pointing to the same underlying object. Thus <code>Box</code> in Rust,
-as well as in C++, requires that ownership is moved, and not copied.
+<code>Box&lt;T&gt;</code> is like a <code>T *</code> in C (pointer to object of type T). With two notable exceptions. It cannot
+be copied. As in, you cannot have multiple instances of <code>Box</code> pointing to the same underlying object.
+Thus <code>Box</code> in Rust, as well as in C++, requires that ownership is moved, and not copied.
 The other notable difference from a raw pointer is that once the ´´´Box´´´ goes out of scope,
 the object on the heap that it is pointing to is deallocated automatically.  </p>
+<div class="tabbed-set tabbed-alternate" data-tabs="40:1"><input checked="checked" id="__tabbed_40_1" name="__tabbed_40" type="radio" /><div class="tabbed-labels"><label for="__tabbed_40_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-40-1"><a id="__codelineno-40-1" name="__codelineno-40-1" href="#__codelineno-40-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">box_variable</span>: <span class="nb">Box</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">Box</span>::<span class="n">new</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>
 </span><span id="__span-40-2"><a id="__codelineno-40-2" name="__codelineno-40-2" href="#__codelineno-40-2"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">other_box</span>: <span class="nb">Box</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">box_variable</span><span class="p">;</span><span class="w"> </span><span class="c1">// box_variable no longer accesible due to move</span>
 </span><span id="__span-40-3"><a id="__codelineno-40-3" name="__codelineno-40-3" href="#__codelineno-40-3"></a><span class="kd">let</span><span class="w"> </span><span class="n">copied_variable</span>: <span class="kt">i32</span> <span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">other_box</span><span class="p">;</span><span class="w"> </span><span class="c1">// Dereference and copy the underlying value, this is not a move</span>
@@ -3141,13 +3352,17 @@ the object on the heap that it is pointing to is deallocated automatically.  </p
 </span><span id="__span-40-5"><a id="__codelineno-40-5" name="__codelineno-40-5" href="#__codelineno-40-5"></a><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">copied_variable</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
 </span><span id="__span-40-6"><a id="__codelineno-40-6" name="__codelineno-40-6" href="#__codelineno-40-6"></a><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">other_box</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 43</span>
 </span></code></pre></div>
-<p>Next up are the shared pointers. They are essentially what Python is using in the example
-from earlier. In C++ it is called <a href="https://en.cppreference.com/w/cpp/memory/shared_ptr">shared_ptr<T></a>,
-in Rust it comes in two versions; <a href="https://doc.rust-lang.org/std/rc/index.html">Rc<T></a> and <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html">Arc<T></a>.
-<code>Rc</code> stands for reference counted. It is only made for single threaded usage as the
-reference count itself is susceptible to a data race, which you may recall, is several
-reads and/or writes to the same value. This could result in the count of live references
-being incorrect and the underlying value never being deallocated.</p>
+</div>
+</div>
+</div>
+<p>Next up are the shared pointers. They are essentially what Python is using in the example from earlier. In C++
+it is called <a href="https://en.cppreference.com/w/cpp/memory/shared_ptr">shared_ptr<T></a>, in Rust it comes in two versions; <a href="https://doc.rust-lang.org/std/rc/index.html">Rc<T></a> and <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html">Arc<T></a>. <code>Rc</code>
+stands for reference counted. It is only made for single threaded usage as the reference count itself is
+susceptible to a data race, which you may recall, is several reads and/or writes to the same value.
+This could result in the count of live references being incorrect and the underlying value never being deallocated.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="41:1"><input checked="checked" id="__tabbed_41_1" name="__tabbed_41" type="radio" /><div class="tabbed-labels"><label for="__tabbed_41_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-41-1"><a id="__codelineno-41-1" name="__codelineno-41-1" href="#__codelineno-41-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Rc</span><span class="p">;</span>
 </span><span id="__span-41-2"><a id="__codelineno-41-2" name="__codelineno-41-2" href="#__codelineno-41-2"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-41-3"><a id="__codelineno-41-3" name="__codelineno-41-3" href="#__codelineno-41-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">shared_reference_a</span>: <span class="nc">Rc</span><span class="o">&lt;</span><span class="kt">i32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">new</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span><span class="w"> </span><span class="c1">// Live references = 1</span>
@@ -3175,10 +3390,15 @@ being incorrect and the underlying value never being deallocated.</p>
 </span><span id="__span-41-25"><a id="__codelineno-41-25" name="__codelineno-41-25" href="#__codelineno-41-25"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_b</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
 </span><span id="__span-41-26"><a id="__codelineno-41-26" name="__codelineno-41-26" href="#__codelineno-41-26"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><code>Arc&lt;T&gt;</code> is here to solve exactly that issue.
-It uses atomic reference counting. Atomics will be introduced in the
-<a href="https://absorensen.github.io/the-guide/m2_concurrency/">concurrency</a> module. But in this context, it means that the reference counting is
-thread-safe, but a bit slower.</p>
+</div>
+</div>
+</div>
+<p><code>Arc&lt;T&gt;</code> is here to solve exactly that issue. It uses atomic reference counting.
+Atomics will be introduced in the <a href="https://absorensen.github.io/the-guide/m2_concurrency/">concurrency</a> module. But in this context, it means that the
+reference counting is thread-safe, but a bit slower.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="42:1"><input checked="checked" id="__tabbed_42_1" name="__tabbed_42" type="radio" /><div class="tabbed-labels"><label for="__tabbed_42_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">sync</span>::<span class="n">Arc</span><span class="p">;</span>
 </span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
 </span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -3200,27 +3420,29 @@ thread-safe, but a bit slower.</p>
 </span><span id="__span-42-19"><a id="__codelineno-42-19" name="__codelineno-42-19" href="#__codelineno-42-19"></a>
 </span><span id="__span-42-20"><a id="__codelineno-42-20" name="__codelineno-42-20" href="#__codelineno-42-20"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>While <code>shared_ptr</code> from C++ allows you to mutate the value it refers to
-<code>Rc</code> and <code>Arc</code> do not. They require a synchronization primitive wrapped around your
-underlying value, like <code>Arc&lt;RwLock&lt;i32&gt;&gt;</code>, but that is more advanced usage,
-and don't worry about it right now. Other than the atomicity, and being shareable between
-threads, <code>Rc</code> and <code>Arc</code> work more or less the same.</p>
-<p>Finally, we have the weak pointer. This basically exists to weaken cyclical references.
-If object A refers to another object, object B, with an <code>Rc</code>, while the object
-B refers to object A, we have a problem. When either, or both go out of scope,
-they will not be deallocated as there is live references to both.</p>
+</div>
+</div>
+</div>
+<p>While <code>shared_ptr</code> from C++ allows you to mutate the value it refers to <code>Rc</code> and <code>Arc</code> do not.
+They require a synchronization primitive wrapped around your underlying value, like <code>Arc&lt;RwLock&lt;i32&gt;&gt;</code>,
+but that is more advanced usage, and don't worry about it right now. Other than the atomicity, and being
+shareable between threads, <code>Rc</code> and <code>Arc</code> work more or less the same.</p>
+<p>Finally, we have the weak pointer. This basically exists to weaken cyclical references. If object A refers
+to another object, object B, with an <code>Rc</code>, while the object B refers to object A, we have a problem.
+When either, or both go out of scope, they will not be deallocated as there is live references to both.</p>
 <p>Try to take a second and imagine this and the things that can go wrong
 when there are multiple references interconnected.</p>
 <p>Go on.</p>
-<p>I'll wait.</p>
-<p>To solve this issue, the weak pointer comes to the rescue. It is along for the party,
-but doesn't actually keep things alive. In Rust it is called <a href="https://doc.rust-lang.org/std/rc/struct.Weak.html">Weak<T></a>.
-It can reference the same underlying object as the shared pointer it comes from,
-but does not contribute to the live reference count. As such, it can allow you
-to have cyclical references, without causing a memory leak.
-If object A points to object B with an <code>Rc</code> reference, but object B
-points to object A with a <code>Weak</code>, once object A goes out of scope,
+<p>I will wait.</p>
+<p>To solve this issue, the weak pointer comes to the rescue. It is along for the party, but doesn't actually
+keep things alive. In Rust it is called <a href="https://doc.rust-lang.org/std/rc/struct.Weak.html">Weak<T></a>. It can reference the same underlying object as the
+shared pointer it comes from, but does not contribute to the live reference count. As such, it can allow
+you to have cyclical references, without causing a memory leak. If object A points to object B with an
+<code>Rc</code> reference, but object B points to object A with a <code>Weak</code>, once object A goes out of scope,
 both object A and object B can safely be deallocated.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="43:1"><input checked="checked" id="__tabbed_43_1" name="__tabbed_43" type="radio" /><div class="tabbed-labels"><label for="__tabbed_43_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-43-1"><a id="__codelineno-43-1" name="__codelineno-43-1" href="#__codelineno-43-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Rc</span><span class="p">;</span>
 </span><span id="__span-43-2"><a id="__codelineno-43-2" name="__codelineno-43-2" href="#__codelineno-43-2"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">rc</span>::<span class="n">Weak</span><span class="p">;</span>
 </span><span id="__span-43-3"><a id="__codelineno-43-3" name="__codelineno-43-3" href="#__codelineno-43-3"></a>
@@ -3232,18 +3454,18 @@ both object A and object B can safely be deallocated.</p>
 </span><span id="__span-43-9"><a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">weak_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 1!</span>
 </span><span id="__span-43-10"><a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>For more information on smart pointers in Rust, there is a nice example <a href="https://doc.rust-lang.org/book/ch15-00-smart-pointers.html">here</a>
-and another example about <a href="https://doc.rust-lang.org/book/ch15-06-reference-cycles.html">reference cycles</a>,
-which is what we needed weak pointers for.</p>
+</div>
+</div>
+</div>
+<p>For more information on smart pointers in Rust, there is a nice example <a href="https://doc.rust-lang.org/book/ch15-00-smart-pointers.html">here</a> and another example
+about <a href="https://doc.rust-lang.org/book/ch15-06-reference-cycles.html">reference cycles</a>, which is what we needed weak pointers for.</p>
 <h2 id="the-vector-reloaded">The Vector Reloaded</h2>
-<p>This isn't meant to be a one-to-one representation of how tensors work in <code>numpy</code> or
-<code>PyTorch</code>, but combined with creating different views on the same underlying
-one dimensional memory as we learned about earlier, we can look at a few other fun
-concepts in different ways to arrange tensors.</p>
+<p>This isn't meant to be a one-to-one representation of how tensors work in <code>numpy</code> or <code>PyTorch</code>,
+but combined with creating different views on the same underlying one dimensional memory as we learned
+about earlier, we can look at a few other fun concepts in different ways to arrange tensors.</p>
 <h3 id="strided-access-and-transposition">Strided Access and Transposition</h3>
-<p>One of the most used operations is the matrix multiplication.
-If we assume two 2D matrices as input and output into another 2D matrix,
-one of those input matrices will be accessed with a strided access in
+<p>One of the most used operations is the matrix multiplication. If we assume two 2D matrices as input and
+output into another 2D matrix, one of those input matrices will be accessed with a strided access in
 a column major form.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/mat_mul_strided_access.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/mat_mul_strided_access.png" width="500" /></a></p>
@@ -3251,17 +3473,14 @@ a column major form.</p>
 Matrix multiplication. The numbers indicate access order.
 </figcaption>
 </figure>
-<p>There is a solution for this. We can just transpose the second input matrix.
-Transposition, as you may remember, is flipping a matrix around the diagonal.
-Another way to do this is to flip all coordinates. (0, 0) becomes (0, 0), but
-(3, 1) becomes (1, 3).
-Transposition is an expensive operation however, and we have to create additional code
-for whether the second input matrix is transposed and the other multiplication
-code for just that case. We also need to keep track of which matrices are transposed.
-In a more general, flexible system, or one in which the system does a lot of optimization
-without user input, we also need to evaluate when and where to tranpose matrices.
-But, if the matrix is fairly static and is read from often, it can definitely be worth
-the time and effort.</p>
+<p>There is a solution for this. We can just transpose the second input matrix. Transposition, as you might remember,
+is flipping a matrix around the diagonal. Another way to do this is to flip all coordinates. (0, 0) becomes
+(0, 0), but (3, 1) becomes (1, 3). Transposition is an expensive operation however, and we have to create
+additional code for whether the second input matrix is transposed and the other multiplication code for just
+that case. We also need to keep track of which matrices are transposed. In a more general, flexible system,
+or one in which the system does a lot of optimization without user input, we also need to evaluate when and
+where to tranpose matrices. But, if the matrix is fairly static and is read from often, it can definitely be
+worth the time and effort.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/mat_mul_strided_access_transposed.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/mat_mul_strided_access_transposed.png" width="500" /></a></p>
 <figcaption>
@@ -3269,7 +3488,7 @@ Matrix multiplication with the second matrix transposed.
 </figcaption>
 </figure>
 <p>Now, lets try out a simple example! Checkout the code at
-<code>m1_memory_hierarchies/code/strided_access_and_transposition</code> or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/strided_access_and_transposition/src/main.rs">online</a>.</p>
+<code>m1_memory_hierarchies::code::strided_access_and_transposition</code> or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/strided_access_and_transposition/src/main.rs">online</a>.</p>
 <p>Interestingly, when running the code there doesn't seem to be much of a difference until
 the matrix sizes become quite big. Why do you think that is?</p>
 <figure>
@@ -3323,7 +3542,7 @@ order.</p>
 Offset some of the cost of permutations, by just permuting rows.
 </figcaption>
 </figure>
-<p>Now, lets try out a simple example! Checkout the code at <code>m1_memory_hierarchies/code/permuted_arrays</code>
+<p>Now, lets try out a simple example! Checkout the code at <code>m1_memory_hierarchies::code::permuted_arrays</code>
 or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/permuted_arrays/src/main.rs">online</a></p>
 <figure>
 <p><a class="glightbox" href="../../figures/permuted_arrays_benchmark_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_arrays_benchmark_0.png" width="500" /></a></p>
@@ -3403,7 +3622,7 @@ to the end of the array. Otherwise, we can't get the length of the last row.</p>
 As we compacted the data, we can keep track of the starting index of each row in an auxiliary array.
 </figcaption>
 </figure>
-<p>Now for a simple performance benchmark. Checkout the code at <code>m1_memory_hierarchies/code/jagged_arrays</code>
+<p>Now for a simple performance benchmark. Checkout the code at <code>m1_memory_hierarchies::code::jagged_arrays</code>
 or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/jagged_arrays/src/main.rs">online</a>.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/jagged_arrays_benchmark_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_arrays_benchmark_0.png" width="500" /></a></p>
@@ -3495,7 +3714,7 @@ neural network with random access, you can just create a new string "Linear0" an
 that as a key for the first linear layer and its contents, and then "ReLU0", "Linear1",
 "ReLU1", "Softmax0" and so on. If possible, it is more efficient to use small types as
 your key. Such as an integer.</p>
-<p>Now for a simple performance benchmark. Checkout the code at <code>m1_memory_hierarchies/code/hash_maps</code>
+<p>Now for a simple performance benchmark. Checkout the code at <code>m1_memory_hierarchies::code::hash_maps</code>
 or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/hash_maps/src/main.rs">online</a>.</p>
 <p>As you can see the hash map using integers clearly outperforms Strings. To be fair, every insertion in the
 string based map, requires a clone of the original string, the read and update only requires a reference.

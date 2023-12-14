@@ -1868,26 +1868,28 @@
 <p>The following sections are about to get a bit technical, so let's start things off with a very high level
 summary.</p>
 <p>Branchless programming is a way of making your code faster. It becomes faster by structuring our data in a certain
-way, through refactoring lists of structs, each with their own fields into fewer structs with multiples of each field,
-through sorting data to execute all of elements requiring one type of jobs, then all elements of the next type of job
-and through either minimizing the amount of if statements, through minimizing how many different paths code can go down
-and moving if statements outside of our loops. As you might recall, loops often dictate the run time of your code.</p>
-<p>The reason this becomes faster is that we can optimize what data we get in <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#access-patterns">our cache line</a> through a paradigm called
-data-oriented design and because of a hardware concept called branch prediction. Despite being single threaded,
-a thread can still do somethings concurrently. A line of code can contain more instructions than we think of at first
-glance. Fetching a data element, changing something and then storing it contains several parts. If the next line is
-also fetching a data element, but a different element, and there are no data or execution dependencies between them,
-as in, what we do with the first element has no effect on how we process the second element, we can initiate loading
-of the second element, once we are done loading the first element. While the first element is being processed,
-the second element is being loaded. Once the second element is loaded, a third element can be loaded. This is
-implemented in hardware and results in significant performance boosts. The pipeline is a lot deeper than my example.</p>
+way, through refactoring lists of structs, each with their own fields into fewer structs with multiples of
+each field, through sorting data to execute all of elements requiring one type of jobs, then all elements
+of the next type of job and through either minimizing the amount of if statements, through minimizing how
+many different paths code can go down and moving if statements outside of our loops. As you might recall,
+loops often dictate the run time of your code.</p>
+<p>The reason this becomes faster is that we can optimize what data we get in <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#access-patterns">our cache line</a> through a
+paradigm called data-oriented design and because of a hardware concept called branch prediction. Despite
+being single threaded, a thread can still do somethings concurrently. A line of code can contain more
+instructions than we think of at first glance. Fetching a data element, changing something and then storing
+it contains several parts. If the next line is also fetching a data element, but a different element, and
+there are no data or execution dependencies between them, as in, what we do with the first element has no
+effect on how we process the second element, we can initiate loading of the second element, once we are
+done loading the first element. While the first element is being processed, the second element is being
+loaded. Once the second element is loaded, a third element can be loaded. This is implemented in hardware
+and results in significant performance boosts. The pipeline is a lot deeper than my example.</p>
 <p>If the execution of the second element is can go down two different paths (think if-else), the hardware will predict
 which path will need to be executed and pre-load the needed data and instructions. But if the other path ends up
 being needed, all the work that has been accumulated ahead of time is thrown away and the other branch needs to be
 executed. This is known as a pipeline flush. Designing around this is a universal concept which can speed up your
-code, but it's not as simple as simply doing one thing, it has elements of hardware awareness, structuring and designing
-your architecture and data, and micro-optimizing your code like putting if statements outside of loops or reducing your
-usage of short circuiting boolean operators like <code>||</code> and <code>&amp;&amp;</code>.</p>
+code, but it's not as simple as simply doing one thing, it has elements of hardware awareness, structuring and
+designing your architecture and data, and micro-optimizing your code like putting if statements outside of
+loops or reducing your usage of short circuiting boolean operators like <code>||</code> and <code>&amp;&amp;</code>.</p>
 <h2 id="branch-prediction">Branch Prediction</h2>
 <p>While the speed at which CPUs and memory can execute hasn't risen aggresively in these last few years, that doesn't
 mean they can't get smarter. One such effort is the hardware supporting branch prediction. Loading a value
@@ -1906,6 +1908,9 @@ register, to be moved on to the next part of the pipeline. This is vastly more e
 hardware is able to predict which execution path should be followed. In the case of picking the wrong path,
 all instructions which were part of the wrong path have to be flushed from the pipeline, and the new execution
 path has to be begun. If you have a hard time picturing the scenario, let me paint you a picture with code -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">1337</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">        </span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">-=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="c1">// Path A</span>
@@ -1914,6 +1919,9 @@ path has to be begun. If you have a hard time picturing the scenario, let me pai
 </span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Below you can see a more abstract representation of pipelined instructions -</p>
 <figure>
 <p><a class="glightbox" href="../../figures/pipelined_instructions.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/pipelined_instructions.png" width="600" /></a></p>
@@ -1941,19 +1949,46 @@ means that because both <code>a</code> and <code>b</code> need to be true in ord
 <code>a</code> evaluates as false, <code>b</code> need not be evaluated. Do you see the problem?</p>
 <p>It's a branch! Supposing that <code>a</code> and <code>b</code> aren't too expensive to evaluate we can reduce the amount of
 branching in our code by evaluating both. One way to do so could be -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">if</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>or even -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">if</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>For <code>||</code> options can include -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">if</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>or -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">if</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">)</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Another way to remove a potential if-statement branch could be to multiply by 0's and 1's the data we might
 like to use, by reformulating our code arithmetically -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="fm">vec!</span><span class="p">[</span><span class="mf">0.5</span><span class="p">;</span><span class="w"> </span><span class="mi">5</span><span class="p">];</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
@@ -1966,18 +2001,30 @@ like to use, by reformulating our code arithmetically -</p>
 </span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Calculated: {}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">calculated</span><span class="p">);</span>
 </span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>As with everything else, this is something you should benchmark before deciding. In terms of readability it is
 usually harder to read, so just do it when you need better performance, after asserting correctness first,
 of course.</p>
 <p>Loop unrolling is the process of doing more work per loop, which also reduces the relationship between actual
 work done and administrative control flow work. This unroll will happen a certain amount at a time. Let's
 take a quick look at a loop unroll transformation, with an unroll of 4.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="fm">vec!</span><span class="p">[</span><span class="mf">0.2</span><span class="p">;</span><span class="w"> </span><span class="mi">19</span><span class="p">];</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="w">    </span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mf">2.0</span><span class="p">;</span>
 </span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>And now for the unrolled version -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="8:1"><input checked="checked" id="__tabbed_8_1" name="__tabbed_8" type="radio" /><div class="tabbed-labels"><label for="__tabbed_8_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">unroll_size</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span>
 </span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">data</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="fm">vec!</span><span class="p">[</span><span class="mf">0.2</span><span class="p">;</span><span class="w"> </span><span class="mi">19</span><span class="p">];</span>
 </span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">full_iterations</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="n">data</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">unroll_size</span><span class="p">;</span><span class="w"> </span><span class="c1">// 4 = 19 / 4</span>
@@ -1994,6 +2041,9 @@ take a quick look at a loop unroll transformation, with an unroll of 4.</p>
 </span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="w">        </span><span class="n">data</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">*=</span><span class="w"> </span><span class="mf">2.0</span><span class="p">;</span>
 </span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="w">    </span><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Of course, the tail iterations in the second for-loop won't be as fast the main loop, but again, this usually
 something the compiler will do for you in release mode.</p>
 <h2 id="data-oriented-design">Data-oriented Design</h2>
@@ -2026,6 +2076,9 @@ group rays by material, allowing us to execute all rays needed a material A scat
 executing all rays needing a material B scattering event. It gets worse, but let's take a step back and just
 look at how we might handle a whole bunch of rays.</p>
 <p>The typical way we might handle a bunch of rays in a path tracer, would be to define each ray as a struct, such as -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="9:1"><input checked="checked" id="__tabbed_9_1" name="__tabbed_9" type="radio" /><div class="tabbed-labels"><label for="__tabbed_9_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="k">struct</span> <span class="nc">Ray</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="w">    </span><span class="n">origin</span>: <span class="nc">Vec3</span><span class="p">,</span>
 </span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="w">    </span><span class="n">direction</span>: <span class="nc">Vec3</span><span class="p">,</span>
@@ -2033,6 +2086,9 @@ look at how we might handle a whole bunch of rays.</p>
 </span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="w">    </span><span class="n">material</span>: <span class="nc">Material</span><span class="p">,</span><span class="w"> </span><span class="c1">// Enum</span>
 </span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>This is just as useful with graphs, as long as we have chosen a formulation of them which allows us to keep
 them in arrays instead of floating around in pointer-based structures.
 Think back to cache lines now, if we are handling a bunch of rays one at a time, whenever we go to a different
@@ -2044,6 +2100,9 @@ a relevant part of the code. If we kept a <code>Vec&lt;Ray&gt;</code> to do this
 to function, we would call this an Array-of-Structs (AoS).</p>
 <p>What we could do instead, to only cache exactly what we needed is called Struct-of-Arrays (SoA). We keep all of
 our rays in a deconstructed fashion -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="10:1"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="k">struct</span> <span class="nc">VectorOfRays</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">    </span><span class="n">origins</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Vec3</span><span class="o">&gt;</span><span class="p">,</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">    </span><span class="n">directions</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Vec3</span><span class="o">&gt;</span><span class="p">,</span>
@@ -2051,7 +2110,13 @@ our rays in a deconstructed fashion -</p>
 </span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">    </span><span class="n">materials</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Material</span><span class="o">&gt;</span><span class="p">,</span>
 </span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>or we might even take it a step further -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="11:1"><input checked="checked" id="__tabbed_11_1" name="__tabbed_11" type="radio" /><div class="tabbed-labels"><label for="__tabbed_11_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">struct</span> <span class="nc">VectorOfRays</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">    </span><span class="n">origins_x</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
 </span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="n">origins_y</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">f32</span><span class="o">&gt;</span><span class="p">,</span>
@@ -2065,6 +2130,9 @@ our rays in a deconstructed fashion -</p>
 </span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="w">    </span><span class="n">materials</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">Material</span><span class="o">&gt;</span><span class="p">,</span>
 </span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Now instead of operating on individual rays, or operating on lists of rays, we can do individual operations on each
 and every relevant element, getting them all in our cache line. This require our intersection function to have
 a series of loops for each step in the function and requires a bit of refactoring. We gain an additional advantage,
@@ -2076,6 +2144,9 @@ A, move others to a queue for material B and so on.</p>
 <p>Enter... drumroll please... Arrays-of-Structs-of-Arrays (AoSoA).</p>
 <p>We could instead use a coarser granularity by storing a number of rays in a shared struct and keep a list of
 those structs -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="12:1"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">struct</span> <span class="nc">Ray4</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">    </span><span class="n">origins_x</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="n">origins_y</span>: <span class="p">[</span><span class="kt">f32</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="mf">0.0</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
@@ -2089,6 +2160,9 @@ those structs -</p>
 </span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">    </span><span class="n">materials</span>: <span class="p">[</span><span class="n">Material</span><span class="p">;</span><span class="w"> </span><span class="mi">4</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">Material</span>::<span class="n">default</span><span class="p">();</span><span class="w"> </span><span class="mi">4</span><span class="p">],</span>
 </span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>We can choose a coarser granularity by making this struct any size we like. Within reason, we have a good
 chance it might fit on the stack. Now we are free to move around rays, eliminate ones that are terminated,
 replace terminated rays with new ones and other such divergence limiting operations. Some libraries such
@@ -2136,6 +2210,9 @@ memory bound. SIMD does nothing to alleviate that, except try to draw on even mo
 <p>If we instead look at code which uses an actual function from path tracing, in this case sphere intersection,
 we are doing much more compute per memory load and can see a significant increase in performance. Here's
 a sample of the code to show you what SIMD programming looks like -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="13:1"><input checked="checked" id="__tabbed_13_1" name="__tabbed_13" type="radio" /><div class="tabbed-labels"><label for="__tabbed_13_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="k">fn</span> <span class="nf">ray_sphere_intersect_x8</span><span class="p">(</span>
 </span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a><span class="w">    </span><span class="n">sphere_o</span>: <span class="kp">&amp;</span><span class="nc">uv</span>::<span class="n">Vec3x8</span><span class="p">,</span>
 </span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a><span class="w">    </span><span class="n">sphere_r_sq</span>: <span class="kp">&amp;</span><span class="nc">uv</span>::<span class="n">f32x8</span><span class="p">,</span>
@@ -2163,6 +2240,9 @@ a sample of the code to show you what SIMD programming looks like -</p>
 </span><span id="__span-12-25"><a id="__codelineno-12-25" name="__codelineno-12-25" href="#__codelineno-12-25"></a><span class="w">    </span><span class="n">t</span>
 </span><span id="__span-12-26"><a id="__codelineno-12-26" name="__codelineno-12-26" href="#__codelineno-12-26"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>In this case I only use functions implemented directly by utraviolet's <code>uv::Vec3x8</code> and
 <code>uv::f32x8</code> types.</p>
 <p>Be sure to check out the 4 references at the top of the code.
@@ -2219,7 +2299,7 @@ This is even being rolled out and described in this <a href="https://developer.n
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 12, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     

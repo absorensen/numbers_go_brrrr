@@ -1745,12 +1745,11 @@
 to be an easier introduction to the concept of parallelism. Parallelism and concurrency are often used
 interchangably, but they aren't necessarily the same.
 <a href="https://en.wikipedia.org/wiki/Concurrency_(computer_science)">Concurrency</a>
-is when we run several calls at once,
-but they aren't necessarily running on two different processors. This could for example be the downloading
-of several files at once. Things are happening in the background, the process doesn't necessarily need to sit and
-wait for the first file to download and then request the second file for download and so on. Instead it can ask to
-download all of the files and then wait for all of them to be done, or for the first one to be done so it can begin
-processing the files.</p>
+is when we run several calls at once, but they aren't necessarily running on two different processors.
+This could for example be the downloading of several files at once. Things are happening in the background,
+the process doesn't necessarily need to sit and wait for the first file to download and then request the
+second file for download and so on. Instead it can ask to download all of the files and then wait for all of
+them to be done, or for the first one to be done so it can begin processing the files.</p>
 <p>Parallelism on the other hand implies that we are actually running different cores and threads.
 So far I have introduced parallelism in small pockets inside a function which cannot do anything
 too complicated. The programs aren't long running and we choose a specific subset of problems to
@@ -1876,7 +1875,7 @@ cases, <code>Send</code> and <code>Sync</code> are automatically derived.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     

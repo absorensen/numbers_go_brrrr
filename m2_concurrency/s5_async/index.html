@@ -1812,9 +1812,15 @@ this is a future returning type <code>T</code>... eventually! Within <code>async
 functions without using <code>block_on()</code>. Instead each call to an <code>async</code> function returns the <code>Future</code> I
 mentioned earlier. You can either use <code>.await</code> immmediately like so
 <code>let result: u8 = my_async_func().await;</code>, or you can store it and <code>.await</code> later, like so</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">future_result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">my_async_func</span><span class="p">();</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">result</span>: <span class="kt">u8</span> <span class="o">=</span><span class="w"> </span><span class="n">future_result</span><span class="p">.</span><span class="k">await</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>If you think back to the earlier page <code>m2::s1</code> about threads, you can imagine the same scenario as threading.
 You launch a bunch of jobs, store their handles, then when you are done launching jobs, you might even have some
 other work to do in the mean time, you await all of your handles until you are ready to move on. But, allow
@@ -1828,6 +1834,9 @@ made, the Future will be picked up by the executor and will resume running, allo
 just the system we are in control of, calling <code>.await</code> may result in the current thread yielding. Another thing
 we could do is the <code>join!()</code> macro. This is sort of like calling <code>.await</code> on a bunch of futures at the same
 time. Like so -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">future_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">download_file_async</span><span class="p">(</span><span class="n">url_a</span><span class="p">);</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">future_b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">download_file_async</span><span class="p">(</span><span class="n">url_b</span><span class="p">);</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kd">let</span><span class="w"> </span><span class="n">future_c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">download_file_async</span><span class="p">(</span><span class="n">url_c</span><span class="p">);</span>
@@ -1836,6 +1845,9 @@ time. Like so -</p>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;Successfully downloaded files from {}, {} and {}, url_a, url_b, url_c);</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>You can read more about <code>join!()</code>
 <a href="https://rust-lang.github.io/async-book/06_multiple_futures/02_join.html">here</a>. Async is its own paradigm and
 again, in this course you are most likely to see it when interacting with the GPU and a GUI system. In the
@@ -1843,8 +1855,7 @@ real world you might see it very pervasibely in web servers and anything to do w
 outside of your computer. In any case, you should try to limit how big the async portions of your code are,
 or very soon all of your code, including your main, will be async.</p>
 <h2 id="additional-reading">Additional Reading</h2>
-<p>For an intro to the async functionality available in the core Rust library, there's a
-<a href="https://rust-lang.github.io/async-book/">book for that</a>.</p>
+<p>For an intro to the async functionality available in the core Rust library, there's a <a href="https://rust-lang.github.io/async-book/">book for that</a>.</p>
 <p><a href="https://tokio.rs/">Tokio</a> is a widely used async runtime. It is suggested, by Tokio itself, to not use it for cases
 where you are CPU compute bound, they suggest Rayon in that case, to not use it for accessing lots of files as the
 operating systems generally do not have asynchronous file APIs, and to not use it for single web requests. So, when
@@ -1875,7 +1886,7 @@ software, to make them extremely lightweight.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     

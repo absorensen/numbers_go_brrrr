@@ -1733,9 +1733,15 @@ same setup like this <code>my_lib.do_something(5)</code>. Ok, that's fairly triv
 is likely to be the exact same in both Rust and Python (but what about <code>String</code> and your own custom structs?).
 Additionally, because we use a literal, the ownership of that 5 is not an issue. But then we go do something
 crazy like this -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-Python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">element_count</span> <span class="o">=</span> <span class="mi">5</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">my_lib</span><span class="o">.</span><span class="n">do_something</span><span class="p">(</span><span class="n">element_count</span><span class="p">)</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>In this scenario, we have created a variable, which in Python is reference counted so the garbage collector can
 free it later on, and then given that variable to a function. That function calls some Rust code. Does that Rust
 code take ownership of <code>element_count</code>? If it does, we have to be sure that Python no longer sees
@@ -1788,7 +1794,7 @@ way and let you reuse some of the skills you have learned here in other contexts
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 24, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     

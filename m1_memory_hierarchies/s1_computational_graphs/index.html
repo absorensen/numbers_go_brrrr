@@ -702,7 +702,7 @@
         <li class="md-nav__item">
   <a href="#graphs-in-graphicsgpu-programming" class="md-nav__link">
     <span class="md-ellipsis">
-      🧬Graphs in Graphics/GPU Programming
+      🧬 Graphs in Graphics/GPU Programming
     </span>
   </a>
   
@@ -1912,7 +1912,7 @@
         <li class="md-nav__item">
   <a href="#graphs-in-graphicsgpu-programming" class="md-nav__link">
     <span class="md-ellipsis">
-      🧬Graphs in Graphics/GPU Programming
+      🧬 Graphs in Graphics/GPU Programming
     </span>
   </a>
   
@@ -1944,8 +1944,12 @@ So now let's get to business.</p>
 It can allow a library or a framework to keep data at various levels of the memory hierarchy.
 It can allow it to check that all of the dimensions fit for the data,
 it can make assumptions about fusing nodes (combining them), remove redundancies and unused elements.  </p>
-<p>Let's take a look at this defined network from PyTorch's own
-<a href="https://pytorch.org/tutorials/recipes/recipes/defining_a_neural_network.html">documentation</a>.</p>
+<p>Let's take a look at this defined network from PyTorch's own <a href="https://pytorch.org/tutorials/recipes/recipes/defining_a_neural_network.html">documentation</a>.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">class</span> <span class="nc">Net</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>      <span class="nb">super</span><span class="p">(</span><span class="n">Net</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -2036,6 +2040,11 @@ If you are in the root directory for <code>computational_graphs</code> go to <co
 <p>Start by taking a look at the definition of the <code>Tensor2D</code> struct at the very top. The <code>derive</code> stuff
 is asking some macros to automatically implement (derive) some traits (interfaces and behavior).
 <code>Clone</code> means we can call a Tensor2D element as below -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_tensor</span>: <span class="nc">Tensor2D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Tensor2D</span>::<span class="n">new</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="p">);</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">copy_of_some_tensor</span>: <span class="nc">Tensor2D</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">some_tensor</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span>
 </span></code></pre></div>
@@ -2125,6 +2134,11 @@ corresponds to 16384 bytes, or 16 KB. We have 4 of these tensor structs, so we s
 running on the laptop at the time. But then again, the sampling is quite sparse. You can try and add more data
 points and see if you can narrow down the sizes of your caches.</p>
 <p>This might be a good time to experiment with changing the values in <code>lib.rs</code> for</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">loop_count</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="p">;</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">loop_range</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">usize</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="k">u32</span><span class="o">..</span><span class="mi">8</span><span class="k">u32</span><span class="p">).</span><span class="n">map</span><span class="p">(</span><span class="o">|</span><span class="n">x</span><span class="o">|</span><span class="w"> </span><span class="mi">2</span><span class="k">usize</span><span class="p">.</span><span class="n">pow</span><span class="p">(</span><span class="n">x</span><span class="p">)).</span><span class="n">collect</span><span class="p">();</span>
 </span></code></pre></div>
@@ -2132,6 +2146,11 @@ points and see if you can narrow down the sizes of your caches.</p>
 In this case, the first element is 4, so the first measurement will be done with matrices sized 4x4.
 Currently, it takes a range between 2 and 8 (not including 8) and yields a vector of sizes of 2^N.
 So 4, 8, 16, 32, 64, 128. If you wanted all values in the range of 0 to 100 you could write</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block"></div>
+</div>
+</div>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">loop_range</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="kt">usize</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="mi">101</span><span class="p">).</span><span class="n">collect</span><span class="p">();</span>
 </span></code></pre></div>
 <p>You can zoom in on these parts of the graph by modifying <code>lib.rs</code> to just test values in these
@@ -2237,7 +2256,7 @@ would otherwise write <code>cargo run --release</code>. This works just fine for
 CPU based tests. The testing system launches lots of tests in parallel to speed up
 the amount of time it takes to run the tests. As we will see later, this parallel
 test launch can create some issues when testing our GPU functions.</p>
-<h2 id="graphs-in-graphicsgpu-programming">🧬Graphs in Graphics/GPU Programming</h2>
+<h2 id="graphs-in-graphicsgpu-programming">🧬 Graphs in Graphics/GPU Programming</h2>
 <p>Computational graphs are even making their way into the way you can program the GPU!
 Ways to define computational graphs have been added to <a href="https://devblogs.microsoft.com/directx/d3d12-work-graphs-preview/">DirectX12</a> and <a href="https://gpuopen.com/gpu-work-graphs-in-vulkan/">Vulkan</a>.
 This development seems to be lead by game and graphics workloads being increasingly
@@ -2264,7 +2283,7 @@ compute shader driven.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 12, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     

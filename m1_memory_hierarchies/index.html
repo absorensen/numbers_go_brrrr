@@ -1750,14 +1750,24 @@
 
 
 <h1 id="memory-hierarchies-computational-graphs-and-compilers">Memory Hierarchies, Computational Graphs and Compilers</h1>
+<p>In this module I wll be getting in to memory hierarchies. Memory isn't just memory. There's various types
+of memory, different sizes, different speeds, different locations. When we formulate our programs in a more
+restricted fashion, such as declaring our intent through a graph, that allows us to optimize where memory is kept.
+Memory is everything as compute itself is very cheap, keeping the part of your code that does computations fed
+with data is expensive. Knowing more about how memory works will also help you parallelize your code for a greater
+speedup. I'll also introduce how to work with GPU's from the dual perspective of memory and parallelism. It is
+introduced in this module instead of concurrency as programming GPU's is a microcosm of memory and parallelism and
+introducing these concepts early on your journey will allow you some time to come to terms with the mindbending
+prospects of parallel programming. Also GPU's have become ubiquitous these last few years. Just look at
+Nvidia's stock prices!</p>
 <p>Not all efficiency comes from optimizing the various computational details like multiplications, divisions
-and such of a function.
-Quite a large part of it, in fact, comes from optimizing how much you write to and read from memory.
-'Which memory?' you might ask, rightfully. The answering the where, when and what of memory will be
-the focus of this module. We can almost always get more cores to throw at a problem, we can also,
-at least on the CPU, quite easily get more memory, but that does not change the amount of time it takes
-to get a piece of memory, only how much data we can have in memory before we have to go to a lower level,
-e.g. go from RAM to disk. This is even more important given the relatively slow improvement of memory over time.</p>
+and such of a function. Quite a large part of it, in fact, comes from optimizing how much you write to
+and read from memory. 'Which memory?' you might ask, rightfully. The answering the where, when and what
+of memory will be the focus of this module. We can almost always get more cores to throw at a problem,
+we can also, at least on the CPU, quite easily get more memory, but that does not change the amount of
+time it takes to get a piece of memory, only how much data we can have in memory before we have to go
+to a lower level, e.g. go from RAM to disk. This is even more important given the relatively slow
+improvement of memory over time.</p>
 <figure>
 <p><a class="glightbox" href="../figures/compute_vs_memory.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/compute_vs_memory.png" width="500" /></a></p>
 <figcaption>
@@ -1783,11 +1793,12 @@ include PyTorch, after several attempts with various degrees of success, finally
 neural network you just defined.
 Or the functional programming style used by
 <a href="https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html">JAX</a> in conjunction with
-the <a href="https://www.tensorflow.org/xla">XLA compiler</a>.</p>
+the <a href="https://www.tensorflow.org/xla">XLA compiler</a>. Don't worry if you don't understand too much of that. Once
+you are at the end of this guide, you'll have a much better chance at understanding.</p>
 <h2 id="memory-hierarchies">Memory Hierarchies</h2>
 <p>So what is memory anyways? Memory in a compute context is represented in several stages, all having
 their own capacity and speed.
-In order from smallest capacity and highest speed to largest capacity and lowest speed we have
+In order, from smallest capacity and highest speed to largest capacity and lowest speed, we have
 the registers, the L1-L3 caches, the main memory (RAM) and the disks.
 The registers are the fastest and smallest of the bunch. They reside right next to the parts of
 the CPU that does the computations.
@@ -1838,16 +1849,17 @@ An example view of what CPU memory hierarchy can look like with 8 cores.
 </figcaption>
 </figure>
 <p>Nudging the programmer (that's you!), to better define your program, not just line-by-line, but as a whole,
-to constrain these sorts of contentions, is one of the myriad reasons why
-frameworks like PyTorch can greatly speed up your code, if you help it along.</p>
+to constrain these sorts of contentions, is one of the myriad reasons why frameworks like PyTorch can greatly
+speed up your code, if you take the time to help it along.</p>
 <h2 id="expanding-the-memory-hierarchy">Expanding the Memory Hierarchy</h2>
 <p>To top it off we can expand this memory hierarchy with additional components, such as accelerators, networking
 and the internet!
 Let's start off with the GPU. It is an accelerator originally made for just computing graphics as fast as
 possible. It has a whole bunch of threads in it, meaning it can do very parallel work, like making every pixel
 of an image slightly darker. At the end of the 2000's, Nvidia saw a bunch of academics hacking the GPU to do
-stuff like fast fourier transforms using the fragment shader. Don't worry about what a fragment shader is, but shader
-basically means GPU program. So Nvidia releases CUDA as a pure compute (no graphics) API for using your GPU.
+stuff like fast fourier transforms using the fragment shader. Don't worry about what a fragment shader is,
+but shader basically means GPU program. So Nvidia releases CUDA as a pure compute (no graphics) API for using
+your GPU.
 It only runs on Nvidia GPU's though. Transfering memory from the CPU to the GPU and back, can be a
 quite explicit process. Not only does the CPU need to reserve some memory for copying to the GPU,
 the CPU and GPU have to be synchronized which can take a while, and then the data is usually transferred
@@ -1928,7 +1940,7 @@ all programs and it is worth spending some time on having at least a tenuous gra
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     

@@ -497,27 +497,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#m0e0" class="md-nav__link">
+  <a href="#m0e0-advent-of-code" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e0
+      m0::e0 - Advent of Code
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e1" class="md-nav__link">
+  <a href="#m0e1a-ray-tracing-in-one-weekend" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e1
+      m0::e1::a - Ray Tracing in One Weekend
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e2" class="md-nav__link">
+  <a href="#m0e1b-learning-to-fly" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e2
+      m0::e1::b - Learning to Fly
     </span>
   </a>
   
@@ -1754,27 +1754,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#m0e0" class="md-nav__link">
+  <a href="#m0e0-advent-of-code" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e0
+      m0::e0 - Advent of Code
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e1" class="md-nav__link">
+  <a href="#m0e1a-ray-tracing-in-one-weekend" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e1
+      m0::e1::a - Ray Tracing in One Weekend
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e2" class="md-nav__link">
+  <a href="#m0e1b-learning-to-fly" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e2
+      m0::e1::b - Learning to Fly
     </span>
   </a>
   
@@ -1799,24 +1799,39 @@
 
 
 <h1 id="exercises">👨🏼‍💻 Exercises</h1>
-<h2 id="m0e0">m0::e0</h2>
+<p>These exercises are supposed to get you to write some Rust code yourself. Advent of Code is a good place to start
+for learning the basic syntax and stuff like reading from files. You'll quickly see though that you start focusing
+more and more on the problems themselves instead on Rust. At this point you can learn more about the challenges
+of structure and the borrow checker through doing either m0::e1::a or m0::e1::b. One is more visually inclined,
+wheras the other is more neural network oriented.</p>
+<h2 id="m0e0-advent-of-code">m0::e0 - Advent of Code</h2>
 <p>In order to get a hang of the basic of Rust I recommend doing <a href="https://adventofcode.com/">Advent of Code</a>
-problems until you feel comfortable moving forward.</p>
-<h2 id="m0e1">m0::e1</h2>
-<p>You won't be confronted much with the borrow checker in these small problems. To get better practice structure,
-smart pointers, dynamic dispatch and traits, I recommend moving on to doing <a href="https://raytracing.github.io/books/RayTracingInOneWeekend.html">Ray Tracing in One Weekend</a> in Rust.
-There is a code snippet which shows your image on screen instead of writing it to file in
-<code>m1_memory_hierarchies::code::image_on_screen</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/image_on_screen">online</a>.</p>
+problems until you feel comfortable moving forward. You can give yourself a bigger challenge by rewriting your
+solutions to use iterators whenever possible.</p>
+<h2 id="m0e1a-ray-tracing-in-one-weekend">m0::e1::a - Ray Tracing in One Weekend</h2>
+<p>Doing this exercise will be quite challenging if you don't know how to read C++. To better practice
+structure, smart pointers, dynamic dispatch and traits, I recommend moving on to doing
+<a href="https://raytracing.github.io/books/RayTracingInOneWeekend.html">Ray Tracing in One Weekend</a> in Rust. There is a code snippet which shows your image on screen
+instead of writing it to file in <code>m1_memory_hierarchies::code::image_on_screen</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/image_on_screen">online</a>.</p>
 <p>Once you have completed this part 1 out of 3, I suggest modifying the resulting code in the following ways -</p>
 <ul>
-<li>Remove the use of <code>dyn</code>. (Hint: Use enums)</li>
-<li>Remove the use of smart pointers.
-(Hint: My solution was to use indices and a geometry service provided by dependency injection)</li>
-<li>Parallelize computation of pixels through <code>rayon</code>.</li>
+<li>Remove the use of <code>dyn</code></li>
+<li>Remove the use of smart pointers</li>
+<li>Parallelize computation of pixels through <code>rayon</code></li>
 </ul>
-<h2 id="m0e2">m0::e2</h2>
-<p>If you are more inclined towards neural networks, <a href="https://pwy.io/posts/learning-to-fly-pt1/">this tutorial</a> about neural networks and genetic
-algorithms might be more stimulating.</p>
+<details class="note">
+<summary>Hints</summary>
+<ul>
+<li>You can remove the use of dyn through using enums to represent the material interface</li>
+<li>My solution to remove smart pointers was to use indices and a geometry service provided
+through dependency injection</li>
+<li>Formulate your rendering as a base iterator that calls the inner function with the correct
+pixel indices, then trade .iter() for .par_iter() </li>
+</ul>
+</details>
+<h2 id="m0e1b-learning-to-fly">m0::e1::b - Learning to Fly</h2>
+<p>If you are more inclined towards neural networks, <a href="https://pwy.io/posts/learning-to-fly-pt1/">Learning to Fly</a>, which focuses on neural networks and genetic
+algorithms, might be more stimulating. The code is already in Rust and should be fairly easy to follow.</p>
 
 
 

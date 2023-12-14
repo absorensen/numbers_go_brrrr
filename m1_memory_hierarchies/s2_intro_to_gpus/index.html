@@ -2130,7 +2130,7 @@ You can of course also get a specific version of it, such as <code>wgpu = "0.16.
 code. We'll start off with the basics of the host code and then move on the GPU code. Just enough
 for you to be able to read the following sections and understand what is going on in this entire module,
 as it doesn't go into the finer details of GPU programming, but is centered around a GPU-oriented paradigm.</p>
-<p>The rest of this section will be make use of the code location at <code>m1_memory_hierarchies/code/gpu_add/</code> or
+<p>The rest of this section will be make use of the code location at <code>m1_memory_hierarchies::code::gpu_add</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_add">online</a>.
 Make sure to go and actually read the code. It is full of comments! And they're made just for you!
 If you want to learn more about wgpu you can visit <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</p>
@@ -2152,6 +2152,9 @@ either block on async function calls by using <code>await</code> - such as <code
 you can store what is known as a future. We could set in motion the loading of a number of files, and then once we
 were done and actually genuinely NEEDED to use the files for something, <code>await</code> on the future. The <code>async</code>
 function, when called from a normal function also returns a future, but we can't use <code>.await</code> on it.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="k">pub</span><span class="w"> </span><span class="k">async</span><span class="w"> </span><span class="k">fn</span> <span class="nf">load_four_files</span><span class="p">(</span><span class="n">path_a</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">path_b</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">path_c</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">,</span><span class="w"> </span><span class="n">path_d</span>: <span class="kp">&amp;</span><span class="kt">str</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="p">(</span><span class="n">File</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p">,</span><span class="w"> </span><span class="n">File</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_future_a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load_file_async</span><span class="p">(</span><span class="n">path_a</span><span class="p">);</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">file_future_b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">load_file_async</span><span class="p">(</span><span class="n">path_b</span><span class="p">);</span>
@@ -2166,6 +2169,9 @@ function, when called from a normal function also returns a future, but we can't
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="w">    </span><span class="p">(</span><span class="n">file_a</span><span class="p">,</span><span class="w"> </span><span class="n">file_b</span><span class="p">,</span><span class="w"> </span><span class="n">file_c</span><span class="p">,</span><span class="w"> </span><span class="n">file_d</span><span class="p">)</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Ok, so why do we need <code>async</code> when dealing with the GPU? In some cases, we don't care about synchronization.
 We just want to keep transferring data to the GPU as fast as we can get it, the GPU might output to the display
 or we might get some data transferred back, but if we are doing this in a real-time setting, we might not care
@@ -2260,10 +2266,16 @@ Adding our two vectors, it should be easily verifiable that it is correct.
 <p>When writing GPU programs, you should usually start writing a CPU-based version. Once that works, you have
 something to verify your GPU program against. Often the part of your program that you want to offload to the GPU,
 will have loops. For example, in a vector addition snippet you might have -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">for</span><span class="w"> </span><span class="n">index</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">ouput</span><span class="p">.</span><span class="n">len</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">    </span><span class="n">output</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">input_a</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">input_b</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>When transferring your program to a GPU shader, as a way to get comfortable with thinking about this sort of
 parallelism, you should start with writing a single threaded version on the GPU. You can do this by dispatching
 a single thread <code>cpass.dispatch_workgroups(1, 1, 1);</code>. It WILL be slower than the CPU
@@ -2272,6 +2284,9 @@ done that, and you have verified that it works, mind you, you can start adding, 
 You do that by removing one of the for-loops in your code and replacing it with added dimensionality in your shader
 dispatch. So in your first version of your vector addition shader, it might look like this sketch (don't know if
 it compiles) -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">WGSL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">(</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">global_invocation_id</span><span class="p">)</span><span class="w"> </span><span class="n">global_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span>
@@ -2285,10 +2300,16 @@ it compiles) -</p>
 </span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>When that works, you can begin thinking about how to remove that pesky loop. You do that by removing a dimension
 in your shader, but adding one in your dispatch and then making accomodations in your shader. We can take that
 and transform it by instead dispatching more 1D threads: <code>cpass.dispatch_workgroups(launch_blocks, 1, 1);</code>.
 Then we change the shader to have each thread work on a single element -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">WGSL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">(</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">global_invocation_id</span><span class="p">)</span><span class="w"> </span><span class="n">global_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span>
@@ -2300,6 +2321,9 @@ Then we change the shader to have each thread work on a single element -</p>
 </span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>If there had been more dimensions we could have continued expanding and removing dimensionality. We can continue
 until the third dimension, usually you can launch less threads in the third dimension than in the first two. You
 also have to remember to check whether the thread is outside of the valid range for each dimension. You
@@ -2320,6 +2344,9 @@ Eventually, they all snap into place. All of the pieces fit exactly right.</p>
 <p>Here's a small example, if we for some reason were intent on turning our vector addition shader into
 2D matrix addition, but we were deadset on keeping the thread grid for our dispatch one dimensional we
 could do something like this -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="5:1"><input checked="checked" id="__tabbed_5_1" name="__tabbed_5" type="radio" /><div class="tabbed-labels"><label for="__tabbed_5_1">WGSL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">const</span><span class="w"> </span><span class="n">BLOCK_SIZE</span>: <span class="kt">u32</span> <span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="n">u</span><span class="p">;</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">(</span>
@@ -2338,10 +2365,16 @@ could do something like this -</p>
 </span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Again, not verified/compiled code. But hold on for a second! We have to remember that there are other work groups
 too. We can't necessarily just stride through the single dimension in the same way. We would be reprocessing
 elements that had already been processed by a different work group. What we could do instead would be to step
 along the rows instead.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">WGSL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">(</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="o">@</span><span class="n">builtin</span><span class="p">(</span><span class="n">global_invocation_id</span><span class="p">)</span><span class="w"> </span><span class="n">global_id</span>: <span class="nc">vec3</span><span class="o">&lt;</span><span class="kt">u32</span><span class="o">&gt;</span><span class="p">,</span>
@@ -2359,16 +2392,20 @@ along the rows instead.</p>
 </span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="p">}</span>
 </span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>In other cases, using a stride of the work group size can work as well. In this case, stepping along the rows
 made better sense, but keep thinking in these terms, implement different versions and test them! It's the
 only way to be sure! Once you have made a couple of different versions and done simple timing you can always
 add in a profiler, m4 has got you covered!</p>
 <h2 id="divergence-overlap-and-occupancy">Divergence, Overlap and Occupancy</h2>
-<p>One statement I tried to sweep under the rug in the last section was - "each thread in a work group executes in lock step".
-It is highly desirable for a work group to have each thread executing in lock step. That is each thread is executing the
-same line in your program. If you have branches, like if-statements, some threads might execute path A and some threads
-might execute path B. This will lead to divergence. Divergence will result in the group of threads A executing
-while group of threads B will wait until A is finished, and then executed. Finally, they might join again.</p>
+<p>One statement I tried to sweep under the rug in the last section was - "each thread in a work group executes
+in lock step". It is highly desirable for a work group to have each thread executing in lock step. That is
+each thread is executing the same line in your program. If you have branches, like if-statements, some
+threads might execute path A and some threads might execute path B. This will lead to divergence. Divergence
+will result in the group of threads A executing while group of threads B will wait until A is finished,
+and then executed. Finally, they might join again.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/work_group_divergence.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/work_group_divergence.png" width="700" /></a></p>
 <figcaption>
@@ -2411,6 +2448,9 @@ although it will likely be named something else. It is a barrier ensuring that a
 workgroup will stall and wait until each thread has signalled that it is ready to proceed. This
 is very handy when you are loading data into shared memory for reuse between the threads. A small
 example snippet -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">WGSL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">var</span><span class="o">&lt;</span><span class="n">workgroup</span><span class="o">&gt;</span><span class="w"> </span><span class="n">shared_data</span>: <span class="nc">array</span><span class="o">&lt;</span><span class="kt">f32</span><span class="p">,</span><span class="w"> </span><span class="n">BLOCK_SIZE</span><span class="o">&gt;</span><span class="p">;</span>
 </span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
 </span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="o">@</span><span class="n">compute</span><span class="w"> </span><span class="o">@</span><span class="n">workgroup_size</span><span class="p">(</span><span class="mi">32</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span>
@@ -2440,6 +2480,9 @@ example snippet -</p>
 </span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">        </span><span class="n">workgroupBarrier</span><span class="p">();</span>
 </span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">    </span><span class="p">}</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>As usual, this code isn't very well tested and there might be some cases where it isn't fully functional,
 but you can see the primitives for declaring shared memory, accessing it and synchronizing. When you start coding
 with shared memory, you shouldn't necessarily be surprised that your code becomes a bit slower. If you are running

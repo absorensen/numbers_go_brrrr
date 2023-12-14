@@ -1918,10 +1918,9 @@ realizing one thing...</p>
 <p>Programs are just strings!</p>
 <p>We can decimate all of our neatly written shaders into something called op codes. You start by defining
 all of the data that goes in, you have a few lines of the thread figuring out its own ID and so on.
-Peruse the directory <code>src::op_code_compiler::runner.rs</code> or
-<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/op_code_compiler/runner.rs">online</a>. This is just a toy example, it didn't make
-sense to make the whole thing and I won't be benchmarking it since the results will be the exact same
-as the operator version. Each op code is just a string. Each operator is just a list of op codes.
+Peruse the directory <code>src::op_code_compiler::runner.rs</code> or <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/op_code_compiler/runner.rs">online</a>. This is just a toy example,
+it didn't make sense to make the whole thing and I won't be benchmarking it since the results will be the exact
+same as the operator version. Each op code is just a string. Each operator is just a list of op codes.
 In this op code example we do operator fusion by adding our ReLU op-code to the list.</p>
 <p>This is sort of like ordering a standard cheese burger at a restaurant that ONLY SERVES BURGERS.
 You realize that you want pickles. So you can either order an entirely new cheese burger, the
@@ -1937,14 +1936,26 @@ handled shared memory programming. If we were doing a render graph with a number
 single pixel operations such as tone mapping, changing hues or saturation, we might use op codes
 to merge these several different calls, keeping the data as close to the registers as possible.</p>
 <p>Another thing, often done in graphics is to have various defines in your shader code like</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">GLSL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>#<span class="n">ifdef</span><span class="w"> </span><span class="n">USE_SHARED_MEMORY</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// something with shared memory</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>#<span class="n">endif</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Then if at runtime you find out it would be optimal to use shared memory you can merely append
-a</p>
+a -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">GLSL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>#<span class="n">define</span><span class="w"> </span><span class="n">USE_SHARED_MEMORY</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>at the top of the shader file and then compile. This makes your code less readable, but not as unreadable
 as fully using op codes.</p>
 <h2 id="additional-reading">Additional Reading</h2>
@@ -1974,7 +1985,7 @@ PyTorch compiler are <a href="https://pytorch.org/docs/stable/fx.html">Torch.fx<
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 12, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     

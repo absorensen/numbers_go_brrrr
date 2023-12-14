@@ -1865,10 +1865,16 @@ out. Note that each thread does not block and instead of using <code>.rcv()</cod
 <code>.try_rcv()</code> and handles the case where there wasn't any new message to receive. In the case of no message
 being received it also prints.</p>
 <p>There are three values at the top.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">max_work</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">master_wait_time</span>: <span class="kt">u64</span> <span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">worker_wait_time</span>: <span class="kt">u64</span> <span class="o">=</span><span class="w"> </span><span class="mi">200</span><span class="p">;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <p>Max work is the most amount of work messages will be processed, otherwise the program would run forever.
 <code>master_wait_time</code> is the amount of miliseconds the master thread will wait after sending a new
 work message. The <code>worker_wait_time</code> is the amount of time the processing thread will wait before
@@ -1877,11 +1883,9 @@ attempting to receive another message.</p>
 <p>Now try and adjusting the wait times. How does it run when you reduce <code>worker_wait_time</code>.
 Why do you think that is?</p>
 <h2 id="additional-reading">Additional Reading</h2>
-<p>A longer, very friendly introduction to channels and message passing in Rust can be found
-<a href="https://doc.rust-lang.org/book/ch16-02-message-passing.html">here</a>.</p>
+<p>A longer, very friendly introduction to channels and message passing in Rust can be found <a href="https://doc.rust-lang.org/book/ch16-02-message-passing.html">here</a>.</p>
 <p>This is slightly larger scale, but when running code on multiple compute nodes in an HPC installation,
-the most used method for sharing data between nodes is a standard called
-<a href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI</a>.</p>
+the most used method for sharing data between nodes is a standard called <a href="https://en.wikipedia.org/wiki/Message_Passing_Interface">MPI</a>.</p>
 
 
 
@@ -1904,7 +1908,7 @@ the most used method for sharing data between nodes is a standard called
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     
