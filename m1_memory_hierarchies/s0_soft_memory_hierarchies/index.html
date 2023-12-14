@@ -2615,8 +2615,7 @@ The operating system might keep track of the memory though and clean up once our
 <details class="note">
 <summary>Answer</summary>
 <p>We had two pointers and forgot to <code>free</code> using the base pointer, <code>base_integer_array</code>.
-This is <a href="https://en.wikipedia.org/wiki/Undefined_behavior">undefined behavior</a>,
-which means that there are literally no definitions of what will happen.
+This is <a href="https://en.wikipedia.org/wiki/Undefined_behavior">undefined behavior</a>, which means that there are literally no definitions of what will happen.
 It is really bad. What we should have done was this.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="12:1"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">C</label></div>
 <div class="tabbed-content">
