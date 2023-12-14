@@ -2718,9 +2718,7 @@ In general, using variables from the stack will be much faster than using variab
 from the heap. But we also can't return pointers to a stack variable as it might disappear
 or be overwritten at any moment.</p>
 <p>The heap, in this context, is not the actual data structure known as a heap.
-Instead it is a bunch of unstructured memory living in the
-<a href="https://courses.grainger.illinois.edu/cs225/fa2021/resources/stack-heap/">same reserved space</a>
-as the stack.</p>
+Instead it is a bunch of unstructured memory living in the <a href="https://courses.grainger.illinois.edu/cs225/fa2021/resources/stack-heap/">same reserved space</a> as the stack.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/stack_and_heap.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/stack_and_heap.png" width="500" /></a></p>
 <figcaption>
@@ -3145,9 +3143,7 @@ the object on the heap that it is pointing to is deallocated automatically.  </p
 </span></code></pre></div>
 <p>Next up are the shared pointers. They are essentially what Python is using in the example
 from earlier. In C++ it is called <a href="https://en.cppreference.com/w/cpp/memory/shared_ptr">shared_ptr<T></a>,
-in Rust it comes in two versions;
-<a href="https://doc.rust-lang.org/std/rc/index.html">Rc<T></a> and
-<a href="https://doc.rust-lang.org/std/sync/struct.Arc.html">Arc<T></a>.
+in Rust it comes in two versions; <a href="https://doc.rust-lang.org/std/rc/index.html">Rc<T></a> and <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html">Arc<T></a>.
 <code>Rc</code> stands for reference counted. It is only made for single threaded usage as the
 reference count itself is susceptible to a data race, which you may recall, is several
 reads and/or writes to the same value. This could result in the count of live references
@@ -3181,8 +3177,8 @@ being incorrect and the underlying value never being deallocated.</p>
 </span></code></pre></div>
 <p><code>Arc&lt;T&gt;</code> is here to solve exactly that issue.
 It uses atomic reference counting. Atomics will be introduced in the
-<a href="https://absorensen.github.io/the-guide/m2_concurrency/">parallelism</a>
-module. But in this context, it means that the reference counting is thread-safe, but a bit slower.</p>
+<a href="https://absorensen.github.io/the-guide/m2_concurrency/">concurrency</a> module. But in this context, it means that the reference counting is
+thread-safe, but a bit slower.</p>
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-42-1"><a id="__codelineno-42-1" name="__codelineno-42-1" href="#__codelineno-42-1"></a><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="n">sync</span>::<span class="n">Arc</span><span class="p">;</span>
 </span><span id="__span-42-2"><a id="__codelineno-42-2" name="__codelineno-42-2" href="#__codelineno-42-2"></a>
 </span><span id="__span-42-3"><a id="__codelineno-42-3" name="__codelineno-42-3" href="#__codelineno-42-3"></a><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
@@ -3218,8 +3214,7 @@ when there are multiple references interconnected.</p>
 <p>Go on.</p>
 <p>I'll wait.</p>
 <p>To solve this issue, the weak pointer comes to the rescue. It is along for the party,
-but doesn't actually keep things alive.
-In Rust it is called <a href="https://doc.rust-lang.org/std/rc/struct.Weak.html">Weak<T></a>.
+but doesn't actually keep things alive. In Rust it is called <a href="https://doc.rust-lang.org/std/rc/struct.Weak.html">Weak<T></a>.
 It can reference the same underlying object as the shared pointer it comes from,
 but does not contribute to the live reference count. As such, it can allow you
 to have cyclical references, without causing a memory leak.
@@ -3237,10 +3232,8 @@ both object A and object B can safely be deallocated.</p>
 </span><span id="__span-43-9"><a id="__codelineno-43-9" name="__codelineno-43-9" href="#__codelineno-43-9"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span>::<span class="n">weak_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 1!</span>
 </span><span id="__span-43-10"><a id="__codelineno-43-10" name="__codelineno-43-10" href="#__codelineno-43-10"></a><span class="p">}</span>
 </span></code></pre></div>
-<p>For more information on smart pointers in Rust, there is a nice example
-<a href="https://doc.rust-lang.org/book/ch15-00-smart-pointers.html">here</a>
-and another example about
-<a href="https://doc.rust-lang.org/book/ch15-06-reference-cycles.html">reference cycles</a>,
+<p>For more information on smart pointers in Rust, there is a nice example <a href="https://doc.rust-lang.org/book/ch15-00-smart-pointers.html">here</a>
+and another example about <a href="https://doc.rust-lang.org/book/ch15-06-reference-cycles.html">reference cycles</a>,
 which is what we needed weak pointers for.</p>
 <h2 id="the-vector-reloaded">The Vector Reloaded</h2>
 <p>This isn't meant to be a one-to-one representation of how tensors work in <code>numpy</code> or
@@ -3276,9 +3269,7 @@ Matrix multiplication with the second matrix transposed.
 </figcaption>
 </figure>
 <p>Now, lets try out a simple example! Checkout the code at
-<code>m1_memory_hierarchies/code/strided_access_and_transposition</code> or check it out
-<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/strided_access_and_transposition/src/main.rs">online</a>
-.</p>
+<code>m1_memory_hierarchies/code/strided_access_and_transposition</code> or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/strided_access_and_transposition/src/main.rs">online</a>.</p>
 <p>Interestingly, when running the code there doesn't seem to be much of a difference until
 the matrix sizes become quite big. Why do you think that is?</p>
 <figure>
@@ -3332,9 +3323,8 @@ order.</p>
 Offset some of the cost of permutations, by just permuting rows.
 </figcaption>
 </figure>
-<p>Now, lets try out a simple example! Checkout the code at
-<code>m1_memory_hierarchies/code/permuted_arrays</code> or check it out
-<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/permuted_arrays/src/main.rs">online</a></p>
+<p>Now, lets try out a simple example! Checkout the code at <code>m1_memory_hierarchies/code/permuted_arrays</code>
+or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/permuted_arrays/src/main.rs">online</a></p>
 <figure>
 <p><a class="glightbox" href="../../figures/permuted_arrays_benchmark_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_arrays_benchmark_0.png" width="500" /></a></p>
 <figcaption>
@@ -3413,9 +3403,8 @@ to the end of the array. Otherwise, we can't get the length of the last row.</p>
 As we compacted the data, we can keep track of the starting index of each row in an auxiliary array.
 </figcaption>
 </figure>
-<p>Now for a simple performance benchmark. Checkout the code at
-<code>m1_memory_hierarchies/code/jagged_arrays</code> or check it out
-<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/jagged_arrays/src/main.rs">online</a></p>
+<p>Now for a simple performance benchmark. Checkout the code at <code>m1_memory_hierarchies/code/jagged_arrays</code>
+or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/jagged_arrays/src/main.rs">online</a>.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/jagged_arrays_benchmark_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_arrays_benchmark_0.png" width="500" /></a></p>
 <figcaption>
@@ -3506,9 +3495,8 @@ neural network with random access, you can just create a new string "Linear0" an
 that as a key for the first linear layer and its contents, and then "ReLU0", "Linear1",
 "ReLU1", "Softmax0" and so on. If possible, it is more efficient to use small types as
 your key. Such as an integer.</p>
-<p>Now for a simple performance benchmark. Checkout the code at
-<code>m1_memory_hierarchies/code/hash_maps</code> or check it out
-<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/hash_maps/src/main.rs">online</a></p>
+<p>Now for a simple performance benchmark. Checkout the code at <code>m1_memory_hierarchies/code/hash_maps</code>
+or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/hash_maps/src/main.rs">online</a>.</p>
 <p>As you can see the hash map using integers clearly outperforms Strings. To be fair, every insertion in the
 string based map, requires a clone of the original string, the read and update only requires a reference.
 But we can expect just about a factor 2 performance difference by using the simpler type with the simpler
@@ -3695,9 +3683,7 @@ present in this otherwise dense structure, by having a
 means of representing an empty value, but the greater the sparseness, the more inefficient this <em>linearized</em>
 tree structure becomes. The implicit/predictable structure makes the linearized treeqv easily serializeable
 (writing it to a file on disk) or transferable to and useable on GPU's.</p>
-<p>A better explanation of <a href="https://github.com/nrc/r4cppp/blob/master/graphs/README.md">graphs in Rust</a><br />
-and graphs in Rust using
-<a href="http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/">indices</a>  </p>
+<p>A better explanation of <a href="https://github.com/nrc/r4cppp/blob/master/graphs/README.md">graphs in Rust</a> and graphs in Rust using <a href="http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/">indices</a>.</p>
 <h3 id="octrees">🧬 Octrees</h3>
 <p>Octrees are elevant for all of the specializations that aren't deep learning, especially <em>computer graphics</em>.
 But it might be relevant for deep learning too if you do stuff related to geometry or spatial data.</p>
@@ -3760,27 +3746,25 @@ just been cleaned up referenced anew.</p>
 <p>Garbage collectors aren't really that relevant to the rest of the guide,
 but if you are coming from Python, C#, Go or Java this section will use some of the concepts
 previously introduced on this page to give you a quick perspective to how garbage collectors work.
-This post takes a look at
-<a href="https://stackify.com/python-garbage-collection/">how python handles garbage collection</a>
-although, a bit light on the details for the generational garbage collection. In the following
+This post takes a look at <a href="https://stackify.com/python-garbage-collection/">how python handles garbage collection</a> although, a bit light on the
+details for the generational garbage collection. In the following
 sections I will introduce three different types of garbage collectors, and finally
 set you up with a few tricks for working with the garbage collector.</p>
 <h3 id="reference-counted-garbage-collectors">Reference Counted Garbage Collectors</h3>
-<p><a href="https://en.wikipedia.org/wiki/Reference_counting">Reference counting garbage collection</a> is one of the
-simplest forms of dealing with garbage collection. Imagine that there is an <code>Rc&lt;T&gt;</code>, like we saw earlier,
-wrapped around every heap-allocated variable. Once the amount of references reaches 0,
-the object is deallocated. Simple, can be handled locally, scales well, doesn't burden the
-entire system with a lockdown to clean up, which makes it good for real-time systems which need
-to be responsive at all times and not have noticeable freezes. What makes it not quite usable is,
-that it is up to the programmer to not create cyclical references. Node A and Node B cannot refer
-to each other without causing a memory leak, despite not being referenced by
+<p><a href="https://en.wikipedia.org/wiki/Reference_counting">Reference counting garbage collection</a> is one of the simplest forms of dealing with garbage collection.
+Imagine that there is an <code>Rc&lt;T&gt;</code>, like we saw earlier, wrapped around every heap-allocated variable.
+Once the amount of references reaches 0, the object is deallocated. Simple, can be handled locally,
+scales well, doesn't burden the entire system with a lockdown to clean up, which makes it good for
+real-time systems which need to be responsive at all times and not have noticeable freezes. What
+makes it not quite usable is, that it is up to the programmer to not create cyclical references.
+Node A and Node B cannot refer to each other without causing a memory leak, despite not being referenced by
 anything else. They cannot be cleaned, unless one of the references is a weak reference. Just like the
 <code>Weak&lt;T&gt;</code> type we saw in the smart pointer section. But it is up to the programmer to make sure that
 the weak references are used correctly throughout the system, which isn't necessarily non-trivial.</p>
 <h3 id="tracing-garbage-collectors">Tracing Garbage Collectors</h3>
-<p><a href="https://en.wikipedia.org/wiki/Tracing_garbage_collection">Tracing garbage collection</a> on the other hand
-follows every root, this could for example be the variable holding the pointer to the root node of your graph,
-if there even is such a thing, and then following every pointer making sure to mark all the objects it finds along
+<p><a href="https://en.wikipedia.org/wiki/Tracing_garbage_collection">Tracing garbage collection</a> on the other hand follows every root, this could for example be the
+variable holding the pointer to the root node of your graph, if there even is such a thing,
+and then following every pointer making sure to mark all the objects it finds along
 the way as not being ready for clean-up. This does however require that all the memory is frozen. There can't all
 of a sudden be new references to some of the objects or some of them be removed. Once the marking process has
 completed, all of the objects are traversed and every object not marked is cleaned up.</p>
@@ -3789,8 +3773,7 @@ objects start marked as white, and are then moved to grey, and then finally to b
 are possibly accessible from roots and are candidates for collection. Gray objects are definitely accessible
 from roots and might have pointers to objects marked in white. Black marked objects are definitely accessible
 from roots and definitely do not have pointers to the white set.</p>
-<p>You can read more about tri-color marking
-<a href="https://bwoff.medium.com/understanding-gos-garbage-collection-415a19cc485c">here</a>.</p>
+<p>You can read more about tri-color marking <a href="https://bwoff.medium.com/understanding-gos-garbage-collection-415a19cc485c">here</a>.</p>
 <h3 id="generational-garbage-collection">Generational Garbage Collection</h3>
 <p>Generational garbage collection is a different technique which sequesters allocated objects into different memory regions.
 These regions, usually 3, are based on the age of the object. If an object survives a garbage collection pass it
@@ -3798,9 +3781,7 @@ is promoted from one region to the next, older region. The youngest region will 
 than the two older regions and it is estimated that most garbage collection will happen in the youngest region.
 This strategy might not find all unreachable objects, however, and can be supplemented by an occasional
 expensive full mark-and-sweep to ensure that no memory leaks go undetected for too long.
-For more on
-<a href="https://en.wikipedia.org/wiki/Tracing_garbage_collection#Generational_GC_(ephemeral_GC)">generational garbage collection</a>
-.</p>
+For more on <a href="https://en.wikipedia.org/wiki/Tracing_garbage_collection#Generational_GC_(ephemeral_GC)">generational garbage collection</a>.</p>
 <h2 id="virtualized-memory-hierarchy">Virtualized Memory Hierarchy</h2>
 <p>A simplified definition of virtualized memory is a single address space that doesn't correspond 1-to-1 to physical
 memory. As we have seen earlier in jagged arrays and permuted arrays, if we have all of our data in memory
@@ -3849,9 +3830,7 @@ optimize our virtualized data set. We could give a priority to each of the sampl
 sampled last and in which block they were located, on which physical memory they were located (the cloud is just
 someone else's computer). Optimizing these types of systems can be quite a fun algorithms and systems optimization
 process. For more on working with data outside of your computers memory, like on disk, see the first
-three weeks of
-<a href="https://www2.compute.dtu.dk/courses/02289/2022/">Algorithmic Techniques for Modern Data Models</a> by Inge Li Gørtz,
-Eva Rotenberg and Philip Bille.</p>
+three weeks of <a href="https://www2.compute.dtu.dk/courses/02289/2022/">Algorithmic Techniques for Modern Data Models</a>.</p>
 <h3 id="virtualized-rendering">🧬 Virtualized Rendering</h3>
 <p>Another use of this is the rendering of data sets too large to fit in a users computer. You preprocess
 all of the data you need to visualize into a tree structure and then just keep the tree in memory at all times.
