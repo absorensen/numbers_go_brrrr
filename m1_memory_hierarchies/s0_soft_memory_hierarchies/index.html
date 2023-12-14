@@ -3248,14 +3248,14 @@ which is what we needed weak pointers for.</p>
 one dimensional memory as we learned about earlier, we can look at a few other fun
 concepts in different ways to arrange tensors.</p>
 <h3 id="strided-access-and-transposition">Strided Access and Transposition</h3>
-<p>One of the most used operations is the matrix-matrix multiplication.
+<p>One of the most used operations is the matrix multiplication.
 If we assume two 2D matrices as input and output into another 2D matrix,
-one of those input matrices will be accessed with a stride access in
+one of those input matrices will be accessed with a strided access in
 a column major form.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/mat_mul_strided_access.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/mat_mul_strided_access.png" width="500" /></a></p>
 <figcaption>
-Matrix-matrix multiplication. The numbers indicate access order.
+Matrix multiplication. The numbers indicate access order.
 </figcaption>
 </figure>
 <p>There is a solution for this. We can just transpose the second input matrix.
@@ -3272,7 +3272,7 @@ the time and effort.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/mat_mul_strided_access_transposed.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/mat_mul_strided_access_transposed.png" width="500" /></a></p>
 <figcaption>
-Matrix-matrix multiplication with the second matrix transposed.
+Matrix multiplication with the second matrix transposed.
 </figcaption>
 </figure>
 <p>Now, lets try out a simple example! Checkout the code at
@@ -3894,7 +3894,7 @@ the memory hierarchy. For even more <a href="http://csapp.cs.cmu.edu/2e/ch9-prev
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 12, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
   </span>
 
     
