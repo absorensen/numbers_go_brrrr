@@ -653,9 +653,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#threads-warps-and-blocks" class="md-nav__link">
+  <a href="#threads-work-groups-and-blocks" class="md-nav__link">
     <span class="md-ellipsis">
-      Threads, Warps and Blocks
+      Threads, Work Groups and Blocks
     </span>
   </a>
   
@@ -1860,9 +1860,9 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#threads-warps-and-blocks" class="md-nav__link">
+  <a href="#threads-work-groups-and-blocks" class="md-nav__link">
     <span class="md-ellipsis">
-      Threads, Warps and Blocks
+      Threads, Work Groups and Blocks
     </span>
   </a>
   
@@ -1973,8 +1973,6 @@
 
 
 <h1 id="intro-to-gpus">Intro to GPU's</h1>
-<p>Now, I'll just give you a quick introduction to GPU's as the next section is about immediate mode
-GPU computation.</p>
 <p>GPU's are fairly ubiquitous at this point. They started off as purely for graphics, but
 around 2008, enough researchers had tinkered with workarounds to use them for general
 computing, that Nvidia put out CUDA, opening up GPU's for more general usage. GPU's still do lots
@@ -1983,8 +1981,8 @@ Metal and DirectX have opened up. With modern graphics API's you don't even nece
 to use them. You can just use the pure compute capabilities. This guide won't get into graphics, except
 for the graphics specialization.</p>
 <p>Ok, so anyways, GPU's are pretty hot stuff right now as the software support becomes deeper and deeper,
-the hardware increasingly has support for neural network specific operations and ChatGPT has
-increased the hype and demand for AI to exasperating levels.</p>
+the hardware increasingly has hardware support for specific operations in deep learning, ray tracing and
+optical flow, and deep learning has hit the mainstream.</p>
 <p>You can think of the GPU as an expansion of the memory hierarchies we have been examining earlier.
 It is not running in lock step, and you have to program more things explicitly, while also changing
 your mindset about how programming works. Memory transfers to and from the CPU and GPU will be
@@ -2029,7 +2027,7 @@ area and do it for you. If you do it yourself and optimize this process you are 
 in transfer speed. The same thing happens on the GPU, a staging area visible from the CPU is where the transferred
 memory is stored, and then moved from the controlled area to the rest of GPU memory, where the GPU is free to do
 what it wants with it, without interruptions and guarantees.</p>
-<h3 id="threads-warps-and-blocks">Threads, Warps and Blocks</h3>
+<h3 id="threads-work-groups-and-blocks">Threads, Work Groups and Blocks</h3>
 <p>Threads are sort of like a CPU core, except a CPU core is a physical entity, whereas a thread is more like
 a set of variables (think back to the stack and function calls) which is following its own set of instructions.
 Thread 1 could be running program A with various states in registers and local variables X. It makes a call
@@ -2041,13 +2039,13 @@ just focus on you having called a single operation. In that case all of your thr
 the same program. They might however, go down different branches (think if-statements!), but this is more expensive
 on the GPU than the CPU, and should in general be avoided as much as possible. Each thread will have its own local
 variables. Threads on a GPU are launched in groups. Depending on the platform and the API they will be
-called something different. In wgpu, which is what we will be using, it is called a workgroup, while
-in CUDA terminology it is called a warp. On Nvidia GPU's it will be at most 32 threads per workgroup
+called something different. In wgpu, which is what we will be using, it is called a work group, while
+in CUDA terminology it is called a warp. On Nvidia GPUs it will be at most 32 threads per work group
 and on AMD it will be at most 64 threads. The "at most" might seem a bit weird, but there is something called
 register pressure. All of the execution units that can run those 32 or 64 threads at the same time, share
 a lot of the same physical memory, so if your program uses lots of memory, you might have to decrease
 the amount of threads to have enough memory to run your program.</p>
-<p>Anyways. Once you decided to write a matrix-matrix multiplication shader, you need to figure out which threads
+<p>Anyways. Once you decided to write a matrix multiplication shader, you need to figure out which threads
 are gonna go where. In that case, I would begin by launching 1 thread for every output element.</p>
 <p>When programming for a GPU you have some maximum amount of threads you can launch. This is usually
 defined in three dimensions. Yes! You can define these threads in three dimensions. It doesn't actually
@@ -2528,7 +2526,7 @@ instead followed the gathering paradigm, each thread would take the point of vie
 They would each do lots of reads from both the input signal and the filter weights, they would do local
 accumulation in a register, and each have a single write to memory with no overlap. As you might remember, you
 should always prefer more reads than writes. Reads are very parallelizable, writes usually require synchronization.</p>
-<p>This can be extended to lots of different algorithms. For matrix-matrix multiplication, it's recommended to use
+<p>This can be extended to lots of different algorithms. For matrix multiplication, it's recommended to use
 gathering, from the point of view of the output element for each thread. For some more material on
 scattering and gathering, there is a paper on it
 <a href="https://cse.hkust.edu.hk/catalac/papers/scatter_sc07.pdf">from '07</a>.</p>
@@ -2562,7 +2560,7 @@ used tutorial is <a href="https://sotrh.github.io/learn-wgpu/">Learn Wgpu</a>.</
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2023</span>
   </span>
 
     

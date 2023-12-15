@@ -1782,22 +1782,22 @@
 
 <h1 id="data-parallelism">Data Parallelism</h1>
 <p>Now let's get into working with parallelism, I won't start from basic to advanced, but from
-easiest to most difficult to use. The absolute easiest to use, in Rust at least, is data parallelism.
-<a href="https://en.wikipedia.org/wiki/Data_parallelism">Data parallelism</a> partitions the data into segments
-for each thread. The way we are going to look at it in Rust is very simple as it is a trivial extension
-of the idiomatic way of writing Rust, as in so trivial you need to import a library and prefix your iterator
-with <code>par_</code>. The library will take care of the rest for you.  However, as we'll see later, this isn't
-necessarily the fastest, but if we think about the amount of parallelism available in our system and
-the nature of our data, we can do something very very simple and easy to make data parallelism the fastest
-of the easy methods of parallelism. Using data parallelism requires that either there is no overlap between
-your data elements, or that you make your input read-only and each thread can output to its own segment
-of an output collection.</p>
+easiest to most difficult to use. The absolute easiest to use, in Rust at least, is data parallelism
+through iterators. This will sequence of methods, concluding in <code>m2::s3</code>, will show you how formulating your
+problem as an iterator with no interdependence between the iterations can give you a nice CPU-based parallel
+speedup by changing a term or two.</p>
+<p><a href="https://en.wikipedia.org/wiki/Data_parallelism">Data parallelism</a> partitions the data into segments for each thread. The way we are going to look at it
+in Rust is very simple as it is a trivial extension of the idiomatic way of writing Rust,
+as in so trivial you need to import a library and prefix your iterator with <code>par_</code>. The library will
+take care of the rest for you. However, as we'll see later, this isn't necessarily the fastest, but if we
+think about the amount of parallelism available in our system and the nature of our data, we can do
+something very very simple and easy to make data parallelism the fastest of the easy methods of
+parallelism. Using data parallelism requires that either there is no overlap between your data elements,
+or that you make your input read-only and each thread can output to its own segment of an output collection.</p>
 <p>The next sections will be heavily inspired by the book "Programming Rust"'s multiple implementations of
-<a href="https://github.com/ProgrammingRust/mandelbrot/">Mandelbrot</a> image generation.
-If you don't know about the Mandelbrot image, you can see what that's all about
-<a href="https://www.co-pylit.org/courses/cosc1337/lectures/17-Complex-Numbers/02-mandelbrot-math.html">here</a>!
-Ok, so I will start off talking about the parallel part of things. First off, lets look at
-<a href="https://github.com/rayon-rs/rayon">Rayon</a>, which is the easiest way of doing parallelism in Rust.</p>
+<a href="https://github.com/ProgrammingRust/mandelbrot/">Mandelbrot</a> image generation. If you don't know about the Mandelbrot image, you can see what that's
+all about <a href="https://www.co-pylit.org/courses/cosc1337/lectures/17-Complex-Numbers/02-mandelbrot-math.html">here</a>! Ok, so I will start off talking about the parallel part of things. First off,
+lets look at <a href="https://github.com/rayon-rs/rayon">Rayon</a>, which is the easiest way of doing parallelism in Rust.</p>
 <p>To use Rayon, we just have to formulate our computations as iterators. Under the hood Rayon divvies up the work
 into chunks and distributes it to a fitting amount of threads. It also does something called work stealing where if
 one thread is done with its work sooner it gets work from one of the other threads. This is really good
@@ -1805,8 +1805,7 @@ for very uneven workloads like generating Mandelbrot images or path tracing. Aga
 way of doing parallelism in Rust, both because it is such a small change from idiomatic Rust (using iterators)
 and the cognitive load, if there is no communication between threads, is so very small.</p>
 <h2 id="a-parallel-iterator-benchmark">A Parallel Iterator Benchmark</h2>
-<p>You can find the code for this section in <code>m2_concurrency::code::data_parallelism</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/data_parallelism">online</a>.</p>
+<p>You can find the code for this section in <code>m2_concurrency::code::data_parallelism</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/data_parallelism">online</a>.</p>
 <p>First we define our data, how many elements we want, and how many iterations we will iterate through
 the data to do our benchmarks.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Rust</label></div>
@@ -1896,16 +1895,13 @@ it is likely that the performance gain from Rayon would increase. Personally, I 
 a path tracer, starting with a range of all the pixels and then having Rayon distribute the workload of
 path tracing every pixel. In that case we have a VERY complex workload and I saw an almost linear scaling
 compared to the amount of threads available. I wouldn't recommend it, but if you want to see a larger system
-you can check it out <a href="https://github.com/absorensen/raytracing_in_rust">here</a>. The parallelization can be found
-in <code>render_pixel()</code>
-<a href="https://github.com/absorensen/raytracing_in_rust/blob/main/src/render/integrator.rs">here</a>
-and the <code>render()</code> <a href="https://github.com/absorensen/raytracing_in_rust/blob/main/src/lib.rs">here</a>.</p>
+you can check it out <a href="https://github.com/absorensen/raytracing_in_rust">here</a>. The parallelization can be found in <code>render_pixel()</code> <a href="https://github.com/absorensen/raytracing_in_rust/blob/main/src/render/integrator.rs">here</a> and the
+<code>render()</code> <a href="https://github.com/absorensen/raytracing_in_rust/blob/main/src/lib.rs">here</a>.</p>
 <p>So, now that we can conclude that Rayon can be really good and easy to use for some things, let's move on
 to more explicitly define our own parallel system with, perhaps, longer running threads.</p>
 <hr />
 <h2 id="examples-with-rayon">Examples with Rayon</h2>
-<p>You can find the code for this section in <code>m2_concurrency::code::data_parallelism</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/data_parallelism">online</a>.</p>
+<p>You can find the code for this section in <code>m2_concurrency::code::data_parallelism</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/data_parallelism">online</a>.</p>
 <p>Ok, so I made two additional examples. There's lots of different adaptors for iterators and I'll just show two.
 <code>.filter()</code> and <code>.window()</code>. If you go back to the file from earlier and change the bool in the
 main function to <code>true</code>, it should now run these two benchmarks. First off let's look at the filter
@@ -2040,7 +2036,7 @@ space for a result. If we preallocated an output vector, we might get an even gr
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2023</span>
   </span>
 
     

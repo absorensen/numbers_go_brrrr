@@ -1818,16 +1818,18 @@
 
 <h1 id="building-a-computational-graph-compiler">Building a Computational Graph Compiler</h1>
 <p>Ok, so we are almost done with this module. Let's put it all together and execute the graphs,
-except I have three more variations to explain before I present the benchmark graph.</p>
-<p>Compiling the shaders for each operator is actually quite expensive, so I put a flag on the GPU graph
-runner which if <code>true</code> will cache all of the compiled shaders for reuse later.</p>
-<p>Next up, we have the fused variant. This is our own little mini-compiler. This one is for both the CPU
-and the GPU graph runners. If <code>true</code> the graph runners will replace any instance of
-<code>Linear/ReLU/Softmax</code> or <code>Linear/ReLU</code> with a fused version. But as softmax can only ever
-be the final operation and a ReLU the one before the softmax, and thus there will always be at
-most a single instance of a fused <code>Linear/ReLU/Softmax</code> operator, we will mostly see the
-effect of <code>Linear/ReLU</code> fused operators. Remember, that for a network of depth N we have
-N - 2 operators that are randomly either a linear or ReLU operator.</p>
+except I have three more variations to explain before I present the benchmark plots. This is where everything
+will pay off and we can see the performance improvements we get from formulating programs as graphs and
+optimize them.</p>
+<p>Compiling the shaders for each operator is actually quite expensive and not something we need to do every time
+we launch a GPU program, so I put a flag on the GPU graph runner which if <code>true</code> will cache all of the
+compiled shaders for reuse later. The compiled shaders are stored in a hash map.</p>
+<p>Next up, we have the fused variant. This one is for both the CPU and the GPU graph runners.
+If <code>true</code> the graph runners will replace any instance of <code>Linear/ReLU/Softmax</code> or <code>Linear/ReLU</code>
+with a fused version. Softmax can only ever be the final operation and a ReLU the one before the softmax,
+and thus there will always be at most a single instance of a fused <code>Linear/ReLU/Softmax</code> operator,
+we will mostly see the effect of <code>Linear/ReLU</code> fused operators. Remember, that for a network of depth N
+we have N - 2 operators that are randomly either a linear or ReLU operator.</p>
 <p>Finally, there is the graph loop variant. This variant is not just creating a computational graph, but
 moves the loop from the measuring function closer into the graph runner itself. One thing to note though
 is that while we do cut down on some transfers, the implementation is still suboptimal. I will elaborate
@@ -1869,12 +1871,12 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
 <p>As we can see from the benchmarks, if you have small enough matrices, it can at some point be more efficient to just
-use the CPU. But the graph running in a loop seems to work to be better over all. If you were a machine learning
+use the CPU. But the graph running in a loop seems to be better overall. If you were a machine learning
 researcher, these graphs are sort of an overview of why you should use a system that formulates a computational
 graph, and why you should use optimization on that graph if it is available. The difference in performance you pay
 for. Either with your time or your budget. So if you use something like PyTorch, do be sure to optimize, and be
-sure to check whether the <code>torch.compile()</code> function works for your setup. Next up is the parallelism module
-where you will be introduced, very superficially, to a couple of different concepts in parallelism. Hopefully,
+sure to check whether the <code>torch.compile()</code> function works for your setup. Next up is the concurrency module
+where you will be introduced, very superficially, to a couple of different concepts in concurrency. Hopefully,
 this will help you to understand stuff like model distributed parallelism and data distributed parallelism.</p>
 <hr />
 <h2 id="seeing-the-memory-hierarchy">Seeing the Memory Hierarchy</h2>
@@ -1985,7 +1987,7 @@ PyTorch compiler are <a href="https://pytorch.org/docs/stable/fx.html">Torch.fx<
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2023</span>
   </span>
 
     

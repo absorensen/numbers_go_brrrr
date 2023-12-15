@@ -1817,6 +1817,8 @@
 
 
 <h1 id="threads">Threads</h1>
+<p>Now I will introduce how to explicitly define a thread and give it some work to do. This can be very good for
+workloads which are long running and data independent.</p>
 <p>This section is somewhat based on <a href="https://doc.rust-lang.org/book/ch16-00-concurrency.html">The Book</a>.
 In the last section we looked at what a parallelization library like Rayon can do. Under the hood, it does
 quite a lot of stuff. It subdivides a collection, in the examples I showed you, these collections were all
@@ -1863,9 +1865,9 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
 <p>This is all over the place. Two things to note - the main thread, despite not printing until it has spawned
-all of the other threads, prints before some of them. Also, we don't have a handle to any of the threads after spawning
-them. Thus we don't have any means of synchronized execution or anything like that. The threads might still be alive
-when the main thread is done executing.</p>
+all of the other threads, prints before some of them. Also, we don't have a handle to any of the threads
+after spawning them. Thus we don't have any means of synchronized execution or anything like that.
+The threads might still be alive when the main thread is done executing.</p>
 <h2 id="joining-wishing-waiting">Joining, Wishing, Waiting</h2>
 <p>Another thing we could do, is to hold on to each thread handle. That would allow us to make sure that
 all threads were done before exiting. Go to the function <code>basic_threading_with_termination</code> and see how that can
@@ -1975,7 +1977,7 @@ a number of threads is more free to optimize however it wants.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2023</span>
   </span>
 
     

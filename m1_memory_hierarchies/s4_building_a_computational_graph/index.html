@@ -1799,14 +1799,15 @@
 
 
 <h1 id="building-a-computational-graph">Building a Computational Graph</h1>
-<p>Ok, so now we have the basic building blocks ready. We also have a very simplifying set of constraints. This
-allows us to just represent this graph as a straight line. So we can just represent our graph as a
-series of nodes in a list. This list needs to be runnable on both the CPU and the GPU, so we'll look
-at how we can make a CPU graph runner and a GPU graph runner which can interpret the same list of
-commands and still work just fine. First we are going to do this on the CPU, then the GPU. Then
-we are going to run the GPU graph in a loop instead of reconstructing it with every iteration.
-This also the part where we really start to let loose, creating graphs of different sizes,
-creating arbitrary permutations of linear and ReLU nodes and seeing what the benchmarks can show us.</p>
+<p>Ok, so now we have the basic building blocks ready. I have introduced what computational graphs are, we have
+taken a quick look at what GPU's are and we also have a very simplifying set of constraints.
+Given our constraints we can represent our graph as a series of nodes in a list. This list needs to be
+runnable on both the CPU and the GPU, so we'll look at how we can make a CPU graph runner and a GPU
+graph runner which can interpret the same list of commands and still work just fine. First we are
+going to do this on the CPU, then the GPU. Then we are going to run the GPU graph in a loop instead
+of reconstructing it every iteration. This also the part where we really start to let loose, creating
+graphs of different sizes, creating arbitrary permutations of linear and ReLU nodes and seeing what
+the benchmarks can show us.</p>
 <h2 id="building-the-cpu-graph">Building the CPU Graph</h2>
 <p>The CPU version of the computational graph is found in <code>src::graph::nodes.rs</code>,
 <code>src::graph::graph_runner.rs</code>, <code>src::graph::graph_validation.rs</code> and
@@ -1983,7 +1984,7 @@ the incorrectness is confined to as small a pocket of your system as possible.</
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2023</span>
   </span>
 
     

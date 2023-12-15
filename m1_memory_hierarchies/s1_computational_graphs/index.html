@@ -1937,13 +1937,18 @@
 
 
 <h1 id="computational-graphs">Computational Graphs</h1>
-<p>Conveying the importance of computational graphs to people who were probably using Python to
-program neural networks was the motivation for doing this whole thing in the first place.
-So now let's get to business.</p>
-<p>Computational graphs are more or less a way to communicate the flow of your program.
-It can allow a library or a framework to keep data at various levels of the memory hierarchy.
-It can allow it to check that all of the dimensions fit for the data,
-it can make assumptions about fusing nodes (combining them), remove redundancies and unused elements.  </p>
+<p>Formulating your program, or merely pieces thereof, as a graph allows your program, or a library you are using,
+to analyze and optimize your program. A graph represents a flow of data and control, which are types of the
+limitations we so crave to optimize our programs. Formulating programs as graphs also allows us to check the
+validity of our program before running it. It can be confirmed that all dimensions fit, that one computation
+will run before the result is needed, it can be seen ahead of time that some nodes can be fused (combined)
+into a single node in order to remove redundancies. It can also be checked whether all results are used. If a
+result is never used we can eliminate all computations that are exclusively used to generate that result.</p>
+<p>Few languages have direct support for computational graphs as they often require domain-specific knowledge to
+analyze and create. Again, limitations are a good thing. Specificity is a good thing. A computational graph
+which has been created specifically for a domain, such as graphics or machine learning, can make assumptions
+and optimizations that a generalized version might not be able to. They will also likely be significantly less
+complex to code and use if they only cater to a single case.</p>
 <p>Let's take a look at this defined network from PyTorch's own <a href="https://pytorch.org/tutorials/recipes/recipes/defining_a_neural_network.html">documentation</a>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python</label></div>
 <div class="tabbed-content">
@@ -2027,7 +2032,7 @@ at fusion, new operators will be produced, linear-ReLU and linear-ReLU-softmax. 
 An example computational graph.
 </figcaption>
 </figure>
-<p>The code for the rest of the module can be found at <code>m1_memory_hierarchies/code/computational_graphs/</code> or
+<p>The code for the rest of the module can be found at <code>m1_memory_hierarchies::code::computational_graphs</code> or
 <a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/computational_graphs">online</a>. It's quite long (more than 6k lines of code). You don't need to read the whole thing, you can just
 skim the most relevant sections which will typically be named specifically.</p>
 <h2 id="whats-in-a-tensor2d">What's in a Tensor2D?</h2>
@@ -2035,7 +2040,7 @@ skim the most relevant sections which will typically be named specifically.</p>
 We are going to create a data type which will hold the data our operators consume on the CPU.
 Let's call it <code>Tensor2D</code>. Our 2D tensor will actually be a simple piece of one dimensional memory under the
 hood and we will keep track of the number of rows and columns to find out how to access each piece of data.
-If you are in the root directory for <code>computational_graphs</code> go to <code>src/shared/tensor_2d.rs</code> or
+If you are in the root directory for <code>computational_graphs</code> go to <code>src::shared::tensor_2d.rs</code> or
 <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d.rs">online</a>.</p>
 <p>Start by taking a look at the definition of the <code>Tensor2D</code> struct at the very top. The <code>derive</code> stuff
 is asking some macros to automatically implement (derive) some traits (interfaces and behavior).
@@ -2109,11 +2114,11 @@ before the writing of the accumulated result to the output tensor. If the bias c
 might not be faster. In some cases for highly complex loops, it can instead make sense to separate them into
 more loops, which is a process called <code>loop fission</code>. I have only used a small subset of loop optimizations,
 but you can read about more ways of optimzing a loop <a href="https://en.wikipedia.org/wiki/Loop_optimization">here</a>.</p>
-<p>Ok, so try and run the code locally! To begin with go to the file <code>src/lib.rs</code>. Comment out all
+<p>Ok, so try and run the code locally! To begin with go to the file <code>src::lib.rs</code>. Comment out all
 of the lines within and including the <code>if configuration.compatible_gpu_found {</code> line. Then in your terminal
 navigate to the root folder, the one containing the <code>src</code> folder, and write <code>cargo run --release</code>. Your
 computer will now run a bunch of benchmarks relevant to the rest of this section. You can find the output
-in <code>computational_graphs/outputs/benchmarks/cpu</code>. The one that should have been generated on your computer
+in <code>computational_graphs::outputs::benchmarks::cpu</code>. The one that should have been generated on your computer
 that we want to look at now is called <code>cpu_linear_benchmark.png</code>. If you weren't able to run
 it locally, don't worry, I got you covered!</p>
 <figure>
@@ -2283,7 +2288,7 @@ compute shader driven.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2023</span>
   </span>
 
     
