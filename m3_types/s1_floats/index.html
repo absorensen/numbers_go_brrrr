@@ -899,7 +899,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - More GPU
+    S6 - 🧬 More GPU
   </span>
   
 
@@ -920,7 +920,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - Parallel Graphs
+    S7 - 🧬 Parallel Graphs
   </span>
   
 
@@ -1793,14 +1793,14 @@
 
 
 <h1 id="floats">Floats</h1>
-<p>Where as in signed integers we had two distinct areas of the bits with a uniform precision, we
-have 3 segments and a quite varying precision with floating point numbers. In the more-or-less standard
+<p>Where as signed integers have two distinct areas of the bits with a uniform precision, floats
+have 3 segments and a wildly varying precision. In the more-or-less standard
 IEEE-754 specification we also have a number of exceptions and specific behaviors such as in which situations
 a float locks to a NaN value. Given the use cases in machine learning new, smaller and less standard floating point
 formats have emerged such as bfloat16. A lot of these very small specialized types of floats, or very small integers
 are required to work with tensor core accelerators.</p>
-<p>I can't explain exactly how a float works much better than the
-<a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">wiki</a>. Ever so slightly browsing the page about <a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> also makes good sense.</p>
+<p>I can't explain exactly how a float works much better than the <a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">wiki</a>. Ever so slightly browsing the
+page about <a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> also makes good sense.</p>
 <p>So, now that you've browsed the websites and your are familliar with concepts such as exponent and fraction, I
 have a few key concepts for you to make note of. If you can at all keep your floats as close to being between
 -1.0 and 1.0, you will keep as much of your precision as possible. 4.0 / 3.0 is not the same in terms of precision
@@ -1831,19 +1831,17 @@ if a division by a constant is happening in a loop -</p>
 </div>
 </div>
 </div>
-<p>But if <code>some_constant</code> was 4.0, 2.0 or 256.0 or some other version of 2^N, they would be.
-Finally, <code>NaN</code>'s propagate.
-Any operation involving a <code>NaN</code> value returns a <code>NaN</code> value, including <code>NaN == NaN</code>.
-Division by <code>1.0/0.0</code> does not return <code>NaN</code> in Rust, but <code>inf</code>. <code>-1.0/0.0</code>
-on the other hand returns <code>-inf</code>.</p>
-<p>Accumulation in floats have some aspects to it which can be quite relevant.
-Due to the variable amount of precision in the type, adding a small float to a large float, will
-yield a significantly higher error than adding two small floats. By extension, if you have three
-floats, two small and a large, you would get a smaller error by first adding the two smaller
-numbers and then adding the now somewhat less small number to the big number. Taking things
-further, if you had a large list of numbers, you could sort them and add them from smallest to
-biggest. But, the number in which you accumulate your sum might quickly become much bigger than
-the individual elements. An alternative method if you have a large list
+<p>But if <code>some_constant</code> was 4.0, 2.0 or 256.0 or some other version of 2^N, they would be. Finally, <code>NaN</code>'s
+propagate. Any operation involving a <code>NaN</code> value returns a <code>NaN</code> value, including <code>NaN == NaN</code>.
+Division by <code>1.0/0.0</code> does not return <code>NaN</code> in Rust, but <code>inf</code>. <code>-1.0/0.0</code> on the other
+hand returns <code>-inf</code>.</p>
+<p>Accumulation in floats have some aspects to it which can be quite relevant. Due to the variable amount of
+precision in the type, adding a small float to a large float, will yield a significantly higher error
+than adding two small floats. By extension, if you have three floats, two small and a large, you would
+get a smaller error by first adding the two smaller numbers and then adding the now somewhat less small
+number to the big number. Taking things further, if you had a large list of numbers, you could sort them
+and add them from smallest to biggest. But, the number in which you accumulate your sum might quickly
+become much bigger than the individual elements. An alternative method if you have a large list
 of numbers, is summing them pairwise, recursively (like a tree reduction). This will yield a
 smaller error. This is one of the reasons for the increased numerical precision in the
 <a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform#Accuracy">butterfly FFT algorithm</a>, compared to naive summation.</p>
@@ -1861,8 +1859,8 @@ on my machine) and faster in others. Depending on your use case you might also n
 you are summing a large list of numbers you can use algorithms for compensating for the accumulated error, such as
 <a href="https://en.wikipedia.org/wiki/Kahan_summation_algorithm">Kahan Summation</a>. You can also keep a <a href="https://pbr-book.org/3ed-2018/Shapes/Managing_Rounding_Error">running estimate of the error</a>.</p>
 <h3 id="computer-graphics">🧬 Computer Graphics</h3>
-<p>Depth buffers are usually in need of some thought. You can take a look at
-<a href="https://developer.nvidia.com/content/depth-precision-visualized">depth precision visualized</a> or the now fairly common <a href="https://www.danielecarbone.com/reverse-depth-buffer-in-opengl/">reverse depth buffer</a>.</p>
+<p>Depth buffers are usually in need of some thought. You can take a look at <a href="https://developer.nvidia.com/content/depth-precision-visualized">depth precision visualized</a> or
+the now fairly common <a href="https://www.danielecarbone.com/reverse-depth-buffer-in-opengl/">reverse depth buffer</a>.</p>
 
 
 
@@ -1885,7 +1883,7 @@ you are summing a large list of numbers you can use algorithms for compensating 
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
   </span>
 
     

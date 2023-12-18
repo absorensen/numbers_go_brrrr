@@ -968,7 +968,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - More GPU
+    S6 - 🧬 More GPU
   </span>
   
 
@@ -989,7 +989,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - Parallel Graphs
+    S7 - 🧬 Parallel Graphs
   </span>
   
 
@@ -1799,8 +1799,8 @@
 
 
 <h1 id="atomics">Atomics</h1>
-<p>If a mutex is a horse, an atomic is a pony. Except, like a pony that's much faster than a horse.
-The smaller a region serialized through synchronization, the more potential concurrency we can have
+<p>If a lock, such as a mutex, is a horse, an atomic is a pony. Except, it's like a pony that's much faster than
+a horse. The smaller a region serialized through synchronization, the more potential concurrency we can have
 and the less likely things will go wrong. So what is an atomic?</p>
 <p>Atomic operations are a special kind of very small lock. Atomics are specific to certain data types
 and certain operations because there is sometimes hardware support for them. Now, whenever you see
@@ -1813,7 +1813,7 @@ be emulated in software which will make your code inexplicably slower.</p>
 atomic functions you can use, and then finally look at what atomics are like in WGSL.</p>
 <p>Anyways, memory ordering.</p>
 <p>Various hardware platforms have different types of support for atomics. If we for
-example had a counter variable, it could for example be used to sum an array, we could make sure that
+example had a counter variable, it could for be used to sum an array, we could make sure that
 the sum was correct while still being manipulated and accessed in a multithreaded setting by placing
 the counter inside an atomic. The nature of how the counter is incremented is then dictated by the
 memory ordering.</p>
@@ -1833,18 +1833,15 @@ get it done. It is the easiest to comprehend, and to begin with I would recommen
 use atomics in a situation where a relaxed ordering is good enough. Otherwise we get into mutex
 levels of complexity and you're gonna have a bad time.</p>
 <p>In terms of types you will be limited to integers and bools. Which types are available in Rust
-can be found <a href="https://doc.rust-lang.org/std/sync/atomic/">here</a>. Go to
-<a href="https://doc.rust-lang.org/std/sync/atomic/struct.AtomicU32.html">the page</a>
-for <code>AtomicU32</code> and see which functions are available. There's some load, store and swap
-operations, followed by some compare/exchange operations and then a bunch of fetch and something
-operations. Try and read through them. In practice you would share the atomic variable between threads
-by wrapping it with an <code>Arc&lt;Atomic...&gt;</code> and cloning the <code>Arc</code>.</p>
+can be found <a href="https://doc.rust-lang.org/std/sync/atomic/">here</a>. Go to <a href="https://doc.rust-lang.org/std/sync/atomic/struct.AtomicU32.html">the page</a> for <code>AtomicU32</code> and see which functions are available.
+There's some load, store and swap operations, followed by some compare/exchange operations and then
+a bunch of fetch and something operations. Try and read through them. In practice you would share
+the atomic variable between threads by wrapping it with an <code>Arc&lt;Atomic...&gt;</code> and cloning the <code>Arc</code>.</p>
 <p>WGSL, the language used to make GPU programs in this guide, only supports <code>atomic&lt;T&gt;</code> where <code>T</code>
 is either <code>i32</code> or <code>u32</code>. All atomic functions have <code>relaxed</code> memory ordering. It's really
 good for things like reduction operations. Once each work group has a local result computed, they can
 compare results, or add, across work groups through a global atomic variable. You can check out which
-functions are available, which is a bit more limited compared to what was available in Rust,
-<a href="https://www.w3.org/TR/WGSL/#atomic-builtin-functions">here</a>.</p>
+functions are available, which is a bit more limited compared to what was available in Rust, <a href="https://www.w3.org/TR/WGSL/#atomic-builtin-functions">here</a>.</p>
 <hr />
 <h2 id="lock-free-algorithms">Lock Free Algorithms</h2>
 <p>Lock free algorithms are a type of algorithms where there is a minimal amount of synchronization. Think of it as
@@ -1856,8 +1853,7 @@ the same time, but no locks have to be acquired. But this way of using atomics t
 from an array is made possible with all these functions which don't just swap, compare or fetch, but also
 do one more thing. We can increment and fetch to get our new data chunk!</p>
 <h2 id="crossbeam-and-atomics">Crossbeam and Atomics</h2>
-<p>Back to the storyline! Once again, go to <code>m2_concurrency::code::parallelism</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">online</a>.
+<p>Back to the storyline! Once again, go to <code>m2_concurrency::code::parallelism</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">online</a>.
 Set the <code>crossbeam_atomic_chunks</code> flag to true.</p>
 <p>So, I pulled in the <code>atomic_chunks_mut</code> crate from the mandelbrot example you will see later.
 It is a chunks iterator which uses atomics to increment an index. This allows each thread, whenever
@@ -1928,7 +1924,7 @@ which is even better.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
   </span>
 
     

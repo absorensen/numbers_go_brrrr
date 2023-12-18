@@ -899,7 +899,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - More GPU
+    S6 - 🧬 More GPU
   </span>
   
 
@@ -920,7 +920,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - Parallel Graphs
+    S7 - 🧬 Parallel Graphs
   </span>
   
 
@@ -2192,11 +2192,11 @@ or if it is possible, you probably shouldn't force it to do, is executing differ
 different, very basic, functions. Note that the memory-to-compute ratio is quite high, as the functions are quite
 simple compared to the amount of load operations. SIMD doesn't magically make your program any less memory bound, as
 such you have to try and optimize your code before going fully SIMD.</p>
-<p>Find the code in <code>m2_concurrency::code::sorting_functions</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sorting_functions">online</a>.  </p>
+<p>Find the code in <code>m4_real_time_systems::code::sorting_functions</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/sorting_functions">online</a>.  </p>
 <figure>
 <p><a class="glightbox" href="../../figures/sorting_functions_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sorting_functions_benchmark.png" width="500" /></a></p>
 <figcaption>
-Benchmark for the program in ```m2_concurrency::code::sorting_functions```.
+Benchmark for the program in ```m4_real_time_systems::code::sorting_functions```.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively. The CPU supports
 Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
@@ -2246,11 +2246,11 @@ a sample of the code to show you what SIMD programming looks like -</p>
 <p>In this case I only use functions implemented directly by utraviolet's <code>uv::Vec3x8</code> and
 <code>uv::f32x8</code> types.</p>
 <p>Be sure to check out the 4 references at the top of the code.
-Find the code in <code>m2_concurrency::code::sphere_intersection</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/sphere_intersection">online</a>.</p>
+Find the code in <code>m4_real_time_systems::code::sphere_intersection</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/sphere_intersection">online</a>.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/sphere_intersection_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sphere_intersection_benchmark.png" width="500" /></a></p>
 <figcaption>
-Benchmark for the program in ```m2_concurrency::code::sphere_intersection```.
+Benchmark for the program in ```m4_real_time_systems::code::sphere_intersection```.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively. The CPU supports
 Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
@@ -2299,7 +2299,7 @@ This is even being rolled out and described in this <a href="https://developer.n
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
   </span>
 
     

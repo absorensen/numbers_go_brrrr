@@ -968,7 +968,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - More GPU
+    S6 - 🧬 More GPU
   </span>
   
 
@@ -989,7 +989,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - Parallel Graphs
+    S7 - 🧬 Parallel Graphs
   </span>
   
 
@@ -1799,13 +1799,14 @@
 
 
 <h1 id="message-passing">Message Passing</h1>
+<p>Message passing is one of the easiest ways to share data between multiple threads is not to use locks,
+but to just send data from one thread to another. Whoever has the data gets to use it. Once that thread is done
+using it, it can send it to another thread. Synchronization through ownership. Easy peasy.</p>
 <p>Now let's look at a different way of doing parallelism. What if we didn't share memory at all and just sent it
-between threads? That would make things so much easier! We will do that with
-<a href="https://en.wikipedia.org/wiki/Message_passing">message passing</a>!
+between threads? That would make things so much easier! We will do that with <a href="https://en.wikipedia.org/wiki/Message_passing">message passing</a>!
 It might also make things slower, but I will just assume that it is slower than the data parallelism, threads,
 locks and atomics we just looked at. On the other hand it allows us to work simply while maintaining a very high
-degree of freedom between threads, allowing us to take that to the extreme with
-<a href="https://en.wikipedia.org/wiki/Task_parallelism">task parallelism</a>.</p>
+degree of freedom between threads, allowing us to take that to the extreme with <a href="https://en.wikipedia.org/wiki/Task_parallelism">task parallelism</a>.</p>
 <p>So why is message passing easier to work with than the mutexes and atomics we just looked at? Until now, we have
 either had a library like Rayon split some shared data into segments which each thread could consume or we have used
 more or less complex locking mechanisms to synchronize which thread had access to which data. With message passing
@@ -1848,23 +1849,20 @@ is the basis of the MPI standard.</p>
 structs. <code>mpsc</code> stands for multiple producer, single consumer. When creating an <code>mpsc::channel</code> both a
 sender and a receiver are returned. The sender can be cloned multiple times, to allow several threads to send
 messages using the same channel, whereas there can only ever be one receiver.</p>
-<p><a href="https://doc.rust-lang.org/std/sync/mpsc/fn.channel.html">mpsc::channel</a> is the one most often used and
-is an asynchronous channel. It is what is known as <em>unbounded</em> and if given too many messages will resize to
-accommodate. A transmitting thread will not block.</p>
-<p>The <a href="https://doc.rust-lang.org/std/sync/mpsc/fn.sync_channel.html">mpsc::sync_channel</a> on the other hand
-is <em>bounded</em> and won't change its size. A transmitting thread will have to block until the message as been sent
-successfully. This might be best if you are running at high speeds and can't drop packages. You could very quickly
-accummulate a massive amount of memory.</p>
+<p><a href="https://doc.rust-lang.org/std/sync/mpsc/fn.channel.html">mpsc::channel</a> is the one most often used and is an asynchronous channel. It is what is known as
+<em>unbounded</em> and if given too many messages will resize to accommodate. A transmitting thread will not block.</p>
+<p>The <a href="https://doc.rust-lang.org/std/sync/mpsc/fn.sync_channel.html">mpsc::sync_channel</a> on the other hand is <em>bounded</em> and won't change its size. A transmitting thread
+will have to block until the message as been sent successfully. This might be best if you are running at high
+speeds and can't drop packages. You could very quickly accummulate a massive amount of memory.</p>
 <h2 id="real-time-message-passing">Real-Time Message Passing</h2>
-<p>I made a code example for you. You can either go to <code>m2_concurrency::code::message_passing</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/message_passing">online</a>.</p>
+<p>I made a code example for you. You can either go to <code>m2_concurrency::code::message_passing</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/message_passing">online</a>.</p>
 <p>In this example I use Rust's <code>mpsc::channel</code> to get two pairs of senders/receivers. The main thread
 generates some data and sends the <code>Vec&lt;f32&gt;</code> to a processing thread, which performs some in-place
 computations and sends them back on another channel. The main thread can then receive the result and prints it
 out. Note that each thread does not block and instead of using <code>.rcv()</code>, which is a blocking receive, uses
 <code>.try_rcv()</code> and handles the case where there wasn't any new message to receive. In the case of no message
 being received it also prints.</p>
-<p>There are three values at the top.</p>
+<p>There are three values at the top -</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Rust</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -1880,8 +1878,8 @@ being received it also prints.</p>
 work message. The <code>worker_wait_time</code> is the amount of time the processing thread will wait before
 attempting to receive another message.</p>
 <p>Try and run the code, see what happens!</p>
-<p>Now try and adjusting the wait times. How does it run when you reduce <code>worker_wait_time</code>.
-Why do you think that is?</p>
+<p>Now try and adjusting the wait times. How does it run when you reduce <code>worker_wait_time</code>. Why do you think
+that is?</p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p>A longer, very friendly introduction to channels and message passing in Rust can be found <a href="https://doc.rust-lang.org/book/ch16-02-message-passing.html">here</a>.</p>
 <p>This is slightly larger scale, but when running code on multiple compute nodes in an HPC installation,
@@ -1908,7 +1906,7 @@ the most used method for sharing data between nodes is a standard called <a href
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
   </span>
 
     

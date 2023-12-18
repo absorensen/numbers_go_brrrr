@@ -899,7 +899,7 @@
         
   
   <span class="md-ellipsis">
-    S6 - More GPU
+    S6 - 🧬 More GPU
   </span>
   
 
@@ -920,7 +920,7 @@
         
   
   <span class="md-ellipsis">
-    S7 - Parallel Graphs
+    S7 - 🧬 Parallel Graphs
   </span>
   
 
@@ -1764,15 +1764,14 @@
 
 <h1 id="energy-efficiency">Energy Efficiency</h1>
 <p>From experience, not a lot of people who daily write quite long-running code, necessarily
-connect the two dots computing and energy consumption/CO<sub>2</sub> emissions. Anything you
-do with a computer consumes some form of electricity. Including whatever you do on the internet
-or download from the internet. Like downloading the contents of this page for you to read.
-Generally, if your code is faster, it is greener. If your code
-downloads less, it is likely to be greener. If you use a lower precision, generally,
-it is likely to be greener. If you accumulate work to do, as in batching, instead of
-firing up the system for every single request, it is likely to be greener. If you
-preprocess the data at the edge before sending it to the cloud, it is likely to be greener.
-If your code is faster, it is likely to greener. If your code is faster, it is likely to be cheaper.</p>
+connect the two dots - computing and energy consumption/CO<sub>2</sub> emissions. Anything you
+do with a computer consumes some form of electricity. Including whatever you do on the internet.
+Like downloading the contents of this page for you to read. Generally, if your code is faster, it is greener.
+If your code downloads less, it is likely to be greener. If you use a lower precision, generally, it is likely
+to be greener. If you accumulate work to do, as in batching, instead of firing up the system for every
+single request, it is likely to be greener. If you preprocess the data at the edge before sending it to the
+cloud, it is likely to be greener. If your code is faster, it is likely to greener. If your code is faster,
+it is likely to be cheaper.</p>
 <p>I will primarily focus on the energy efficiency of things you have direct control over. Once you
 have learned that, you should be able to infer the rest. Why not make this a more advanced or optional topic?</p>
 <p>Because quite a few people don't seem to be making the aforementioned connection, and I find it
@@ -1803,11 +1802,10 @@ CPU.
 Image credit </a>
 </figcaption>
 </figure>
-<p>As you can see, retrieving a value all the way from RAM instead of a cache
-is vastly more expensive. If you think back to the cache lines from <code>m1</code>
-imagine lowering the precision of your data from 32-bit floats to 16-bit or
-even 8-bit. Imagine many additional data elements you could fit in a single
-cache line. Elements which could be reused and kept in cache.</p>
+<p>As you can see, retrieving a value all the way from RAM instead of a cache is vastly more expensive. If you
+think back to the cache lines from <code>m1</code> imagine lowering the precision of your data from 32-bit floats
+to 16-bit or even 8-bit. Imagine many additional data elements you could fit in a single cache line.
+Elements which could be reused and kept in cache.</p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p><a href="https://arxiv.org/pdf/1703.09039.pdf">Efficient Processing of Deep Neural Networks</a> is a highly
 recommended tour through various concerns and techniques in reducing the energy footprint of
@@ -1838,7 +1836,7 @@ of energy consumption, speed and memory consumption.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 12, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
   </span>
 
     
