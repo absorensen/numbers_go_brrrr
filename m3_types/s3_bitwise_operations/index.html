@@ -1824,9 +1824,15 @@ from 0 to 1 or from 1 to 0.</p>
 <p>Rust does not have a bit vector implementation in the standard library, but what it does instead is implement
 quite a number of bitwise or bitwise-adjacent operations directly on
 <a href="https://doc.rust-lang.org/std/primitive.u32.html#method.rotate_left">integers</a>. Rust does have the bitwise NOT, usually denoted ~, but it is ! like on boolean types. Like so -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">initial_value</span>: <span class="kt">u8</span> <span class="o">=</span><span class="w"> </span><span class="mb">0b01010101</span><span class="p">;</span>
 </span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">flipped_value</span>: <span class="kt">u8</span> <span class="o">=</span><span class="w"> </span><span class="o">!</span><span class="n">initial_value</span><span class="p">;</span><span class="w"> </span><span class="c1">// 0b10101010;</span>
 </span></code></pre></div>
+</div>
+</div>
+</div>
 <h2 id="additional-reading">Additional Reading</h2>
 <p>If you want to go into greater depths about bitwise operators check out <a href="https://en.wikipedia.org/wiki/Bitwise_operation">this wiki</a> or the Rust language
 reference for <a href="https://doc.rust-lang.org/reference/expressions/operator-expr.html">operators</a>.</p>
