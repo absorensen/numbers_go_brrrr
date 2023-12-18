@@ -2618,8 +2618,9 @@ The operating system might keep track of the memory though and clean up once our
 <details class="note">
 <summary>Answer</summary>
 <p>We had two pointers and forgot to <code>free</code> using the base pointer, <code>base_integer_array</code>.
-This is <a href="https://en.wikipedia.org/wiki/Undefined_behavior">undefined behavior</a>, which means that there are literally no definitions of what will happen.
-It is really bad. What we should have done was this.</p>
+This is [undefined behavior][https://en.wikipedia.org/wiki/Undefined_behavior], which means
+that there are literally no definitions of what will happen. It is really bad. What we
+should have done was this -</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="12:1"><input checked="checked" id="__tabbed_12_1" name="__tabbed_12" type="radio" /><div class="tabbed-labels"><label for="__tabbed_12_1">C</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -4072,6 +4073,7 @@ the memory hierarchy. For even more <a href="http://csapp.cs.cmu.edu/2e/ch9-prev
 <p>If you are into spatial data structures and/or graphics, computer vision, etc here's some links for
 <a href="https://www.gamedev.net/articles/programming/general-and-gameplay-programming/introduction-to-octrees-r3529/">octrees</a>, <a href="https://pbr-book.org/3ed-2018/Primitives_and_Intersection_Acceleration/Bounding_Volume_Hierarchies">BVHs</a>, <a href="https://pbr-book.org/3ed-2018/Primitives_and_Intersection_Acceleration/Kd-Tree_Accelerator">Kd-Trees</a>, <a href="https://doc.cgal.org/latest/Orthtree/index.html">a comparison between kD tree and octree</a>,
 <a href="https://publik.tuwien.ac.at/files/publik_252607.pdf">levels-of-detail for point clouds (chapter 3)</a> and <a href="https://www.evl.uic.edu/vchand2/thesis/papers/Marching%20Cubes.pdf">levels-of-detail for meshes</a>.</p>
+<p>[24]: </p>
 
 
 
@@ -4094,7 +4096,7 @@ the memory hierarchy. For even more <a href="http://csapp.cs.cmu.edu/2e/ch9-prev
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
   </span>
 
     
