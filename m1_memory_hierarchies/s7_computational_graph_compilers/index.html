@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../s2_intro_to_gpus/">
+        <link rel="prev" href="../s6_building_a_computational_graph/">
       
       
-        <link rel="next" href="../s4_building_a_computational_graph/">
+        <link rel="next" href="../s8_exercises/">
       
       
       <link rel="icon" href="../../figures/nebula.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>S3 - Immediate GPU Computation - The Real-Timers Guide to the Computational Galaxy</title>
+        <title>S7 - Computational Graph Compilers - The Real-Timers Guide to the Computational Galaxy</title>
       
     
     
@@ -83,7 +83,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#immediate-gpu-computation" class="md-skip">
+        <a href="#building-a-computational-graph-compiler" class="md-skip">
           Skip to content
         </a>
       
@@ -118,7 +118,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              S3 - Immediate GPU Computation
+              S7 - Computational Graph Compilers
             
           </span>
         </div>
@@ -499,6 +499,10 @@
       
         
       
+        
+      
+        
+      
     
     
     
@@ -567,11 +571,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../s1_computational_graphs/" class="md-nav__link">
+      <a href="../s1_basic_data_structures/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S1 - Computational Graphs
+    S1 - Basic Data Structures
   </span>
   
 
@@ -588,11 +592,95 @@
   
   
     <li class="md-nav__item">
-      <a href="../s2_intro_to_gpus/" class="md-nav__link">
+      <a href="../s2_less_basic_data_structures/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S2 - Introduction to GPU's
+    S2 - Less Basic Data Structures
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s3_computational_graphs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S3 - Computational Graphs
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s4_intro_to_gpus/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S4 - Introduction to GPU's
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s5_immediate_gpu_computation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S5 - Immediate GPU Computation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../s6_building_a_computational_graph/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    S6 - Building a Computational Graph
   </span>
   
 
@@ -622,7 +710,7 @@
           
   
   <span class="md-ellipsis">
-    S3 - Immediate GPU Computation
+    S7 - Computational Graph Compilers
   </span>
   
 
@@ -633,7 +721,7 @@
         
   
   <span class="md-ellipsis">
-    S3 - Immediate GPU Computation
+    S7 - Computational Graph Compilers
   </span>
   
 
@@ -655,54 +743,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-the-linear-node" class="md-nav__link">
+  <a href="#seeing-the-memory-hierarchy" class="md-nav__link">
     <span class="md-ellipsis">
-      Building the Linear Node
+      Seeing the Memory Hierarchy
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#building-relu" class="md-nav__link">
+  <a href="#the-results-and-the-caveats" class="md-nav__link">
     <span class="md-ellipsis">
-      Building ReLU
+      The Results and the Caveats
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#building-softmax" class="md-nav__link">
+  <a href="#metaprogramming" class="md-nav__link">
     <span class="md-ellipsis">
-      Building Softmax
+      Metaprogramming
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#building-fused-operators" class="md-nav__link">
+  <a href="#additional-reading" class="md-nav__link">
     <span class="md-ellipsis">
-      Building Fused Operators
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#setting-up-to-dispatch-multiple-shaders" class="md-nav__link">
-    <span class="md-ellipsis">
-      Setting up to Dispatch Multiple Shaders
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#caching-shaders" class="md-nav__link">
-    <span class="md-ellipsis">
-      Caching Shaders
+      Additional Reading
     </span>
   </a>
   
@@ -724,53 +794,11 @@
   
   
     <li class="md-nav__item">
-      <a href="../s4_building_a_computational_graph/" class="md-nav__link">
+      <a href="../s8_exercises/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
-    S4 - Building a Computational Graph
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s5_computational_graph_compilers/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S5 - Computational Graph Compilers
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-              
-            
-              
-                
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="../s6_exercises/" class="md-nav__link">
-        
-  
-  <span class="md-ellipsis">
-    S6 - 👨🏼‍💻 Exercises
+    S8 - 👨🏼‍💻 Exercises
   </span>
   
 
@@ -1781,54 +1809,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#building-the-linear-node" class="md-nav__link">
+  <a href="#seeing-the-memory-hierarchy" class="md-nav__link">
     <span class="md-ellipsis">
-      Building the Linear Node
+      Seeing the Memory Hierarchy
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#building-relu" class="md-nav__link">
+  <a href="#the-results-and-the-caveats" class="md-nav__link">
     <span class="md-ellipsis">
-      Building ReLU
+      The Results and the Caveats
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#building-softmax" class="md-nav__link">
+  <a href="#metaprogramming" class="md-nav__link">
     <span class="md-ellipsis">
-      Building Softmax
+      Metaprogramming
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#building-fused-operators" class="md-nav__link">
+  <a href="#additional-reading" class="md-nav__link">
     <span class="md-ellipsis">
-      Building Fused Operators
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#setting-up-to-dispatch-multiple-shaders" class="md-nav__link">
-    <span class="md-ellipsis">
-      Setting up to Dispatch Multiple Shaders
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#caching-shaders" class="md-nav__link">
-    <span class="md-ellipsis">
-      Caching Shaders
+      Additional Reading
     </span>
   </a>
   
@@ -1852,162 +1862,155 @@
   
 
 
-<h1 id="immediate-gpu-computation">Immediate GPU computation</h1>
-<p>Now let's look at speeding up our operators with GPU, after this we will take a look at building an actual
-computational graph, both on the CPU and the GPU.</p>
-<p>The first version of our GPU implementation, will be for immediate mode computation.
-In this version the behavior will be treated a bit like executing a Python script.
-Every command will be processed one at a time, no optimizations can be executed outside
-of a single operation, and all data has to be ready for a new and completely different
-operation to be executed afterwards. The result of this being that if the system
-is told to execute a linear operator on some data, it will compile the code needed
-to run on the GPU, allocate all necessary buffers on the GPU, transfer the needed data,
-execute the operation, synchronize with the CPU and then transfer back all of the necessary
-data to the CPU. If that linear operator is then followed by a ReLU operator, it will
-have to do the whole thing over again. Compile the ReLU code for the GPU,
-allocate buffers, transfer, execute, transfer back. Then possibly deallocate.</p>
-<p>This is a suboptimal way to accomplish this. But it is highly flexible and
-we're gonna do it anyways! Don't worry about the 'how' too much, I'll go into greater detail further down the page.</p>
-<h2 id="building-the-linear-node">Building the Linear Node</h2>
-<p>Okay, so let's try building the linear operator again, but this time on the GPU! Don't worry too much about
-the particulars. The setup is quite a bit like what is described in <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s2_intro_to_gpus/">Intro to GPU's</a>.</p>
-<p>There are three central files for this. <code>src::shared::tensor2d_gpu.rs</code>,
-<code>src::shared::shaders::linear.wgsl</code> and <code>src::immediate::nodes.rs</code>.
-If you don't have them locally you can them <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d_gpu.rs">here</a>, <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/linear.wgsl">here</a> and <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/immediate/nodes.rs">here</a> respectively.</p>
-<p>First of all, let's go directly to the shader (GPU) code in <code>linear.wgsl</code>.
-The version of the two functions we are interested in is <code>main</code>.
-At the top there is a struct called <code>TensorDimensions</code>, it is
-bound as something called a <code>uniform</code>. The <code>uniform</code> is a struct,
-it can also just be a single value, which is read only for the duration of our shader.
-As such all threads can safely keep it entirely in their registers, or in whichever
-cache they have room, without fear of the data getting stale. It also
-means that each thread will be accessing the same data, and not just overlapping
-data. But let's stay with the definition. We now have the <code>group</code>, which is 0.
-A binding group is a set of bindings. There are a limited amount of binding slots
-available so you could have one set of buffers bound for group 0 and another set
-of buffers bound for group 1. In the <code>var</code> declaration, you declare how the
-bound data is used. Uniform is what I just wrote, you don't need to specify whether
-it is <code>read</code> or <code>read_write</code>, it is always just <code>read</code>. For the more
-general <code>storage</code>, which is your normal buffer, you can specify
-whether it is <code>read</code> or <code>read_write</code>. Whether there is a performance impact
-for one or the other might depend on your system, but the <code>wgsl</code> compiler is
-likely to complain if you declare <code>var&lt;storage, read_write&gt;</code> without actually
-writing to it. That's not just a performance thing, that is also good software
-engineering. Don't give stuff more rights than it needs to. That allows
-the compiler to give you helpful reminders that, at the very least writing
-to this buffer wasn't your original declared intention.
-We have several instances of <code>array&lt;f32&gt;</code> which is the raw data from our
-<code>Tensor2D</code>s. You can reconstruct the entire <code>Tensor2D</code> by combining
-this data with the dimension sizes from the <code>TensorDimension</code> struct.</p>
-<p>So now we get to the code itself. For the matrix multiplication, the
-dimensionality of the problem lends itself to a two dimensional solution.
-So above the <code>main</code> function, which can be named anything by the way,
-we define that our work group will have a size of 8 on the x-axis and
-8 on the y-axis. This changes the way our threads individual ID's are
-computed. Don't worry about it!</p>
-<p>Then we define a number of built-in variables we would like to have
-access too. There are more available than we declare here.
-These are various ID's such as, what is this threads number inside
-this work group, which work group is this thread in, out of all threads
-which number thread is this thread, that sort of thing.
-These are <code>vec3&lt;u32&gt;</code> because we actually dispatch our GPU programs
-with three dimensional grids of threads. In the case where we only
-use a single dimension, such as a sum reduction shader where we don't
-care about dimensionality, we still launch it three dimensionally,
-we just set the two last dimensions to one and then ignore them from
-then on.</p>
-<p>Next, the thread will calculate the correspondence between its global
-ID and the element of the output matrix this specific thread will calculate.
-Then we check whether these specific indices are outside the valid range
-of indices, remember that we often launch more threads than we need.
-Then we calculate the linearized index (multiple dimensions collapsed into one) in our one dimensional output array.
-We declare and initialize a local variable to hold our running result,
-which will hopefully ensure that we keep it in a register.
-Then we just loop through the input row and weight column, multiplying
-and adding, until we have accumulated our result, add our bias and then
-store the result in the output tensor.</p>
+<h1 id="building-a-computational-graph-compiler">Building a Computational Graph Compiler</h1>
+<p>Ok, so we are almost done with this module. Let's put it all together and execute the graphs,
+except I have three more variations to explain before I present the benchmark plots. This is where everything
+will pay off and we can see the performance improvements we get from formulating programs as graphs and
+optimize them.</p>
+<p>Compiling the shaders for each operator is actually quite expensive and not something we need to do every time
+we launch a GPU program, so I put a flag on the GPU graph runner which if <code>true</code> will cache all of the
+compiled shaders for reuse later. The compiled shaders are stored in a hash map.</p>
+<p>Next up, we have the fused variant. This one is for both the CPU and the GPU graph runners.
+If <code>true</code> the graph runners will replace any instance of <code>Linear/ReLU/Softmax</code> or <code>Linear/ReLU</code>
+with a fused version. Softmax can only ever be the final operation and a ReLU the one before the softmax,
+and thus there will always be at most a single instance of a fused <code>Linear/ReLU/Softmax</code> operator,
+we will mostly see the effect of <code>Linear/ReLU</code> fused operators. Remember, that for a network of depth N
+we have N - 2 operators that are randomly either a linear or ReLU operator.</p>
+<p>Finally, there is the graph loop variant. This variant is not just creating a computational graph, but
+moves the loop from the measuring function closer into the graph runner itself. One thing to note though
+is that while we do cut down on some transfers, the implementation is still suboptimal. I will elaborate
+about why further down the page. So just take this as an indicator of why you should use computational graphs
+and computational graph compilers when you can. There also two additional plots which show the same
+benchmark but with the CPU and Immediate runs removed to zoom in on the graph and graph loop runs.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/immediate_linear_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_linear_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/graphs_size_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_size_benchmark.png" width="600" /></a></p>
 <figcaption>
-Benchmarking Linear operator on the GPU and the CPU.
+Benchmarking randomly generated graphs of depth 64 at various tensor sizes across 25 samples.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
-<p>Given the immediate mode usage, we will always be paying for a full transfer
-to and from the GPU. Clearly, the tensors will have to be quite large before
-a single shot immediate linear operator starts paying off. Inexplicably,
-the GPU version with ReLU is faster than without. This implementation of the
-linear operator is quite suboptimal, it is left as an optional exercise to
-implement a more optimal version using tiling and shared memory.</p>
-<h2 id="building-relu">Building ReLU</h2>
-<p>We then implement ReLU, Softmax and the fused operators in the same way. ReLU you can just check out yourself
-in <code>shaders::relu.wgsl</code> or <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu.wgsl">online</a> along with an inline implementation in
-<code>shaders::relu_inline.wgsl</code> or <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu_inline.wgsl">online</a>.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/immediate_relu_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_relu_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/graphs_only_size_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_only_size_benchmark.png" width="600" /></a></p>
 <figcaption>
-Benchmarking ReLU operators on the GPU and CPU.
+Benchmarking randomly generated graphs of depth 64 at various tensor sizes across 25 samples.
+Run without CPU and Immediate functions.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
-<p>Interestingly, when done this way, the inline version is significantly slower than the normal, more functional,
-version. As you can see with the redline, for ReLU, it will be quite some time before doing it on the GPU
-is in any way faster.</p>
-<h2 id="building-softmax">Building Softmax</h2>
-<p>Next up, we have the softmax operator. You will find the three shaders
-needed for the softmax operator in <code>shaders::softmax.wgsl</code> or <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/softmax.wgsl">online</a>.</p>
-<p>In this case, finding and communicating the maximum value and the sum is a lot more complicated on a GPU.
-The implementation provided is not even using all the possible threads, but just a single work group to make
-the code more readable. Implementing a tree reduction with iterative calls to max and sum shaders is left as
-an exercise. So you don't need to know what that is right now, just know that it is not just implemented
-suboptimally, but even without more than 32 threads. I did however cheat a little bit and use shared memory,
-to make it a bit faster.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/immediate_softmax_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_softmax_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/graphs_depth_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_depth_benchmark.png" width="600" /></a></p>
 <figcaption>
-Benchmarking Softmax operators on the GPU and CPU.
+Benchmarking randomly generated graphs of various depths and a size of 256 across 25 samples.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
-<p>Of course, the CPU implementation is faster, even if I had parallelized it correctly, it would have to quite
-large to offset the cost of the transfer.</p>
-<h2 id="building-fused-operators">Building Fused Operators</h2>
-<p>Finally, the fused operators are basically implemented through doing a single transfer to and from, and
-calling the kernels and bindings in succession. This is done CPU-side and there are no unique shaders for them.
-Again, don't worry about the stuff happening CPU side. Just know that it is implemented slighty suboptimally,
-and these shaders aren't implemented optimally.</p>
-<p>The only really interesting part of the performance benchmarks, as I don't have many different implementations of
-each operator, is the fused ones.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/immediate_linear_relu_softmax_fused_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_linear_relu_softmax_fused_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/graphs_only_depth_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graphs_only_depth_benchmark.png" width="600" /></a></p>
 <figcaption>
-Benchmarking fused operators on the GPU. If there is no underscore between the operators they were fused.
+Benchmarking randomly generated graphs of various depths and a size of 256 across 25 samples.
+Run without CPU and Immediate functions.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
-<p>As you can see, fusing all three operators and now having 2 transfers instead of 6 makes a big difference.
-The fully fused operator wins by a large margin compared to the other GPU versions, but it still needs
-quite a bit of scale before it can beat the CPU implementation. Now, let's start building some graphs!</p>
+<p>As we can see from the benchmarks, if you have small enough matrices, it can at some point be more efficient to just
+use the CPU. But the graph running in a loop seems to be better overall. If you were a machine learning
+researcher, these graphs are sort of an overview of why you should use a system that formulates a computational
+graph, and why you should use optimization on that graph if it is available. The difference in performance you pay
+for. Either with your time or your budget. So if you use something like PyTorch, do be sure to optimize, and be
+sure to check whether the <code>torch.compile()</code> function works for your setup. Next up is the concurrency module
+where you will be introduced, very superficially, to a couple of different concepts in concurrency. Hopefully,
+this will help you to understand stuff like model distributed parallelism and data distributed parallelism.</p>
 <hr />
-<h2 id="setting-up-to-dispatch-multiple-shaders">Setting up to Dispatch Multiple Shaders</h2>
-<p>If you actually delve into how these immediate mode operators are implemented on the CPU side,
-go to <code>src::immediate::nodes.rs</code>. The code is almost the exact same as in the <code>add_gpu</code>
-example from <code>m1::s2</code>, except now we will dispatch several shaders in a row, sharing
-data. Especially the softmax and fused operators will be significantly different on the
-CPU (host) side.</p>
-<h2 id="caching-shaders">Caching Shaders</h2>
-<p>One other thing that is fundamentally suboptimal about this, is that we compile the shaders
-for every operator, every time we use the operator. If you do lots of small matrix calls,
-this will incur a significant overhead. Shader compilation is expensive. What you could do
-instead is to cache your compiled shaders for reuse later on. This is done with the graph
-implementations, but it has been left as an optional exercise for you to implement
-this for immediate mode operations. This works just fine when you have 4-10 shaders to
-compile and keep track of, but what if you had in the 1000's of combinations? In that
-case you might need some form of cache eviction mechanism, such as LRU.</p>
+<h2 id="seeing-the-memory-hierarchy">Seeing the Memory Hierarchy</h2>
+<p>Ok, so what we just did, with the graphs and the operator fusions and the what not, what did it do in terms
+of the memory hierarchy? For the CPU, it didn't do a whole lot other than adding another layer of complexity,
+but let's focus on the GPU. When we went from the immediate mode, to the graph version, it saved us from
+transferring to and from the GPU for every operation. It also meant that instead of adding each operation to the
+queue and then waiting for it to complete, we could just add all of the operations of our graph and then wait.
+So far so good. But what did the fused versions do?</p>
+<p>When calculating the linear operation, it kept the output in the threads register and applied the ReLU function
+once the data in register before storing it in the GPU's RAM and dispatching a new compute shader.
+One of the suggested exercises is to optimize the linear shader. In any case that should involve tiling and
+shared memory. That would mean that the matrix multiplication would need the work group to act in
+coordination and load in tiles of the matrices into shared memory (L1 cache) and synchronize, in order for
+them to get more out of memory they might otherwise have overlapping accesses of. Finally, when we use
+the graph loop, we don't actually tell the GPU to run this same queue for N iterations, but add to the
+queue, submit and wait N times. If we found the correct tools to tell the GPU to run some program for
+100 times, it might completely set the GPU free for a while.</p>
+<h2 id="the-results-and-the-caveats">The Results and the Caveats</h2>
+<p>Ok, so we just saw some results previously. I am mostly concerned with showing you the relative timings, otherwise
+I probably wouldn't be benchmarking on a laptop, but there a number of caveats that might make the benchmarks
+look slightly different. Some of these I might fix if/when I get the time, some are left as potential exercises,
+as again, this is more of an introduction to a bunch of concepts, and you get the point at this point hopefully.
+Point.</p>
+<p>Anyways, the <code>Tensor2DGPU</code> currently allocates a staging buffer, even for the ones that don't need it.
+If this was made optional, immediate mode computation would do an allocation less, so would all of the other
+GPU paradigms, but immediate mode is probably the one hurting the most here.</p>
+<p>Another pain point is the use of the one shot receiver, instead of being a reusable receiver. I tried to change it
+but I wasn't quite able to debug its behavior. If I get the time this is definitely something I would like to
+change. This results in the <code>graph_loop</code> versions only actually transferring back to the CPU once. So, fixing
+this is likely to make the <code>graph_loop</code> versions a bit slower. Not remaking the receiver each time and mapping
+buffers, but keeping them around might make that part of the process a bit faster.</p>
+<p>Finally, for the umpteenth time, the max, sum and linear shaders are completely unoptimized. The impact of max and
+sum are neglible due to only being called once per graph, but optimizing the linear operator would probably see
+all of the GPU based implementations run significantly faster.</p>
+<h2 id="metaprogramming">Metaprogramming</h2>
+<p>Finally, I am going to introduce you to another way of representing these operators. Instead of having an
+operator with a full implementation of each operator and a lot of hardwired rules like, if a
+linear operator is followed by a ReLU operator, fuse them, you can attain a bit more flexibility by
+realizing one thing...</p>
+<p>Programs are just strings!</p>
+<p>We can decimate all of our neatly written shaders into something called op codes. You start by defining
+all of the data that goes in, you have a few lines of the thread figuring out its own ID and so on.
+Peruse the directory <code>src::op_code_compiler::runner.rs</code> or <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/op_code_compiler/runner.rs">online</a>. This is just a toy example,
+it didn't make sense to make the whole thing and I won't be benchmarking it since the results will be the exact
+same as the operator version. Each op code is just a string. Each operator is just a list of op codes.
+In this op code example we do operator fusion by adding our ReLU op-code to the list.</p>
+<p>This is sort of like ordering a standard cheese burger at a restaurant that ONLY SERVES BURGERS.
+You realize that you want pickles. So you can either order an entirely new cheese burger, the
+kitchen has to make a new one from scratch for this one, or you can order pickles between
+two buns, which technically qualifies as a burger. This will be delivered quite fast. But its
+frowned upon in a restaurant to play with your food so you have to eat the pickles as they come.
+But you do technically get your pickles. Another option is to realize that a burger is just a
+stack of ingredients, or a list of op codes, and it would be much easier to send the burger
+back to the kitchen (compilation) for them to just slide in a few pickles. Using op codes
+makes our code so much more complex, but it allows us a great amount of flexibility. If we
+found out we were running on a GPU with a much bigger L1 cache, we might change how we
+handled shared memory programming. If we were doing a render graph with a number of image-based
+single pixel operations such as tone mapping, changing hues or saturation, we might use op codes
+to merge these several different calls, keeping the data as close to the registers as possible.</p>
+<p>Another thing, often done in graphics is to have various defines in your shader code like</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">GLSL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>#<span class="n">ifdef</span><span class="w"> </span><span class="n">USE_SHARED_MEMORY</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="c1">// something with shared memory</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>#<span class="n">endif</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>Then if at runtime you find out it would be optimal to use shared memory you can merely append
+a -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">GLSL</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>#<span class="n">define</span><span class="w"> </span><span class="n">USE_SHARED_MEMORY</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>at the top of the shader file and then compile. This makes your code less readable, but not as unreadable
+as fully using op codes.</p>
+<h2 id="additional-reading">Additional Reading</h2>
+<p>Here's a few blog posts on <a href="https://getcode.substack.com/p/massively-parallel-fun-with-gpus">GPU tensors</a> and how <a href="https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust">to build neural networks</a>, as well as an
+<a href="https://github.com/googlefonts/compute-shader-101/blob/main/docs/glossary.md">introduction to GPU computing terminology</a>. Another few blog posts, specifically for the
+PyTorch compiler are <a href="https://pytorch.org/docs/stable/fx.html">Torch.fx</a>, <a href="https://pytorch.org/docs/stable/generated/torch.compile.html">torch.compile</a> and
+<a href="https://pytorch.org/docs/stable/torch.compiler.html">getting started with PyTorch's compiler</a>.</p>
 
 
 
@@ -2030,7 +2033,7 @@ case you might need some form of cache eviction mechanism, such as LRU.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 19, 2023</span>
   </span>
 
     
@@ -2069,7 +2072,7 @@ case you might need some form of cache eviction mechanism, such as LRU.</p>
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../s2_intro_to_gpus/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S2 - Introduction to GPU&#39;s">
+          <a href="../s6_building_a_computational_graph/" class="md-footer__link md-footer__link--prev" aria-label="Previous: S6 - Building a Computational Graph">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
@@ -2079,20 +2082,20 @@ case you might need some form of cache eviction mechanism, such as LRU.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                S2 - Introduction to GPU's
+                S6 - Building a Computational Graph
               </div>
             </div>
           </a>
         
         
           
-          <a href="../s4_building_a_computational_graph/" class="md-footer__link md-footer__link--next" aria-label="Next: S4 - Building a Computational Graph">
+          <a href="../s8_exercises/" class="md-footer__link md-footer__link--next" aria-label="Next: S8 - 👨🏼‍💻 Exercises">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                S4 - Building a Computational Graph
+                S8 - 👨🏼‍💻 Exercises
               </div>
             </div>
             <div class="md-footer__button md-icon">
