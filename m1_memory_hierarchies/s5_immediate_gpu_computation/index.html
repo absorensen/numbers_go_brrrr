@@ -1916,7 +1916,7 @@ allocate buffers, transfer, execute, transfer back. Then possibly deallocate.</p
 we're gonna do it anyways! Don't worry about the 'how' too much, I'll go into greater detail further down the page.</p>
 <h2 id="building-the-linear-node">Building the Linear Node</h2>
 <p>Okay, so let's try building the linear operator again, but this time on the GPU! Don't worry too much about
-the particulars. The setup is quite a bit like what is described in <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s2_intro_to_gpus/">Intro to GPU's</a>.</p>
+the particulars. The setup is quite a bit like what is described in <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s4_intro_to_gpus/">Intro to GPU's</a>.</p>
 <p>There are three central files for this. <code>src::shared::tensor2d_gpu.rs</code>,
 <code>src::shared::shaders::linear.wgsl</code> and <code>src::immediate::nodes.rs</code>.
 If you don't have them locally you can them <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d_gpu.rs">here</a>, <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/linear.wgsl">here</a> and <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/immediate/nodes.rs">here</a> respectively.</p>
