@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -1933,7 +1933,7 @@
 in hardware, how you can exploit awareness of memory hierarchies to improve performance and energy efficiency,
 and how common data constructs relate to the memory hierarchies.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/amd_athlon_hierarchy.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/amd_athlon_hierarchy.png" width="600" /></a></p>
+<p><a class="glightbox" href="../../figures/amd_athlon_hierarchy.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/amd_athlon_hierarchy.png" width="600" /></a></p>
 <figcaption>
 Memory hierarchy of the AMD Athlon.
 <a href="https://en.wikipedia.org/wiki/File:Hwloc.png">
@@ -2240,7 +2240,7 @@ auto-alignment with <code>__attribute__ ((packed))</code></p>
 </div>
 <p>If you had an alignment of say, 8 bytes, the last two lines would result in two cache lines being retrieved.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/cache_alignment.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment.png" width="600" /></a></p>
+<p><a class="glightbox" href="../../figures/cache_alignment.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment.png" width="600" /></a></p>
 <figcaption>
 Bad cache alignment.
 </figcaption>
@@ -2270,7 +2270,7 @@ behavior in C, up to some amount of alignment.</p>
 </div>
 <p>Then our alignment becomes this -</p>
 <figure>
-<p><a class="glightbox" href="../../figures/cache_alignment_fixed.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment_fixed.png" width="600" /></a></p>
+<p><a class="glightbox" href="../../figures/cache_alignment_fixed.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cache_alignment_fixed.png" width="600" /></a></p>
 <figcaption>
 Better cache alignment.
 </figcaption>
@@ -2299,7 +2299,7 @@ through a random number generator. It turned out to be overkill and resulted in 
 performance for random access. Your take away from that should be that generating random floats
 is very expensive.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/access_patterns.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/access_patterns.png" width="400" /></a></p>
+<p><a class="glightbox" href="../../figures/access_patterns.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/access_patterns.png" width="400" /></a></p>
 <figcaption>
 Timing access patterns in Rust.
 </figcaption>
@@ -2330,7 +2330,7 @@ you just entered, but once you return from that function, they are.
 When you enter that function, a pointer to where you called the function from is added
 to the stack and that function has its own local variables.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/call_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/call_stack.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/call_stack.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/call_stack.png" width="500" /></a></p>
 <figcaption>
 The call stack.
 <a href="https://en.wikipedia.org/wiki/Stack-based_memory_allocation">
@@ -2345,7 +2345,7 @@ or be overwritten at any moment.</p>
 <p>The heap, in this context, is not the actual data structure known as a heap.
 Instead it is a bunch of unstructured memory living in the <a href="https://courses.grainger.illinois.edu/cs225/fa2021/resources/stack-heap/">same reserved space</a> as the stack.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/stack_and_heap.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/stack_and_heap.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/stack_and_heap.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/stack_and_heap.png" width="500" /></a></p>
 <figcaption>
 The stack and the heap sharing memory.
 <a href="https://courses.grainger.illinois.edu/cs225/fa2021/resources/stack-heap/">

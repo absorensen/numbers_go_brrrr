@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -1821,7 +1821,7 @@ specialized at the same time. I won't get into the ray tracing cores in this sec
 They are really good at multiplying a small matrix by another small matrix and adding another small matrix, while
 accumulating the result. It can do it in a number of different levels of precision.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/tensor_cores_math.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/tensor_cores_math.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/tensor_cores_math.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/tensor_cores_math.png" width="500" /></a></p>
 <figcaption>
 Nvidia's visualization of the mathematical operation a tensor core can perform.
 <a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">
@@ -1840,7 +1840,7 @@ floating point numbers. So if you do quantization of your entire network before 
 inference and lower power consumption. The cooperative matrix was first available in CUDA, but has since been made
 available in Vulkan, although the usage of it is not that wide spread yet as it is a fairly recent addition.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/tensor_cores.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/tensor_cores.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/tensor_cores.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/tensor_cores.png" width="500" /></a></p>
 <figcaption>
 Nvidia's visualization of a cooperative matrix.
 <a href="https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/">

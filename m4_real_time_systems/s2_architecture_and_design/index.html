@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -1857,7 +1857,7 @@ like <a href="https://github.com/amethyst/legion">Legion</a>. Alternatively, her
 <p>Let's take a look at an example architecture. This is an abstracted view of what a UI-based application, hooked up
 to a machine learning library, using a GPU backend, with a multithreaded data loader might look like.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/example_architecture.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_architecture.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/example_architecture.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_architecture.png" width="800" /></a></p>
 <figcaption>
 An example architecture of what a machine learning app might look like. The different colors denote
 different threads.
@@ -1885,7 +1885,7 @@ parallelism bookended by communication in the thread safe queue and the channel.
 sure the N threads doing loading and preprocessing have enough work. We should of course make sure that
 the amount of work incoming is balanced with the amount of data getting dequeued from the output channel.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/example_architecture_2.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_architecture_2.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/example_architecture_2.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_architecture_2.png" width="800" /></a></p>
 <figcaption>
 Encapsulating the data loader, can make things simpler, and we can now at run time change out the data loader for
 a different implementation.

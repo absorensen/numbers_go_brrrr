@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -1973,7 +1973,7 @@ Then we just loop through the input row and weight column, multiplying
 and adding, until we have accumulated our result, add our bias and then
 store the result in the output tensor.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/immediate_linear_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_linear_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/immediate_linear_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_linear_benchmark.png" width="800" /></a></p>
 <figcaption>
 Benchmarking Linear operator on the GPU and the CPU.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -1991,7 +1991,7 @@ implement a more optimal version using tiling and shared memory.</p>
 in <code>shaders::relu.wgsl</code> or <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu.wgsl">online</a> along with an inline implementation in
 <code>shaders::relu_inline.wgsl</code> or <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu_inline.wgsl">online</a>.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/immediate_relu_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_relu_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/immediate_relu_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_relu_benchmark.png" width="800" /></a></p>
 <figcaption>
 Benchmarking ReLU operators on the GPU and CPU.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -2011,7 +2011,7 @@ an exercise. So you don't need to know what that is right now, just know that it
 suboptimally, but even without more than 32 threads. I did however cheat a little bit and use shared memory,
 to make it a bit faster.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/immediate_softmax_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_softmax_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/immediate_softmax_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_softmax_benchmark.png" width="800" /></a></p>
 <figcaption>
 Benchmarking Softmax operators on the GPU and CPU.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -2028,7 +2028,7 @@ and these shaders aren't implemented optimally.</p>
 <p>The only really interesting part of the performance benchmarks, as I don't have many different implementations of
 each operator, is the fused ones.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/immediate_linear_relu_softmax_fused_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_linear_relu_softmax_fused_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/immediate_linear_relu_softmax_fused_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/immediate_linear_relu_softmax_fused_benchmark.png" width="800" /></a></p>
 <figcaption>
 Benchmarking fused operators on the GPU. If there is no underscore between the operators they were fused.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was

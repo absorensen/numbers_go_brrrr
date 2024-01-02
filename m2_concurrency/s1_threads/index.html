@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -1903,7 +1903,7 @@ they can be returned to the thread pool again.</p>
 <code>thread::spawn()</code> and give it a closure to execute. Each thread, including the main thread
 will print their name in a loop, waiting for a bit after each print. I get the following output -</p>
 <figure>
-<p><a class="glightbox" href="../../figures/threads_basic_threading.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_basic_threading.png" width="200" /></a></p>
+<p><a class="glightbox" href="../../figures/threads_basic_threading.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_basic_threading.png" width="200" /></a></p>
 <figcaption>
 Naively launching 8 threads along with a main thead and printing three times.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -1919,7 +1919,7 @@ The threads might still be alive when the main thread is done executing.</p>
 all threads were done before exiting. Go to the function <code>basic_threading_with_termination</code> and see how that can
 done.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/threads_basic_threading_with_termination.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_basic_threading_with_termination.png" width="200" /></a></p>
+<p><a class="glightbox" href="../../figures/threads_basic_threading_with_termination.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_basic_threading_with_termination.png" width="200" /></a></p>
 <figcaption>
 Launching 8 threads along with a main thead and printing three times. We keep track of the handles and wait for
 execution to finish.
@@ -1943,7 +1943,7 @@ spawner, which lets it keep track of the threads for me.
 I then proceeed to use a scope. It is just like the scope we normally have in Rust, but for executing threads
 until the end. This is equivalent to the loop of <code>.join()</code>s we just had.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/threads_basic_threading_with_scope.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_basic_threading_with_scope.png" width="200" /></a></p>
+<p><a class="glightbox" href="../../figures/threads_basic_threading_with_scope.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_basic_threading_with_scope.png" width="200" /></a></p>
 <figcaption>
 Launching 8 threads along with a main thead and printing three times. We use the ```crossbeam::scope``` to enclose
 the lifetime of the threads.
@@ -1983,7 +1983,7 @@ overhead. To enable these bencharks, set the following flags to <code>true</code
 <code>rayon</code> and <code>crossbeam_scope</code>.
 Let's look at the results -</p>
 <figure>
-<p><a class="glightbox" href="../../figures/threads_crossbeam.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_crossbeam.png" width="600" /></a></p>
+<p><a class="glightbox" href="../../figures/threads_crossbeam.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_crossbeam.png" width="600" /></a></p>
 <figcaption>
 Launching as many threads as chunks using ```crossbeam::scope``` to enclose
 the lifetime of the threads. This is clearly not the way to go, but as the workload becomes bigger,

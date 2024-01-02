@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -2009,7 +2009,7 @@ our float to have the maximum float value be the biggest integer we want to use.
 the maximum float value in our data set and knowing how many indices we at most want in our grid. I have
 made a small example below -</p>
 <figure>
-<p><a class="glightbox" href="../../figures/spatial_hashing.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/spatial_hashing.png" width="600" /></a></p>
+<p><a class="glightbox" href="../../figures/spatial_hashing.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/spatial_hashing.png" width="600" /></a></p>
 <figcaption>
 Spatial hashing implicitly defines a grid. That grid can have offsets and scales. Just be sure you don't end
 up not covering your domain without having a definition for points falling outside the domain.
@@ -2060,7 +2060,7 @@ of Morton codes. The above code snippet was just a Rust version of what was writ
 blog post under the "For-loop based method"-heading. The blog post also has a nice visualization of what
 Morton codes look like, as opposed to the grid.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/small_morton_code.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/small_morton_code.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/small_morton_code.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/small_morton_code.png" width="800" /></a></p>
 <figcaption>
 A four bit, two-dimensional Morton code.
 <a href="https://www.researchgate.net/figure/The-work-principle-of-Morton-codes-a-Morton-code-and-traversal-ordering-for-a-2D-grid_fig4_354791070">
@@ -2073,7 +2073,7 @@ in the for-loops increases. It does however require you to copy paste or generat
 You tradeoff a lot of for-loops for doing a few
 memory look-ups instead. It seems to be the favoured way of doing it when you search for Mortorn encoding libraries.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/morton_vs_hilbert.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/morton_vs_hilbert.jpg" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/morton_vs_hilbert.jpg" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/morton_vs_hilbert.jpg" width="800" /></a></p>
 <figcaption>
 The spatial layout of Morton coding compared to Hilbert coding.
 <a href="https://www.researchgate.net/figure/Spatial-ordering-and-encoding-based-on-the-Morton-curve-left-and-the-Hilbert-curve_fig2_220616180">
@@ -2088,7 +2088,7 @@ interpolation. Then we need good locality to get the 4 pixels as quickly as poss
 spatial ordering of the Morton layout, you'll see that if you get lucky, the four pixels can be either
 very close to each other in memory, or pretty close. They aren't an entire row apart.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/nearest_linear_texture_filtering.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/nearest_linear_texture_filtering.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/nearest_linear_texture_filtering.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/nearest_linear_texture_filtering.png" width="800" /></a></p>
 <figcaption>
 The effect of choosing nearest neighbor interpolation instead of linear interpolation.
 <a href="https://learnopengl.com/Getting-started/Textures">

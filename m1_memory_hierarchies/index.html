@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -1815,7 +1815,7 @@ time it takes to get a piece of memory, only how much data we can have in memory
 to a lower level, e.g. go from RAM to disk. This is even more important given the relatively slow
 improvement of memory over time.</p>
 <figure>
-<p><a class="glightbox" href="../figures/compute_vs_memory.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/compute_vs_memory.png" width="500" /></a></p>
+<p><a class="glightbox" href="../figures/compute_vs_memory.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/compute_vs_memory.png" width="500" /></a></p>
 <figcaption>
 <a href="https://www.cs.umd.edu/~meesh/411/CA-online/chapter/memory-hierarchy-design-basics/index.html">
 Image credit</a>
@@ -1852,7 +1852,7 @@ As a rule of thumb, most of the variables you declare in the scope of your funct
 there is A LOT of variables, will be kept in registers. The caches and the main memory all work
 in conjunction with each other as an invisible way of speeding up the accesses to the main memory (RAM).</p>
 <figure>
-<p><a class="glightbox" href="../figures/cpu_hierarchy.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/cpu_hierarchy.png" width="500" /></a></p>
+<p><a class="glightbox" href="../figures/cpu_hierarchy.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/cpu_hierarchy.png" width="500" /></a></p>
 <figcaption>
 A simplified view of the CPU memory hierarchy.
 </figcaption>
@@ -1869,7 +1869,7 @@ and so on, until we reach memory. If our file was too big to fit in memory, the 
 virtualize (don't worry about it) the memory and go all the way to the disk or to the internet to retrieve our value.
 Which is even slower than it sounds.</p>
 <figure>
-<p><a class="glightbox" href="../figures/2_cpus_hierarchy.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/2_cpus_hierarchy.png" width="500" /></a></p>
+<p><a class="glightbox" href="../figures/2_cpus_hierarchy.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/2_cpus_hierarchy.png" width="500" /></a></p>
 <figcaption>
 An example view of what the CPU memory hierarchy can look like with 2 cores.
 </figcaption>
@@ -1889,7 +1889,7 @@ had never been modified.
 Thread A will then write its own new version of the value, or just be working off an old version, resulting in
 incorrect results.</p>
 <figure>
-<p><a class="glightbox" href="../figures/8_cpus_hierarchy.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/8_cpus_hierarchy.png" width="500" /></a></p>
+<p><a class="glightbox" href="../figures/8_cpus_hierarchy.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/8_cpus_hierarchy.png" width="500" /></a></p>
 <figcaption>
 An example view of what CPU memory hierarchy can look like with 8 cores.
 </figcaption>
@@ -1914,7 +1914,7 @@ about if you are using a GPU for your program. Neglecting transfers is one of th
 The GPU also has its
 <a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">own memory hierarchy</a>.</p>
 <figure>
-<p><a class="glightbox" href="../figures/Full-H100-GPU-with-144-SMs-1024x457.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/Full-H100-GPU-with-144-SMs-1024x457.png" width="500" /></a></p>
+<p><a class="glightbox" href="../figures/Full-H100-GPU-with-144-SMs-1024x457.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/Full-H100-GPU-with-144-SMs-1024x457.png" width="500" /></a></p>
 <figcaption>
 <a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">
 Image credit </a>
@@ -1923,7 +1923,7 @@ Image credit </a>
 <p>As you can see, this being representative of the Nvidia H100, there are 2 L2 caches and a
 whole bunch of smaller sections. Each of these smaller sections are a streaming multiprocessor (SM).</p>
 <figure>
-<p><a class="glightbox" href="../figures/H100-Streaming-Multiprocessor-SM-625x869.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/H100-Streaming-Multiprocessor-SM-625x869.png" width="500" /></a></p>
+<p><a class="glightbox" href="../figures/H100-Streaming-Multiprocessor-SM-625x869.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/H100-Streaming-Multiprocessor-SM-625x869.png" width="500" /></a></p>
 <figcaption>
 <a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">
 Image credit </a>
@@ -1951,7 +1951,7 @@ certain no one has ever just downloaded a Hugging Face data set whenever they la
 The internet can in this way be thought of as yet another, even slower, component of the memory hierarchy.
 Not much good comes from the internet. Try to avoid it. Except for this guide of course, which is very helpful.</p>
 <figure>
-<p><a class="glightbox" href="../figures/welcometotheinternet.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/welcometotheinternet.jpg" width="400" /></a></p>
+<p><a class="glightbox" href="../figures/welcometotheinternet.jpg" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/welcometotheinternet.jpg" width="400" /></a></p>
 <figcaption>
 <a href="http://www.quickmeme.com/meme/3rmoyk">
 Image credit </a>

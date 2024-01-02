@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -2063,7 +2063,7 @@ and a softmax operator. The softmax operator is the most complex part. Don't wor
 CPU code that is fairly easy to understand. The GPU version gets a bit complicated and is only constructed
 in a fairly simplistic version.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/basic_graph_operations.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/basic_graph_operations.png" width="300" /></a></p>
+<p><a class="glightbox" href="../../figures/basic_graph_operations.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/basic_graph_operations.png" width="300" /></a></p>
 <figcaption>
 Our minimal computational graph example will only contain these 5 operations.
 </figcaption>
@@ -2073,7 +2073,7 @@ next to last, the only difference is the amount of linear and ReLU layers. Event
 at fusion, new operators will be produced, linear-ReLU and linear-ReLU-softmax. We will only use
 32-bit floating point, <code>f32</code> in Rust, as the data type.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/example_computational_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_computational_graph.png" width="300" /></a></p>
+<p><a class="glightbox" href="../../figures/example_computational_graph.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_computational_graph.png" width="300" /></a></p>
 <figcaption>
 An example computational graph.
 </figcaption>
@@ -2168,7 +2168,7 @@ in <code>computational_graphs::outputs::benchmarks::cpu</code>. The one that sho
 that we want to look at now is called <code>cpu_linear_benchmark.png</code>. If you weren't able to run
 it locally, don't worry, I got you covered!</p>
 <figure>
-<p><a class="glightbox" href="../../figures/cpu_linear_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cpu_linear_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/cpu_linear_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cpu_linear_benchmark.png" width="800" /></a></p>
 <figcaption>
 Benchmarking linear operator functions on the CPU.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -2222,7 +2222,7 @@ it might benefit from inlining.</p>
 <p>So now go back into the same folder where you found the linear benchmark output and look at what your computer
 could crunch out. Alternatively, if you couldn't run it, I got you covered here.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/cpu_relu_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cpu_relu_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/cpu_relu_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cpu_relu_benchmark.png" width="800" /></a></p>
 <figcaption>
 Benchmarking ReLU operator functions on the CPU.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -2256,7 +2256,7 @@ and go through why we can an unproblematic inplace version of softmax.</p>
 <p>Finally, checkout the results in your output folder! Or if you couldn't run them locally I have
 some here -</p>
 <figure>
-<p><a class="glightbox" href="../../figures/cpu_softmax_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cpu_softmax_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/cpu_softmax_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cpu_softmax_benchmark.png" width="800" /></a></p>
 <figcaption>
 Benchmarking Softmax operator functions on the CPU.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -2279,7 +2279,7 @@ matrix multiplication loop.</p>
 <p>Finally, checkout the results in your output folder! Or if you couldn't run them locally I have
 some here -</p>
 <figure>
-<p><a class="glightbox" href="../../figures/cpu_linear_relu_softmax_fused_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cpu_linear_relu_softmax_fused_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/cpu_linear_relu_softmax_fused_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/cpu_linear_relu_softmax_fused_benchmark.png" width="800" /></a></p>
 <figcaption>
 Benchmarking fused operators functions on the CPU.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was

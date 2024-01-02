@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -2117,7 +2117,7 @@ All of the streaming multiprocessors share the L2 cache and each streaming multi
 Nvidia GPU's the streaming multiprocessor is a number of, in this case 4, units which can each execute a
 work group, or in Nvidia terminology, a warp.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/Full-H100-GPU-with-144-SMs-1024x457.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/Full-H100-GPU-with-144-SMs-1024x457.png" width="700" /></a></p>
+<p><a class="glightbox" href="../../figures/Full-H100-GPU-with-144-SMs-1024x457.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/Full-H100-GPU-with-144-SMs-1024x457.png" width="700" /></a></p>
 <figcaption>
 The layout of a H100 GPU. Note that connectivity to the memory (HBM3) is on the left and right sides.
 <a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">
@@ -2129,7 +2129,7 @@ to the GPU's main memory, then to the L2 cache, then to the streaming multiproce
 until it finally is loaded up into the registers of the 32x4 threads executing on different, but adjacent, segments
 of the same data.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/H100-Streaming-Multiprocessor-SM-625x869.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/H100-Streaming-Multiprocessor-SM-625x869.png" width="400" /></a></p>
+<p><a class="glightbox" href="../../figures/H100-Streaming-Multiprocessor-SM-625x869.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/H100-Streaming-Multiprocessor-SM-625x869.png" width="400" /></a></p>
 <figcaption>
 The layout of a single Streaming Multiprocessor. It can execute 4 work groups or warps at a time.
 <a href="https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/">
@@ -2300,7 +2300,7 @@ Once it has finished we block on the receiver. Until the receiver sends the <cod
 it we retrieve the data. This is raw data in bytes, <code>u8</code>, which we recast to the type we know it is, which in
 this case is <code>f32</code>. We do a bit of clean up, and don't you know it, that's the program!</p>
 <figure>
-<p><a class="glightbox" href="../../figures/intro_to_gpu_vector_add_results.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/intro_to_gpu_vector_add_results.png" width="600" /></a></p>
+<p><a class="glightbox" href="../../figures/intro_to_gpu_vector_add_results.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/intro_to_gpu_vector_add_results.png" width="600" /></a></p>
 <figcaption>
 Adding our two vectors, it should be easily verifiable that it is correct.
 </figcaption>
@@ -2451,7 +2451,7 @@ threads might execute path A and some threads might execute path B. This will le
 will result in the group of threads A executing while group of threads B will wait until A is finished,
 and then executed. Finally, they might join again.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/work_group_divergence.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/work_group_divergence.png" width="700" /></a></p>
+<p><a class="glightbox" href="../../figures/work_group_divergence.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/work_group_divergence.png" width="700" /></a></p>
 <figcaption>
 An if-statement causes a work group to diverge into two.
 <a href="https://developer.nvidia.com/blog/using-cuda-warp-level-primitives/">
@@ -2540,7 +2540,7 @@ you are likely to see a speed up quite early in the optimization process.</p>
 <p>While a complete guide on GPGPU algorithm design might be... more thorough at least, one core design aspect
 you should definitely know is scattering and gathering.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/scattering_or_gathering.jpg" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/scattering_or_gathering.jpg" width="700" /></a></p>
+<p><a class="glightbox" href="../../figures/scattering_or_gathering.jpg" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/scattering_or_gathering.jpg" width="700" /></a></p>
 <figcaption>
 Answer!
 </figcaption>
@@ -2554,7 +2554,7 @@ the ends.</p>
 <p>Anyways, for weight in our kernel we sample a different element in our signal, multiply it with a weight in
 our filter, accumulate the result and output a new signal.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/1d_convolution.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/1d_convolution.png" width="700" /></a></p>
+<p><a class="glightbox" href="../../figures/1d_convolution.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/1d_convolution.png" width="700" /></a></p>
 <figcaption>
 A figure showing a signal being convolved with a filter.
 <a href="https://www.researchgate.net/figure/Calculations-involved-in-a-1D-convolution-operation_fig3_324177888">

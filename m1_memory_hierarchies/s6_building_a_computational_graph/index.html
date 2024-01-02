@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -1975,20 +1975,20 @@ a benchmark so you can see the differences in our assortment of implementations.
 We ironically need to deal with the issues that Rust enforces through the borrow checker.
 If we have one node writing to multiple other nodes, that is fine.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/graph_this_is_fine.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graph_this_is_fine.png" width="400" /></a></p>
+<p><a class="glightbox" href="../../figures/graph_this_is_fine.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graph_this_is_fine.png" width="400" /></a></p>
 <figcaption>
 One node writing to multiple buffers is fine.
 </figcaption>
 </figure>
 <figure>
-<p><a class="glightbox" href="../../figures/graph_this_is_also_fine.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graph_this_is_also_fine.png" width="400" /></a></p>
+<p><a class="glightbox" href="../../figures/graph_this_is_also_fine.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graph_this_is_also_fine.png" width="400" /></a></p>
 <figcaption>
 One node reading from multiple buffers is fine. The dashed line is a synchronization barrier.
 Nodes A and B can write to buffers, node C just has to be sure that nodes A and B are done before reading.
 </figcaption>
 </figure>
 <figure>
-<p><a class="glightbox" href="../../figures/graph_this_is_not_fine.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graph_this_is_not_fine.png" width="400" /></a></p>
+<p><a class="glightbox" href="../../figures/graph_this_is_not_fine.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/graph_this_is_not_fine.png" width="400" /></a></p>
 <figcaption>
 Multiple nodes writing to the same buffer is not fine.
 </figcaption>

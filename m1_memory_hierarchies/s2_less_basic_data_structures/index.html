@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -2411,7 +2411,7 @@ about earlier, we can look at a few other fun concepts in different ways to arra
 output into another 2D matrix, one of those input matrices will be accessed with a strided access in
 a column major form.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/mat_mul_strided_access.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/mat_mul_strided_access.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/mat_mul_strided_access.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/mat_mul_strided_access.png" width="500" /></a></p>
 <figcaption>
 Matrix multiplication. The numbers indicate access order.
 </figcaption>
@@ -2425,7 +2425,7 @@ or one in which the system does a lot of optimization without user input, we als
 where to tranpose matrices. But, if the matrix is fairly static and is read from often, it can definitely be
 worth the time and effort.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/mat_mul_strided_access_transposed.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/mat_mul_strided_access_transposed.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/mat_mul_strided_access_transposed.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/mat_mul_strided_access_transposed.png" width="500" /></a></p>
 <figcaption>
 Matrix multiplication with the second matrix transposed.
 </figcaption>
@@ -2435,7 +2435,7 @@ Matrix multiplication with the second matrix transposed.
 <p>Interestingly, when running the code there doesn't seem to be much of a difference until
 the matrix sizes become quite big. Why do you think that is?</p>
 <figure>
-<p><a class="glightbox" href="../../figures/strided_access_transposition_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/strided_access_transposition_benchmark.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/strided_access_transposition_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/strided_access_transposition_benchmark.png" width="500" /></a></p>
 <figcaption>
 Difference gets bigger as the matrices get bigger.
 </figcaption>
@@ -2460,7 +2460,7 @@ at index 0 in our new permuted array resides at index 4 in our original data.</p
 <p>This is likely to be quite a bit slower compared to normal sequential access as we now
 have to follow more than one pointer to get to our data.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/permutations.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permutations.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/permutations.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permutations.png" width="500" /></a></p>
 <figcaption>
 Create permutations of an array by creating a list of indices and permuting that list.
 </figcaption>
@@ -2471,7 +2471,7 @@ wanted to be able to undo the permutation, we could just keep track of the
 permutation we executed and undo it later. But we should now be able to get back
 to sequential access performance.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/permuted_array.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_array.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/permuted_array.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_array.png" width="500" /></a></p>
 <figcaption>
 If reading a lot from the same array with the same permutations, go ahead and execute the permutations.
 </figcaption>
@@ -2480,7 +2480,7 @@ If reading a lot from the same array with the same permutations, go ahead and ex
 we should be able to get partially sequential access, at least if we are moving through the elements in
 order.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/permuted_rows_array.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_rows_array.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/permuted_rows_array.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_rows_array.png" width="500" /></a></p>
 <figcaption>
 Offset some of the cost of permutations, by just permuting rows.
 </figcaption>
@@ -2488,14 +2488,14 @@ Offset some of the cost of permutations, by just permuting rows.
 <p>Now, lets try out a simple example! Checkout the code at <code>m1_memory_hierarchies::code::permuted_arrays</code>
 or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/permuted_arrays/src/main.rs">online</a></p>
 <figure>
-<p><a class="glightbox" href="../../figures/permuted_arrays_benchmark_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_arrays_benchmark_0.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/permuted_arrays_benchmark_0.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_arrays_benchmark_0.png" width="500" /></a></p>
 <figcaption>
 Huh, that's weird. There doesn't seem to be much of a difference.
 </figcaption>
 </figure>
 <p>It seems pretty much the same.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/permuted_arrays_benchmark_1.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_arrays_benchmark_1.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/permuted_arrays_benchmark_1.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/permuted_arrays_benchmark_1.png" width="500" /></a></p>
 <figcaption>
 The differences appear as the cache runs out of space with bigger data sizes.
 </figcaption>
@@ -2510,7 +2510,7 @@ flexible scheme, but unless you are absolutely sure you need it, you should abso
 <p>In the example below, we attain this complete flexibility by using a vector of vectors,
 which as you may recall is really bad for performance.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/naive_jagged_array.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/naive_jagged_array.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/naive_jagged_array.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/naive_jagged_array.png" width="500" /></a></p>
 <figcaption>
 Create a jagged array by using a vector of vectors.
 </figcaption>
@@ -2520,7 +2520,7 @@ we can sacrifice a bit of additional memory for allocating all rows as if they h
 the same length and keep track of the length of the active sections in each row
 in a separate vector.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/jagged_array_size_constrained_aux.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array_size_constrained_aux.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/jagged_array_size_constrained_aux.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array_size_constrained_aux.png" width="500" /></a></p>
 <figcaption>
 Slightly better now with the data in a single vector.
 </figcaption>
@@ -2533,14 +2533,14 @@ for access.</p>
 ceiling on the max length of each row, by interleaving the auxiliary array with the data
 array.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/jagged_array_size_constrained.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array_size_constrained.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/jagged_array_size_constrained.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array_size_constrained.png" width="500" /></a></p>
 <figcaption>
 All of the data in a single vector, with the blue values being the amount of active data in the row.
 </figcaption>
 </figure>
 <p>We can do this either compacted or non-compacted.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/jagged_array_size_constrained_compacted.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array_size_constrained_compacted.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/jagged_array_size_constrained_compacted.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array_size_constrained_compacted.png" width="500" /></a></p>
 <figcaption>
 All of the data in a single vector, with the blue values being the amount of active data in the row. Compacted data.
 </figcaption>
@@ -2560,7 +2560,7 @@ the length of each row by taking the difference between the starting index of th
 and the beginning of the next row. Which is also why I have inserted an extra starting index, which points
 to the end of the array. Otherwise, we can't get the length of the last row.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/jagged_array_size_compacted_aux.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array_size_compacted_aux.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/jagged_array_size_compacted_aux.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array_size_compacted_aux.png" width="500" /></a></p>
 <figcaption>
 As we compacted the data, we can keep track of the starting index of each row in an auxiliary array.
 </figcaption>
@@ -2568,13 +2568,13 @@ As we compacted the data, we can keep track of the starting index of each row in
 <p>Now for a simple performance benchmark. Checkout the code at <code>m1_memory_hierarchies::code::jagged_arrays</code>
 or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/jagged_arrays/src/main.rs">online</a>.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/jagged_arrays_benchmark_0.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_arrays_benchmark_0.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/jagged_arrays_benchmark_0.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_arrays_benchmark_0.png" width="500" /></a></p>
 <figcaption>
 Huh, that's weird. There doesn't seem to be much of a difference.
 </figcaption>
 </figure>
 <figure>
-<p><a class="glightbox" href="../../figures/jagged_arrays_benchmark_1.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_arrays_benchmark_1.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/jagged_arrays_benchmark_1.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_arrays_benchmark_1.png" width="500" /></a></p>
 <figcaption>
 There we go, we ran out of cache!.
 </figcaption>
@@ -2595,7 +2595,7 @@ in having to reconstruct where the indices are on the fly. The method below is o
 such as a very large matrix with just diagonal values. If we have a band around the diagonal we could modify
 the strategy from the last example in the jagged arrays section.  </p>
 <figure>
-<p><a class="glightbox" href="../../figures/sparse_arrays.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sparse_arrays.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/sparse_arrays.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sparse_arrays.png" width="500" /></a></p>
 <figcaption>
 A sparse array created with run-length encoding. We could of course also just linearize the indices to get a single
 number.
@@ -2642,7 +2642,7 @@ elements which need to be queried a lot, we can usually ask the data structure t
 <code>.shrink_to_fit()</code> or <code>.rehash()</code>. Rehashing will reconstruct the structure to be
 made as if it had only been the elements currently stored, all along.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/hash_map_find_key.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/hash_map_find_key.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/hash_map_find_key.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/hash_map_find_key.png" width="500" /></a></p>
 <figcaption>
 A number of keys have been inserted in random order. We try to find the entry corresponding to the key "Ni"
 at index 3. But its natural spot was already taken by a spillover from the index 2. We find the entry
@@ -2716,7 +2716,7 @@ something else that I can't think of right now. The node on the other hand, can 
 It can even be just a number or an index to the corresponding data payload if you have seperated
 the graph structure from the data payloads.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/bidirectional_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/bidirectional_graph.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/bidirectional_graph.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/bidirectional_graph.png" width="500" /></a></p>
 <figcaption>
 A bidirectional graph. Each edge points both ways.
 </figcaption>
@@ -2727,7 +2727,7 @@ also points to node A. Unidirectional graphs, you guessed it, means that the edg
 does not dictate that node A and B can't point to each other, but that it's not the default and it requires
 inserting two edges into the graph. Note that edges can also have weights or other values themselves.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/unidirectional_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/unidirectional_graph.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/unidirectional_graph.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/unidirectional_graph.png" width="500" /></a></p>
 <figcaption>
 A unidirectional graph. Each edge points one way. Note that edges can also have weights.
 </figcaption>
@@ -2740,7 +2740,7 @@ way to Mordor just to go back to the friggin Shire. No eagles will save you. You
 As you can imagine this can be a costly property to assert, unless we devise mechanisms to prevent this
 from happening in the first place.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/directed_acyclic_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/directed_acyclic_graph.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/directed_acyclic_graph.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/directed_acyclic_graph.png" width="500" /></a></p>
 <figcaption>
 The unidirectional graph is verified as being a DAG through a topological sorting. No edges points backwards.
 </figcaption>
@@ -2750,7 +2750,7 @@ a DAG. In general, if you are reading this, you should try to avoid graphs with 
 It's a headache and you'll end up down a headscratching rabbit hole. It's also a good source
 of memory leaks if you haven't implemented your graph or tree in a certain way.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/computational_graph.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/computational_graph.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/computational_graph.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/computational_graph.png" width="500" /></a></p>
 <figcaption>
 A neural network formulated as a computational graph.
 </figcaption>
@@ -2763,7 +2763,7 @@ node which will point to one or more child nodes. If the tree is bidirectional, 
 Leaf nodes are nodes which are not pointing to any children.
 Nodes which are not the root, but also not a leaf node are usually called internal nodes.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/unidirectional_tree.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/unidirectional_tree.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/unidirectional_tree.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/unidirectional_tree.png" width="500" /></a></p>
 <figcaption>
 A binary tree where parent nodes point to children nodes, but children nodes don't point back.
 </figcaption>
@@ -2775,7 +2775,7 @@ closest number to some query. The hierarchical nature of the tree lends itself w
 that the tree is fairly balanced. Meaning that the maximum length from root node to any leaf node is reasonably
 close.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/tree_balance.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/tree_balance.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/tree_balance.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/tree_balance.png" width="500" /></a></p>
 <figcaption>
 A balanced and an unbalanced binary tree. Note the sparseness and the differences
 in minimum and maximum height (distance from root node).
@@ -2787,7 +2787,7 @@ implicit assumptions of the structure, which can save quite a lot of space, redu
 need to follow in order to traverse the structure and make it easier to serialize (write it to a file on disk)
 the tree.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/bidirectional_tree.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/bidirectional_tree.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/bidirectional_tree.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/bidirectional_tree.png" width="500" /></a></p>
 <figcaption>
 A bidirectional tree. Note if the pointers pointing from children nodes to parent nodes are strong pointers,
 the tree is rife with cyclical references.
@@ -2813,7 +2813,7 @@ child was <code>None</code> or <code>Some(child)</code>.</p>
 </div>
 </div>
 <figure>
-<p><a class="glightbox" href="../../figures/binary_tree_node_weak_parent.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/binary_tree_node_weak_parent.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/binary_tree_node_weak_parent.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/binary_tree_node_weak_parent.png" width="500" /></a></p>
 <figcaption>
 A unidirectional binary tree with weak pointers from child to parent. In this case, due to the regular structure
 of the binary tree, we could have made do with indices.
@@ -2889,7 +2889,7 @@ is contained by some cell, we always need to examine the neighboring cells. But 
 neighboring cells. We still need to compare our point Q against a good number of points, but it is way less than
 the potentially hundreds of millions of points.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/octree_nearest_neighbor.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/octree_nearest_neighbor.png" width="500" /></a></p>
+<p><a class="glightbox" href="../../figures/octree_nearest_neighbor.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/octree_nearest_neighbor.png" width="500" /></a></p>
 <figcaption>
 The blue star is our query point. The full arrow line is towards the closest point, if we do not search the
 neighbors.
@@ -2979,7 +2979,7 @@ you have probably tried this making this mistake and your error has been met wit
 reprisals. The virtual memory space allocated for your process, for stuff like heap and stack will
 typically look as below.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/virtual_heap_and_stack.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/virtual_heap_and_stack.png" width="300" /></a></p>
+<p><a class="glightbox" href="../../figures/virtual_heap_and_stack.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/virtual_heap_and_stack.png" width="300" /></a></p>
 <figcaption>
 The stack and the heap sharing memory in their own virtual address space.
 <a href="https://www.cprogramming.com/tutorial/virtual_memory_and_heaps.html">

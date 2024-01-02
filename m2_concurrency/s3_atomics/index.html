@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.2">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.3">
     
     
       
@@ -1907,7 +1907,7 @@ asking for a new chunk to increment the current index and get the last index val
 that threads data chunk. Thus we do almost the same as the one with mutex, but with an atomic
 and an index.</p>
 <figure>
-<p><a class="glightbox" href="../../figures/atomics_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/atomics_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/atomics_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/atomics_benchmark.png" width="800" /></a></p>
 <figcaption>
 Crossbeam with an atomic chunk queue.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -1932,7 +1932,7 @@ you to make the work load less uniform and more like generating a mandelbrot ima
 path tracing. If we weren't chunking the data and exclusively running fine-grained parallelism this should
 give a larger advantage to the work stealing techniques (Rayon).</p>
 <figure>
-<p><a class="glightbox" href="../../figures/atomics_with_escape_benchmark.png" data-type="image" data-width="100%" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/atomics_with_escape_benchmark.png" width="800" /></a></p>
+<p><a class="glightbox" href="../../figures/atomics_with_escape_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/atomics_with_escape_benchmark.png" width="800" /></a></p>
 <figcaption>
 Adding more loop iterations while also adding an escape probability.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
