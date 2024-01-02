@@ -61,10 +61,13 @@ pub fn matrix_multiplication(handles: &GPUHandles) -> bool {
     //
     // 2) Make another version which uses tiling through shared memory and local accumulation in a register.
     // A tiling reference: http://www.csce.uark.edu/~mqhuang/courses/4643/s2016/lecture/GPU_Lecture_3.pdf
+    // Try to ensure that you use coalesced accessing as much as possible when loading data into shared
+    // memory.
     //
     // 3) After ensuring correctness - time the two functions.
     // 
-    // 4) How big do the matrices have to be before you see a big performance difference?
+    // 4) How big do the matrices have to be before you see a big performance difference between the
+    // naive and shared memory versions?
     //
     // 5) What happens when you set the block size to different multiples of 32? Why do you think that is?
     //
@@ -74,6 +77,10 @@ pub fn matrix_multiplication(handles: &GPUHandles) -> bool {
     // multiple of the block size? So, if you had a block size of 32 and a 30x30 * 28x29
     // multiplication you padded both with 0's to get 32x32 * 32x32.
     // HINT - You can now remove some if-guards.
+    //
+    // 8) How big are the performance differences if you make new versions of all the shaders with the
+    // restriction that the second matrix is transposed? Is the different between the transposed and
+    // non-transposed different for the naive and tiled versions different? Why do you think that is?
     //
     // HINT - You need a run_compute_shader() call per type of compute shader.
     // Figure out what the arguments are supposed to be (see vector_add.rs) and

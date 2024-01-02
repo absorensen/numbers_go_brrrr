@@ -50,19 +50,21 @@ pub fn convolution(handles: &GPUHandles) -> bool {
     let ground_truth: Vec<f32> = convolution_cpu(&signal, &filter);
 
     //
-    // 1) Do 1D convolution on the GPU, don't use shared memory.
+    // 0) Do 1D convolution on the GPU, don't use shared memory.
     // Make sure to keep the filter and signal large enough to offset the cost of data transfer
     //
-    // 2) Make a new version of 1D convolution which uses shared memory.
-    // See which is the fastest, is it the signal in shared memory, is it the filter in
-    // shared memory, is it both?
-    // What happens when you set the block size to different multiples of 32? Why do you think that is?
-    //
-    // 3) Make another version using a zero padded version of the original signal. Do not use any if's
+    // 1) Make another version using a zero padded version of the original signal. Do not use any if's
     // inside the inner for-loop. This zero padding is (filter_size - 1) / 2 on each side of the
     // signal. What happens if you increase the padding with 0's to ensure that the signal is
     // always a multiple of your block size? HINT - You should be able to remove the outer if-guard.
     // 
+    // 2) Make a new version of 1D convolution which uses shared memory and zero padding.
+    // See which is the fastest, is it the signal in shared memory, is it the filter in
+    // shared memory, is it both?
+    // Make sure to reduce the amount of branching (if-statements) in your code, and ensure
+    // coalesced accessing when loading data into shared memory.
+    // What happens when you set the block size to different multiples of 32? Why do you think that is?
+    //
     // HINT - You need a run_compute_shader() call per type of compute shader.
     // Figure out what the arguments are supposed to be (see vector_add.rs) and
     // call the correct shader function in the correct shader file.
