@@ -506,27 +506,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e2-traits" class="md-nav__link">
+  <a href="#m0e1-traits" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e2 - Traits
+      m0::e1 - Traits
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e3a-ray-tracing-in-one-weekend" class="md-nav__link">
+  <a href="#m0e2a-ray-tracing-in-one-weekend" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e3::a - Ray Tracing in One Weekend
+      m0::e2::a - Ray Tracing in One Weekend
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e3b-learning-to-fly" class="md-nav__link">
+  <a href="#m0e2b-learning-to-fly" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e3::b - Learning to Fly
+      m0::e2::b - Learning to Fly
     </span>
   </a>
   
@@ -1818,27 +1818,27 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e2-traits" class="md-nav__link">
+  <a href="#m0e1-traits" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e2 - Traits
+      m0::e1 - Traits
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e3a-ray-tracing-in-one-weekend" class="md-nav__link">
+  <a href="#m0e2a-ray-tracing-in-one-weekend" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e3::a - Ray Tracing in One Weekend
+      m0::e2::a - Ray Tracing in One Weekend
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#m0e3b-learning-to-fly" class="md-nav__link">
+  <a href="#m0e2b-learning-to-fly" class="md-nav__link">
     <span class="md-ellipsis">
-      m0::e3::b - Learning to Fly
+      m0::e2::b - Learning to Fly
     </span>
   </a>
   
@@ -1870,11 +1870,32 @@ of structure and the borrow checker through doing either m0::e1::a or m0::e1::b.
 wheras the other is more neural network oriented.</p>
 <h2 id="m0e0-advent-of-code">m0::e0 - Advent of Code</h2>
 <p>In order to get a hang of the basic of Rust I recommend doing <a href="https://adventofcode.com/">Advent of Code</a>
-problems until you feel comfortable moving forward. You can give yourself a bigger challenge by rewriting your
-solutions to use iterators whenever possible.</p>
-<h2 id="m0e2-traits">m0::e2 - Traits</h2>
-<p>Find out which traits are needed for using BURN.</p>
-<h2 id="m0e3a-ray-tracing-in-one-weekend">m0::e3::a - Ray Tracing in One Weekend</h2>
+problems until you feel comfortable moving forward.</p>
+<p>Give yourself a bigger challenge:</p>
+<ul>
+<li>Rewrite your solutions to use iterators whenever possible</li>
+<li>Handle errors properly instead of using <code>.unwrap()</code> everywhere</li>
+<li>Implement testing</li>
+</ul>
+<h2 id="m0e1-traits">m0::e1 - Traits</h2>
+<p>Traits are one of the ways in which we can begin to create structure in our programs. In Rust, traits
+are somewhat like interfaces seen in other languages. A struct can implement multiple traits and we can enable
+lots of different types of input as function arguments by specifying them somewhat generically. Imagine a
+function definition. Argument A might be an <code>f32</code>, argument B might be a <code>&amp;Vec&lt;i64&gt;</code>, but argument
+C could support a range of possible inputs, by specifying that all arguments in the third spot (C), should
+implement the interface Alpha. Meaning that they all must implement some form of behaviour that is
+needed by this function. It could have lots of other behavior, but we don't care about that behavior.
+Or we could even require multiple kinds of behavior such as argument C must support behavior of
+trait Alpha + trait Beta + trait Omega. This is known as composition. Now for the exercise.</p>
+<ul>
+<li>Read <a href="https://github.com/absorensen/the-guide/tree/main/m0_introduction/code/image_on_screen">this link</a> about traits</li>
+<li>Create a new project (<code>cargo new name</code>)</li>
+<li>Create 3 different traits</li>
+<li>Create 3 different structs, each implementing 2 different traits</li>
+<li>Create 3 functions each requiring one or more arguments to implement one or more of those traits</li>
+<li>Create a test program which uses all structs, all functions and all traits</li>
+</ul>
+<h2 id="m0e2a-ray-tracing-in-one-weekend">m0::e2::a - Ray Tracing in One Weekend</h2>
 <p>Doing this exercise will be quite challenging if you don't know how to read C++. To better practice
 structure, smart pointers, dynamic dispatch and traits, I recommend moving on to doing
 <a href="https://raytracing.github.io/books/RayTracingInOneWeekend.html">Ray Tracing in One Weekend</a> in Rust. There is a code snippet which shows your image on screen
@@ -1895,7 +1916,7 @@ through dependency injection</li>
 pixel indices, then trade .iter() for .par_iter() </li>
 </ul>
 </details>
-<h2 id="m0e3b-learning-to-fly">m0::e3::b - Learning to Fly</h2>
+<h2 id="m0e2b-learning-to-fly">m0::e2::b - Learning to Fly</h2>
 <p>If you are more inclined towards neural networks, <a href="https://pwy.io/posts/learning-to-fly-pt1/">Learning to Fly</a>, which focuses on neural networks and genetic
 algorithms, might be more stimulating. The code is already in Rust and should be fairly easy to follow.</p>
 
@@ -1920,7 +1941,7 @@ algorithms, might be more stimulating. The code is already in Rust and should be
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 19, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 3, 2024</span>
   </span>
 
     
