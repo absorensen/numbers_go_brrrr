@@ -43,8 +43,8 @@ folder. You are allowed to change function signatures as long as the overall res
     * You are allowed to try and replace the used random number generation solution with something more performant.
     Crytographic security isn't a priority. The generated values should be reasonably uniformly distributed.
     * Some functions do the same thing every loop iteration and can be moved to preprocessing.
-    * Some functions don't depend on other functions for their results or are only needed until the very end.
-    Parhaps the work could be transferred to other threads.
+    * Some functions don't depend on other functions for their results or are only needed at the very end.
+    Perhaps the work could be transferred to other threads.
     * You are free to restructure the flow of data to cache generated or allocated data.
     * How can you see whether results depending on RNG are the same with every iteration?
     * Look for branching everywhere.
@@ -59,7 +59,7 @@ folder. You are allowed to change function signatures as long as the overall res
 
 ??? note "Hints - Workers"
 
-    * Restructure Vec<Worker> into Workers using data oriented design.
+    * Restructure Vec<Worker> into Workers using data-oriented design.
     * Change in_a_union to bool.
 
 ??? note "Hints - Rainbow Curvature"
@@ -71,12 +71,15 @@ folder. You are allowed to change function signatures as long as the overall res
 
     * If you formulate the loops as an iterator instead you can use Rayon to parallelize it, or you can
     move the whole thing to the GPU.
+    * If you are using par_iter(), could you reduce the size of the problem to alleviate work for the
+    work stealing scheduler?
 
 ??? note "Hints - Point Cloud Processing"
 
     * Point sampling of a mesh means sampling random points on a triangle with the number of points relative to
     the area of the triangle. What can you do to minimize the amount of allocations? (Hint: resize as soon as you
     know how much data you will need instead of always just pushing)
+    * Use a cheaper random number generator.
 
 ??? note "Hints - Pandemonium Machine"
 
@@ -84,7 +87,7 @@ folder. You are allowed to change function signatures as long as the overall res
     cache this list of functions and sort it.
     * Sort the list of functions so you execute all of the functions of type A before moving on to
     functions of type B.
-    * Using enums instead of dyn.
+    * Use enums instead of dyn to go from dynamic to static dispatch.
 
 ??? note "Hints - Model Loading"
 
@@ -97,8 +100,8 @@ folder. You are allowed to change function signatures as long as the overall res
 
 ??? note "Hints - Geometry Machinery"
 
-    * Threads being spun up for each individual work task
-    * Could you change the gizmo work to use SIMD and data oriented design instead?
+    * Threads being spun up for each individual work task.
+    * Could you change the gizmo work to use SIMD and data-oriented design instead?
     * In the geometry machinery add_work function, could you add a return type to reduce the amount of contention
     on the lock or could you reformulate the interactions using atomics?
 
