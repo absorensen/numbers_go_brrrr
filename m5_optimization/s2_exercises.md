@@ -28,14 +28,14 @@ different concepts introduced throughout the course to figure out how to progres
 are called and what they do don't matter. Some of the code is real world code, some of it is nonsense.
 Try to spot which concept from the text could improve the performance of each section. Also try to
 structure the loop. Which of the calculations are completely deterministic and are repeated with
-each loop iteration. You are allowed to move things to the GPU if it makes sense, you are also allowed
-to completely restructure data. Try to figure out each function individually before you start using the
-hints. You can also remove all the timing if you have a working profiler.
+each loop iteration? You are allowed to move things to the GPU if it makes sense, you are also allowed
+to completely restructure and cache data. Try to figure out each function individually before you start
+using the hints. You can also remove all the timing if you have a working profiler.
 
 Go to the code in ```m5_optimization_code::geometry_factory```.
 To get the code to work you need to download the [Stanford bunny][0] as an .obj file through
-[Morgan McGuire's Compute Graphics archive][1] and put it in the resources folder.
-You are allowed to change function signatures as long as the results stay the same.
+[Morgan McGuire's Compute Graphics archive][1] and put it in the ```geometry_factory/resources/```
+folder. You are allowed to change function signatures as long as the overall results stay the same.
 
 ??? note "Hints - Overall"
 
