@@ -1868,8 +1868,8 @@ folder. You are allowed to change function signatures as long as the overall res
 <li>You are allowed to try and replace the used random number generation solution with something more performant.
 Crytographic security isn't a priority. The generated values should be reasonably uniformly distributed.</li>
 <li>Some functions do the same thing every loop iteration and can be moved to preprocessing.</li>
-<li>Some functions don't depend on other functions for their results or are only needed until the very end.
-Parhaps the work could be transferred to other threads.</li>
+<li>Some functions don't depend on other functions for their results or are only needed at the very end.
+Perhaps the work could be transferred to other threads.</li>
 <li>You are free to restructure the flow of data to cache generated or allocated data.</li>
 <li>How can you see whether results depending on RNG are the same with every iteration?</li>
 <li>Look for branching everywhere.</li>
@@ -1886,7 +1886,7 @@ Parhaps the work could be transferred to other threads.</li>
 <details class="note">
 <summary>Hints - Workers</summary>
 <ul>
-<li>Restructure Vec<Worker> into Workers using data oriented design.</li>
+<li>Restructure Vec<Worker> into Workers using data-oriented design.</li>
 <li>Change in_a_union to bool.</li>
 </ul>
 </details>
@@ -1902,6 +1902,8 @@ doesn't remove the other functions for not having their results used.</li>
 <ul>
 <li>If you formulate the loops as an iterator instead you can use Rayon to parallelize it, or you can
 move the whole thing to the GPU.</li>
+<li>If you are using par_iter(), could you reduce the size of the problem to alleviate work for the
+work stealing scheduler?</li>
 </ul>
 </details>
 <details class="note">
@@ -1910,6 +1912,7 @@ move the whole thing to the GPU.</li>
 <li>Point sampling of a mesh means sampling random points on a triangle with the number of points relative to
 the area of the triangle. What can you do to minimize the amount of allocations? (Hint: resize as soon as you
 know how much data you will need instead of always just pushing)</li>
+<li>Use a cheaper random number generator.</li>
 </ul>
 </details>
 <details class="note">
@@ -1919,7 +1922,7 @@ know how much data you will need instead of always just pushing)</li>
 cache this list of functions and sort it.</li>
 <li>Sort the list of functions so you execute all of the functions of type A before moving on to
 functions of type B.</li>
-<li>Using enums instead of dyn.</li>
+<li>Use enums instead of dyn to go from dynamic to static dispatch.</li>
 </ul>
 </details>
 <details class="note">
@@ -1938,8 +1941,8 @@ functions of type B.</li>
 <details class="note">
 <summary>Hints - Geometry Machinery</summary>
 <ul>
-<li>Threads being spun up for each individual work task</li>
-<li>Could you change the gizmo work to use SIMD and data oriented design instead?</li>
+<li>Threads being spun up for each individual work task.</li>
+<li>Could you change the gizmo work to use SIMD and data-oriented design instead?</li>
 <li>In the geometry machinery add_work function, could you add a return type to reduce the amount of contention
 on the lock or could you reformulate the interactions using atomics?</li>
 </ul>
