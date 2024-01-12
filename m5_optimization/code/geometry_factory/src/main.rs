@@ -183,7 +183,7 @@ fn main() {
     let mut function_time_in_nano: Timings = Timings::new();
     let path_to_bunny: String = "./resources/bunny.obj".to_string();
     let mut screensaver = PrettyScreensaver::new();
-    let loop_count = 1;
+    let loop_count = 10;
     
     preprocessing(&mut total_time_in_nano, &mut function_time_in_nano);
 
