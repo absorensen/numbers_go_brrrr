@@ -1857,9 +1857,9 @@ structure the loop. Which of the calculations are completely deterministic and a
 each loop iteration? You are allowed to move things to the GPU if it makes sense, you are also allowed
 to completely restructure and cache data. Try to figure out each function individually before you start
 using the hints. You can also remove all the timing if you have a working profiler.</p>
-<p>Go to the code in <code>m5_optimization_code::geometry_factory</code>.
+<p>Go to the code in <code>m5_optimization::code::geometry_factory</code>.
 To get the code to work you need to download the <a href="http://www.graphics.stanford.edu/data/3Dscanrep/">Stanford bunny</a> as an .obj file through
-<a href="https://casual-effects.com/g3d/data10/index.html#mesh4">Morgan McGuire's Compute Graphics archive</a> and put it in the <code>geometry_factory/resources/</code>
+<a href="https://casual-effects.com/g3d/data10/index.html#mesh4">Morgan McGuire's Compute Graphics archive</a> and put it in the <code>geometry_factory::resources</code>
 folder. You are allowed to change function signatures as long as the overall results stay the same.</p>
 <details class="note">
 <summary>Hints - Overall</summary>
