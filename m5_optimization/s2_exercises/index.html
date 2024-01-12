@@ -1656,6 +1656,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#m5e1-professor-brentzen-and-the-geometry-factory-a-performance-easter-egg-hunt-in-g-minor" class="md-nav__link">
+    <span class="md-ellipsis">
+      m5::e1 - Professor Bærentzen and the Geometry Factory: A Performance Easter Egg Hunt in G Minor
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1790,6 +1799,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#m5e1-professor-brentzen-and-the-geometry-factory-a-performance-easter-egg-hunt-in-g-minor" class="md-nav__link">
+    <span class="md-ellipsis">
+      m5::e1 - Professor Bærentzen and the Geometry Factory: A Performance Easter Egg Hunt in G Minor
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -1824,6 +1842,108 @@ the <code>egui-winit-template</code> project, the <code>computational_graphs</co
 <li>Can you see L2 cache hits/misses?</li>
 <li>Can it show you the hot spots in your code?</li>
 </ul>
+<h2 id="m5e1-professor-brentzen-and-the-geometry-factory-a-performance-easter-egg-hunt-in-g-minor">m5::e1 - Professor Bærentzen and the Geometry Factory: A Performance Easter Egg Hunt in G Minor</h2>
+<p>I have conjured up a playground of functions for you to profile and optimize. I present to you
+Professor Bærentzen and the Geometry Factory. In it the Willy Wonka of Geometry Processing (
+don't be alarmed, he is completely fictional) has a factory which constructs geometry doodads
+and supresses the work force (as is tradition). In the end, he uses the supression of the work
+force and various geometry operations to calculate the curvature of the rainbow (he doesn't
+care much about it's color, that's the other guy). </p>
+<p>Figure out why, how and what, in order to optimize the time per loop iteration. You will need the
+different concepts introduced throughout the course to figure out how to progress. What the functions
+are called and what they do don't matter. Some of the code is real world code, some of it is nonsense.
+Try to spot which concept from the text could improve the performance of each section. Also try to
+structure the loop. Which of the calculations are completely deterministic and are repeated with
+each loop iteration. You are allowed to move things to the GPU if it makes sense, you are also allowed
+to completely restructure data. Try to figure out each function individually before you start using the
+hints. You can also remove all the timing if you have a working profiler.</p>
+<p>Go to the code in <code>m5_optimization_code::geometry_factory</code>.
+To get the code to work you need to download the <a href="http://www.graphics.stanford.edu/data/3Dscanrep/">Stanford bunny</a> as an .obj file through
+<a href="https://casual-effects.com/g3d/data10/index.html#mesh4">Morgan McGuire's Compute Graphics archive</a> and put it in the resources folder.
+You are allowed to change function signatures as long as the results stay the same.</p>
+<details class="note">
+<summary>Hints - Overall</summary>
+<ul>
+<li>You are free to change how you measure things, the timings already there are there to get you started.</li>
+<li>You are allowed to try and replace the used random number generation solution with something more performant.
+Crytographic security isn't a priority. The generated values should be reasonably uniformly distributed.</li>
+<li>Some functions do the same thing every loop iteration and can be moved to preprocessing.</li>
+<li>Some functions don't depend on other functions for their results or are only needed until the very end.
+Parhaps the work could be transferred to other threads.</li>
+<li>You are free to restructure the flow of data to cache generated or allocated data.</li>
+<li>How can you see whether results depending on RNG are the same with every iteration?</li>
+<li>Look for branching everywhere.</li>
+<li>Look at data oriented design to rewrite the data structures to be optimal for caching.</li>
+<li>Try to avoid resizing in loops.</li>
+<li>Is there a more performant way of printing text?</li>
+<li>Are you sure your data is cache aligned?</li>
+<li>Try to remove branching and if-statements inside loops.</li>
+<li>Try to remove all values represented as String.</li>
+<li>See whether loops can be fused or fissioned.</li>
+<li>If you parallelize a loop, see whether you gain more performance by using chunks instead.</li>
+</ul>
+</details>
+<details class="note">
+<summary>Hints - Workers</summary>
+<ul>
+<li>Restructure Vec<Worker> into Workers using data oriented design.</li>
+<li>Change in_a_union to bool.</li>
+</ul>
+</details>
+<details class="note">
+<summary>Hints - Rainbow Curvature</summary>
+<ul>
+<li>This function doesn't really matter except to create a data dependence ensuring that the compiler
+doesn't remove the other functions for not having their results used.</li>
+</ul>
+</details>
+<details class="note">
+<summary>Hints - Pretty Screensaver</summary>
+<ul>
+<li>If you formulate the loops as an iterator instead you can use Rayon to parallelize it, or you can
+move the whole thing to the GPU.</li>
+</ul>
+</details>
+<details class="note">
+<summary>Hints - Point Cloud Processing</summary>
+<ul>
+<li>Point sampling of a mesh means sampling random points on a triangle with the number of points relative to
+the area of the triangle. What can you do to minimize the amount of allocations? (Hint: resize as soon as you
+know how much data you will need instead of always just pushing)</li>
+</ul>
+</details>
+<details class="note">
+<summary>Hints - Pandemonium Machine</summary>
+<ul>
+<li>As written in the code, the order in which the functions are executed isn't important. You can
+cache this list of functions and sort it.</li>
+<li>Sort the list of functions so you execute all of the functions of type A before moving on to
+functions of type B.</li>
+<li>Using enums instead of dyn.</li>
+</ul>
+</details>
+<details class="note">
+<summary>Hints - Model Loading</summary>
+<ul>
+<li>In this function the main run time is loading the bunny with a library.</li>
+<li>What you can do is to make sure you cache and save the bunny model once in preprocessing.</li>
+</ul>
+</details>
+<details class="note">
+<summary>Hints - Kettles</summary>
+<ul>
+<li>Does the early returns and extra if-statements yield a performance gain or penalty?</li>
+</ul>
+</details>
+<details class="note">
+<summary>Hints - Geometry Machinery</summary>
+<ul>
+<li>Threads being spun up for each individual work task</li>
+<li>Could you change the gizmo work to use SIMD and data oriented design instead?</li>
+<li>In the geometry machinery add_work function, could you add a return type to reduce the amount of contention
+on the lock or could you reformulate the interactions using atomics?</li>
+</ul>
+</details>
 
 
 
@@ -1846,7 +1966,7 @@ the <code>egui-winit-template</code> project, the <code>computational_graphs</co
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 5, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 12, 2024</span>
   </span>
 
     
