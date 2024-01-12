@@ -21,7 +21,7 @@ Professor Bærentzen and the Geometry Factory. In it the Willy Wonka of Geometry
 don't be alarmed, he is completely fictional) has a factory which constructs geometry doodads
 and supresses the work force (as is tradition). In the end, he uses the supression of the work
 force and various geometry operations to calculate the curvature of the rainbow (he doesn't
-care much about it's color, that's the other guy). 
+care much about it's color, that's the other guy).  
 
 Figure out why, how and what, in order to optimize the time per loop iteration. You will need the
 different concepts introduced throughout the course to figure out how to progress. What the functions
@@ -38,7 +38,7 @@ To get the code to work you need to download the [Stanford bunny][0] as an .obj 
 You are allowed to change function signatures as long as the results stay the same.
 
 ??? note "Hints - Overall"
-    
+
     * You are free to change how you measure things, the timings already there are there to get you started.
     * You are allowed to try and replace the used random number generation solution with something more performant.
     Crytographic security isn't a priority. The generated values should be reasonably uniformly distributed.
@@ -58,28 +58,28 @@ You are allowed to change function signatures as long as the results stay the sa
     * If you parallelize a loop, see whether you gain more performance by using chunks instead.
 
 ??? note "Hints - Workers"
-    
+
     * Restructure Vec<Worker> into Workers using data oriented design.
     * Change in_a_union to bool.
 
 ??? note "Hints - Rainbow Curvature"
-    
+
     * This function doesn't really matter except to create a data dependence ensuring that the compiler
     doesn't remove the other functions for not having their results used.
 
 ??? note "Hints - Pretty Screensaver"
-    
+
     * If you formulate the loops as an iterator instead you can use Rayon to parallelize it, or you can
     move the whole thing to the GPU.
 
 ??? note "Hints - Point Cloud Processing"
-    
+
     * Point sampling of a mesh means sampling random points on a triangle with the number of points relative to
     the area of the triangle. What can you do to minimize the amount of allocations? (Hint: resize as soon as you
     know how much data you will need instead of always just pushing)
 
 ??? note "Hints - Pandemonium Machine"
-   
+
     * As written in the code, the order in which the functions are executed isn't important. You can
     cache this list of functions and sort it.
     * Sort the list of functions so you execute all of the functions of type A before moving on to
@@ -92,11 +92,11 @@ You are allowed to change function signatures as long as the results stay the sa
     * What you can do is to make sure you cache and save the bunny model once in preprocessing.
 
 ??? note "Hints - Kettles"
-    
+
     * Does the early returns and extra if-statements yield a performance gain or penalty?
 
 ??? note "Hints - Geometry Machinery"
-    
+
     * Threads being spun up for each individual work task
     * Could you change the gizmo work to use SIMD and data oriented design instead?
     * In the geometry machinery add_work function, could you add a return type to reduce the amount of contention
