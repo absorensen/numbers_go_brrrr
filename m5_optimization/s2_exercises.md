@@ -17,8 +17,8 @@ the ```egui-winit-template``` project, the ```computational_graphs``` framework 
 
 ## m5::e1 - Professor Bærentzen and the Geometry Factory: A Performance Easter Egg Hunt in G Minor
 I have conjured up a playground of functions for you to profile and optimize. I present to you
-Professor Bærentzen and the Geometry Factory. In it, the Willy Wonka of Geometry Processing (
-don't be alarmed, he is completely fictional) has a factory which constructs geometry doodads
+Professor Bærentzen and the Geometry Factory. In it, the Willy Wonka of Geometry Processing
+(don't be alarmed, he is completely fictional) has a factory which constructs geometry doodads
 and supresses the work force (as is tradition). In the end, he uses the supression of the work
 force and various geometry operations to calculate the curvature of rainbows at various points.
 He doesn't care much about it's color, that's the other guy.
