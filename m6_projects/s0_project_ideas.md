@@ -71,6 +71,7 @@ Render the points to a buffer using compute shaders instead and use a fragment s
 the points to screen. How do you handle which points are closest in terms of depth? Which
 type of synchronization might you need?
 Could you preprocess the points to compress the data?
+One way to start this project is to create a renderer using [LearnWGPU][9] and [WebGPU Fundamentals][10].
 
 ## Path tracer
 Create an interactive GPU-based path tracer.
@@ -98,3 +99,5 @@ spectral domain signal.
 [6]: https://arxiv.org/abs/2201.06799
 [7]: https://github.com/tmalsburg/saccades
 [8]: https://xeno-canto.org/
+[9]: https://sotrh.github.io/learn-wgpu/
+[10]: https://webgpufundamentals.org/webgpu/lessons/webgpu-points.html

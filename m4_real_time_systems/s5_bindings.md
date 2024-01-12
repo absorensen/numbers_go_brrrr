@@ -67,8 +67,8 @@ with every element of a vector with a for-loop like anywhere else. But, it is a 
 and use ```[:]```. In that case, you've just moved the for-loop from happening in Python, to happening in C,
 reducing the amount of switching from Python to C and back from N to 1, resulting in a large speedup.
 
-There's of course many more subtleties and nuances to creating bindins, but that should be enough to set you on your
-way and let you reuse some of the skills you have learned here in other contexts.
+There's of course many more subtleties and nuances to creating bindings, but that should be enough to set you
+on your way and let you reuse some of the skills you have learned here in other contexts.
 
 [0]: https://en.wikipedia.org/wiki/Language_binding
 [1]: https://en.wikipedia.org/wiki/Foreign_function_interface

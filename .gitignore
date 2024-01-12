@@ -142,7 +142,7 @@ dmypy.json
 outputs/
 
 # datasets
-FashionMNIST/
+.obj
 
 # vs code
 .vscode/settings.json
