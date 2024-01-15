@@ -2011,11 +2011,13 @@ strategy is going into greater detail about core concepts such as memory and the
 of tools and concepts, also known as the "learn what to DuckDuckGo"-strategy. Once you are ready to do a project
 of your own you can then go back to a handful of concepts and explore them in greater detail. The additional
 reading sections might be useful when going back.</p>
-<p>The guide will introduce concepts that aid some programs in producing faster results than others.
+<p>The guide will introduce concepts that aid some programs in producing faster results.
 An important factor in reliable and performant systems is limitations.
 Usually, the word limitations carries a negative connotation. Very few people think less freedom or
 flexibility sounds particularly enticing, but in computing, limitations can be a wonderful thing to have
 and set. Especially, once you are past the first prototype. In some cases, even when prototyping.</p>
+<p>For an introduction to how a computer works, see <a href="https://people.compute.dtu.dk/janba/what_is_a_computer.html">this explanation</a> by Andreas Bærentzen. I will
+continue assuming you have read it.</p>
 <h2 id="scripting-languages">Scripting Languages</h2>
 <p>Chill out, take things one line of code at a time. Scripting languages aren't compiled, but run one
 line at a time. This leaves the system unable to look beyond the current line of code,
@@ -2075,12 +2077,22 @@ frameworks such as <a href="https://en.wikipedia.org/wiki/Numba">Numba</a> perfo
 <h2 id="compiled-languages">Compiled Languages</h2>
 <p>In some languages like <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a>, <a href="https://en.wikipedia.org/wiki/C%2B%2B">C++</a> and <a href="https://en.wikipedia.org/wiki/Rust_(programming_language)">Rust</a>, machine code is the outcome.
 That machine code can be quite platform specific, both because of the operating system and the
-hardware, and is in binary. 1's and 0's! These three languages are not garbage collected (more on that later).
-<a href="https://godbolt.org/">Godbolt</a> is an online compiler explorer where we can explore what happens when we compile or interpret
-languages. I have defined this very simple example function, where in a number is multiplied with itself
+hardware, and is in binary. 1's and 0's! These three languages are not garbage collected (more on that later).</p>
+<p>Compiled languages have compilers (who would have thunk) which can and will optimize your code. It can do so
+because it can look at all the code at the same time and it can make improvements specific to the platform
+you are compiling for. Compilers aren't just a feature specific to programming languages, but we can
+even see them hit the mainstream for optimizing machine learning applications. We will even construct
+a very simple optimizing compiler for computational graphs in the next module.</p>
+<p><a href="https://godbolt.org/">Godbolt</a> is an online compiler explorer where we can explore what happens when we compile or interpret
+languages. It will show output to assembley code which corresponds to actual machine code. You don't need
+to learn everything, but if you have read the <a href="https://people.compute.dtu.dk/janba/what_is_a_computer.html">introduction to computers</a> you will see the most important
+codes for the following is load, store, add and multiply, along with register and memory addresses, as seen
+in the description of the SSMC.</p>
+<p>I have defined this very simple example function, where in a number is multiplied with itself
 in-place, twice. In a perfect world, the system would see that we could store the intermediate results
-as close to the arithmetic logic unit (ALU), which is doing the multiplication, as possible in order to
-not redo the loading and storing into the more expensive RAM.</p>
+in a single register. This places the data as close to the arithmetic logic unit (ALU), which is computing
+the multiplication, as possible in order to not redo the loading and storing into the more expensive RAM.
+A good compiler will also recognize that the three components in a multiplication are all the same value.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python</label><label for="__tabbed_1_2">Rust</label><label for="__tabbed_1_3">C++</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2213,7 +2225,7 @@ not redo the loading and storing into the more expensive RAM.</p>
 </div>
 </div>
 </div>
-<p>As you can see, with the interpreted Python version, wherein Python is ready and executing a single line
+<p>As you can see, with the interpreted Python version, wherein Python is reading and executing a single line
 at a time, the lack of context and constraint results in loading the same value into registers twice and
 storing it in main memory, only to load it twice and storing it again. This is wildly ineffecient.
 If we instead move to Rust and compile it in what is more or less debug mode, we get all sorts of
@@ -2362,7 +2374,7 @@ it to generate more performant code.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 2, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 15, 2024</span>
   </span>
 
     
