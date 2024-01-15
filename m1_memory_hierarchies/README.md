@@ -5,8 +5,8 @@ restricted fashion, such as declaring our intent through a graph, that allows us
 Memory is everything as compute itself is very cheap, keeping the part of your code that does computations fed
 with data is expensive. Knowing more about how memory works will also help you parallelize your code for a greater
 speedup. I'll also introduce how to work with GPU's from the dual perspective of memory and parallelism. It is
-introduced in this module instead of concurrency as programming GPU's is a microcosm of memory and parallelism and
-introducing these concepts early on your journey will allow you some time to come to terms with the mindbending
+introduced in this module instead of concurrency as programming GPU's is a microcosm of memory and parallelism.
+Introducing these concepts early on in your journey will allow you some time to come to terms with the mindbending
 prospects of parallel programming. Also GPU's have become ubiquitous these last few years. Just look at
 Nvidia's stock prices!
 
@@ -26,9 +26,6 @@ improvement of memory over time.
 Image credit</a>
 </figcaption>
 </figure>
-
-For an introduction to how a computer works, see [this explanation][1] by Andreas Bærentzen. I will
-continue assuming you have read it.  
 
 ## Perspective
 The further you move from simple, albeit heavy, problems such as a matrix-matrix problem to more heterogenous
@@ -191,4 +188,3 @@ For a more in-depth explanation on the memory hierarchy see this chapter on
 [Memory Hierarchy Design][0].
 
 [0]: https://www.cs.umd.edu/~meesh/411/CA-online/chapter/memory-hierarchy-design-basics/index.html
-[1]: https://people.compute.dtu.dk/janba/what_is_a_computer.html

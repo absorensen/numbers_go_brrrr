@@ -10,11 +10,14 @@ of tools and concepts, also known as the "learn what to DuckDuckGo"-strategy. On
 of your own you can then go back to a handful of concepts and explore them in greater detail. The additional
 reading sections might be useful when going back.
 
-The guide will introduce concepts that aid some programs in producing faster results than others.
+The guide will introduce concepts that aid some programs in producing faster results.
 An important factor in reliable and performant systems is limitations.
 Usually, the word limitations carries a negative connotation. Very few people think less freedom or
 flexibility sounds particularly enticing, but in computing, limitations can be a wonderful thing to have
 and set. Especially, once you are past the first prototype. In some cases, even when prototyping.
+
+For an introduction to how a computer works, see [this explanation][39] by Andreas Bærentzen. I will
+continue assuming you have read it.
 
 ## Scripting Languages
 Chill out, take things one line of code at a time. Scripting languages aren't compiled, but run one
@@ -84,11 +87,24 @@ frameworks such as [Numba][3] perform JIT compilation of your annotated Python c
 In some languages like [C][4], [C++][5] and [Rust][6], machine code is the outcome.
 That machine code can be quite platform specific, both because of the operating system and the
 hardware, and is in binary. 1's and 0's! These three languages are not garbage collected (more on that later).
+
+Compiled languages have compilers (who would have thunk) which can and will optimize your code. It can do so
+because it can look at all the code at the same time and it can make improvements specific to the platform
+you are compiling for. Compilers aren't just a feature specific to programming languages, but we can
+even see them hit the mainstream for optimizing machine learning applications. We will even construct
+a very simple optimizing compiler for computational graphs in the next module.
+
 [Godbolt][7] is an online compiler explorer where we can explore what happens when we compile or interpret
-languages. I have defined this very simple example function, where in a number is multiplied with itself
+languages. It will show output to assembley code which corresponds to actual machine code. You don't need
+to learn everything, but if you have read the [introduction to computers][39] you will see the most important
+codes for the following is load, store, add and multiply, along with register and memory addresses, as seen
+in the description of the SSMC.
+
+I have defined this very simple example function, where in a number is multiplied with itself
 in-place, twice. In a perfect world, the system would see that we could store the intermediate results
-as close to the arithmetic logic unit (ALU), which is doing the multiplication, as possible in order to
-not redo the loading and storing into the more expensive RAM.
+in a single register. This places the data as close to the arithmetic logic unit (ALU), which is computing
+the multiplication, as possible in order to not redo the loading and storing into the more expensive RAM.
+A good compiler will also recognize that the three components in a multiplication are all the same value.
 
 === "Python"
 
@@ -230,7 +246,7 @@ Now let's look at the compiled (interpreted for Python) outputs.
         ret
     ```
 
-As you can see, with the interpreted Python version, wherein Python is ready and executing a single line
+As you can see, with the interpreted Python version, wherein Python is reading and executing a single line
 at a time, the lack of context and constraint results in loading the same value into registers twice and
 storing it in main memory, only to load it twice and storing it again. This is wildly ineffecient.
 If we instead move to Rust and compile it in what is more or less debug mode, we get all sorts of
@@ -414,3 +430,4 @@ it to generate more performant code.
 [36]: https://www.taichi-lang.org/
 [37]: https://halide-lang.org/
 [38]: https://futhark-lang.org/
+[39]: https://people.compute.dtu.dk/janba/what_is_a_computer.html
