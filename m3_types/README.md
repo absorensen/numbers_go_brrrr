@@ -15,12 +15,15 @@ and quantize your processed data in a way that has as small an impact on precisi
 while decreasing the size of your data. This could result in faster download times or you could stream
 your data from disk directly to the GPU, where the GPU itself might be able to unpack the data.
 
+Knowing which transformations of your data are alright can also allow you to minimize the total
+size of your data at run time, allowing you to fit everything into memory which will greatly
+decrease the amount of disk activity.
+
 Which types you are using have an impact not just on speed and size, but also the energy
-consumption of your programs. In general, less bits mean less energy consumed and integers
-cost less energy to process compared to floats. You don't have to micromanage every single
-variable all the time, but one of the first places to look when optimizing should be arrays.
-```u8``` rarely matters, but ```[u8]``` sure does.
+consumption of your programs. In general, less bits mean less energy consumed. You don't
+have to micromanage every single variable all the time, but one of the first places to
+look when optimizing should be arrays. ```u8``` rarely matters, but ```[u8]``` sure does.
 
 Finally, knowing about types allows us to operate directly on the underlying bits, casting
 from one type to another, to create tightly packed information, which we couldn't otherwise
-have, such as packing three dimensional indices into just 32 or 64 bit integers.
+have, such as packing three dimensional indices into just 32- or 64-bit integers.

@@ -1,4 +1,11 @@
 # Optimization
+Generally, when optimizing code, try to see the memory hierarchy and optimize
+from the bottom up. Sure, you can optimize your RAM usage and memory allocations,
+but it won't matter much if your program spends most of its time waiting on the disk.
+Likewise, microoptimizing your calculations for optimal cache usage probably won't
+matter much if you are constantly asking the operating system for more RAM in a
+loop.
+
 Much like the memory hierarchies there's levels to measuring performance.
 The easiest is just using your system's own task manager. On Windows you just click
 "ctrl+shift+esc" and click on the performance tab. No putting in print statements,
