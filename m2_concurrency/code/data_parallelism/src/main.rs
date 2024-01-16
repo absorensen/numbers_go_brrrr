@@ -130,6 +130,7 @@ fn level_3() {
     }
     // Remove mutability to be sure.
     let filters: Vec<Vec<f32>> = filters;
+    filters[9][1] = 1.0;
 
     for (size, filter) in filter_sizes.iter().zip(&filters) {
         println!("Running filter size {}", *size);
