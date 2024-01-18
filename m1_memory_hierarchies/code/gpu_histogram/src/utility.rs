@@ -1,9 +1,9 @@
 use std::borrow::Cow;
 
+use bytemuck::Pod;
 use wgpu::{Queue, Device, Adapter, AdapterInfo, Instance, RequestAdapterOptions, ShaderModule, ComputePipeline, BindGroupLayout, BindingResource, BindGroup, BindGroupEntry, CommandEncoder, ComputePass, Buffer, BufferSlice, BufferView, util::DeviceExt};
 
-use crate::gpu_vector_f32::GPUVectorF32;
-use crate::gpu_vector_u32::GPUVectorU32;
+use crate::gpu_vector::GPUVector;
 
 // Try hovering your mouse over these types and see
 // what the messages are!
@@ -213,7 +213,8 @@ impl Uniform {
     }
 }
 
-pub fn run_compute_shader(
+pub fn run_compute_shader<T: Pod, U: Pod>(
+    debug: bool,
     handles: &GPUHandles,
     block_size_x: usize, 
     launch_blocks_x: u32,
@@ -222,8 +223,8 @@ pub fn run_compute_shader(
     shader_file: &str, 
     shader_function: &str,
     uniform: &Uniform,
-    input: &GPUVectorF32,
-    output: &mut GPUVectorU32,
+    input: &GPUVector<T>,
+    output: &mut GPUVector<U>,
 ) {
     
     // Compile the shader allowing us to call specific
@@ -274,7 +275,7 @@ pub fn run_compute_shader(
         cpass.set_bind_group(0, &bind_group, &[]);
         cpass.insert_debug_marker("histogram");
         cpass.dispatch_workgroups(launch_blocks_x, launch_blocks_y, 1); // Number of cells to run, the (x,y,z) size of item being processed
-        println!("Dispatching {} x blocks of {} threads and {} y blocks of {} threads each for a total of {} threads!", launch_blocks_x, block_size_x, launch_blocks_y, block_size_y, launch_blocks_x as usize * launch_blocks_y as usize * block_size_x * block_size_y);
+        if debug { println!("Dispatching {} x blocks of {} threads and {} y blocks of {} threads each for a total of {} threads!", launch_blocks_x, block_size_x, launch_blocks_y, block_size_y, launch_blocks_x as usize * launch_blocks_y as usize * block_size_x * block_size_y) };
     }
 
     // Add the command to the encoder copying output back to CPU
@@ -301,7 +302,7 @@ pub fn run_compute_shader(
             let data: BufferView = buffer_slice.get_mapped_range();
             // We actually receive this data as raw bytes &[u8] so we
             // recast it to f32.
-            let result: Vec<u32> = bytemuck::cast_slice(&data).to_vec();
+            let result: Vec<U> = bytemuck::cast_slice(&data).to_vec();
 
             // Clean up and return the data.
             drop(data);

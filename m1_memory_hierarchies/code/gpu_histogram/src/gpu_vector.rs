@@ -1,12 +1,13 @@
 use std::mem;
 
+use bytemuck::Pod;
 use wgpu::{Buffer, util::DeviceExt, CommandEncoder};
 
 use crate::utility::GPUHandles;
 
-pub struct GPUVectorF32 {
+pub struct GPUVector<T> where T: Pod {
     // Our initial, cpu-side data
-    pub cpu_data: Vec<f32>,
+    pub cpu_data: Vec<T>,
 
     // The staging buffer which we back to the CPU with. It represents
     // memory CPU side. In a more complex setup we might have a staging
@@ -23,9 +24,9 @@ pub struct GPUVectorF32 {
     pub storage_buffer: Buffer,
 }
 
-impl GPUVectorF32 {
-    pub fn new(handles: &GPUHandles, cpu_data: Vec<f32>, label: &str, ouput_buffer: bool) -> Self {
-        let element_size: usize = std::mem::size_of::<f32>();
+impl <T> GPUVector<T> where T: Pod {
+    pub fn new(handles: &GPUHandles, cpu_data: Vec<T>, label: &str, ouput_buffer: bool) -> Self {
+        let element_size: usize = std::mem::size_of::<T>();
         let slice_size: usize = cpu_data.len() * element_size;
         let size: u64 = slice_size as wgpu::BufferAddress;
 
@@ -57,7 +58,7 @@ impl GPUVectorF32 {
                         wgpu::BufferUsages::COPY_SRC,
                 });
 
-        GPUVectorF32 { cpu_data, staging_buffer, storage_buffer }
+        GPUVector { cpu_data, staging_buffer, storage_buffer }
     }
 
     // For a bit more nuance to staging buffers and copy to copy 
@@ -71,7 +72,7 @@ impl GPUVectorF32 {
                 0,
                 self.staging_buffer.as_ref().unwrap(),
                 0,
-                (self.cpu_data.len() * mem::size_of::<f32>()) as u64,
+                (self.cpu_data.len() * mem::size_of::<T>()) as u64,
             );
         }
     }
