@@ -612,7 +612,7 @@ numbers from 0 to 4.99999, we would have bins 0, 1, 2, 3 and 4. You can find
 the code in ```m1_memory_hierarchies::code::gpu_histogram``` or [online][8].
 
 I will assume you read and looked at all of the code from the ```gpu_add``` project.
-The wgpu host (cpu) side code is pretty much the same, except I did a bit of 
+The wgpu host (cpu) side code is pretty much the same, except I did a bit of
 refactoring and put it into ```src::utility.rs::run_compute_shader```. It is still
 naively allocating and deallocating buffers, and compiling shaders for our program.
 I offset this by using really large data amounts and threads. Histogram computation
