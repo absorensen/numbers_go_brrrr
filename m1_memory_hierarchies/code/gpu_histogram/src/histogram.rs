@@ -23,19 +23,13 @@ fn histogram_cpu(input: &Vec<f32>, bin_count: usize) -> Vec<u32> {
 
 pub fn histogram(
     debug: bool,
+    input: &Vec<f32>,
     handles: &GPUHandles, 
     base_shader_file: &str,
     element_count: usize,
     bin_count: usize,
     elements_per_thread: usize
 ) -> bool {
-    // Setup our CPU-side data
-    let input: Vec<f32> =
-        (0..element_count).into_iter().map(
-            |element| 
-            1.0 / element_count as f32 * 
-            element as f32 * bin_count as f32 * 0.9999).collect();
-
     let output: Vec<u32> = vec![0; bin_count];
 
     let ground_truth: Vec<u32> = histogram_cpu(&input, bin_count);
@@ -48,7 +42,7 @@ pub fn histogram(
     // Note the true at the end of the output vector creation.
     // This will result in a staging_buffer being created, which we
     // can read from on the CPU.
-    let input: GPUVector<f32> = GPUVector::<f32>::new(&handles, input, "input", false);
+    let input: GPUVector<f32> = GPUVector::<f32>::new(&handles, input.to_vec(), "input", false);
     let mut output: GPUVector<u32> = GPUVector::<u32>::new(&handles, output, "output", true);
 
     // We will use 32 threads in a work group/warp
@@ -60,7 +54,15 @@ pub fn histogram(
     let launch_blocks_y: u32 = 1;
     let bin_count_specialization: String = format!("const BIN_COUNT: u32 = {}u;\n", bin_count);
     let elements_per_thread_specialization: String = format!("const ELEMENTS_PER_THREAD: u32 = {}u;\n", elements_per_thread);
-    let shader_file: String = format!("{}{}{}", bin_count_specialization, elements_per_thread_specialization, base_shader_file);        
+    let sparse_array_specialization: String = format!("const SPARSE_ARRAY_SIZE: u32 = {}u;\n", 2*elements_per_thread);
+    let shader_file: String = 
+        format!(
+            "{}{}{}{}", 
+            bin_count_specialization, 
+            elements_per_thread_specialization,
+            sparse_array_specialization, 
+            base_shader_file
+        );        
     let shader_function: &str = "histogram";
 
     run_compute_shader(

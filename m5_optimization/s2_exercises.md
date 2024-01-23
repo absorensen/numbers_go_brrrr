@@ -23,6 +23,13 @@ and supresses the work force (as is tradition). In the end, he uses the supressi
 force and various geometry operations to calculate the curvature of rainbows at various points.
 He doesn't care much about it's color, that's the other guy.
 
+<figure markdown>
+![Image](../figures/alien_words.jpg){ width="700" }
+<figcaption>
+<a href="https://imgflip.com/i/8d9vne"> Image credit </a>
+</figcaption>
+</figure>
+
 Figure out why, how and what, in order to optimize the time per loop iteration. You will need the
 different concepts introduced throughout the course to figure out how to progress. What the functions
 are called and what they do don't matter. Some of the code is real world code, some of it is nonsense.

@@ -62,6 +62,14 @@ How could you make this sort of general graph, with very few restrictions, safe 
 In the case of the multiply connected nodes, can you come up with a structural solution which allows
 us to make arbitrary graphs in a garbage collected setting or safe in a C++/Rust setting?
 
+## m1::e3 - Gathering Histograms
+Extend the program in ```code::gpu_histogram``` with a shader which uses the gathering paradigm, instead
+of scattering.
+
+??? note "Hints"
+
+    * If the data is unsorted, each thread or work group will need to run through the entire data set.
+
 ## GPU Programming
 This serves as both one of the few instances where we can explicitly program parts of the memory hierarchy
 (shared memory resides in the L1 cache), but also as an introduction to parallel thinking, which you will
@@ -91,12 +99,12 @@ to use shared memory doing it. Doing matrix multiplication as well is good pract
     amount of active threads in the work group. This should result in coalesced memory reads. You should
     look that up.
 
-### m1::e3 - 1D Convolution
+### m1::e4 - 1D Convolution
 Go to ```m1_memory_hierarchies::code::gpu_hand_in``` or [online][0] and follow the instructions.
 You need to do 3 different version of 1D convolution, a naive version, one with zero padding of the input
 signal and one with optimal usage of shared memory.
 
-### m1::e4 - Matrix Multiplication
+### m1::e5 - Matrix Multiplication
 For the second section, also in ```gpu_hand_in``` you need to do a matrix multiplication and a
 tiled matrix multiplication (using shared memory). You should also try out doing a padded version.
 

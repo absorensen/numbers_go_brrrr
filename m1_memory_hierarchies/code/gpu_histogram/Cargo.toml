@@ -13,3 +13,4 @@ pollster = "0.3.0"
 ordered-float = "3.7.0"
 bytemuck = { version = "1.13.1", features = ["derive"] }
 futures-intrusive = "0.5.0"
+rand = "*"

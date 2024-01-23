@@ -29,11 +29,11 @@ fn histogram(
     @builtin(workgroup_id) group_id: vec3<u32>, 
     @builtin(local_invocation_id) local_id: vec3<u32>
     ) {
-        var index: u32 = group_id.x * ELEMENTS_PER_THREAD * 32u + local_id.x;
+        var index: u32 = group_id.x * ELEMENTS_PER_THREAD * 32u + local_id.x * ELEMENTS_PER_THREAD;
         if index < dimensions.element_count {
             for(var elements_fetched: u32 = 0u; elements_fetched < ELEMENTS_PER_THREAD; elements_fetched += 1u) {
                 local_histogram[u32(floor(input[index]))] += 1u;
-                index += 32u;
+                index += 1u;
                 if (dimensions.element_count <= index) {
                     break;
                 }
@@ -48,9 +48,7 @@ fn histogram(
 
         var local_index: u32 = local_id.x;
         while (local_index < BIN_COUNT) {
-            if (shared_histogram[local_index] != 0u) {
-                atomicAdd(&output[local_index], shared_histogram[local_index]);
-            }
+            atomicAdd(&output[local_index], shared_histogram[local_index]);
             local_index += 32u;
         }
 }

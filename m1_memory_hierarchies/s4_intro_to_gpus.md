@@ -355,9 +355,7 @@ it compiles) -
 
     ```rust
     @compute @workgroup_size(32, 1, 1) 
-    fn main(
-        @builtin(global_invocation_id) global_id: vec3<u32>,
-        ) {
+    fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
         let thread_id: u32 = global_id.x;
         
         if (thread_id < 1) {
@@ -377,9 +375,7 @@ Then we change the shader to have each thread work on a single element -
 
     ```rust
     @compute @workgroup_size(32, 1, 1) 
-    fn main(
-        @builtin(global_invocation_id) global_id: vec3<u32>,
-        ) {
+    fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
         let thread_id: u32 = global_id.x;
         
         if (thread_id < dimensions.element_count) {
@@ -416,9 +412,7 @@ could do something like this -
     ```rust
     const BLOCK_SIZE: u32 = 32u;
     @compute @workgroup_size(32, 1, 1) 
-    fn main(
-        @builtin(global_invocation_id) global_id: vec3<u32>,
-        ) {
+    fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
         let thread_id: u32 = global_id.x;
         
         if (thread_id < dimensions.first_dimension_count) {
@@ -442,9 +436,7 @@ along the rows instead.
 
     ```rust
     @compute @workgroup_size(32, 1, 1) 
-    fn main(
-        @builtin(global_invocation_id) global_id: vec3<u32>,
-        ) {
+    fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
         let thread_id: u32 = global_id.x;
         
         if (thread_id < dimensions.first_dimension_count) {
@@ -610,7 +602,788 @@ gathering, from the point of view of the output element for each thread. For som
 scattering and gathering, there is a paper on it
 [from '07](https://cse.hkust.edu.hk/catalac/papers/scatter_sc07.pdf).
 
-Now back to the memory hierarchies!
+## A Histogram of Violence
+Let's take things a bit further and look at shared memory, scattering, gathering,
+and programming for memory hierarchies with a case study of computing a histogram.
+
+We will take in a list of positive floats and a number of bins.
+Each float is quantized with a floor function to a nearest bin. So for a list of
+numbers from 0 to 4.99999, we would have bins 0, 1, 2, 3 and 4. You can find
+the code in ```m1_memory_hierarchies::code::gpu_histogram``` or [online][8].
+
+I will assume you read and looked at all of the code from the ```gpu_add``` project.
+The wgpu host (cpu) side code is pretty much the same, except I did a bit of 
+refactoring and put it into ```src::utility.rs::run_compute_shader```. It is still
+naively allocating and deallocating buffers, and compiling shaders for our program.
+I offset this by using really large data amounts and threads. Histogram computation
+is going to be mostly about moving data through memory and getting the swarm of
+threads to correctly write to the small number of bins. This is called contention.
+
+When we have 4 threads all wanting to increment the number 0 bin, they are contending
+for the write access. If they were all just reading from the number 0 bin, they
+could all safely do so at a much larger scale, as long as the value didn't change.
+But it will in the case of the histogram. First off there are these basic
+configuration parameters to the different (six) histogram implementations.
+You will find these parameters in ```main()``` -
+
+=== "Rust"
+
+    ```rust
+    let data_count: usize = 2000000;
+    let bin_count: usize = 4;
+    let elements_per_thread: usize = 16;
+    let debug: bool = false;
+    let time_limit_seconds: f32 = 2.0;
+    ```
+
+```data_count``` is how many data elements we will be using to create our histogram.
+```bin_count``` is how many bins to sort them into. ```elements_per_thread``` is
+something I will be using later, when we can have each GPU thread handle more than
+a single data element. ```debug``` turns on some print statements which will say
+whether the function had the correct result and how many blocks/threads were launched
+to handle the amount of data. ```time_limit_seconds``` is how long we will run our
+functions for to measure their performance. For this case we will be counting iterations.
+So how many runs could we do in 2 seconds, including allocations and transfers.
+
+So let's look at the basic compute shader -
+
+=== "WGSL"
+
+    ```rust
+    struct Uniform {
+        element_count: u32,
+        not_used: u32,
+        not_used: u32,
+        not_used: u32,
+    };
+
+    @group(0) @binding(0)
+    var<uniform> dimensions: Uniform;
+
+    @group(0) @binding(1)
+    var<storage, read> input: array<f32>;
+
+    // Bind a read/write array
+    @group(0) @binding(2)
+    var<storage, read_write> output: array<u32>;
+
+    @compute @workgroup_size(32, 1, 1) 
+    fn histogram(@builtin(global_invocation_id) global_id: vec3<u32>) {
+        let thread_id: u32 = global_id.x;
+        
+        if (thread_id < dimensions.element_count) {
+            let index: u32 = u32(floor(input[thread_id]));
+            output[index] += 1u;        
+        }
+    }
+    ```
+
+Each thread finds its *global thread ID*, ensures that is within a
+valid range loads an element, computes the bin, and then increments
+the corresponding bin. Why is this incorrect?
+
+??? success "Answer"
+
+    There is no coordination when reading and writing the bin number.
+    In principle a 100 threads could read the value from ```ouput[index]```,
+    which could be ```5```, decide that the incremented value should be ```6```.
+    This could happen continuously, resulting in invalid results.
+
+What we can do instead is to use a synchronization method called atomics.
+Atomics will be further introduced in the next module. But they're
+basically very small locks which usually have hardware support, meaning
+they support a very limited set of operations, but they are quite fast
+and happen closer to the data. A rule of thumb is that the more generic
+locks you might want to use for areas of memory, whereas atomics are good
+for elements of data. Atomics ensure that all writes happen
+correctly, which has a different meaning based on your requirements,
+but ensuring this correctness, even with hardware support, is slower
+than not using it as only on incrementation can happen at a time.
+It can also be a lot slower if the atomic operation is not available
+in hardware and has to be software emulated instead.
+WGSL has atomics available, and they can be called as such -
+
+=== "WGSL"
+
+    ```rust
+        atomicAdd(&output[index], 1u);   
+    ```
+
+We also have declare the affected array as being atomic, and we have to
+provide a correct size at compile time.
+
+=== "WGSL"
+
+    ```rust
+    @group(0) @binding(2)
+    var<storage, read_write> output: array<atomic<u32>, 10>; 
+    ```
+
+You don't have to do so in other languages such as CUDA, but I would really like
+some flexibility so we don't have to keep a thousand different variations of
+the shader around for something so basic. What we can do instead, because programs
+are just strings, is to append a constant definition at the top of the shader.
+I do that with this snippet in the Rust code -
+
+=== "Rust"
+
+    ```rust
+    let bin_count_specialization: String = format!("const BIN_COUNT: u32 = {}u;\n", bin_count);
+    let shader_file: String = 
+        format!(
+            "{}{}{}", 
+            bin_count_specialization, 
+            base_shader_file
+        );
+    ```
+
+As we just appended this definition at the top we can now put in the ```BIN_COUNT```
+constant instead of the hardcoded 10 and get a variable amount of bins with recompilation.
+
+=== "WGSL"
+
+    ```rust
+    @group(0) @binding(2)
+    var<storage, read_write> output: array<atomic<u32>, BIN_COUNT>; 
+    ```
+
+So now, we can write a more correct version, found in ```histogram_atomic.wgsl```.
+
+=== "WGSL"
+
+    ```rust
+    @compute @workgroup_size(32, 1, 1) 
+    fn histogram(@builtin(global_invocation_id) global_id: vec3<u32>) {
+        let thread_id: u32 = global_id.x;
+        
+        if (thread_id < dimensions.element_count) {
+            let index: u32 = u32(floor(input[thread_id]));
+            atomicAdd(&output[index], 1u);        
+        }
+    }
+    ```
+
+Now that we have correctness, we can start looking at performance. Right now
+the work happens at two levels. The thread loads a value from RAM, computes
+the index, then uses the atomic, to increment the value in RAM. As you can imagine
+the more threads and the fewer bins the more *contention* there will be for the
+few atomic data elements in the output array. Contention is generally bad. Some
+data is being shared between threads, and in order to ensure correctness we have
+to use synchronization methods, thus slowing each thread down that ends up waiting
+for access to the data through the synchronization mechanism.
+
+The greater the ratio between amount of bins and the amount of threads, the
+greater the contention. This is almost true. However, the data generated for
+this example is uniformly distributed. There is an even amount of data going
+into each bin. If the data had instead been skewed towards the smaller bin
+indices, the contention is greater for a few bins and smaller for the rest.
+However, for our function to complete all of them need to be finished, so
+we are likely to be bottlenecked by the most hotly contended bins.
+
+One way to mitigate this, is to move some of the contention to a faster
+layer in the memory hierarchy. As I wrote earlier, with GPU's we're allowed
+to explicitly program a section of the L1 cache named shared memory.
+With shared memory, we also need to know the size at compile time. We basically
+treat this as a stack allocated array that is shared between all threads in a
+work group. We can also declare need to declare it as atomic in WGSL.
+The code can be found in ```histogram_shared.wgsl``` -
+
+=== "WGSL"
+
+    ```rust
+    struct Uniform {
+        element_count: u32,
+        not_used: u32,
+        not_used: u32,
+        not_used: u32,
+    };
+
+    @group(0) @binding(0)
+    var<uniform> dimensions: Uniform;
+
+    @group(0) @binding(1)
+    var<storage, read> input: array<f32>;
+
+    @group(0) @binding(2)
+    var<storage, read_write> output: array<atomic<u32>, BIN_COUNT>;
+
+    var<workgroup> shared_histogram: array<atomic<u32>, BIN_COUNT>;
+
+    @compute @workgroup_size(32, 1, 1) 
+    fn histogram(
+        @builtin(global_invocation_id) global_id: vec3<u32>,
+        @builtin(local_invocation_id) local_id: vec3<u32>
+        ) {
+
+        let thread_id: u32 = global_id.x;
+        if (thread_id < dimensions.element_count) {
+            let index: u32 = u32(floor(input[thread_id]));
+            atomicAdd(&shared_histogram[index], 1u);
+        }
+
+        workgroupBarrier();
+
+        var local_index: u32 = local_id.x;
+        while (local_index < BIN_COUNT) {
+            atomicAdd(&output[local_index], shared_histogram[local_index]);
+            local_index += 32u;
+        }
+    }
+    ```
+
+Now the code has two new elements. First off, for each thread in the work group,
+we really have to start thinking in terms of the work group now, has to load
+a data element from memory. Then we move some of the contention of the binning
+into shared memory. We now have a small, very fast array in L1 cache, where our
+32 threads can create a sub histogram. We still need the atomic operations for
+synchronization, but contention is now much cheaper. A rule of thumb is the speed
+of access in RAM vs. L1 cache/shared memory is 30 to 1. So, each thread loads
+1 element of data and writes it to the shared histogram. Then we have a
+work group barrier which ensures that we have completed computing the histogram
+for the work group and that we can safely begin adding the shared memory histogram
+to the global histogram.
+
+We can take things a step further. What if we accumulated part of the histogram
+locally in registers? That would be quite fast as there would be no need for
+any form of synchronization mechanism as the data would all be thread local,
+as in private for each thread. We now get to a point where we have two concepts
+you have to get comfortable with. We will have a couple of different sections
+of the shader, wherein different things will happen. You have to think of these
+sections as being distinct and as such what indices were used in the first section
+don't necessarily have a relation to the indices in the second section.
+The second thing, coalescing, is something I will get to once I have done the
+paedagogical wrong way to do things example below, also found in
+```histogram_non_coalesced.wgsl``` -
+
+=== "WGSL"
+
+    ```rust
+    // We would have to hardcode this line if we didn't use the bin_count specialization
+    // when compiling the shader
+    //const BIN_COUNT: u32 = 8u;
+    //const ELEMENTS_PER_THREAD: u32 = 8u;
+
+    struct Uniform {
+        element_count: u32,
+        not_used: u32,
+        not_used: u32,
+        not_used: u32,
+    };
+
+    @group(0) @binding(0)
+    var<uniform> dimensions: Uniform;
+
+    @group(0) @binding(1)
+    var<storage, read> input: array<f32>;
+
+    @group(0) @binding(2)
+    var<storage, read_write> output: array<atomic<u32>, BIN_COUNT>;
+
+    var<workgroup> shared_histogram: array<atomic<u32>, BIN_COUNT>;
+
+    var<private> local_histogram: array<u32, BIN_COUNT>;
+
+    @compute @workgroup_size(32, 1, 1) 
+    fn histogram(
+        @builtin(global_invocation_id) global_id: vec3<u32>,
+        @builtin(workgroup_id) group_id: vec3<u32>, 
+        @builtin(local_invocation_id) local_id: vec3<u32>
+    ) {
+        var index: u32 = group_id.x * ELEMENTS_PER_THREAD * 32u + local_id.x * ELEMENTS_PER_THREAD;
+        if index < dimensions.element_count {
+            for(var elements_fetched: u32 = 0u; elements_fetched < ELEMENTS_PER_THREAD; elements_fetched += 1u) {
+                local_histogram[u32(floor(input[index]))] += 1u;
+                index += 1u;
+                if (dimensions.element_count <= index) {
+                    break;
+                }
+            }
+        }
+
+        workgroupBarrier();
+
+        for(var local_index: u32 = 0u; local_index < BIN_COUNT; local_index += 1u) {
+            atomicAdd(&shared_histogram[local_index], local_histogram[local_index]);
+        }
+
+        workgroupBarrier();
+
+        var local_index: u32 = local_id.x;
+        while (local_index < BIN_COUNT) {
+            atomicAdd(&output[local_index], shared_histogram[local_index]);
+            local_index += 32u;
+        }
+    }
+    ```
+
+As you can see, I introduced a new definition, ```ELEMENTS_PER_THREAD```. Each
+thread will load that amount of data and compute a subhistogram in thread local
+memory, which, depending on the register pressure, as in how many local variables
+are allocated between all of the threads relative to the size of the register file,
+will reside in registers, and possibly L1 cache. Computing the subhistogram locally
+increases our register pressure, but decreases the amount of contention for the
+individual bins. One thing we do however, is to throttle the amount of parallelism
+in our solution. We use less threads to compute the same amount of elements.
+This trade-off is likely something you have to test, as the cost of scheduling
+and launching threads is non-neglible, but in a situation where you might have
+lots of different workloads happening on the GPU at the same time, if you can
+find a sweet spot where you are using less threads to get the same or better
+performance, you have made a different type of optimization. In some cases,
+we might even be willing to extend this trade-off beyond the optimal saddle point,
+to create a shader which takes longer to execute, but uses even less threads in
+order to free up the GPU to do other things at the same time.
+
+Back to the code. We now have three distinct sections, which reflect our memory
+hierarchy. In the first section, the threads each load and compute on a number
+of elements, storing the results in a thread local array. We hit a barrier
+to make sure all threads are done. Then each thread adds its local results
+to the shared histogram with atomic operations. But hold up...
+
+We don't actually need the first barrier. We are already synchronizing with
+atomics when writing to the shared histogram, so we don't need the first
+barrier.
+
+=== "WGSL"
+
+    ```rust
+    @compute @workgroup_size(32, 1, 1) 
+    fn histogram(
+        @builtin(global_invocation_id) global_id: vec3<u32>,
+        @builtin(workgroup_id) group_id: vec3<u32>, 
+        @builtin(local_invocation_id) local_id: vec3<u32>
+    ) {
+        var index: u32 = group_id.x * ELEMENTS_PER_THREAD * 32u + local_id.x * ELEMENTS_PER_THREAD;
+        if index < dimensions.element_count {
+            for(var elements_fetched: u32 = 0u; elements_fetched < ELEMENTS_PER_THREAD; elements_fetched += 1u) {
+                local_histogram[u32(floor(input[index]))] += 1u;
+                index += 1u;
+                if (dimensions.element_count <= index) {
+                    break;
+                }
+            }
+        }
+
+        for(var local_index: u32 = 0u; local_index < BIN_COUNT; local_index += 1u) {
+            atomicAdd(&shared_histogram[local_index], local_histogram[local_index]);
+        }
+
+        workgroupBarrier();
+
+        var local_index: u32 = local_id.x;
+        while (local_index < BIN_COUNT) {
+            atomicAdd(&output[local_index], shared_histogram[local_index]);
+            local_index += 32u;
+        }
+    }
+    ```
+
+In the third section, each thread must now take ownership of a section of shared memory
+and write it to global memory, which, again, has nothing to do with the indexing in the
+first parts. One thing we are missing in the first section is coalesced accessing.
+As the threads in the work group share cache lines, threads should generally avoid reading
+from global memory completely incrementally. Instead we likely want a work group sized stride
+in order to get coalesced accesses. If you feel iffy about what that concept was, go back and
+read about it, it's very important. If the explanation in this guide isn't enough for you
+to feel at ease with the concept, try looking it up on the interwebz.
+
+Now for the next iteration of the shader, which you can find in ```histogram_local.wgsl``` -
+
+=== "WGSL"
+
+    ```rust
+    // We would have to hardcode this line if we didn't use the bin_count specialization
+    // when compiling the shader
+    //const BIN_COUNT: u32 = 5u;
+    //const ELEMENTS_PER_THREAD: u32 = 256u;
+
+    struct Uniform {
+        element_count: u32,
+        not_used: u32,
+        not_used: u32,
+        not_used: u32,
+    };
+
+    @group(0) @binding(0)
+    var<uniform> dimensions: Uniform;
+
+    @group(0) @binding(1)
+    var<storage, read> input: array<f32>;
+
+    @group(0) @binding(2)
+    var<storage, read_write> output: array<atomic<u32>, BIN_COUNT>;
+
+    var<workgroup> shared_histogram: array<atomic<u32>, BIN_COUNT>;
+
+    var<private> local_histogram: array<u32, BIN_COUNT>;
+
+    @compute @workgroup_size(32, 1, 1) 
+    fn histogram(
+        @builtin(global_invocation_id) global_id: vec3<u32>,
+        @builtin(workgroup_id) group_id: vec3<u32>, 
+        @builtin(local_invocation_id) local_id: vec3<u32>
+        ) {
+            var index: u32 = group_id.x * ELEMENTS_PER_THREAD * 32u + local_id.x;
+            if index < dimensions.element_count {
+                for(var elements_fetched: u32 = 0u; elements_fetched < ELEMENTS_PER_THREAD; elements_fetched += 1u) {
+                    local_histogram[u32(floor(input[index]))] += 1u;
+                    index += 32u;
+                    if (dimensions.element_count <= index) {
+                        break;
+                    }
+                }
+            }
+
+            for(var local_index: u32 = 0u; local_index < BIN_COUNT; local_index += 1u) {
+                atomicAdd(&shared_histogram[local_index], local_histogram[local_index]);
+            }
+
+            workgroupBarrier();
+
+            var local_index: u32 = local_id.x;
+            while (local_index < BIN_COUNT) {
+                if (shared_histogram[local_index] != 0u) {
+                    atomicAdd(&output[local_index], shared_histogram[local_index]);
+                }
+                local_index += 32u;
+            }
+    }
+    ```
+
+Note that our initial index calculation became easier in part 1 and that we now stride by ```32u```,
+which is the size of the work group. One thing to note now is that our shader is going to scale with
+three things. The number of data elements, the number of elements per thread and the number of
+output bins. Given this dense way of solving the histogram problem, our register pressure is likely
+to go up quite a bit with the number of output bins, while our contention falls. We can try to
+lower this contention a little bit in exchange for the threads going down different paths, by
+looking at the performance difference with ordered data and randomized data. Another thing
+we could do to improve the scaling of the solution would be to use a dense array in the shared
+and global arrays, it is a bit complicated/expensive to make them sparse given that we are using
+atomics for synchronization, so I'll just focus on one easy way to lower our register pressure.
+Using a sparse array for our local histogram. This array will use every second array entry as
+a histogram bin index and the every second plus one entry as the count. In this case our scaling
+of the local array becomes two times the number of elements per thread, instead of the number
+of output bins. Our shared histogram still scales with with the number of output bins.
+You can find the shader in ```histogram_sparse_unoptimized.wgsl``` -
+
+=== "WGSL"
+
+    ```rust
+    // We would have to hardcode this line if we didn't use the bin_count specialization
+    // when compiling the shader
+    //const BIN_COUNT: u32 = Nu;
+    //const ELEMENTS_PER_THREAD: u32 = Nu;
+    // const SPARSE_ARRAY_SIZE: u32 = 2 * ELEMENTS_PER_THREAD
+
+    struct Uniform {
+        element_count: u32,
+        not_used: u32,
+        not_used: u32,
+        not_used: u32,
+    };
+
+    @group(0) @binding(0)
+    var<uniform> dimensions: Uniform;
+
+    @group(0) @binding(1)
+    var<storage, read> input: array<f32>;
+
+    @group(0) @binding(2)
+    var<storage, read_write> output: array<atomic<u32>, BIN_COUNT>;
+
+    var<workgroup> shared_histogram: array<atomic<u32>, BIN_COUNT>;
+
+    var<private> local_histogram: array<u32, SPARSE_ARRAY_SIZE>;
+
+    @compute @workgroup_size(32, 1, 1) 
+    fn histogram(
+        @builtin(global_invocation_id) global_id: vec3<u32>,
+        @builtin(workgroup_id) group_id: vec3<u32>, 
+        @builtin(local_invocation_id) local_id: vec3<u32>
+        ) {
+            var global_index: u32 = group_id.x * ELEMENTS_PER_THREAD * 32u + local_id.x;
+            var entry: u32 = 0u;
+            if global_index < dimensions.element_count {
+                for(var elements_fetched: u32 = 0u; elements_fetched < ELEMENTS_PER_THREAD; elements_fetched += 1u) {
+                    entry = u32(floor(input[global_index]));
+                    for (var sparse_index: u32 = 0u; sparse_index < SPARSE_ARRAY_SIZE; sparse_index += 2u ) {
+                        if (local_histogram[sparse_index] == entry) {
+                            local_histogram[sparse_index + 1u] += 1u;
+                            break;
+                        }
+                        if (local_histogram[sparse_index] != entry & local_histogram[sparse_index + 1u] == 0u){
+                            local_histogram[sparse_index] = entry;
+                            local_histogram[sparse_index + 1u] = 1u;
+                            break;
+                        }
+                    }
+
+                    global_index += 32u;
+                    if (dimensions.element_count <= global_index) {
+                        break;
+                    }
+                }
+            }
+
+            for(var local_index: u32 = 0u; local_index < SPARSE_ARRAY_SIZE; local_index += 2u) {
+                if (0u < local_histogram[local_index + 1u]) {
+                    let entry: u32 = local_histogram[local_index];
+                    atomicAdd(&shared_histogram[entry], local_histogram[local_index + 1u]);
+                }
+            }
+
+            workgroupBarrier();
+
+            var local_index: u32 = local_id.x;
+            while (local_index < BIN_COUNT) {
+                if (shared_histogram[local_index] != 0u) {
+                    atomicAdd(&output[local_index], shared_histogram[local_index]);
+                }
+                local_index += 32u;
+            }
+    }
+    ```
+
+Note that we introduce some work group divergence with this sparse array as each thread has
+to look for the first entry which satisfies its requirements, which is highly data sequence
+dependent. Note that the way I implemented the sparse array is, while simpler, somewhat
+reminiscent of how hash maps are implemented.
+
+=== "WGSL"
+
+    ```rust
+    // We would have to hardcode this line if we didn't use the bin_count specialization
+    // when compiling the shader
+    //const BIN_COUNT: u32 = 5u;
+    //const ELEMENTS_PER_THREAD: u32 = 256u;
+
+    struct Uniform {
+        element_count: u32,
+        not_used: u32,
+        not_used: u32,
+        not_used: u32,
+    };
+
+    @group(0) @binding(0)
+    var<uniform> dimensions: Uniform;
+
+    @group(0) @binding(1)
+    var<storage, read> input: array<f32>;
+
+    @group(0) @binding(2)
+    var<storage, read_write> output: array<atomic<u32>, BIN_COUNT>;
+
+    var<workgroup> shared_histogram: array<atomic<u32>, BIN_COUNT>;
+
+    var<private> local_entries: array<u32, ELEMENTS_PER_THREAD>;
+    var<private> local_counts: array<u32, ELEMENTS_PER_THREAD>;
+
+    @compute @workgroup_size(32, 1, 1) 
+    fn histogram(
+        @builtin(global_invocation_id) global_id: vec3<u32>,
+        @builtin(workgroup_id) group_id: vec3<u32>, 
+        @builtin(local_invocation_id) local_id: vec3<u32>
+        ) {
+            var global_index: u32 = group_id.x * ELEMENTS_PER_THREAD * 32u + local_id.x;
+            var unoccupied_index: u32 = 0u;
+            if global_index < dimensions.element_count {
+                for(var elements_fetched: u32 = 0u; elements_fetched < ELEMENTS_PER_THREAD; elements_fetched += 1u) {
+                    let entry: u32 = u32(floor(input[global_index]));
+                    var sparse_index: u32 = 0u;
+                    while (sparse_index < unoccupied_index ) {
+                        if (local_entries[sparse_index] == entry) {
+                            local_counts[sparse_index] += 1u;
+                            break;
+                        }
+                        sparse_index += 1u;
+                    }
+
+                    if (sparse_index == unoccupied_index) {
+                        unoccupied_index += 1u;
+                        local_counts[sparse_index] = 1u;
+                        local_entries[sparse_index] = entry;
+                    }
+
+                    global_index += 32u;
+                    if (dimensions.element_count <= global_index) {
+                        break;
+                    }
+                }
+            }
+
+            for(var local_index: u32 = 0u; local_index < ELEMENTS_PER_THREAD; local_index += 1u) {
+                if (0u < local_counts[local_index]) {
+                    let entry: u32 = local_entries[local_index];
+                    atomicAdd(&shared_histogram[entry], local_counts[local_index]);
+                }
+            }
+
+            workgroupBarrier();
+
+            var local_index: u32 = local_id.x;
+            while (local_index < BIN_COUNT) {
+                if (shared_histogram[local_index] != 0u) {
+                    atomicAdd(&output[local_index], shared_histogram[local_index]);
+                }
+                local_index += 32u;
+            }
+    }
+    ```
+
+Some alterations were made. The what made the biggest difference was splitting up ```local_histogram[]``` into
+two arrays, which also meant I could just base their sizes on ```ELEMENTS_PER_THREAD```. This is quite in
+line with branchless program, which will be introduced in the module about real-time systems.
+I made some additional tweaks that gave a small, but reasonably consistent boost, trying to limit
+the amount of times the local data is looped by keeping track of the first unoccupied space.
+
+Finally, before we start timing the various versions, let's see what the base level is for the system. I am
+timing it on a laptop with an integrated GPU, which means the feature level of the GPU isn't very high, the
+transfer costs are quite low, but the performance is also relatively low. In this instance I chose to
+time the number of iterations possible within a 2 second window. To get my baseline performance I set the
+number of data elements to 1, the number of output bins to 1 and the number of elements per thread to 1.
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_baseline.png){ width="700" }
+<figcaption>
+Setting data size to 1 and output bins to 1, we can see the cost of allocation, transfer and compilation.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+As you can see, there is a signficant difference when running it like this. The difference cannot lie in the
+allocation and transfer of the buffers, it is only 1 value for each buffer for all of the shaders, after all.
+The difference probably lies in recompiling the shader with every invocation instead of caching it. The
+later shaders are longer and more complex, likely resulting in longer compilation times.
+
+In the next run, I will run as big a data count as I can get the system to accept, with a low output bin
+count, one data element handled per thread and the data not shuffled. This results in the input data being
+monotonically increasing in an even distribution. Having each thread handle only a single data element
+will put the last four versions of the histogram code at a disadvantage.
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_false_10_1.png){ width="700" }
+<figcaption>
+Setting data size to 2000000, output bins to 10, 1 data element per thread and no shuffling data.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+At this point all of the non-naive implementations seem to perform more or less the same. The naive version
+is likely suffering under contention as all threads are trying to write to the same 10 atomic values. To
+highlight this we can use a single output bin instead.
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_false_1_1.png){ width="700" }
+<figcaption>
+Setting data size to 2000000, output bins to 1, 1 data element per thread and no shuffling data.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+We now allocate less shared memory and there is likely to be a signficant mitigation in work group divergence,
+as all threads have to write to the same output bin, but the speed up is least significant for the
+naive implementation. Going back to the settings from before, let's take a look at what happens
+when we begin using completely random, but uniformly distributed, numbers as input.
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_true_10_1.png){ width="700" }
+<figcaption>
+Setting data size to 2000000, output bins to 10, 1 data element per thread and random data.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+If we begin increasing the number of data elements per thread to 4, we get the following measurements
+with and without shuffling -
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_false_10_4.png){ width="700" }
+<figcaption>
+Setting data size to 2000000, output bins to 10, 4 data elements per thread and no shuffled data.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_true_10_4.png){ width="700" }
+<figcaption>
+Setting data size to 2000000, output bins to 10, 4 data elements per thread and random data.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+As I'll remind you, the two middle shaders have a scaling issue when it comes to local memory. They HAVE
+to allocate a ```bin_count``` sized array as there are no guarantees in terms of data. The last two
+scale their thread local memory with ```elements_per_thread```. So let's try upping both of those -
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_false_64_32.png){ width="700" }
+<figcaption>
+Setting data size to 2000000, output bins to 64, 32 data elements per thread and no shuffled data.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_false_64_32.png){ width="700" }
+<figcaption>
+Setting data size to 2000000, output bins to 64, 32 data elements per thread and random data.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+As can be seen the sparse version doesn't really hold up that well in this case. It has to allocate quite
+a bit of memory and is overall more complex, but it does quite well if we have presorted our data. Or at least
+it keeps up with ```histogram_local.wgsl```. If we go for a more real-world like scenario where we have more
+bins and less elements per thread we get these measurements -
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_false_1024_8.png){ width="700" }
+<figcaption>
+Setting data size to 2000000, output bins to 1024, 8 data elements per thread and no shuffled data.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+<figure markdown>
+![Image](../figures/histogram_benchmark_false_1024_8.png){ width="700" }
+<figcaption>
+Setting data size to 2000000, output bins to 1024, 8 data elements per thread and random data.
+This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
+Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
+</figcaption>
+</figure>
+
+Here we can see the total collapse of the ```histogram_local.wgsl``` as it overloads its register file due to
+allocating too much thread local memory. ```histogram_shared.wgsl``` also does worse than expected due to the
+size of what it has to allocate in shared memory. Interestingly ```histogram_sparse.wgsl``` still performs
+well. It is worth noting that the naive version performs significantly better when the input data is random.
+This can sometimes be seen when implementations are bound by contention. Distributing the data evenly and
+randomly can mitigate contention. You are more than welcome to play around with these numbers yourselves and
+see what sort of behavior you can elicit. In the end, these different implementations are good at different
+scenarios. If you were building a library function for computing histograms, you might implement the four main
+ones and use some heuristic to select which one to run in order to get the optimal running time. If I were to
+just choose two I would go for the atomic and sparse. The simpler implementations are likely to be good
+enough for a bunch of scenarios, whereas the sparse version seems to scale very well and uses a
+significantly smaller amount of threads. Having more threads available could allow us to run more inputs
+and invocations at the same time and assembling these subhistograms at the end.
+
+<figure markdown>
+![Image](../figures/room_for_activities.jpg){ width="700" }
+<figcaption>
+<a href="http://www.quickmeme.com/meme/3ug8e9"> Image credit </a>
+</figcaption>
+</figure>
+
+Now back to computational graphs and memory hierarchies!
 
 ## Additional Reading
 To learn more about GPU's and memory checkout these - [The GPU Memory Hierarchy][0],
@@ -629,3 +1402,4 @@ used tutorial is [Learn Wgpu][6].
 [5]: https://engineering.purdue.edu/~smidkiff/ece563/NVidiaGPUTeachingToolkit/Mod14DataXfer/Mod14DataXfer.pdf
 [6]: https://sotrh.github.io/learn-wgpu/
 [7]: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
+[8]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_histogram
