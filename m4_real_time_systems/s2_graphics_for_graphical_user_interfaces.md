@@ -5,4 +5,4 @@ Normalized device coordinates
 Vertex and Fragment Shaders
 Rasterization
 Contention
-https://github.com/teresa-sc/RealTime_project/blob/main/hand-drawn-shapes/src/canvas.rs
+Draw Order and the Painters algorithm
