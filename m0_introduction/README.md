@@ -74,6 +74,10 @@ chapters, university courses, scientific papers and in-depth blog posts. In a lo
 they are also the basis for the content in the section above it.
 
 # 👨🏼‍💻 Exercises and Teaching
+!!! warning "WSL"
+    
+    I recommend you do not use WSL on Windows. It makes GUI and GPU programming difficult.
+
 Sections indicated by 👨🏼‍💻 are recommended exercises if you want to really learn the topics in-depth or if you
 are following a course based on the material.
 

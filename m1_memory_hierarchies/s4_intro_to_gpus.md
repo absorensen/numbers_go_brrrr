@@ -1331,7 +1331,7 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figure>
 
 <figure markdown>
-![Image](../figures/histogram_benchmark_false_64_32.png){ width="700" }
+![Image](../figures/histogram_benchmark_true_64_32.png){ width="700" }
 <figcaption>
 Setting data size to 2000000, output bins to 64, 32 data elements per thread and random data.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
@@ -1354,7 +1354,7 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figure>
 
 <figure markdown>
-![Image](../figures/histogram_benchmark_false_1024_8.png){ width="700" }
+![Image](../figures/histogram_benchmark_true_1024_8.png){ width="700" }
 <figcaption>
 Setting data size to 2000000, output bins to 1024, 8 data elements per thread and random data.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was

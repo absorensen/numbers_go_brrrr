@@ -95,7 +95,7 @@ nav:
     - S3 - Atomics: m2_concurrency/s3_atomics.md
     - S4 - Message Passing: m2_concurrency/s4_message_passing.md
     - S5 - Async: m2_concurrency/s5_async.md
-    - S6 - 🧬 More GPU: m2_concurrency/s6_more_gpu.md
+    - S6 - More GPU: m2_concurrency/s6_more_gpu.md
     - S7 - 🧬 Parallel Graphs: m2_concurrency/s7_parallel_graphs.md
     - S8 - 👨🏼‍💻 Exercises: m2_concurrency/s8_exercises.md
   - M3 - Types:
@@ -112,12 +112,13 @@ nav:
     - m4_real_time_systems/README.md
     - S0 - Events and Interactions: m4_real_time_systems/s0_events_and_interactions.md
     - S1 - Graphical User Interfaces: m4_real_time_systems/s1_graphical_user_interfaces.md
-    - S2 - Architecture and Design: m4_real_time_systems/s2_architecture_and_design.md
-    - S3 - Branchless Programming: m4_real_time_systems/s3_branchless_programming.md
-    - S4 - Logging: m4_real_time_systems/s4_logging.md
-    - S5 - Bindings: m4_real_time_systems/s5_bindings.md
-    - S6 - Tips and Tricks: m4_real_time_systems/s6_tips_and_tricks.md
-    - S7 - 👨🏼‍💻 Exercises: m4_real_time_systems/s7_exercises.md
+    - S2 - Graphics for Graphical User Interfaces: m4_real_time_systems/s2_graphics_for_graphical_user_interfaces.md
+    - S3 - Architecture and Design: m4_real_time_systems/s3_architecture_and_design.md
+    - S4 - Branchless Programming: m4_real_time_systems/s4_branchless_programming.md
+    - S5 - Logging: m4_real_time_systems/s5_logging.md
+    - S6 - Bindings: m4_real_time_systems/s6_bindings.md
+    - S7 - Tips and Tricks: m4_real_time_systems/s7_tips_and_tricks.md
+    - S8 - 👨🏼‍💻 Exercises: m4_real_time_systems/s8_exercises.md
   - M5 - Optimization:
     - m5_optimization/README.md
     - S0 - Timing and Printing: m5_optimization/s0_timing_and_printing.md

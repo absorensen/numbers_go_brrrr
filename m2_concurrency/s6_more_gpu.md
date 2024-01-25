@@ -1,4 +1,4 @@
-# 🧬 More GPU
+# More GPU
 This section is about giving a bit of additional context around GPUs. It isn't a prerequisite for understanding any
 of the material after it.
 
