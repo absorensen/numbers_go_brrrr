@@ -1392,7 +1392,8 @@ To learn more about GPU's and memory checkout these - [The GPU Memory Hierarchy]
 
 To learn more about [optimzing shaders with shared memory][7]. A slightly more detailed explanation of
 [asynchronous memory transfers][5] for GPUs. If you want to learn more about wgpu, this is the most
-used tutorial is [Learn Wgpu][6].
+used tutorial is [Learn Wgpu][6]. One of the most popular books about GPGPU programming can be found
+[here][9].
 
 [0]: https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/lectures/08_mem_hierarchy.pdf
 [1]: http://meseec.ce.rit.edu/551-projects/spring2015/3-2.pdf
@@ -1403,3 +1404,4 @@ used tutorial is [Learn Wgpu][6].
 [6]: https://sotrh.github.io/learn-wgpu/
 [7]: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
 [8]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_histogram
+[9]: https://shop.elsevier.com/books/programming-massively-parallel-processors/hwu/978-0-323-91231-0
