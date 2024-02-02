@@ -1,4 +1,4 @@
-# Graphics for Graphical User Interfaces
+# Graphics in Two Dimensions
 In most cases, you can probably get away with some fairly rudimentary code to create, draw and interact
 with some buttons for your application. But, in this context, we care about performance. It's simple to
 redraw every single button, every single frame, but it isn't necessarily performant. As such, we have to
@@ -121,29 +121,141 @@ Image credit </a>
 </figure>
 
 The point primitive is sometimes available. It will usually draw a quad of a size you have to set per vertex. The
-most used are usually lines, triangles and triangle strips. When we know we have a contiguous set of triangles we
+most used are usually lines, triangles and triangle strips. When we know we have a contiguous set of triangles, we
 can save a lot of indices by using a moving window interpretation for the faces. Face 0 will be vertex 0, 1 and 2,
 face 1 will be vertex 1, 2 and 3 and so on. To stop the strip and start a new one, you can usually make the
 strip degenerate by repeating a vertex. So making face 1 be vertex 1, 2 and 2, would make it clear that a new
 triangle strip needs to be started. Sometimes to maximize numerical accuracy or to help with the quantization
 process, we might create a model matrix for the mesh and normalize all coordinates to maximally touch the
-surface of a unit sphere and then quantize.
+surface of a unit sphere and then quantize to lower precision integers.
 
 ## What's in drawing a series of triangles?
-Vertex and Fragment Shaders  
-Coordinates and spaces  
-Normalized device coordinates  
-Rasterization  
-Depth testing  
+Now we have a mesh to draw. How do we draw it? First of all, just like when we looked at the more generic
+GPGPU programming in ```m1```, any time we want data on the GPU, we have to allocate and transfer. For vertex
+data, it is the exact same. We have to allocate a buffer on the GPU and transfer data from the CPU in a format
+that works for the GPU. If you update the vertex data you should reuse the buffer to avoid another allocation
+or use a handful of buffers you can switch between. If you want to redraw the same model, don't reallocate
+and retransfer, just reuse. If you can avoid any allocations and transfers, you should.
+
+Once the vertex buffer has been properly described, allocated, transferred and received, we can start using
+it on the GPU. There are more possible variations of the drawing process, but here is a basic version from
+[earlier][11] -
+
+<figure markdown>
+![Image](../figures/graphics_pipeline.png){ width="700" }
+<figcaption>
+A simplified view of the traditional vertex/fragment shader setup. The geometry shader
+is optional and not that popular anymore.
+<a href="https://learnopengl.com/Getting-started/Hello-Triangle">
+Image credit </a>
+</figcaption>
+</figure>
+
+When we call the correct draw function with the properly created and bound render pipeline, a traditional
+vertex and fragment shading pipeline might look like above, minus the geometry shader, which has fallen out
+of favor. So, we send all of the data we want to draw through the vertex shader. Each instance of the vertex
+shader gets a single vertex to process. Often it might have global associated data, such as various transformation
+matrices which can be applied to each vertex, such as taking into account moving the mesh around in world space
+or taking into account where the camera actually is. If you have quantized coordinates, such as 16-bit
+signed integers, this would also typically be where you would dequantize these values and get floating point
+coordinates.
+
+Once the vertices are through being processed in the vertex shader, they are sent to shape assembly. This
+is where the geometry primitives result in a shape, such as a line or triangle, is assembled. Once the
+shape is assembled, culling can take place. If a triangle is completely outside the field of view of the camera,
+there is no need to use more compute on it and it can be discarded. If it is partially or wholly within the view
+frustum (box which contains all the camera can see), the primitive can be rasterized. The surface of the primitive
+is sliced and diced into fragments. For primitives only partially within view, the fragments what are wholly outside
+can safely be discarded. This is called clipping.
+
+The surviving fragments are sent to the fragment shader. In the fragment shader, you can do all sorts of coloring
+and lighting. But we can also change the depth of the fragment (more on that in a few lines) and even discard the
+fragment. This can be really useful if we want to draw circles (also more on that later). Meshes are really
+expensive if you want to draw a nice round circle. You have to generate enough vertices to match the resolution
+of the image to get something that might look like a real circle. What you can do instead, is to draw circles
+as a single quad (two triangles) and keep track of the center point and radius. For each fragment you can
+discard the fragment from the quad if it is outside of the radius. Voila. You just drew a much cheaper circle.
+This could also be used for drawing rounded corners on otherwise square windows.
+
+Once we have done what we needed with the fragments they are sent for testing and blending. In traditional
+rasterization based graphics, we render to a framebuffer. A framebuffer consists of an image in one or more
+colors, a depth buffer and auxiliary information. The depth buffer is a log compressed image containing depth
+values. Fragments which are passed on from the fragment shader are tested against this depth buffer.
+Depending on how you set up your system, it will discard or accept new fragments replacing the currently
+held fragment. A small example; if we submit a new fragment for pixel (3, 4) with depth value 0.1, and
+the currently closest (to the camera) fragment has a depth value of 0.3, the new fragment will replace
+the current one. As such, the depth value will be updated and the other image, which is the one which
+we will eventually present to the screen, will have pixel (3, 4) replaced with this new fragment as well.
+There is a slight bit of complexity to this as fragments can have an alpha value, which determines its opacity.
+If alpha blending is enabled, the new fragment might be mixed in with the current value. If you think about
+the various windows in your operating system, quite a few can be made transparent. Which requires that we don't
+completely overwrite former values, but blend in the new ones. This also requires that we sort all the elements
+we are rendering from back to front in what is called [Painter's algorithm][12]. When we aren't doing
+transparency, the reverse is more efficient. Writes are generally more expensive than reads, and that is
+also true in this process of proposing new fragments and testing them against the depth buffer. If we could
+only write to every single pixel once, and then have all other fragments rejected, while still getting the correct
+image, that would be quite a bit more efficient. This goes back to contention which was introduced in both
+```m1``` and ```m2```.
+
+Once all elements have been rendered, the image part of the framebuffer can be presented to the screen.
+The framebuffer used in the last frame can be used to render the next frame. At the beginning of that
+render process, the new framebuffer will have its former values cleared.
+
+One rendering concept which has largely been ignored for simplicity's sake, is coordinate spaces.
+The geometry we put into our vertex buffers at the beginning are of course not defined relative
+to the world it exists in. It is defined independently. To move it about, we don't change the
+value of every single vertex, we change a model matrix which moves the model about in the world.
+Usually, that world space will be centered around the camera. When we move the camera throughout
+the world, we are actually moving the world and not the camera.
+
+<figure markdown>
+![Image](../figures/spoon-boy.jpg){ width="700" }
+<figcaption>
+We just have to realize that there is no spoon.
+<a href="https://www.matrixfans.net/there-is-no-spoon-spoon-boy-actor-rowan-witt/">
+Image credit </a>
+</figcaption>
+</figure>
+
+If you think back to ```m3``` and what I wrote about the precision of floating point
+numbers, this should make sense. By keeping the world centered around the camera and moving everything
+else, the elements that are close to the camera (0.0) have a higher numerical precision and the things
+that are far away have a lower numerical precision. To get from the world space to the cameras space,
+also known as view space, another matrix is involved; the view matrix.
+
+<figure markdown>
+![Image](../figures/coordinate_systems.png){ width="700" }
+<figcaption>
+LearnOpenGL's explanation of the coordinate spaces in the vertex/fragment render pipeline.
+<a href="https://learnopengl.com/Getting-started/Coordinate-Systems">
+Image credit </a>
+</figcaption>
+</figure>
+
+Now we are seeing things from the cameras perspective and we can take into account the projection
+of the camera with the projection matrix. Now we should be in clip space, which resides in 2D from
+-1 to 1 for both axes. Once the primitives and have been culled, clipped and rasterized, we are in
+normalized device coordinates. In GUI libraries you might see something called NDC. This is it.
+If you are rendering GUI elements, which are always in the same place, you can circumvent all of
+these matrices and define your geometry directly in normalized device coordinates. Once the fragments
+are passed through the fragment shader they are moved into screen space which translates them directly
+to the actual pixels they correspond to.
+
+<figure markdown>
+![Image](../figures/vertex-transform-pipeline.png){ width="600" }
+<figcaption>
+Scratchapixel's explanation of the coordinate spaces in the vertex/fragment render pipeline.
+<a href="https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/projection-matrix-GPU-rendering-pipeline-clipping.html">
+Image credit </a>
+</figcaption>
+</figure>
 
 ## What's in drawing a series of triangles for a GUI?
 How to draw a circle  
 Tesselation and curves  
 Subdivision surfaces [intro][4] [pixar][5]  
-Contention  
-Draw Order and the Painters algorithm  
 
-## What's in drawing a series of triangles for a GUI with egui?
+## What's in drawing a series of triangles for a GUI using libraries?
 Running through egui usage in egui-winit-wgpu-template
 
 We can also find a simpler way to do things by relinquishing fine-grained
@@ -163,8 +275,10 @@ and [LearnOpenGL][1].
 [3]: https://github.com/emilk/egui/tree/master/crates/eframe
 [4]: https://en.wikipedia.org/wiki/Subdivision_surface
 [5]: https://graphics.pixar.com/opensubdiv/docs/subdivision_surfaces.html
-[6]: https://github.com/emilk/egui/blob/master/examples/hello_world/src/main.rs 
+[6]: https://github.com/emilk/egui/blob/master/examples/hello_world/src/main.rs
 [7]: https://en.wikipedia.org/wiki/Bresenham's_line_algorithm
 [8]: https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm
 [9]: https://en.wikipedia.org/wiki/Polygon_mesh
 [10]: https://en.wikipedia.org/wiki/Manifold
+[11]: https://absorensen.github.io/the-guide/m2_concurrency/s6_more_gpu/
+[12]: https://en.wikipedia.org/wiki/Painter's_algorithm

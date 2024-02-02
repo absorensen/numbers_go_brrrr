@@ -135,4 +135,4 @@ reference for [operators][2].
 [0]: https://doc.rust-lang.org/std/primitive.u32.html#method.rotate_left
 [1]: https://en.wikipedia.org/wiki/Bitwise_operation
 [2]: https://doc.rust-lang.org/reference/expressions/operator-expr.html
-[3]: https://absorensen.github.io/the-guide/m4_real_time_systems/s3_branchless_programming/
+[3]: https://absorensen.github.io/the-guide/m4_real_time_systems/s4_branchless_programming/

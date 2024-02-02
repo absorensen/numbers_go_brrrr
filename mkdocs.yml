@@ -112,7 +112,7 @@ nav:
     - m4_real_time_systems/README.md
     - S0 - Events and Interactions: m4_real_time_systems/s0_events_and_interactions.md
     - S1 - Graphical User Interfaces: m4_real_time_systems/s1_graphical_user_interfaces.md
-    - S2 - Graphics for Graphical User Interfaces: m4_real_time_systems/s2_graphics_for_graphical_user_interfaces.md
+    - S2 - Graphics in Two Dimensions: m4_real_time_systems/s2_graphics_in_two_dimensions.md
     - S3 - Architecture and Design: m4_real_time_systems/s3_architecture_and_design.md
     - S4 - Branchless Programming: m4_real_time_systems/s4_branchless_programming.md
     - S5 - Logging: m4_real_time_systems/s5_logging.md
