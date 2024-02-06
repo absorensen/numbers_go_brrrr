@@ -76,7 +76,9 @@ they are also the basis for the content in the section above it.
 # 👨🏼‍💻 Exercises and Teaching
 !!! warning "WSL"
 
-    I recommend you do not use WSL on Windows. It makes GUI and GPU programming difficult.
+    I recommend you do not use WSL on Windows. You can get it to work for if you have an Nvidia GPU,
+    otherwise it seems to be either difficult or impossible. GUI and graphics programming (anything with
+    a window you can interact with) is extremely slow.
 
 Sections indicated by 👨🏼‍💻 are recommended exercises if you want to really learn the topics in-depth or if you
 are following a course based on the material.
