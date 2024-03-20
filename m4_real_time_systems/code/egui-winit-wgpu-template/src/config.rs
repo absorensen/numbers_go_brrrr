@@ -1,42 +1,47 @@
+use std::path::PathBuf;
+use std::{fs::File, io::Write};
+use std::io::BufReader;
+use std::io::prelude::*;
+
+use log::debug;
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct Config {
-    pub aspect_ratio: f32,
-    pub image_width: usize,
-    pub image_height: usize,
-    pub image_scale: f32,
-    pub output_path: String,
-    pub subpixels_per_pixel: usize,
-    pub samples_per_pixel: usize,
-    pub max_depth: usize,
-    pub scene_index: usize,
-    pub seed: usize,
-    pub use_loop_rendering: bool,
+    pub rotate_triangle: bool,
+    pub triangle_speed: f32,
+    pub config_save_path: String,
 }
 
 impl Config {
-    pub fn update_derived_values(&mut self) {
-        self.aspect_ratio = (self.image_height as f32) / (self.image_width as f32);
-        self.image_scale = 1.0 / (self.samples_per_pixel as f32);
-    }
-}
-
-impl ::std::default::Default for Config {
-    fn default() -> 
-        Self { 
-            Self { 
-                aspect_ratio: 16.0 / 9.0, 
-                image_width: 500, 
-                image_height: 500,
-                image_scale: 0.0,
-                output_path: "output.png".to_string(), 
-                subpixels_per_pixel: 2,
-                samples_per_pixel: 5, 
-                max_depth: 10, 
-                scene_index: 7,
-                seed: 1337,
-                use_loop_rendering: true,
-            } 
+    pub fn default() -> Self {
+        Self {
+            rotate_triangle: true,
+            triangle_speed: 0.5,
+            config_save_path: "".to_string(),
         }
+    }
+
+    pub fn deserialize_from_path(path: &PathBuf) -> Result<Config, std::io::Error> {
+        // Does file exist in path?
+        let file: File = File::open(path)?;
+        let mut buf_reader: BufReader<File> = BufReader::new(file);
+        let mut contents: String = String::new();
+        buf_reader.read_to_string(&mut contents)?;
+        let app_state: Result<Config, toml::de::Error> = toml::from_str(contents.as_str());
+        if app_state.is_err() {
+            debug!("Loaded config file, but failed to parse into Config struct");
+        }
+        let app_state: Config = app_state.expect("Failed to get Config from toml::from_str()");
+        debug!("Successfully loaded config file from: {}", path.display());
+        Ok(app_state)
+    }
+
+    pub fn serialize(&self) -> std::io::Result<()> {
+        let toml: String = toml::to_string(&self).expect("Failed to create .toml string form AppState");
+        let mut file: File = File::create(&self.config_save_path)?;
+        file.write_all(toml.as_bytes())?;
+        debug!("Successfully wrote config file to: {}", &self.config_save_path);
+        Ok(())
+    }
 }

@@ -1,3 +1,5 @@
+// Initially based on https://github.com/ejb004/egui-wgpu-demo
+
 fn main() {
-    wgpu_winit_egui_template::run();
+    egui_winit_wgpu_template::run();
 }

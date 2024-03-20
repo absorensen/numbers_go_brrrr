@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.7">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.14">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.f2e4d321.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.10ba22f1.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -319,10 +319,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
@@ -502,10 +500,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
@@ -769,10 +765,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
@@ -1034,10 +1028,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
@@ -1282,10 +1274,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
@@ -1547,10 +1537,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
@@ -1672,10 +1660,8 @@
     
     
     
-    
     <li class="md-nav__item md-nav__item--nested">
       
-        
         
         
         <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
@@ -1790,7 +1776,7 @@ library to render on its own. If you are prototyping a 3D application, it might 
 own output if you are also in the process of learning the ropes of graphics programming. A quite nice immediate
 mode GUI library written in Rust and having WGPU as a potential backend is <a href="https://github.com/emilk/egui">egui</a>. The documentation isn't
 very comprehensive, but you can find out how to use the various widgets through the <a href="https://www.egui.rs/#demo">egui demo</a>.</p>
-<p>For a small code example, check out the <a href="https://github.com/absorensen/the-guide/blob/main/m4_real_time_systems/code/egui-winit-wgpu-template/src/control_panel.rs">template</a> I have linked multiple times. The code is too long to
+<p>For a small code example, check out the <a href="https://github.com/absorensen/the-guide/blob/main/m4_real_time_systems/code/egui-winit-wgpu-template/src/gui.rs">template</a> I have linked multiple times. The code is too long to
 paste here, but it should be fairly easy to see how the widgets are declared in the function <code>ui()</code> and
 results in the following control panel -</p>
 <figure>
@@ -1804,8 +1790,8 @@ of structure in your code. It allows for better performance and is a better tool
 What makes retained GUI's faster is keeping track of all of the GUI elements like a tree. Then once an element (A)
 needs to be redrawn, all of its child elements (B...) also need to be redrawn. If you have an accumulated image from
 drawing the last frame, you only need to redraw all of the pixels where A and children used to be, and all of
-the pixels where they will be in the new frame. Some of these retained mode GUIs even come with additional
-functionality making them more or less fully fledged app frameworks like <a href="https://tauri.app/">Tauri</a> and <a href="https://dioxuslabs.com/">Dioxus</a>.</p>
+the pixels where they will be in the new frame. 
+Some of the most popular retained GUI libraries for Rust are <a href="https://iced.rs/">Iced</a> and <a href="https://dioxuslabs.com/">Dioxus</a>.</p>
 
 
 
@@ -1828,7 +1814,7 @@ functionality making them more or less fully fledged app frameworks like <a href
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1-2.1-2M12.5 7v5.2l4 2.4-1 1L11 13V7h1.5M11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2v1.8Z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 20, 2024</span>
   </span>
 
     
@@ -1961,7 +1947,7 @@ functionality making them more or less fully fledged app frameworks like <a href
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.caa56a14.min.js"></script>
+      <script src="../../assets/javascripts/bundle.bd41221c.min.js"></script>
       
     
   <script>document$.subscribe(() => {const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});})</script></body>
