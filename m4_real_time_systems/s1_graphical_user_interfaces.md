@@ -34,12 +34,12 @@ of structure in your code. It allows for better performance and is a better tool
 What makes retained GUI's faster is keeping track of all of the GUI elements like a tree. Then once an element (A)
 needs to be redrawn, all of its child elements (B...) also need to be redrawn. If you have an accumulated image from
 drawing the last frame, you only need to redraw all of the pixels where A and children used to be, and all of
-the pixels where they will be in the new frame. Some of these retained mode GUIs even come with additional
-functionality making them more or less fully fledged app frameworks like [Tauri][4] and [Dioxus][5].
+the pixels where they will be in the new frame. 
+Some of the most popular retained GUI libraries for Rust are [Iced][4] and [Dioxus][5].
 
 [0]: https://github.com/emilk/egui
 [1]: https://www.egui.rs/#demo
 [2]: https://www.rerun.io/
-[3]: https://github.com/absorensen/the-guide/blob/main/m4_real_time_systems/code/egui-winit-wgpu-template/src/control_panel.rs
-[4]: https://tauri.app/
+[3]: https://github.com/absorensen/the-guide/blob/main/m4_real_time_systems/code/egui-winit-wgpu-template/src/gui.rs
+[4]: https://iced.rs/
 [5]: https://dioxuslabs.com/

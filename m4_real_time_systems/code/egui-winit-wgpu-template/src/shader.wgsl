@@ -1,5 +1,4 @@
 // Vertex shader
-
 struct VertexInput {
     @location(0) position: vec3<f32>,
     @location(1) color: vec3<f32>,
@@ -11,10 +10,11 @@ struct VertexOutput {
 };
 
 struct Uniforms {
-    @size(16) angle: f32, // pad to 16 bytes
+    angle: f32,
 };
 
-@group(0) @binding(0)
+@group(0) 
+@binding(0)
 var<uniform> uniforms: Uniforms;
 
 // Vertex Shader

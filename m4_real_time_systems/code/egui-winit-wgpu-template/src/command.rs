@@ -1,11 +1,10 @@
 use winit::dpi::PhysicalSize;
+use winit::event::WindowEvent;
 
 pub enum Command {
     Resize { new_size: PhysicalSize<u32> },
     RotateTriangle { value: bool },
     SetTriangleSpeed { speed: f32 },
-    LoadScene { path: String },
-    Render { value: bool },
     KeyEventW,
     KeyEventA,
     KeyEventS,
@@ -15,4 +14,5 @@ pub enum Command {
     KeyEventComma,
     KeyEventPeriod,
     Shutdown { value: bool },
+    HandleInputGui{event: WindowEvent},
 }

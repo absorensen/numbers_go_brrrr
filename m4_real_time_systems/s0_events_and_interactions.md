@@ -41,7 +41,7 @@ data, you'll have to take carefully into account where that data is coming in an
 
 In the case of a webcam, hopefully that data is coming in very close to the method with which you will process it.
 If you are using wgpu for instance, you might hope that the incoming images are given to you in WGPU-compatible
-buffers allowing you to not have to transfer the data, either to another buffer or back to the CPU.
+buffers allowing you to not have to transfer or copy the data, either to another buffer or back to the CPU.
 
 # Event Loops
 An easier way of handling events, compared to emitters and listeners is an event loop. The event loop will handle
@@ -54,9 +54,8 @@ react to the incoming events.
 In the example below, the event loop will instead be used. Every iteration of the loop, any and all events
 will be handled and for each type of event a branch will handle what to do given that event. In the case
 of the example for later on is that given a event for a mouse button press, the event handler might find out
-which of the two windows was the mouse hovering over and which event handler should receive a signal. If it is
-the main graphics window it might receive a command through a channel, if it is the GUI window, it might show an
-animation on a button. This is a lot easier to debug and follow with a clear separation of flow and state.
+which window the mouse was hovering over and which event handler should receive a signal.
+This is a lot easier to debug and follow with a clear separation of flow and state.
 
 I made some code for showing how you can work with events in practice. You can find the code in
 ```m4_real_time_systems::code::egui-winit-wgpu-template``` or [online][3]. Note that the events stem from

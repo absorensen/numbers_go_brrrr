@@ -9,10 +9,19 @@ own area of interest.
 Describe the base architecture of the egui-winit-wgpu template. Found in
 ```m4_real_time_systems::code::egui-winit-wgpu-template``` or [online][0].
 
-Which elements are in play?  
-Who owns what data?  
-Think back to what you have learned in this and the previous module.  
-Use words and diagrams!  
+* Which elements are in play?  
+* Who owns what data?  
+* Think back to what you have learned in this and the previous module.  
+* Use words and diagrams!  
+
+If you need some inspiration to get the ball rolling and interact with the code
+I have a few exercises you could try out:
+
+* Launch the app in GUI mode, use it to generate a config.toml file, then load that config file in nogui mode.
+* Replace the automatic rotation of the triangle with rotations based on keyboard input events
+* Could you delay the resize of the window until the window is done resizing?
+* Could you get only log messages from the user written parts of the code and not crates like wgpu?
+* Can you find out how many frames per second is rendered with the GUI running and without it (using --nogui)?
 
 ## 🧬 m4::e1 - Interpretation
 Pick items worth a total of 3 points or more, write an interpretation of each

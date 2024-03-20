@@ -98,6 +98,8 @@ to use shared memory doing it. Doing matrix multiplication as well is good pract
     best case you can use a for-loop to stride through the data you are loading with a stride equal to the
     amount of active threads in the work group. This should result in coalesced memory reads. You should
     look that up.
+    * It can be useful to see what the GPU is doing. Check out how to get [env_logger][1] to give you
+    more information about what wgpu is doing.
 
 ### m1::e4 - 1D Convolution
 Go to ```m1_memory_hierarchies::code::gpu_hand_in``` or [online][0] and follow the instructions.
@@ -109,3 +111,4 @@ For the second section, also in ```gpu_hand_in``` you need to do a matrix multip
 tiled matrix multiplication (using shared memory). You should also try out doing a padded version.
 
 [0]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_hand_in
+[1]: https://docs.rs/env_logger/latest/env_logger/
