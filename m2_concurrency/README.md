@@ -58,10 +58,10 @@ Sometimes when you think about optimizing your code you might visualize it as ex
 speed, flamethrowers and excess!
 
 <figure markdown>
-![Image](../figures/doof-warrior-from-mad-max.png){ width="600" }
+![Image](../figures/doof-warrior-from-mad-max.jpg){ width="600" }
 <figcaption>
 Witness Concurrency!
-<a href="https://www.classicfm.com/discover-music/musicians-battle/doof-warrior-mad-max/">
+<a href="https://www.ultimate-guitar.com/news/community_feed/mad_max_doof_warrior_inspired_flamethrower_ukulele.html">
 Image credit</a>.
 </figcaption>
 </figure>
