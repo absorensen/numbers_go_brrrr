@@ -30,7 +30,16 @@
         },
         {
             "pattern": "https://www.researchgate.net/publication/354065094_Practical_Spatial_Hash_Map_Updates"
-        }        
+        },
+        {
+            "pattern": "https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust"
+        },
+        {
+            "pattern": "https://getcode.substack.com/p/massively-parallel-fun-with-gpus"
+        },
+        {
+            "pattern": "https://www.gamedev.net/articles/programming/general-and-gameplay-programming/introduction-to-octrees-r3529/"
+        }
     ],
     "aliveStatusCodes": [
         0,
