@@ -68,7 +68,7 @@ extra:
 
 nav:
   - Home: README.md
-  - Acknowledgements: acknowledgements.md
+  - About: about.md
   - M0 - Introduction:
     - m0_introduction/README.md
     - S0 - Introduction to the Computing Landscape: m0_introduction/s0_intro_to_computing.md
@@ -127,3 +127,4 @@ nav:
   - M6 - 👨🏼‍💻 Projects:
     - m6_projects/README.md
     - S0 - Project Ideas: m6_projects/s0_project_ideas.md
+  - The End: the_end.md

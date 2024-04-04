@@ -87,7 +87,7 @@ All of these put one thing into the center of everything. Can you guess it?
 
     *Memory!*
 
-    Some ways of accessing memory can seem completely fine when single threaded, but break down under the scrutiny
+    Some ways of accessing memory can seem completely fine when single threaded, but break down under the pressures
     of parallization. Trees can be hard, especially if you also have to modify them. As one researcher found it,
     a [hierarchical hash map][https://www.researchgate.net/publication/354065094_Practical_Spatial_Hash_Map_Updates]
     performed siginifcantly better for some types of algorithms on the GPU.

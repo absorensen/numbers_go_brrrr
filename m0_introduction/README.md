@@ -1,7 +1,19 @@
 # Introduction
 
-If you are reading this you might have been enticed by promises of performance and other
-some such advanced black magic, but first, a digression...
+First of all - do you understand what is written below?
+
+<figure markdown>
+![Image](../figures/do_you_understand_this.png){ width="800" }
+<figcaption>
+<a href="https://burn.dev/docs/burn/"> Image credit </a>
+</figcaption>
+</figure>
+
+If you don't, don't worry, by the end, even if you don't, you should be
+able to look it up and understand not just what it means but the implications, fairly easilys.
+
+While the promises of performance and other some such advanced black magic might have been enticing,
+but first, a digression...
 
 There are so many things to keep track of as a modern day programmer and most systems hide these things from
 the user. You call something called... ```?numba?``` and annotate a few functions and it magically makes your

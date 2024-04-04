@@ -1,7 +1,8 @@
-# Acknowledgments
-This website was financed by the [Pioneer Centre for AI][0]
+# About
+This website was financed by the [Pioneer Centre for AI][0] and conceptualized with Lars Kai Hansen and Nicki
+Skafte Detlefsen.
 
-## Feedback, Input and Sparring
+## Acknowledgements
 
 * Nicki Skafte Detlefsen
 * Lars Kai Hansen
