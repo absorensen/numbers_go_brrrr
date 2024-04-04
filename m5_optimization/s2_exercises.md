@@ -25,9 +25,6 @@ He doesn't care much about it's color, that's the other guy.
 
 <figure markdown>
 ![Image](../figures/alien_words.jpg){ width="700" }
-<figcaption>
-<a href="https://imgflip.com/i/8d9vne"> Image credit </a>
-</figcaption>
 </figure>
 
 Figure out why, how and what, in order to optimize the time per loop iteration. You will need the
