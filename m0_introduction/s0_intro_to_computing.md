@@ -14,7 +14,18 @@ The guide will introduce concepts that aid some programs in producing faster res
 An important factor in reliable and performant systems is limitations.
 Usually, the word limitations carries a negative connotation. Very few people think less freedom or
 flexibility sounds particularly enticing, but in computing, limitations can be a wonderful thing to have
-and set. Especially, once you are past the first prototype. In some cases, even when prototyping.
+and set. If you imagine a software project as the following: You are asked by your boss to design or purchase
+a vehicle. The first natural response from you would be "for what?". If your boss' answer is "for whatever",
+how do you pick out the correct vehicle? If your boss on the other hand had responded "for going down to
+the supermarket and do some shopping". Fine, you would be pretty close to a minivan or a station car.
+But if your boss said "for racing Formula 1", sure, those cars could enter the race and maybe get across
+the finish line, but if your boss had said "for COMPETING in Formula 1", you would have to assume that
+that type of car isn't something you can reasonably just go buy from a car manufacturer. You will
+have to build that car. Performant software programs work much in the same way. If you know you only
+have to render one type of object under a certain set of conditions, you can make simplifying assumptions
+that allow you to write simpler code and the software can be free to kick ass in that singular scenario.
+Sometimes a compiler can even step in and optimize the everliving crap out of your code, if you just supply
+it with restrictions.
 
 For an introduction to how a computer works, see [this explanation][39] by Andreas Bærentzen. I will
 continue assuming you have read it.
@@ -22,7 +33,7 @@ continue assuming you have read it.
 ## Scripting Languages
 Chill out, take things one line of code at a time. Scripting languages aren't compiled, but run one
 line at a time. This leaves the system unable to look beyond the current line of code,
-unless you add a compiler to the mix, whic usually takes a look at all of your code.
+unless you add a compiler to the mix, which usually takes a look at all of your code.
 
 [Python][0] is likely the scripting language you are most familiar with. Python is very popular due
 to its apparent ease-of-use, but it is quite slow in its raw form. A key advantage of vanilla Python is the
@@ -46,8 +57,8 @@ open to interpretation.
 A compiler processes the given code in one or more steps.
 In some steps it might verify that all of your code is correct, it might transform and optimize your code,
 it might change it into different representations like byte code or machine code. Some compilers strictly function
-before running it in an operation like ```some_compiler -compile my_file.code``` and outputs a runnable executable,
-specifically for your type of machine. This is usually done once before running your code and then
+before running it in an operation like ```some_compiler -compile my_file.code``` and outputs a runnable executable
+specifi to your type of machine or operating system. This is usually done once before running your code and then
 only when changes are made. This is called ahead-of-time (AOT) compilation. Most compilers require additional
 constraints to transform and improve your code. Usually, you can also give your compiler additional
 commands to tell it how to compile. It could be things like "please optimize my code to have a smaller
@@ -69,11 +80,12 @@ functionally alter your code, such as reducing the level of precision.
 Most compiled languages are all designed with at least one compiler, usually
 compiling to byte code or machine code. However, it is possible to write a compiler after the fact.
 [Cython][1] is one such compiler made for AOT compiling Python. It benefits
-quite a bit from having the user perform additional annotations of their Python code, allowing for a
-decent speedup.
+quite a bit from having the user perform additional annotations (constraints) of their Python code,
+allowing for a decent speedup.
 
-Other compilers act just-in-time (JIT). Just as you want to run your code it will compile it.
-While this seems a bit weird, why not just compile it once and for all, this can allow the compiler to
+Other compilers act just-in-time (JIT). Just as you want to run your code it will compile it for
+whatever platform you are running on.
+While this seems a bit weird, why not just compile it once and for all? This can allow the compiler to
 optimize the program specifically for your machine. Afterall, while two machines might have similar
 setups, one might have a GPU and other one not. The [Java HotSpot VM][2]
 even tries to optimize your code as it runs. If allowed to become a long-running process it can
@@ -95,7 +107,7 @@ even see them hit the mainstream for optimizing machine learning applications. W
 a very simple optimizing compiler for computational graphs in the next module.
 
 [Godbolt][7] is an online compiler explorer where we can explore what happens when we compile or interpret
-languages. It will show output to assembley code which corresponds to actual machine code. You don't need
+languages. It will show output to assembly code which corresponds to actual machine code. You don't need
 to learn everything, but if you have read the [introduction to computers][39] you will see the most important
 codes for the following is load, store, add and multiply, along with register and memory addresses, as seen
 in the description of the SSMC.
@@ -286,7 +298,8 @@ As you can probably see in the column on the left... the guide will be using Rus
 with a few exceptions. C will occasionally be used for reasoning about low level stuff like pointers
 and memory allocations, while C++ will be used as a comparison to Rust and Python will be used
 for a bit of perspective. In any case it will be assumed you don't really know any of the languages except Python
-and that you have read the introductions to Rust in this module.
+and that you have read the introductions to Rust in this module. Please don't skip the introduction to Rust.
+
 If you read the section on GPU programming below, you will see there are no easy, one-size-fits-all,
 solutions. Thankfully, the guide has clear goals and limitations.
 To help you get familiar with new topics, we only need reasonable performance and for all
@@ -317,19 +330,20 @@ allocating memory on the GPU, transferring the contents of a buffer to the memor
 GPU or launching your shader/kernel and transferring the results back to the CPU. The GPU languages themselves
 vary with the APIs. Some APIs, such as Vulkan, can take an intermediate representation called SPIR-V, this
 allows the user to write in any shading language, or even Rust in [one case][18], as long as it is
-compiled to SPIR-V. Usually a shading language will look a lot like C/C++, but have its own distinct
+compiled to SPIR-V. Usually a shading language will look a lot like C/C++/Rust, but have its own distinct
 rules. You can't always make the same assumptions.
 
 The rest of this section is an overview of the various available GPU APIs.
 
 ### Web APIs
 An often used strategy for making your programs as widely available as possible, is to use web-based techonology.
-Whatever browser you, or the end user is using supports some GPU APIs. For a long time it has been
+Whatever browser you are using supports some GPU APIs. For a long time it has been
 [WebGL][19], which is a subset of OpenGL. WebGL has a version 2.0, which was
 finally supported by all major browsers not too long ago. The 2.0 version brought support for compute shaders with it.
 The modern newcomer is [WebGPU][20] which has a way of doing things that more
-closely resembles modern APIs such as Vulkan, DirectX 12 and Metal. It is not widely supported in browsers, outside
-of developer modes. Until then, the [wgpu][14] abstraction can be used. It has an API which follows
+closely resembles modern APIs such as Vulkan, DirectX 12 and Metal. It was recently supported by Chrome. Hopefully
+Safari and Firefox are not far behind.
+The guide will use the [wgpu][14] abstraction. It has an API which follows
 the WebGPU specification, with some optional extensions for more features, but under the hood it uses whatever API
 it deems best for the current platform. Once the support for WebGPU becomes widespread, it can merely choose to run
 using WebGPU instead. In general, you will find that most frameworks or APIs which have to support a lot of things
@@ -338,18 +352,16 @@ the system you are on for support of an extension, which does allow access to sp
 however, end up with several versions of some elements of your code, based on whether some feature is there or not.
 
 ### Platform-Specific APIs
-Some GPU APIs are specific to specific operating systems. [DirectX11][21] and [DirectX12][22] targets Windows
+Some GPU APIs are operating system specific. [DirectX11][21] and [DirectX12][22] targets Windows
 and XBox platforms, while [Metal][23] targets Apple devices. The guide won't concern itself too much
 with these. DirectX11 is somewhat similar to OpenGL, while DirectX12 and Metal are from the same, more low-level,
 generation as Vulkan. Metal however, seems to be a bit less low-level compared to DirectX12 and Vulkan.
 
 ### Cross-Platform APIs
-[OpenGL][24] and [Vulkan][25] are cross platform. OpenGL hasn't seen any updates for a
-while. Vulkan on the other hand is a low level, but generally popular API. It puts a lot of
-responsibility on to the programmer, but works on Windows and Linux, as well as Intel, Nvidia and
-AMD GPUs. It even works fairly decently on Apple devices thanks to [MoltenVK][26]
-Another cross-platform tool is [wgpu][14], mentioned earlier. It is also the one that will
-be used in the guide for GPU code.
+[OpenGL][24] and [Vulkan][25] are cross platform. Vulkan is a low level, but generally popular API.
+It puts a lot of responsibility on to the programmer, but works on Windows and Linux, as well as
+Intel, Nvidia and AMD GPUs. It even works fairly decently on Apple devices thanks to [MoltenVK][26]
+Another cross-platform tool is [wgpu][14], mentioned earlier.
 
 ### Compute APIs
 Some GPU APIs are strictly not for graphics, such as [CUDA][27] and
@@ -382,10 +394,9 @@ further PyTorch even has its own compiler from [version 2.0][35].
 
 Another way of achieving speedy results in a flexible format is retrofitting an existing language, in this case
 Python, with a slightly different language. [Taichi][36] combines a domain specific
-language to JIT compile highly performant code, which can also run graphics, to whatever platform you are running
-on. It can do this because of increased requirements of the user. Namely, annotating their code and setting
-limitations. [Halide][37] on the other hand restricts itself to be a AOT- or
-JIT-compiled language embedded in C++ made specifically for working with images and tensors.
+language to JIT compile highly performant code which can also run graphics. It can do this because of increased
+requirements of the user. Namely, annotating their code and setting limitations. [Halide][37] on the other hand
+restricts itself to be a AOT- or JIT-compiled language embedded in C++ made specifically for working with images and tensors.
 
 [Futhark][38] is a language made specifically for replacing the parts of your code
 which need to be fast. As such it is not a general language and can make opinionated choices which allows
@@ -409,7 +420,7 @@ it to generate more performant code.
 [15]: https://learnopengl.com/
 [16]: https://sotrh.github.io/learn-wgpu/
 [17]: https://github.com/DTolm/VkFFT
-[18]: https://github.com/EmbarkStudios/rust-gpu
+[18]: https://rust-gpu.github.io/
 [19]: https://en.wikipedia.org/wiki/WebGL
 [20]: https://en.wikipedia.org/wiki/WebGPU
 [21]: https://en.wikipedia.org/wiki/DirectX#DirectX_11

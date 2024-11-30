@@ -10,7 +10,7 @@ First of all - do you understand what is written below?
 </figure>
 
 If you don't, don't worry, by the end, even if you don't, you should be
-able to look it up and understand not just what it means but the implications, fairly easilys.
+able to look it up and understand not just what it means but the implications, fairly easily.
 
 While the promises of performance and other some such advanced black magic might have been enticing,
 but first, a digression...
@@ -47,19 +47,19 @@ such that that training does not have to run again because of sloppiness.
 
 And thus stops the finger pointing!
 
-Optimizing code, especially on systems you might share with others both means that you can get your results faster,
-but that others can have use of the system in a reasonable time as well.
+Optimizing code, especially on systems you might share with others, means that you can get your results faster,
+but that others can get to use the system in a reasonable time frame.
 If you are creating large models, optimizing them to be smaller or more efficient also results in entities with profits less
 than the GDP of a small nation actually being able to train and run inference with your model,
 increasing the democratization of your work and its reach. If its able to run on a consumer grade desktop - even better!
 
-This guide was made to be an iterative process, taking you by the hand,
-speaking to you at the level at which you are following it, trying not to overwhelm you.
-Reading that back, it could sound a bit condescending, but it basically means that the
-types of concepts you are assumed to know about will gradually increase.  
-Due to the guide gradually introducing certain concepts, jumping around the material
-is not recommended.
-I also acknowledge that some people have different interests.  
+This guide was made to be your first step into the world of lower level programming.
+It is designed to not overwhelm you too much. There is almost no math, there is absolutely
+no academic rigour and I hide a bunch of concepts from you in order to make your
+entry into this world as smooth as possible. If you get a taste for it, after reading this
+you should be equipped to take further strides into more rigorous material.
+
+I also acknowledge that some people have different interests.
 As such, some portions of the guide will be tailored to people who are into deep learning,
 people who like computer vision, or computer graphics or other some such.  
 You are more than welcome to read and do all of it, but no one says you have to do anything.  
@@ -67,7 +67,11 @@ If you just follow along the path that is most relevant to you, you will be just
 The guide does contain code, sometimes just small snippets, but also frameworks in
 which most of a module will take place.
 
-Most importantly - Don't Panic! The guide is here for you!
+Most importantly - Don't panic! This stuff can be very fun. Take some breaks to play
+around with the code! Forcing your way through the material to just "get it over with"
+is ultimately a waste of your time, some of the concepts introduced, such as memory
+hierarchies, parallelism and floating point precision can require your mind to rewire itself.
+Let it marinade for a bit. This is a marathon, not a sprint.
 
 And now for something completely different... practicalities!
 
@@ -86,23 +90,17 @@ chapters, university courses, scientific papers and in-depth blog posts. In a lo
 they are also the basis for the content in the section above it.
 
 # 👨🏼‍💻 Exercises and Teaching
-!!! warning "WSL"
-
-    I recommend you do not use WSL on Windows. You can get it to work for if you have an Nvidia GPU,
-    otherwise it seems to be either difficult or impossible. GUI and graphics programming (anything with
-    a window you can interact with) is extremely slow.
-
 Sections indicated by 👨🏼‍💻 are recommended exercises if you want to really learn the topics in-depth or if you
 are following a course based on the material.
 
-If you are a teacher who wants to make use of this material, feel free to use the [course site][2]
+If you are a teacher who wants to make use of this material, feel free to use this [course site][2]
 for inspiration.
 The course focuses on teaching real-time systems for deep learners and visual systems programmers.  
 It allocates half of 15 days to go through the material in the guide and the
 other half to making a project relevant to the students' specialization, which is the [contents of m6][3].  
 It is designed to give shallow introductions to a wide range of concepts with a
 handful of varying exercises.
-The student is to then reach back and explore the topics relevant to their specialized
+The student is to then go back and explore the topics relevant to their specialized
 project in greater detail.
 The breadth of topics is quite wide, and each student shouldn't be expected to
 pass an exam in every topic.
@@ -115,6 +113,9 @@ in mind. From having taught themselves Python to experienced C++ programmers, fr
 graphics to being a deep learning PhD. There is a range in everything, including the exercises and
 hand-ins. As such it is very important to specify to students which parts of the exercises and hand-ins
 they are expected to do and which parts they are invited to do if they find it interesting.
+
+This website has since I taught the course seen quite a few changes based on student feedback, they don't correspond
+1-to-1 any longer.
 
 [0]: https://towardsdatascience.com/chatgpts-electricity-consumption-7873483feac4
 [1]: https://towardsdatascience.com/environmental-impact-of-ubiquitous-generative-ai-9e061bac6800

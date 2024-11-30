@@ -9,6 +9,10 @@ are required to work with tensor core accelerators.
 I can't explain exactly how a float works much better than the [wiki][7]. Ever so slightly browsing the
 page about [IEEE-754][8] also makes good sense.
 
+<figure markdown>
+![Image](../figures/invincible_fraction.png){ width="700" }
+</figure>
+
 So, now that you've browsed the websites and your are familliar with concepts such as exponent and fraction, I
 have a few key concepts for you to make note of. If you can at all keep your floats as close to being between
 -1.0 and 1.0, you will keep as much of your precision as possible. 4.0 / 3.0 is not the same in terms of precision

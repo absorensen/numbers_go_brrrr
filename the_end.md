@@ -10,4 +10,11 @@ not have understood. What about now?
 </figcaption>
 </figure>
 
+If I have more time in the future, I would like to add more profiling of the code and analyze it in expandable
+sections. This would hopefully elaborate on some of the results, like access patterns, with metrics like
+cache hits/misses and branch mispredictions.
+
 Where to from here?
+
+Kayvon Fatahalian - Visual Computing Systems
+You should now be well equipped to read books like https://mlsysbook.ai/

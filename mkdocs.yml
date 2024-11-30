@@ -1,4 +1,4 @@
-site_name: The Real-Timers Guide to the Computational Galaxy
+site_name: The "Numbers Go Brrr" Guide
 docs_dir: .
 site_dir: ../site
 repo_url: https://github.com/absorensen/the-guide
@@ -60,7 +60,7 @@ plugins:
 extra:
   social:
     - icon: material/email
-      link: mailto:aboso@dtu.com
+      link: mailto:anders-soerensen@hotmail.com
     - icon: fontawesome/brands/github
       link: https://github.com/absorensen
     - icon: fontawesome/brands/linkedin
@@ -128,3 +128,4 @@ nav:
     - m6_projects/README.md
     - S0 - Project Ideas: m6_projects/s0_project_ideas.md
   - The End: the_end.md
+  - FAQ: faq.md
