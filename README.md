@@ -1,7 +1,7 @@
 # Prelude
 
 <figure markdown>
-![Image](../figures/hello_there.jpg){ width="600" }
+![Image](figures/hello_there.jpg){ width="600" }
 </figure>
 
 You've found a guide for learning about all the stuff needed to either program or reason about data-oriented

@@ -7,7 +7,7 @@ Well, maybe not frequently, but asked... or potentially asked.
 Either you get it or you don't. *
 
 <figure markdown>
-![Image](../figures/treefiddy.jpg){ width="400" }
+![Image](figures/treefiddy.jpg){ width="400" }
 </figure>
 
 ??? note "Answer"
