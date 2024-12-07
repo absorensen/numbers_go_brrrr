@@ -49,7 +49,7 @@ impl MyStruct {
         // MyStruct { some_field: 3.0, another_field: 2, a_usize: 1 }
     }
 
-    // We can also implment mutable and immutable functions for a struct.
+    // We can also implement mutable and immutable functions for a struct.
     // Without the &self, we cannot access the fields of the struct.
     pub fn get_another_field_value(&self) -> u32 {
         // Implicit copy of self.another_field is sent as return value

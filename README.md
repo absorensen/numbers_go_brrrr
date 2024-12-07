@@ -1,4 +1,4 @@
-# Prelude
+# Madness, Memes and Memory Hierarchies
 
 <figure markdown>
 ![Image](figures/hello_there.jpg){ width="600" }

@@ -9,6 +9,7 @@ pub fn closures() {
     let power_four: u32 = our_closure(power_two); // 16
 
     let data: Vec<u32> = vec![2, 4, 6, 8, 10];
+
     // We also use closures for iterator adaptors
     let powered: Vec<u32> = data.iter().map(|x| *x * *x).collect();
 
@@ -22,8 +23,6 @@ pub fn closures() {
     let multiply_closure = |x: u32| x * multiply_by_what;
     let powered: Vec<u32> = data.iter().map(|x| multiply_closure(*x)).collect();
 
-    // We can save a closure for later, which means it will have to
-    // keep a copy of the environment saved.
     // You should circle back to these subtleties later, for now
     // just keep it simple and your usage of closures narrow.
 

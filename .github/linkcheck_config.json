@@ -39,6 +39,9 @@
         },
         {
             "pattern": "https://www.gamedev.net/articles/programming/general-and-gameplay-programming/introduction-to-octrees-r3529/"
+        },
+        {
+            "pattern": "https://blogs.oracle.com/javamagazine/post/understanding-garbage-collectors"
         }
     ],
     "aliveStatusCodes": [

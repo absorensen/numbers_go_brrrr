@@ -4,7 +4,7 @@ Go into the file corresponding to each function being called in the ```main``` f
 and read all of the comments in order. The code can also be found [online][0].
 
 # Supplementary Comments
-In this section, I'll take you through a few addendums, which aren't as much about a
+In this section, I'll take you through a few additional notes, which aren't as much about a
 specific language construct, but some concepts it might help to know.
 
 ## Aliasing
@@ -43,9 +43,9 @@ It is where the code snippets above are from. The code has been reformatted to p
 It may be on the more advanced side however.
 
 Basically, whenever you write to a value and there are multiple references to that value hidden away
-in different places of the memory hieararchy, such as some threads registers, or even within the same
-function, everything becomes invalidated. This is one of the reasons for the borrow checker
-adamantly enforcing that there can be multiple shared (read-only) references to a value,
+in different places of the memory hieararchy, such as some threads' registers, or even within the same
+function, everything becomes invalidated. This is one of the reasons for the borrow checker to
+adamantly enforce that there can be multiple shared (read-only) references to a value,
 but only one mutable reference (read/write), and if there is a mutable reference, there cannot
 be any shared references to that value. If there were multiple shared references and a mutable reference
 it would be impossible to guarantee correctness as just when a value is retrieved from RAM by a shared reference
@@ -54,8 +54,9 @@ necessitate another read, but what if it happens again? Another read! This is no
 just get a program behaving "weird". In another case, it would also mean you could not read from a value
 and save that value in a local variable to do a bunch of operations before writing it somewhere. It already
 sounds very headscratching and like you should only ever do single threaded programs. But thankfully,
-the borrow checker is there to keep things in check for you. One recommendation, you should try
-to minimize the time that a mutable reference to a value will exist.
+the borrow checker is there to keep things in check for you. One recommendation - try
+to minimize the time that a mutable reference to a value will exist, or in other words, try to
+limit the scope of mutable references.
 
 ## Multiple Function Definitions Not Allowed
 As opposed to languages like C++, you cannot have multiple functions with the same name in Rust.
@@ -73,11 +74,11 @@ on the way you are calling function().
 Rust seems to be designed in a way as to minimize the amount of ambiguity faced by the compiler (and you too).
 Sometimes in Rust code you will see several different constructor functions, such as ```build```,
 ```build_from_ints```, ```new``` and ```default```. In one way, that is a pain in the ass.
-In another way, it's quite nice. It forces the programmer to be explicit about how the functions
+In another way, it's actually quite nice. It forces the programmer to be explicit about how the functions
 behaviours are different, instead of being unwritten, implicit, or 'well, you can just read the
 code, it's not that complicated'. If you ever think or say that. Remember this... *ahem* RED FLAG!
 Fix your stuff so people don't have to guess, it will probably make the next person to read your
-code hate you slightly less. Which is a good thing!
+code hate you slightly less. Which really is something to strive for!
 
 ## Index Checking
 Whenever you access an element in an indexed collection such as a Vec:
@@ -106,18 +107,17 @@ and circumvent this.
     ```
 
 It requires an unsafe region, which is a region in your code where you tell the compiler
-to allow you to do some things it would otherwise not allow you to, and call the function
-```.get_unchecked(index)```. An unsafe region does not turn off all checking, but in general,
-if you are at the level of reading the guide, you don't need it and we won't be talking about it
-more. If you really want to read more about unsafe, the [Rustonomicon][2] is the defacto standard
-introduction to unsafe in Rust.
+to allow you to do some things it would otherwise not allow you to. An unsafe region does not
+turn off all checking, but in general, if you are at the level of reading the guide, you don't
+need it and I will use it sparingly at most. If you want to read more about unsafe,
+the [Rustonomicon][2] is the defacto standard introduction to unsafe in Rust.
 
 The two above functions are equivalent to
 
 === "C++"
 
     ```c++
-    for(int index{0}; index < data.size(); ++index) {
+    for(size_t index{ 0 }; index < data.size(); index += 1) {
         do_something(data.at(index));
     }
     ```
@@ -125,7 +125,7 @@ The two above functions are equivalent to
 === "C++"
 
     ```c++
-    for(int index{0}; index < data.size(); ++index)  {
+    for(size_t index{ 0 }; index < data.size(); index += 1 )  {
         do_something(data[index]);
     }
     ```

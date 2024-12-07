@@ -1,19 +1,19 @@
 # 👨🏼‍💻 Exercises
 These exercises are supposed to get you to write some Rust code yourself. Advent of Code is a good place to start
-for learning the basic syntax and stuff like reading from files. You'll quickly see though that you start focusing
+for learning the basic syntax and stuff like reading from files. After a few exercises you'll see that you start focusing
 more and more on the problems themselves instead on Rust. At this point you can learn more about the challenges
 of structure and the borrow checker through doing either m0::e1::a or m0::e1::b. One is more visually inclined,
 wheras the other is more neural network oriented.
 
 ## m0::e0 - Advent of Code
-In order to get a hang of the basic of Rust I recommend doing [Advent of Code][0]
+In order to get a hang of the basic of Rust, I recommend doing [Advent of Code][0]
 problems until you feel comfortable moving forward.
 
 Give yourself a bigger challenge:
 
-* Rewrite your solutions to use iterators whenever possible
-* Handle errors properly instead of using ```.unwrap()``` everywhere
 * Implement testing
+* Rewrite your solutions to use iterators whenever possible. Use testing to ensure your solution stays correct
+* Handle errors properly with match statements instead of using ```.unwrap()``` everywhere
 
 ## m0::e1 - Traits
 Traits are one of the ways in which we can begin to create structure in our programs. In Rust, traits
@@ -21,9 +21,9 @@ are somewhat like interfaces seen in other languages. A struct can implement mul
 lots of different types of input as function arguments by specifying them somewhat generically. Imagine a
 function definition. Argument A might be an ```f32```, argument B might be a ```&Vec<i64>```, but argument
 C could support a range of possible inputs, by specifying that all arguments in the third spot (C), should
-implement the interface Alpha. Meaning that they all must implement some form of behaviour that is
+implement the interface Alpha. Meaning that they all must implement some form of interface that is
 needed by this function. It could have lots of other behavior, but we don't care about that behavior.
-Or we could even require multiple kinds of behavior such as argument C must support behavior of
+Or we could even require multiple kinds of traits such as argument C must implement
 trait Alpha + trait Beta + trait Omega. This is known as composition. Now for the exercise.
 
 * Read [this link][1] about traits

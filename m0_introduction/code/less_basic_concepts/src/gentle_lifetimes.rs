@@ -31,7 +31,7 @@ pub fn gentle_lifetimes() {
     // X we have at the time. 'a and 'b are completely
     // symbolic. In this example, we just guarantee that
     // X will live AT LEAST as long as Y, but 
-    // it is completely ok for X to live even long.
+    // it is completely ok for X to live even longer.
     // We are just making minimal assurances.
 
     // One more lifetime detail - 'static.
@@ -46,7 +46,7 @@ pub fn gentle_lifetimes() {
     // of eternity (the programs lifetime).
 
     // Read along further for a more complex example.
-    // You don't really need to as the guide tries to
+    // You don't really need to as I try to
     // minimize explicit lifetimes
     references_example();
 

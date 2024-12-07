@@ -1,6 +1,5 @@
 // Don't worry about &'static str right now
-// It is a level 3/4 thing. str will be introduced
-// in a bit.
+// str will be introduced in a bit.
 pub fn types() -> Result<i32, &'static str> {
     // Types can be inferred
     let inferred_int32 = 5;

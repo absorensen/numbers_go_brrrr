@@ -10,8 +10,10 @@ pub fn run() {
     // As such, the rust compiler will not let you change the value.
     // Here the type is dictated as being an unsigned 32-bit integer.
     let output_a: u32 = function_a();
+
     // Here we designate the type 64-bit floating point
     let output_b: f64 = function_b();
+    
     // The type here is a tuple.
     // Tuples are a first-class citizen in Rust.
     // All of the fields are anonymous

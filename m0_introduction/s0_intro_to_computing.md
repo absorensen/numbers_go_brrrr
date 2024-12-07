@@ -4,24 +4,23 @@ you might not have been introduced to the other options. Some of the concepts pr
 lay the foundations for the choices dictating the rest of the guide.
 Though I have made some clearly defined choices about which tools to use in this guide, you should at all times
 use the right tool for the job. Not only in which language or framework you might choose,
-but in how you put together and design your systems using those tools. Part of the guide's
+but in how you put together and design your systems using those tools. Part of my
 strategy is going into greater detail about core concepts such as memory and then introduce you to a multitude
 of tools and concepts, also known as the "learn what to DuckDuckGo"-strategy. Once you are ready to do a project
 of your own you can then go back to a handful of concepts and explore them in greater detail. The additional
 reading sections might be useful when going back.
 
-The guide will introduce concepts that aid some programs in producing faster results.
-An important factor in reliable and performant systems is limitations.
-Usually, the word limitations carries a negative connotation. Very few people think less freedom or
-flexibility sounds particularly enticing, but in computing, limitations can be a wonderful thing to have
-and set. If you imagine a software project as the following: You are asked by your boss to design or purchase
-a vehicle. The first natural response from you would be "for what?". If your boss' answer is "for whatever",
-how do you pick out the correct vehicle? If your boss on the other hand had responded "for going down to
-the supermarket and do some shopping". Fine, you would be pretty close to a minivan or a station car.
-But if your boss said "for racing Formula 1", sure, those cars could enter the race and maybe get across
-the finish line, but if your boss had said "for COMPETING in Formula 1", you would have to assume that
-that type of car isn't something you can reasonably just go buy from a car manufacturer. You will
-have to build that car. Performant software programs work much in the same way. If you know you only
+I will introduce concepts that aid some programs in producing faster results. An important factor in
+reliable and performant systems is limitations. Usually, the word limitations carries a negative connotation.
+Very few people think less freedom or flexibility sounds particularly enticing, but in computing, limitations
+can be a wonderful thing to have and set. If you imagine a software project as the following: You are asked
+by your boss to design or purchase a vehicle. The first natural response from you would be "for what?".
+If your boss' answer is "for whatever", how do you pick out the correct vehicle? If your boss on the other
+hand had responded "for going down to the supermarket and do some shopping". Fine, you would be pretty close
+to a minivan or a station car. But if your boss said "for racing Formula 1", sure, those cars could enter the
+race and maybe get across the finish line, but if your boss had said "for COMPETING in Formula 1", you would
+have to assume that that type of car isn't something you can reasonably just go buy from a car manufacturer.
+You will have to build that car. Performant software programs work much in the same way. If you know you only
 have to render one type of object under a certain set of conditions, you can make simplifying assumptions
 that allow you to write simpler code and the software can be free to kick ass in that singular scenario.
 Sometimes a compiler can even step in and optimize the everliving crap out of your code, if you just supply
@@ -294,19 +293,19 @@ The advantage is highly portable code, because everything is essentially just a 
 which is a traumatic experience, I would prefer not to elaborate on.  
 
 ## The Guide and Languages
-As you can probably see in the column on the left... the guide will be using Rust from here on out,
+As you can probably see in the column on the left... I will be using Rust from here on out,
 with a few exceptions. C will occasionally be used for reasoning about low level stuff like pointers
 and memory allocations, while C++ will be used as a comparison to Rust and Python will be used
 for a bit of perspective. In any case it will be assumed you don't really know any of the languages except Python
 and that you have read the introductions to Rust in this module. Please don't skip the introduction to Rust.
 
 If you read the section on GPU programming below, you will see there are no easy, one-size-fits-all,
-solutions. Thankfully, the guide has clear goals and limitations.
+solutions. Thankfully, I have a set of clear goals and limitations for the guide.
 To help you get familiar with new topics, we only need reasonable performance and for all
 the code to be runnable on most laptops.  
 Most importantly, the setup process should be easy and not make you want to stress-eat
 the contents of your entire fridge when going through the installation process.
-As such the guide will mainly use [Rust][13] and the GPU API [wgpu][14]. The guide will in all cases that do
+As such the guide will mainly use [Rust][13] and the GPU API [wgpu][14]. I will in all cases that do
 not require graphics output only concern itself with pure computation through wgpu, which makes setup quite
 a bit simpler. wgpu is an abstraction layer that runs whatever GPU API it finds best suitable on your
 system. Having exact control and the absolute best performance isn't as important as allowing as many people to
@@ -319,7 +318,7 @@ _________________
 GPUs are some of the most readily available accelerators. Originally made for graphics, since around 2008
 using them for general computation has been fairly wide spread. All graphics API's now also support general
 computation. Usually, it will be called a compute shader. Shader is the common name for a GPU program.
-If running CUDA or OpenCL, it is called a kernel. The guide will mostly focus on the pure compute parts
+If running CUDA or OpenCL, it is called a kernel. I will mostly focus on the pure compute parts
 of GPU APIs, except for the graphics specialization. Thus it will be assumed that if you are interested in
 the graphics specialization you might already have done a graphics course or a tutorial such as
 [LearnOpenGL][15] or [Learn Wgpu][16]. It is worth noting that a compute shader using a graphics-based
@@ -343,7 +342,7 @@ finally supported by all major browsers not too long ago. The 2.0 version brough
 The modern newcomer is [WebGPU][20] which has a way of doing things that more
 closely resembles modern APIs such as Vulkan, DirectX 12 and Metal. It was recently supported by Chrome. Hopefully
 Safari and Firefox are not far behind.
-The guide will use the [wgpu][14] abstraction. It has an API which follows
+I will use the [wgpu][14] abstraction. It has an API which follows
 the WebGPU specification, with some optional extensions for more features, but under the hood it uses whatever API
 it deems best for the current platform. Once the support for WebGPU becomes widespread, it can merely choose to run
 using WebGPU instead. In general, you will find that most frameworks or APIs which have to support a lot of things
@@ -353,7 +352,7 @@ however, end up with several versions of some elements of your code, based on wh
 
 ### Platform-Specific APIs
 Some GPU APIs are operating system specific. [DirectX11][21] and [DirectX12][22] targets Windows
-and XBox platforms, while [Metal][23] targets Apple devices. The guide won't concern itself too much
+and XBox platforms, while [Metal][23] targets Apple devices. I won't concern myself too much
 with these. DirectX11 is somewhat similar to OpenGL, while DirectX12 and Metal are from the same, more low-level,
 generation as Vulkan. Metal however, seems to be a bit less low-level compared to DirectX12 and Vulkan.
 

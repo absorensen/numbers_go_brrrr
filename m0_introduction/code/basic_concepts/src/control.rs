@@ -1,5 +1,5 @@
 pub fn control () {
-    // The control statements that we will see in the guide
+    // The control statements that you will see in the guide
     // are the basic ones. Note that Rust prefers no
     // parenthesis around the condition for control
     // statements.
@@ -7,7 +7,9 @@ pub fn control () {
     // The simplest one is loop. It is equivalent to
     // while(true) in other languages. It is broken out
     // of by returning from the function or a break 
-    // statement.
+    // statement. You have to be careful with the logic.
+    // If you never hit the break statement your program
+    // will continue until you or the system force quits.
 
     let mut counter: usize = 0;
     loop {
@@ -45,13 +47,13 @@ pub fn control () {
         _ => 42,
     };
 
-    // There is no ternary operator: condition ? 42 : 41;
+    // There is no ternary operator: bool const is_42 = condition ? 42 : 41;
     // What you can do is this
     let some_value: u32 = 42;
     let is_42: bool = if some_value == 42 { true } else { false };
 
     // Rust does not have the classic C/C++ for-loop:
-    // for(int i = 0; i < vector.size(); ++i)
+    // for(size_t index { 0 }; index < vector.size(); index += 1)
     // instead it has range based for-loops and iterators.
     let mut our_vector: Vec<u32> = vec![1, 2, 3, 4, 5];
 
