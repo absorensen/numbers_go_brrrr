@@ -290,6 +290,7 @@ by a large margin, if the hardware support is available.
 
 ## Additional Reading
 If you've read all of this, you should now be ready to look at quantization and quantization aware training
-[in PyTorch][0].
+[in PyTorch][0] and [in general][1].
 
 [0]: https://pytorch.org/blog/introduction-to-quantization-on-pytorch/
+[1]: https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-quantization

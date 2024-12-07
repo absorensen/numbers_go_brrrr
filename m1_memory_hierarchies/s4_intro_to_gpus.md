@@ -600,7 +600,7 @@ should always prefer more reads than writes. Reads are very parallelizable, writ
 This can be extended to lots of different algorithms. For matrix multiplication, it's recommended to use
 gathering, from the point of view of the output element for each thread. For some more material on
 scattering and gathering, there is a paper on it
-[from '07](https://cse.hkust.edu.hk/catalac/papers/scatter_sc07.pdf).
+[from '07][10].
 
 ## A Histogram of Violence
 Let's take things a bit further and look at shared memory, scattering, gathering,
@@ -1405,3 +1405,4 @@ used tutorial is [Learn Wgpu][6]. One of the most popular books about GPGPU prog
 [7]: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
 [8]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_histogram
 [9]: https://shop.elsevier.com/books/programming-massively-parallel-processors/hwu/978-0-323-91231-0
+[10]: https://www.researchgate.net/publication/220781807_Efficient_gather_and_scatter_operations_on_graphics_processors

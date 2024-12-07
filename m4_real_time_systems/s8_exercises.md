@@ -96,10 +96,10 @@ You are encouraged to find additional litterature on your own.
 [4]: https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array
 [5]: https://algorithmica.org/en/eytzinger
 [6]: https://screwjankgames.github.io/engine%20programming/2020/09/24/writing-your-own-memory-allocators.html
-[7]: https://ipthomas.com/blog/2023/07/n-times-faster-than-c-where-n-128/
+[7]: https://ipthomas.com/blog/n-times-faster-than-c/
 [8]: https://pytorch.org/tutorials/beginner/ddp_series_theory.html
 [9]: https://pytorch.org/tutorials/intermediate/ddp_tutorial.html
-[10]: https://pytorch.org/docs/stable/pipeline.html
+[10]: https://docs.aws.amazon.com/sagemaker/latest/dg/model-parallel-intro.html
 [11]: https://pytorch.org/blog/optimizing-libtorch/?hss_channel=lcp-78618366
 [12]: https://arxiv.org/pdf/2107.01499.pdf
 [13]: https://arxiv.org/pdf/2205.14135.pdf

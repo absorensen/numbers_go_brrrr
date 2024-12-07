@@ -327,7 +327,8 @@ for benchmarking this section, has multiple SIMD instruction sets - Intel® SSE4
 Intel® AVX2, Intel® AVX-512. You can program for each specific instruction set or find a cross-platform such as
 [ultraviolet][13] to program for multiple architectures.
 What I found most important is that my SIMD lanes max out at 512 bits. If I am doing ```f32```-based SIMD
-operations I can fit up to 16 floats into a lane.
+operations I can fit up to 16 floats into a lane. For a general introduction to the terminology and basics of
+SIMD, you can check out [this post][18].
 
 SIMD programming is a genre unto itself and learning to program it can take a while. If you look at the figure
 from earlier showing pipelined instructions, picture each box as being wider. Imagine you are doing the
@@ -456,3 +457,4 @@ This is even being rolled out and described in this [blog post by Nvidia][1].
 [15]: https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#access-patterns
 [16]: https://github.com/ispc/ispc
 [17]: https://unity.com/dots
+[18]: https://github.com/rust-lang/portable-simd/blob/master/beginners-guide.md
