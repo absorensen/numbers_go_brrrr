@@ -1911,18 +1911,18 @@
 
 <h1 id="exercises">👨🏼‍💻 Exercises</h1>
 <p>These exercises are supposed to get you to write some Rust code yourself. Advent of Code is a good place to start
-for learning the basic syntax and stuff like reading from files. You'll quickly see though that you start focusing
+for learning the basic syntax and stuff like reading from files. After a few exercises you'll see that you start focusing
 more and more on the problems themselves instead on Rust. At this point you can learn more about the challenges
 of structure and the borrow checker through doing either m0::e1::a or m0::e1::b. One is more visually inclined,
 wheras the other is more neural network oriented.</p>
 <h2 id="m0e0-advent-of-code">m0::e0 - Advent of Code</h2>
-<p>In order to get a hang of the basic of Rust I recommend doing <a href="https://adventofcode.com/">Advent of Code</a>
+<p>In order to get a hang of the basic of Rust, I recommend doing <a href="https://adventofcode.com/">Advent of Code</a>
 problems until you feel comfortable moving forward.</p>
 <p>Give yourself a bigger challenge:</p>
 <ul>
-<li>Rewrite your solutions to use iterators whenever possible</li>
-<li>Handle errors properly instead of using <code>.unwrap()</code> everywhere</li>
 <li>Implement testing</li>
+<li>Rewrite your solutions to use iterators whenever possible. Use testing to ensure your solution stays correct</li>
+<li>Handle errors properly with match statements instead of using <code>.unwrap()</code> everywhere</li>
 </ul>
 <h2 id="m0e1-traits">m0::e1 - Traits</h2>
 <p>Traits are one of the ways in which we can begin to create structure in our programs. In Rust, traits
@@ -1930,9 +1930,9 @@ are somewhat like interfaces seen in other languages. A struct can implement mul
 lots of different types of input as function arguments by specifying them somewhat generically. Imagine a
 function definition. Argument A might be an <code>f32</code>, argument B might be a <code>&amp;Vec&lt;i64&gt;</code>, but argument
 C could support a range of possible inputs, by specifying that all arguments in the third spot (C), should
-implement the interface Alpha. Meaning that they all must implement some form of behaviour that is
+implement the interface Alpha. Meaning that they all must implement some form of interface that is
 needed by this function. It could have lots of other behavior, but we don't care about that behavior.
-Or we could even require multiple kinds of behavior such as argument C must support behavior of
+Or we could even require multiple kinds of traits such as argument C must implement
 trait Alpha + trait Beta + trait Omega. This is known as composition. Now for the exercise.</p>
 <ul>
 <li>Read <a href="https://github.com/absorensen/the-guide/tree/main/m0_introduction/code/image_on_screen">this link</a> about traits</li>
@@ -1988,7 +1988,7 @@ algorithms, might be more stimulating. The code is already in Rust and should be
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 3, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 7, 2024</span>
   </span>
 
     

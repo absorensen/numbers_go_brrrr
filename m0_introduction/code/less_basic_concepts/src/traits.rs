@@ -1,9 +1,8 @@
 // Rust does not support object-oriented programming (OOP).
 // In general, it seems that OOP is falling in popularity.
-// Traits are basically interfaces. Interfaces being
-// a list of methods that a given struct needs to implement
-// to fulfill that interface. 
-
+// Traits are basically composable (we can have more than one)
+// interfaces. Interfaces being a list of methods that a
+// given struct needs to implement to conform to that interface. 
 
 // One example - we could make the trait Fruit
 trait Fruit {
@@ -22,7 +21,7 @@ trait Fruit {
     }
 }
 
-// One example - we could make the trait Fruit
+// One example - we could make the trait FruitItem
 trait FoodItem {
     fn get_price(&self) -> f32 {
         0.0
@@ -55,7 +54,7 @@ impl Fruit for Apple {
     }
 }
 
-// A struct can implement more than 1 trait.
+// A struct can implement more than one trait.
 impl FoodItem for Apple {
     fn get_price(&self) -> f32 {
         3.50
@@ -78,7 +77,7 @@ fn get_fruit() -> impl Fruit {
 
 
 // Deriving traits is an absolute super power.
-// A lot of the standard traits can be automatically
+// A lot of the standard traits can be automagically
 // derived by writing a single line above the
 // struct definition. Usually, this requires that 
 // all fields of the struct implement said trait.

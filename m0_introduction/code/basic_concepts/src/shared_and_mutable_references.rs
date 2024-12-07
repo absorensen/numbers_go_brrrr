@@ -1,6 +1,6 @@
 pub fn shared_and_mutable_references() {
-    // References are basically an address to a value.
 
+    // References are basically an address of a value.
     let central_value: u32 = 5;
 
     // These references without any mut keywords
@@ -24,7 +24,7 @@ pub fn shared_and_mutable_references() {
     // This mutable reference borrows the ownership
     // of the value in another_value. It will be returned
     // to another_value once the mutable_reference variable
-    // is dropped (Rusts word for destroyed/removed).
+    // is dropped (Rust's word for destroyed/removed).
     let mutable_reference: &mut u32 = &mut another_value;
     
     // Accessing another_value is not allowed
@@ -58,11 +58,11 @@ pub fn shared_and_mutable_references() {
     // keeping you from making mistakes. If the borrow checker says your code
     // is ok, it will usually be relatively easy to parallelize. It is what
     // Rustaceans (the people who self identify as Rust fans), call
-    // FEARLESS CONCURRENCY.
+    // FEARLESS CONCURRENCY. Sparkle glitter surprise.
     
     // Another thing to note is that if a mutable reference is held anywhere,
     // no shared references are allowed.
-    let mut some_value: f32 = 3.15;
+    let mut some_value: f32 = 3.14;
     let mutable_reference: &mut f32 = &mut some_value;
     *mutable_reference *= 1.0;
 
@@ -154,11 +154,9 @@ pub fn shared_and_mutable_references() {
     // We could accomplish having several mutable references,
     // in a way, through some workarounds. This is a more advanced
     // topic and won't be introduced until module 2, the one about
-    // concepts in parallelism. It is also more of a level 3 and 4
-    // kind of concept. Anyways, if you find yourself needing to worry
-    // about this sort of thing, you are either overcomplicating 
-    // your code, or you should be taking things to the next level 
-    // (3 and 4).
+    // concepts in parallelism. Anyways, if you find yourself needing
+    // to worry about this sort of thing, you are likely overcomplicating 
+    // your code.
 
 }
 

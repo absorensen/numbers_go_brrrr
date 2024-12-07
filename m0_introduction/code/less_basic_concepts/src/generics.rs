@@ -10,7 +10,7 @@ use std::ops::Add;
 
 // This function requires that all types
 // T implements the add operation and the
-// output type T as well.
+// output type T does as well.
 fn generic_add<T>(a: T, b: T) -> T 
 where T : Add + Add<Output = T> {
     a + b

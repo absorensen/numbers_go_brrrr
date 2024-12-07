@@ -7,10 +7,10 @@ enum MyEnum {
     // Completely empty type
     FirstType,
     // Note the intialization like a struct, this means
-    // we even get name fields!
+    // we even get named members!
     SecondType{first_field: u32, second_field: f32},
     // Note the intialization like it is a tuple.
-    // This also results in anonymous fields.
+    // This also results in anonymous members.
     ThirdType(u8, u8),
     // Can even contain named structs!
     FourthType(AStruct),
@@ -41,7 +41,7 @@ pub fn enums_and_match() {
     // They are a sort of struct which can be one or more 
     // different structs. They a value hidden away which communicates
     // Whether that specific enum is type A or type B within that 
-    // type of enum. Having that functionality necessitates that 
+    // type of enum. Having that functionality necessitates that
     // the size in memory of enum type T is the maximum size of
     // all of the different types T covers.
 

@@ -1,6 +1,6 @@
 // This section will be quite small
 // You have already seen functions,
-// the guide will just show you a few
+// here there's just a few
 // interesting tidbits.
 pub fn functions() {
     let mut inlined_result: Option<(f32, u64)> = my_inlined_function(2);
@@ -19,6 +19,8 @@ pub fn functions() {
 // a bit finicky, and you should probably measure what the
 // impact is, unless the function is very simple computationally.
 // Stuff like accessing a variable or adding two numbers.
+// In some cases this will make the code perform worse, so be
+// sure to check.
 #[inline(always)]
 fn my_inlined_function(argument_a: u32) -> Option<(f32, u64)> {
     Some((3.1, argument_a as u64 * 2))
@@ -45,6 +47,10 @@ fn function_taking_functions(
     function_input(argument_a)
 }
 
+// It is idiomatic for a correct return at the bottom of a function to just be
+// the data to be returned with no semicolon.
+// If the return is early for some reason a return statement with a semicolon
+// is the convention.
 fn returning_early(int: u32, float: f64, message: &str) -> Result<i64, &str> {
     // If works slightly different
     // in Rust, more on that later.

@@ -2,6 +2,7 @@
 // be introduced. They are very small concepts,
 // but they are pervasive.
 pub fn move_clone_and_copy() {
+
     // Let's start with move
     // We assign a value to a variable
     let first_variable: Vec<u32> = vec![0; 5];
@@ -19,7 +20,7 @@ pub fn move_clone_and_copy() {
 
     // That's right, that's not just a runtime error,
     // the compiler will check and refuse to run the
-    // code. It keeps track of whether one variables
+    // code. It keeps track of whether one variable's
     // values has been handed over to another variable.
     
     // One thing we could do is to make a full copy of the
@@ -30,18 +31,19 @@ pub fn move_clone_and_copy() {
     println!("{:?}", third_variable);
 
     // Aggresively using clone everywhere can be one way
-    // to get your code past the compiler intially,
-    // eventually, you might find that your code is running
+    // to get your code past the compiler intially.
+    
+    // Eventually, you might find that your code is running
     // slower than expected. One of the first places to look
     // is for excessive cloning. Especially for large data
-    // amounts and/or in a loop. Cloning is always an explicit
+    // collection and/or in a loop. Cloning is always an explicit
     // function call, you make, making it easy to spot.
 
     // Copy, on the other hand is implicit.
     // There is something called traits, don't worry about it,
-    // it will be introduced at levels 3 and 4. One of the 
+    // it will be introduced later. One of the 
     // major traits is Copy. Various types can implement 
-    // the Copy. A type can implement several traits.
+    // the Copy traits. A type can implement several traits.
     // Basically, Copy is a simple bit-for-bit copy of a
     // value. Most simple types, such as u32, implement it
     // by default.

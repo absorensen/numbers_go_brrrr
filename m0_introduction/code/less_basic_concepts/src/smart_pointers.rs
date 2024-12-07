@@ -1,11 +1,11 @@
 use std::{rc::Rc, sync::Arc};
 
 pub fn smart_pointers() {
-    // Whenver you can't quite get what you want past the borrow checker
+    // Whenever you can't quite get what you want past the borrow checker
     // the next thing to try is smart pointers. They allow data to be shared,
     // but in order to modify them, you will have to combine them 
     // with atomics or mutexes to allow for modifications. For those concepts
-    // see the concepts in parallelism module.
+    // see the concepts in the concurrency module.
 
     // Box<T> is equivalent to unique_ptr<T> in C++.
     // It's basically a form of ownership of an element
@@ -50,8 +50,8 @@ pub fn smart_pointers() {
     let arc_two: Arc<u32> = Arc::clone(&arc_one);
     let arc_count: usize = Arc::strong_count(&arc_one); // arc_count == 2
 
-    // For an introduction to atomics see the concepts in parallelism module.
-    // Arc does come with a performance hit compared to Rc, though, so use
+    // For an introduction to atomics see the concepts in concurrency module.
+    // Arc does come with a performance hit compared to Rc, though, so use it
     // only if you are multithreading.
     
     // In general you should use the minimum version of smart pointers that you need.

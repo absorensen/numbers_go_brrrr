@@ -19,7 +19,19 @@ pub fn more_types() {
     // is a macro.
     // We create a vector
     let vec: Vec<i32> = vec![1, 2, 3];
-    // We get a slice to all of the values in vec.
+    
+    // We can get a slice to all of the values in vec.
+    // You can think of a slice as reference to a range
+    // of raw memory. The word range is really important here.
+    // If we have an array of 8 values and we get a slice to the
+    // first 4 values, we can do whatever we want with the next
+    // 4 values. We could split the 8 values into 2 mutable slices
+    // each of size 4. Now imagine if we put some 0's on the back
+    // of those sizes, we could take a single array, split it into
+    // multiple slices, give each slice to a thread to execute in
+    // parallel, with a guarantee that each thread couldn't
+    // get access to data outside of its slice's range.
+
     // Note that .. is a range.
     // In this context it basically means "all of the values"
     let int_slice: &[i32] = &vec[..];
@@ -43,9 +55,7 @@ pub fn more_types() {
         // and the chunk() which guarantees non-overlapping slices.
         // let chunk_size: usize = 2;
         // let mutable_slices: Vec<&mut [f32]> = original_values.chunks_mut(chunk_size).collect();
-        // The guide will in general try to avoid this kind of thing
-        // to not overwhelm you, but there are some more techniques like this
-        // explained at levels 3 and 4. Nudge nudge.
+        // The guide will try to avoid this kind of thing to not overwhelm you.
 
         // Note the change in indexing. Index 0 for this slice corresponds
         // to index 2 in original_values. The resulting value being 0.6.
@@ -62,9 +72,10 @@ pub fn more_types() {
     // This boils down to being a reference to
     // a string (array of characters) which will live for the duration
     // of the program, that's the 'static part. Usually the ' will refer
-    // to the lifetime (how long it is valid) of a variable. The guide
-    // will try to save you from the world of lifetimes. It will be glanced
-    // at at level 3, but that is it. We promise!
+    // to the lifetime of a variable. The lifetime of a variable means how
+    // long we are guaranteed the variable is valid. This guide
+    // will try to save you from the world of lifetimes. It might be glanced at,
+    // but that is it. I promise!
 
     let some_str: &str = "my_str";
     
@@ -88,14 +99,16 @@ pub fn more_types() {
     // which carries the type T. This could be Vec<u32>, Vec<f32> or
     // even Vec<SomeRandomTypeIMade>. The generic means that there
     // doesn't need to be a bunch of code written that does basically
-    // the same thing. Generics will be showcased a bit more at levels 3 and 4.
+    // the same thing.
     let mut a_vector: Vec<u32> = Vec::<u32>::new();
     a_vector.push(0);
     a_vector.push(1);
     a_vector.push(2);
     let a_vector: Vec<u32> = a_vector;
+
     // The above could be accomplished by the following
     let a_vector: Vec<u32> = vec![0, 1, 2];
+    
     // We can also allocate N elements with some default value
     let a_vector: Vec<u32> = vec![2; 3]; // Same as [2, 2, 2]
 

@@ -42,7 +42,7 @@ pub fn iterators() {
         data.iter() 
         // Perform map, an operation on every 
         // element of the collection (not 
-        // necessarily vector), which here is an 
+        // necessarily Vec, which here is an 
         // anonymous function (closure). Note the lack 
         // of semicolon, meaning that we return a new value
         // which is double the old value
@@ -56,7 +56,7 @@ pub fn iterators() {
 
  
     // Until now we have only been assembling a recipe. We won't
-    // be paying for most of the process until this statement.
+    // be paying for most of the process until the next statement.
     // This is handy because we can assemble however many iterators 
     // we need and then do other stuff with them, send them somewhere,
     // space them out to not drain the battery of our device... whatever
@@ -83,11 +83,11 @@ pub fn iterators() {
         .filter_map(|x: &u32| if 42 < *x { Some(1000 - *x) } else { None } )
         .collect();
 
-    // Now filtered is sorted!
+    // Now sort the filtered data!
     filtered.sort();
 
     // Another thing we could do, is to use the zip iterator to combine two collections
-    // in a one-for-me-one-for-you fashion. If vector A has length 3 and vector B has
+    // in an interleaved one-for-me-one-for-you fashion. If vector A has length 3 and vector B has
     // length 9, we would get a new vector AB* with elements [A0, B0, A1, B1, A2, B2].
     // The rest of vector B is ignored.
     let other_filtered: Vec<u32> = filtered.iter().map(|x: &u32| *x * 4).collect();

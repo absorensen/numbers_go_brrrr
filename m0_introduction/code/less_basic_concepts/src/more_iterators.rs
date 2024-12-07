@@ -1,6 +1,6 @@
 pub fn more_iterators() {
     // Often, when using the for-each loop we might be missing knowing the
-    // relevant index in the data structure. For this there is the 
+    // relevant index in the data structure. For this, there is the 
     // enumerate adaptor.
     let data: Vec<u32> = vec![01, 12, 23];
     for (index, element) in data.iter().enumerate() {
@@ -15,7 +15,7 @@ pub fn more_iterators() {
     }
 
     // Another way of doing this could be through zip!
-    for(input_element, output_element) in data.iter().zip(output_data.iter_mut()){
+    for(input_element, output_element) in data.iter().zip( output_data.iter_mut() ){
         *output_element = 24 + *input_element;
     }
     
@@ -38,7 +38,7 @@ pub fn more_iterators() {
     // element_count == 7
     let element_count: usize = data.iter().count();
 
-    // The take adaptor yiels a new operator of the first
+    // The take adaptor yields a new operator of the first
     // n elements of the iterator you call it on.
     // So for this chain we first have an iterator of 
     // 7 elements, then 5 elements [0, 1, 2, 3, 4],
