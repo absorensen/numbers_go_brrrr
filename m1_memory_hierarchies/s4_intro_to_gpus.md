@@ -1390,10 +1390,10 @@ To learn more about GPU's and memory checkout these - [The GPU Memory Hierarchy]
 [GPU Memory Hierarchy][1], [GPU Programming][2], [Hopper Architecture In-Depth][3] and
 [GPU architecture and CUDA Programming][4]. The last entry is highly recommended.
 
-You can read more about [optimzing shaders with shared memory][7] and [optimizing a matmul kernel][8]. A slightly more detailed explanation of
-[asynchronous memory transfers][5] for GPUs. If you want to learn more about wgpu, the most
-used tutorial is [Learn Wgpu][6]. One of the most popular books about GPGPU programming can be found
-[here][9].
+You can read more about [optimzing shaders with shared memory][7] and [optimizing a matmul kernel][11].
+A slightly more detailed explanation of [asynchronous memory transfers][5] for GPUs. If you want to
+learn more about wgpu, the most used tutorial is [Learn Wgpu][6]. One of the most popular books about
+GPGPU programming can be found [here][9].
 
 [0]: https://www.cs.cmu.edu/afs/cs/academic/class/15869-f11/www/lectures/08_mem_hierarchy.pdf
 [1]: http://meseec.ce.rit.edu/551-projects/spring2015/3-2.pdf

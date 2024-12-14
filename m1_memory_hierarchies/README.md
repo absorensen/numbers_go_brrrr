@@ -36,9 +36,9 @@ nudge (or force) you in certain directions to give them the restrictions and hin
 as efficiently as possible. Nudges like defining your neural network as a computational graph. If you're unsure
 about what a computational graph is, the basic version is that you define a bunch of operations and how they relate
 to each other. Like input layer, followed by linear layer, followed by ReLU. But more on that later! Other advances
-include PyTorch, after several attempts with various degrees of success, finally introducing a [compiler][7] for optimizing the
-neural network you just defined. Or the functional programming style used by [JAX][8] in conjunction with
-the [XLA compiler][9]. Don't worry if you don't understand too much of that. Once
+include PyTorch, after several attempts with various degrees of success, finally introducing a [compiler][7] for
+optimizing the neural network you just defined. Or the functional programming style used by [JAX][8] in
+conjunction with the [XLA compiler][9]. Don't worry if you don't understand too much of that. Once
 you are at the end of this guide, you'll have a much better chance at understanding.
 
 ## Memory Hierarchies

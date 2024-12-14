@@ -391,7 +391,6 @@ Why do you think that is?
     every single access will be a cache miss, it's effectively the same. Profiling this with a tool like
     ```perf``` should confirm this.
 
-
 Most interestingly non-wrapping strided access, which actually accesses less elements than the others,
 is slower than sequential access for strides 2 and 3. With stride 4, where we are
 only accessing one fourth the elements of the sequential access pattern, we begin to
