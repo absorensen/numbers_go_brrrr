@@ -45,6 +45,12 @@
         },
         {
             "pattern": "https://www.researchgate.net/publication/220781807_Efficient_gather_and_scatter_operations_on_graphics_processors"
+        },
+        {
+            "pattern": "https://www.sciencedirect.com/science/article/pii/S0167642321000022"
+        },
+        {
+            "pattern": "https://www.flaticon.com/free-icons/nebula"
         }
     ],
     "aliveStatusCodes": [
