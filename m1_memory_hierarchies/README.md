@@ -1,26 +1,26 @@
 # Memory Hierarchies, Computational Graphs and Compilers
 In this module I wll be getting in to memory hierarchies. Memory isn't just memory. There's various types
 of memory, different sizes, different speeds, different locations. When we formulate our programs in a more
-restricted fashion, such as declaring our intent through a graph, that allows us to optimize where memory is kept.
-Memory is everything as compute itself is very cheap, keeping the part of your code that does computations fed
-with data is expensive. Knowing more about how memory works will also help you parallelize your code for a greater
+restricted fashion, such as declaring our intent through a graph, those restrictions allow either us or some system
+we are using to optimize where memory is kept.
+Memory is everything as compute (math) itself is very cheap, keeping the part of your code that does computations fed
+with data is expensive. Knowing more about how memory works will help you parallelize your code for an even greater
 speedup. I'll also introduce how to work with GPU's from the dual perspective of memory and parallelism. It is
-introduced in this module instead of concurrency as programming GPU's is a microcosm of memory and parallelism.
+introduced in this module instead of the concurrency module as programming GPU's is a pressure cooker of memory and parallelism.
 Introducing these concepts early on in your journey will allow you some time to come to terms with the mindbending
-prospects of parallel programming. Also GPU's have become ubiquitous these last few years. Just look at
-Nvidia's stock prices!
+prospects of parallel programming. Also, at this point GPU's have become ubiquitous, you need to know sort of what they do.
 
 Not all efficiency comes from optimizing the various computational details like multiplications, divisions
 and such of a function. Quite a large part of it, in fact, comes from optimizing how much you write to
-and read from memory. 'Which memory?' you might ask, rightfully. The answering the where, when and what
+and read from memory. 'Which memory?' you might ask, rightfully. Answering the where, when and what
 of memory will be the focus of this module. We can almost always get more cores to throw at a problem,
-we can also, at least on the CPU, quite easily get more memory, but that does not change the amount of
-time it takes to get a piece of memory, only how much data we can have in memory before we have to go
+we can also, at least on the CPU, quite easily buy more physical memory, but that does not change the amount of
+time it takes to get a single piece of memory, only how much data we can have in memory before we have to go
 to a lower level, e.g. go from RAM to disk. This is even more important given the relatively slow
 improvement of memory over time.
 
 <figure markdown>
-![Image](../figures/compute_vs_memory.png){ width="500" }
+![Image](../figures/compute_vs_memory.png){ width="600" }
 <figcaption>
 <a href="https://www.cs.umd.edu/~meesh/411/CA-online/chapter/memory-hierarchy-design-basics/index.html">
 Image credit</a>
@@ -30,20 +30,15 @@ Image credit</a>
 ## Perspective
 The further you move from simple, albeit heavy, problems such as a matrix-matrix problem to more heterogenous
 problems, such as training a neural network, the harder it can be to get good performance. How do you know or
-reason about what is where and when in complex systems like
-[PyTorch](https://pytorch.org/), [Tensorflow](https://www.tensorflow.org/),
-[JAX](https://jax.readthedocs.io/en/latest/), [Numba](https://numba.pydata.org/) and
-[Taichi](https://www.taichi-lang.org/)? All of these frameworks, compilers and domain specific languages have to
-nudge you in different directions to give them the restrictions and hints needed to let them run your code
+reason about what is where and when in complex systems like [PyTorch][2], [Tensorflow][3], [JAX][4],
+[Numba][5] and [Taichi][6]? All of these frameworks, compilers and domain specific languages have to
+nudge (or force) you in certain directions to give them the restrictions and hints needed to let them run your code
 as efficiently as possible. Nudges like defining your neural network as a computational graph. If you're unsure
 about what a computational graph is, the basic version is that you define a bunch of operations and how they relate
 to each other. Like input layer, followed by linear layer, followed by ReLU. But more on that later! Other advances
-include PyTorch, after several attempts with various degrees of success, finally introducing a
-[compiler](https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html) for optimizing the
-neural network you just defined.
-Or the functional programming style used by
-[JAX](https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html) in conjunction with
-the [XLA compiler](https://www.tensorflow.org/xla). Don't worry if you don't understand too much of that. Once
+include PyTorch, after several attempts with various degrees of success, finally introducing a [compiler][7] for optimizing the
+neural network you just defined. Or the functional programming style used by [JAX][8] in conjunction with
+the [XLA compiler][9]. Don't worry if you don't understand too much of that. Once
 you are at the end of this guide, you'll have a much better chance at understanding.
 
 ## Memory Hierarchies
@@ -83,8 +78,8 @@ An example view of what the CPU memory hierarchy can look like with 2 cores.
 </figcaption>
 </figure>
 
-To further complicate things, multicore CPU's have each CPU sharing the disk, memory and L3 cache,
-sometimes they also share the L2 cache with a few other CPUs.
+To further complicate things, multicore CPU's have each core sharing the disk, memory and L3 cache,
+sometimes they also share the L2 cache with a few other cores.
 We are also at risk of each core not just reading from the same values, but some of them could even modify
 one or more of the 5 values. At any point in time a value loaded from memory, to L3 cache, to L2 cache, to L1 cache,
 to the registers of thread A, might be invalid because thread B wrote to that value. This may have updated
@@ -92,39 +87,34 @@ the value in memory and in thread B's registers, L1 and L2 caches, hopefully, it
 L2 and/or L3 cache it shared with thread A, but even then we would still need to move the value from
 L2/L3, to thread A's L1 cache and registers for it to be valid. Which is probably not happening.
 Multiple threads reading from a piece of data, which one or more threads are writing to is also known as a
-[data race](https://www.brainkart.com/article/Data-Races_9445/).
-Most likely thread A will end up with a stale version of the data and will continue as if the value
-had never been modified.
-Thread A will then write its own new version of the value, or just be working off an old version, resulting in
-incorrect results.
+[data race][1]. Most likely, thread A will end up with a stale version of the data and will continue as if the value
+had never been modified. Thread A will then write its own new version of the value, or just be working
+off an old version, resulting in incorrect results.
 
 <figure markdown>
 ![Image](../figures/8_cpus_hierarchy.png){ width="500" }
 <figcaption>
-An example view of what CPU memory hierarchy can look like with 8 cores.
+An example view of what a CPU memory hierarchy can look like with 8 cores.
 </figcaption>
 </figure>
 
-Nudging the programmer (that's you!), to better define your program, not just line-by-line, but as a whole,
-to constrain these sorts of contentions, is one of the myriad reasons why frameworks like PyTorch can greatly
-speed up your code, if you take the time to help it along.
+Nudging the programmer (that's you!), to better define your computation sequence, not just line-by-line, but as a whole,
+to constrain these sorts of contentions, is one of the myriad reasons why frameworks like PyTorch and JAX can greatly
+speed up your code.
 
 ## Expanding the Memory Hierarchy
 To top it off we can expand this memory hierarchy with additional components, such as accelerators, networking
-and the internet!
-Let's start off with the GPU. It is an accelerator originally made for just computing graphics as fast as
-possible. It has a whole bunch of threads in it, meaning it can do very parallel work, like making every pixel
+and the internet! Let's start off with the GPU. It is an accelerator originally made for just computing graphics
+as fast as possible. It has a whole bunch of cores in it, meaning it can do very parallel work, like making every pixel
 of an image slightly darker. At the end of the 2000's, Nvidia saw a bunch of academics hacking the GPU to do
 stuff like fast fourier transforms using the fragment shader. Don't worry about what a fragment shader is,
-but shader basically means GPU program. So Nvidia releases CUDA as a pure compute (no graphics) API for using
-your GPU.
-It only runs on Nvidia GPU's though. Transfering memory from the CPU to the GPU and back, can be a
+but shader and kernel basically means GPU program. So Nvidia releases CUDA as a pure compute (no graphics) API for using
+your GPU. It only runs on Nvidia GPUs though. Transfering memory from the CPU to the GPU and back, can be a
 quite explicit process. Not only does the CPU need to reserve some memory for copying to the GPU,
-the CPU and GPU have to be synchronized which can take a while, and then the data is usually transferred
+the CPU and GPU have to be synchronized, which can take a while, and then the data is usually transferred
 across the slower (compared to memory and cache) PCIe bus. This transfer is something you should always be thinking
 about if you are using a GPU for your program. Neglecting transfers is one of the fastest ways to slow code.
-The GPU also has its
-[own memory hierarchy](https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/).
+The GPU also has its [own memory hierarchy][10].
 
 <figure markdown>
 ![Image](../figures/Full-H100-GPU-with-144-SMs-1024x457.png){ width="500" }
@@ -146,13 +136,13 @@ Image credit </a>
 </figure>
 
 Here we have an L1 data cache and shared memory (more on shared memory later), shared between 128 threads.
-Each of these warps, Nvidia terminology for one of these four sections, have 32 threads with an L0 instruction
-cache, which is not matched for data. Additional accelerators exist, such as the neural engine featured in
-quite a lot of Apple products, and dedicated image and video processing hardware.
+Each of these work groups, or warps in Nvidia terminology for one of these four sections, have 32 threads
+with an L0 instruction cache (it stores the relevant section of your code), which is not matched for data.
+Additional accelerators exist, such as the neural engine featured in quite a lot of Apple products, and
+dedicated image and video processing hardware.
 
 You can even go outside of your current system. Two CPU's and eight GPU's could be tightly
-interconnected in a node, such as in the
-[Nvidia DGX system](https://www.nvidia.com/en-us/data-center/dgx-a100/). In the case of a DGX system
+interconnected in a node, such as in the [Nvidia DGX system][11]. In the case of a DGX system
 everything is tightly interconnected with specialized hardware to minimize the time it takes to
 transfer data from one component to the other.
 
@@ -160,7 +150,7 @@ Taking things even further, we could be sending data between more than one node,
 communication, which is going to be slower than communicating internally in your CPU or in your node.
 When running on clusters with multiple nodes, the data you work from might have to be fetched from one
 or more storage nodes, which keeps your data between batch jobs. Taking neural network training as an example,
-if your data set is small enough to keep fully on the compute node you only need to load the dataset to the
+if your data set is small enough to fit on the compute node you only need to load the dataset to the
 compute node before you begin training. Even better, the data set can be small enough that it fits, along
 with your model, completely on the GPU, meaning less transfers, less communication and better performance.
 
@@ -181,10 +171,21 @@ Image credit </a>
 ## Wrapping Things Up
 Hopefully, this teaser hasn't scared you away from charging ahead and learning more about memory hierarchies
 and computational graphs. Memory hierarchies are at the center of getting good performance in pretty much
-all programs and it is worth spending some time on having at least a tenuous grasp of how to use them.
+all programs and it is worth spending some time on having at least a tenuous grasp of what they are and why they matter.
 
 ## Additional Reading
 For a more in-depth explanation on the memory hierarchy see this chapter on
 [Memory Hierarchy Design][0].
 
 [0]: https://www.cs.umd.edu/~meesh/411/CA-online/chapter/memory-hierarchy-design-basics/index.html
+[1]: https://www.brainkart.com/article/Data-Races_9445/
+[2]: https://pytorch.org/
+[3]: https://www.tensorflow.org/
+[4]: https://jax.readthedocs.io/en/latest/
+[5]: https://numba.pydata.org/
+[6]: https://www.taichi-lang.org/
+[7]: https://pytorch.org/tutorials/intermediate/torch_compile_tutorial.html
+[8]: https://jax.readthedocs.io/en/latest/notebooks/Common_Gotchas_in_JAX.html
+[9]: https://www.tensorflow.org/xla
+[10]: https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/
+[11]: https://www.nvidia.com/en-us/data-center/dgx-a100/

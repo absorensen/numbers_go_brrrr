@@ -429,6 +429,8 @@ wiki on [branch prediction][6].
 
 For the broader view there's a nice introduction video to [branchless programming][3] by Fedor Pikus,  
 an introduction video to [SIMD][4] by Guillaume Endignoux and a talk by Mike Acton on [data-oriented design][5].
+There's also a book available on data-oriented design and branchless programming, which is freely available from
+[the author's website][19].
 Data-oriented design has a big enough performance impact that the game engine Unity underwent years of development
 to introduce data-oriented design with [DOTS][17] (data-oriented tech stack).
 Intel also has a C compiler available called [ISPC][16] which generates a SIMD version of your code.
@@ -458,3 +460,4 @@ This is even being rolled out and described in this [blog post by Nvidia][1].
 [16]: https://github.com/ispc/ispc
 [17]: https://unity.com/dots
 [18]: https://github.com/rust-lang/portable-simd/blob/master/beginners-guide.md
+[19]: https://www.dataorienteddesign.com/dodbook/
