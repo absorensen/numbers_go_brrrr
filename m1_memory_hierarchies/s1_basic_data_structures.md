@@ -322,7 +322,7 @@ the data element. Once ```x``` goes out of scope, that counter is decremented. S
 Whichever one decrements the counter to 0 will trigger a cleanup.
 
 In C and C++, the following actually results in two different lists on the heap, kept by two different
-variables. C++ is copy by default, and this is a deep copy. 
+variables. C++ is copy by default, and this is a deep copy.
 
 === "C++"
 
