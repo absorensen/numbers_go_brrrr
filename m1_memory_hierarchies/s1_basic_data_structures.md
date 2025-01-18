@@ -1,12 +1,12 @@
 # Basic Data Structures
 In this section I will take you through some common constructs like dynamic arrays,  vectors, stacks
-and queues, seen through the lense of the stack and the heap from the previous section.
+and queues, seen through the lens of the stack and the heap from the previous section.
 
 ## The Dynamic Array
 The dynamic array is ubiquitous in C++ and Rust. It is quite often what we think about, when we think of
 arrays in those languages. C++ has [```vector<T>```][0] and Rust has [```Vec<T>```][1]. I highly recommend
 reading the first parts of the Rust Vec page. They are basically the same though and I will refer to them
-as vector from here on out. A dynamic array bundles up the behavior we saw earlier with the pointers,
+as vector from here on out. A dynamic array bundles up the behavior we saw earlier with pointers,
 allocations and deallocations, but adds the ability to automatically create a new array that is larger
 (usually by a factor of 2) than the old array and move the old values over to the new array. The vector has
 three values. How much memory is in its allocation, ```capacity```, how much of the memory is currently in
@@ -85,12 +85,11 @@ unless explicitly asked to do so using the ´´´shrink_to_fit´´´ function. I
 to an array that is exactly the size of ```size```, thus also making ```capacity``` the same. In practice,
 you should only do this for large arrays which are unlikely to see more elements added to it.
 
-But, in the case of knowing how many elements we actually we want to put in our vector, or at least an expcected
+But, in the case of knowing how many elements we actually want to put in our vector, or at least an expcected
 minimum amount, we can just create the vector in a way where it has already reserved that amount of capcity.
-If you can at all do this, it is one of the easiest ways to get better performance as you remove a whole
+If you can at all do this, which requires you to at the very least estimate how much data you need at the time
+of creating the vector, it is one of the easiest ways to get better performance as you remove a whole
 bunch of allocations, deallocations and copying.
-There's a variety of ways to control how allocation happens. The simplest one, if you know how
-many elements you want in your vector in advance, is to just create the vector with that capacity.
 
 === "Rust"
 
@@ -103,7 +102,7 @@ many elements you want in your vector in advance, is to just create the vector w
     data.push(4);
     ```
 
-In this case, we have been unambigously upfront about how many elements we will put in the vector.
+In this case, we have been unambigously up front about how many elements we will put in the vector.
 It was created with a ```capacity``` of 5 and a ```size``` of 0. We can also tell the vector to make sure we
 have a ```capacity``` of at least N. If it already has ```capacity``` to meet the minimum, nothing happens.
 If it doesn't it will allocate, copy and deallocate.
@@ -121,7 +120,7 @@ If it doesn't it will allocate, copy and deallocate.
 
 There are more idiomatic ways to do this in Rust, which might also be faster, but you get the gist!
 
-## The Vector
+## Enter the Matrix
 But, we aren't just interested in single lists of numbers, sometimes, we would even like a matrix.
 In Rust we can have fixed size arrays defined like so:
 
@@ -150,8 +149,8 @@ This is called row-major ordering and is the standard layout in C, C++, Rust, Py
 The alternative is column-major which is seen in Fortran and Matlab.
 In column-major ordering the elements would be ordered in memory as 0, 2, 1, 3.
 With row-major ordering the memory will be most tightly packed in the last dimension from the left.
-To iterate through a 3 dimensional vector, this triple for-loop would access the memory
-in order.
+In Rust, which, again is row-major ordered, we can iterate through a 3 dimensional matrix in the same order as its
+memory with the following triple for-loop.
 
 === "Rust"
 
@@ -223,12 +222,12 @@ We could also do this with nested vectors.
     }
     ```
 
-This is even worse though. We now have a 2-dimensional array, which is highly flexible, but we
-have to dereference two pointers for every access.
+This is even worse though. We now have a 2-dimensional array, which is highly flexible, we can
+even have uneven dimensions, but we have to dereference two pointers for every access.
 
 There is another way of doing this with a vector, which is the way I will be using
 multi-dimensional arrays in this module. It involves using a single dimensional vector
-as if it had more dimensions.
+as if it had more dimensions. This is also known as linearization.
 
 === "Rust"
 
@@ -250,7 +249,7 @@ We just create a vector with as much room as we need and then access it with a b
 We've flattened our matrix and can now both have it dynamic and with arbitrary dimensions. We
 can even dynamically decide to see the matrix in a different way, for example by deciding
 to swap the number of columns and rows. The formula to access each element is to multiply
-the index by the dimensions that come after it and add it to the next index.
+the index by the dimensions that come after it multiplied and add it to the next index.
 For example with three dimensions ```x```, ```y``` and ```z```, the index would be
 calculated by
 
@@ -300,12 +299,12 @@ actually doing in each iteration. In this benchmark we do pretty much nothing.
 Now that we have examined how we can deal with a more expensive type,
 compared to the simpler integer or float, let's expand the scope a little bit.
 How do we actually move around these vectors as data? In each language there are
-some implicit rules, which can have wide reaching consequences, both in terms of
+some implicit rules, which can have wide reaching ramifications, both in terms of
 correctness and performance.
 
 In Python, variables are all references to an underlying object, which is freed
 when there are no longer any references to said object. Don't worry about it too
-much, it is a concept I will introduce further down the page.
+much, it's a concept I will introduce further down the page.
 But, it does have consequences when this happens
 
 === "Python"
@@ -318,11 +317,12 @@ But, it does have consequences when this happens
 There aren't actually two lists, but two references to a list which has some data on the heap.
 This can be a bit problematic, as you now have two variables, which can both write to the same list without
 the other knowing. Once both ```x``` and ```y``` go out of scope, the list on the heap will be deallocated
-(eventually).
+(eventually). This happens because Python keeps count of how many live references there currently are to
+the data element. Once ```x``` goes out of scope, that counter is decremented. Same goes for ```y```.
+Whichever one decrements the counter to 0 will trigger a cleanup.
 
 In C and C++, the following actually results in two different lists on the heap, kept by two different
-variables. C++ is copy by default, and this is a deep copy. Which is what Rust would call a clone. Rust
-however, is move by default.
+variables. C++ is copy by default, and this is a deep copy. 
 
 === "C++"
 
@@ -330,6 +330,8 @@ however, is move by default.
     vector<int> x{5, 5, 3, 42};
     vector<int> y = x;
     ```
+
+Which is what Rust would call a clone. Rust however, is move by default.
 
 === "Rust"
 
@@ -375,8 +377,8 @@ Unless we move the values back ourselves.
     }
     ```
 
-To actually create two lists, like we did in the C++ example, we have to explicitly ask for a deep copy -
-a clone in Rust terminology.
+To actually create two lists, like we did in the C++ example, we have to explicitly ask for a deep copy.
+A clone in Rust terminology.
 
 === "Rust"
 
@@ -385,12 +387,13 @@ a clone in Rust terminology.
     let y: Vec<i32> = x.clone();
     ```
 
-Usually, in Rust at least, adding lots of clones everywhere is the way to get around the borrow checker and
+Usually, in Rust at least, adding lots of clones everywhere is an easy way to get around the borrow checker and
 have everything be correct. But once your first prototype is finished, one of the easiest improvements to
 your performance will be to search for all instances of .clone() and see whether there is some other solution
 that might work better. Rust isn't fighting you in this case, even if it can be strict, it is trying to
 protect you from having multiple write-enabled references to the same data, as in the Python example,
-which could make for incorrect code. C++ does have these [move operations][3] as well, it is even highly
+which could make for incorrect code. While performance is great, in most cases, it should not come before
+correctness. C++ does have these [move operations][3] as well, it is even highly
 recommended a lot of the time. It is however, not the default behavior of the language.
 
 Rust has something called traits (don't worry about it). One of these traits is the ```Copy``` trait.
@@ -400,15 +403,16 @@ except in the case of deeper structures, such as ```Vec<T>```, in that case, it 
 stack values, ```capacity```, ```size``` and the pointer to the memory on the heap.
 
 But hold on a minute! That is illegal! We would have two pointers with full write rights. Which is illegal
-in Rust! Which is also why ```Vec<T>``` doesn't implement ```Copy``` and this has all been a ruse,
+in Rust! Which is also why ```Vec<T>``` doesn't actually implement ```Copy``` and this has all been a ruse,
 for your edification.
 
 ## Stacks
-Now let's start looking at a couple of fundamental data structures. Next up is the stack. It isn't an array, but
+Now let's look at the stack, not that one, the other stack. The fundamental data structure. It isn't an array, but
 most implementations are just an array used in a restricted fashion. A stack is what is called a Last In,
 First Out (LIFO) data structure. The usual example is, imagine a stack of cantina trays. If you put a tray
 into the stack, in order to get a tray, you have to take the top tray, you can't remove a tray that is
-below the top tray.
+below the top tray. At least not without picking up the top tray, taking the now top tray and putting back
+the former top tray, which now becomes the top tray again. Top tray.
 
 <figure markdown>
 ![Image](../figures/stack_push.png){ width="500" }
@@ -426,8 +430,8 @@ already implemented on the vector types, but if we want to maintain the invarian
 indices 0 to ```size - 1``` are all valid, you need to make sure that only the stack related functions are called.
 In that way, if you need a stack, you should use not just a vector type, but a stack type, which might just be a
 wrapper around a vector, but also restricts anyone using that type to maintain the invariants needed for a valid
-stack. In that way sending a ```Stack<T>``` from function to function, instead of a ```Vec<T>```,
-will communicate how the value is supposed to be used.
+stack. Sending a ```Stack<T>``` from function to function, instead of a ```Vec<T>```, will also communicate
+how the value is supposed to be used.
 
 <figure markdown>
 ![Image](../figures/stack_pop.png){ width="500" }
@@ -439,7 +443,8 @@ the previous push.
 
 Stacks scale well and all operations would be constant time, except when enough values have been pushed to
 necessitate a resize. However, the cost of this is low enough that across all of the operations it averages out
-and becomes amortized constant time.
+and becomes what is known as amortized constant time. Amortized constant time is a concept found in the
+[big O notation system][9].
 
 ## Queues
 Queues, just like stacks, are a fundamental data type centered around constant time operations mostly implemented
@@ -462,9 +467,10 @@ Resizing is just one way to handle the overlap. In quite a few real-time systems
 overwhelmable. If data comes in too fast to process, and it keeps coming in faster than we can process, we might
 instead say that the ```front``` will move with the ```back``` if they become equal, thus letting the older data
 be overwritten. Other options could be to have whatever is trying to submit an element, wait until a spot opens up
-in the queue or the element could be "added", but not actually added to the queue. You'd of course like to be
-certain of how your queue type would handle being full. It's a central property and you should make sure if you
-are constructing systems with lots of data that you use a queue with the right behavior for your system.
+in the queue or the element could be "added", but not actually added to the queue, essentially dropping the given
+element into the void. You'd of course like to be certain of how your queue type would handle being full.
+It's a central property and you should make sure if you are constructing systems with lots of data that you use
+a queue with the right behavior for your system.
 
 <figure markdown>
 ![Image](../figures/queue_dequeue.png){ width="500" }
@@ -489,3 +495,4 @@ For more on implementing a [heap with an array][5], [priority queues][6], [binar
 [6]: https://www.programiz.com/dsa/priority-queue
 [7]: https://www.programiz.com/dsa/binary-tree
 [8]: https://programmingoneonone.com/array-representation-of-binary-tree.html
+[9]: https://en.wikipedia.org/wiki/Big_O_notation
