@@ -626,7 +626,6 @@ The ```optional<T>``` in C++, and ```Option<T>``` type in Rust denotes a variabl
 have a value. This is usally a better way to communicate your intent for the variable instead of using
 special guard values like ```nullptr``` or ```-1``` to indicate that the variable is inactive.
 
-
 === "Rust"
 
     ```rust
