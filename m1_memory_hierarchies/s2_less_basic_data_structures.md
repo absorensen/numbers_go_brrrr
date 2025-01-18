@@ -1,7 +1,7 @@
 # Less Basic Data Structures
-In this section, things will start getting a spicier and more experimental. We'll look at concepts
+In this section, things will start getting spicier and more experimental. We'll look at concepts
 like smart pointers, which can keep track of deallocating memory for us, how to play around with
-vectors and matrices, how hash maps (dictiornaries) are implemented, graph- and tree structures,
+vectors and matrices, how hash maps (dictionaries) are implemented, graph- and tree structures,
 garbage collectors (which you need graphs and smart pointers to understand), and virtualized memory,
 which is when you build your own memory abstractions.
 
@@ -19,7 +19,7 @@ deal with assigning one variable to another. If you recall the previous example 
 We start by making a list and assigning a reference to ```x```. In this case ```x``` is not the actual owner
 of the list. Instead, the system takes ownership of the list, and ```x``` is a live reference to that list.
 The system keeps track of how many live references there are to the list. Once ```x``` goes out of scope,
-the live reference count for the list decreases by one. Once the live reference count reaches 0, it is
+the live reference count for the list decreases by one. Once the live reference count reaches ```0```, it is
 deallocated or marked available for future deallocation.
 
 Until we hit the end of the scope, and ```x``` and ```y``` disappear, there are two live references to the
@@ -28,7 +28,7 @@ list created at line 1. While a fine enough solution at first glance, sometimes,
 
 When dealing with raw pointers, like we saw earlier, once a system grows beyond absolute simplicity,
 sharing multiple pointers to the same object becomes a bit complex. If you have 5 pointers to the same
-object floating about how do you ensure it isn't used after freeing? Who deallocates the pointer and who
+object floating about, how do you ensure it isn't used after freeing? Who deallocates the pointer and who
 ensures that the pointers are no longer valid? This at the absolute crux of safety and your program not
 blowing up in C and C++.
 
@@ -55,7 +55,7 @@ the object on the heap that it is pointing to is deallocated automatically.
 Next up are the shared pointers. They are essentially what Python is using in the example from earlier. In C++
 it is called [shared_ptr<T>][3], in Rust it comes in two versions; [Rc<T>][4] and [Arc<T>][5]. ```Rc```
 stands for reference counted. It is only made for single threaded usage as the reference count itself is
-susceptible to a data race, which you may recall, is several reads and/or writes to the same value.
+susceptible to a data race, which you may recall, is reads and writes happening to the same value.
 This could result in the count of live references being incorrect and the underlying value never being deallocated.
 
 === "Rust"
@@ -80,12 +80,12 @@ This could result in the count of live references being incorrect and the underl
             println!("{}", Rc::strong_count(&shared_reference_d)); // prints 4
 
         }
-            // shared_reference_c and shared_reference_d are now dropped
-            println!("{}", Rc::strong_count(&shared_reference_b)); // prints 2
+        // shared_reference_c and shared_reference_d are now dropped
+        println!("{}", Rc::strong_count(&shared_reference_b)); // prints 2
 
-            // Live references = 2
-            println!("{}", *shared_reference_a); // prints 42
-            println!("{}", *shared_reference_b); // prints 42
+        // Live references = 2
+        println!("{}", *shared_reference_a); // prints 42
+        println!("{}", *shared_reference_b); // prints 42
     }
     ```
 
@@ -109,19 +109,19 @@ reference counting is thread-safe, but a bit slower.
         println!("{}", *shared_reference_c); // prints 42
         println!("{}", *shared_reference_d); // prints 42
     }
-        // shared_reference_c and shared_reference_d are now dropped
+    // shared_reference_c and shared_reference_d are now dropped
 
-        // Live references = 2
-        println!("{}", *shared_reference_a); // prints 42
-        println!("{}", *shared_reference_b); // prints 42
+    // Live references = 2
+    println!("{}", *shared_reference_a); // prints 42
+    println!("{}", *shared_reference_b); // prints 42
 
     }
     ```
 
-While ```shared_ptr``` from C++ allows you to mutate the value it refers to ```Rc``` and ```Arc``` do not.
-They require a synchronization primitive wrapped around your underlying value, like ```Arc<RwLock<i32>>```,
-but that is more advanced usage, and don't worry about it right now. Other than the atomicity, and being
-shareable between threads, ```Rc``` and ```Arc``` work more or less the same.
+While ```shared_ptr``` from C++ allows you to mutate (modify) the value it refers to ```Rc``` and ```Arc```
+do not. They require a synchronization primitive wrapped around your underlying value,
+like ```Arc<RwLock<i32>>```, but that is more advanced usage, and don't worry about it right now. Other
+than the atomicity, and being shareable between threads, ```Rc``` and ```Arc``` work more or less the same.
 
 Finally, we have the weak pointer. This basically exists to weaken cyclical references. If object A refers
 to another object, object B, with an ```Rc```, while the object B refers to object A, we have a problem.
@@ -161,7 +161,7 @@ about [reference cycles][9], which is what we needed weak pointers for.
 
 ## The Vector Reloaded
 This isn't meant to be a one-to-one representation of how tensors work in ```numpy``` or ```PyTorch```,
-but combined with creating different views on the same underlying one dimensional memory as we learned
+but combined with creating different views on the same underlying one dimensional memory, as we learned
 about earlier, we can look at a few other fun concepts in different ways to arrange tensors.
 
 ### Strided Access and Transposition
@@ -209,7 +209,7 @@ One guess would be a combination of the compiler aggresively optimizing the code
 pipeline (don't worry about it) being really good at guessing these very uniform workloads, but most importantly,
 the caches doing a lot of the heavy lifting for us. Once the caches run out of space we begin to see a gap
 between the two ways of doing it. This might be more pronounced on the GPU. In most cases you should probably
-start with making the simplest and easy comprehendable code and try out, and measure, potential
+start with making the simplest and most easily comprehendable code and try out, and measure, potential
 optimizations before spending your time going down rabbit holes. This is will be a bit of a theme
 in the next few sections. There won't be much of a difference between techniques until the caches
 begin running out of space.
@@ -300,7 +300,7 @@ Create a jagged array by using a vector of vectors.
 If the difference between the smallest row and the largest row isn't too big,
 we can sacrifice a bit of additional memory for allocating all rows as if they had
 the same length and keep track of the length of the active sections in each row
-in a separate vector.
+in a separate vector. This only works well if the rows aren't growing.
 
 <figure markdown>
 ![Image](../figures/jagged_array_size_constrained_aux.png){ width="500" }
@@ -378,6 +378,7 @@ Note that the only version which is not extremely slow for inserting values is t
 cases our final optimized version JaggedArraySizeCompactedAux seems to be the winner. It doesn't take a lot of
 memory compared to the other solutions and it seems to be in some cases on-par with the fastest
 (with a reasonable variance) or the fastest. In most other cases the NaiveJaggedArray seems just fine.
+
 Again, don't overcomplicate things and measure the differences for your case. In any case, you should
 avoid a jagged array if you can. And especially the CompactedJaggedArray, which costs the least memory, but
 has a catastrophic access time due to needing to accumulate the indices needed to find the row index. Plus,
@@ -438,7 +439,7 @@ hash map could dynamically expand to accomodate inserted data. Once we are done 
 we might have a fragmented performance. If we know we are done and have a significant amount of
 elements which need to be queried a lot, we can usually ask the data structure to
 ```.shrink_to_fit()``` or ```.rehash()```. Rehashing will reconstruct the structure to be
-made as if it had only been the elements currently stored, all along.
+made as if it had only been the elements currently stored all along.
 
 <figure markdown>
 ![Image](../figures/hash_map_find_key.png){ width="500" }
@@ -462,7 +463,7 @@ distinguish between. For example, if you needed to keep track of different layer
 neural network with random access, you can just create a new string "Linear0" and use
 that as a key for the first linear layer and its contents, and then "ReLU0", "Linear1",
 "ReLU1", "Softmax0" and so on. If possible, it is more efficient to use small types as
-your key. Such as an integer.
+your key. Such as a ```u32``` or ```u64```.
 
 Now for a simple performance benchmark. Checkout the code at ```m1_memory_hierarchies::code::hash_maps```
 or check it out [online][13].
@@ -478,16 +479,16 @@ bits reserved for the layer type and the last 44, or perhaps just 12, bits reser
 does however incur a significant amount of extra code and the code will become more complex and implicit,
 so it's probably only worth it if you are doing A LOT of accesses for each layer.
 
-Generally, hash maps have an alright performance. C#'s dictionary lookup performance will usually go down
-hill at around 30k entries though. This doesn't happen for arrays. You can read more about different hash table
-implementations [here][14].
+Generally, hash maps have an alright performance. The last time I examined a C# dictionary's lookup performance
+it would start to go down hill at around 30k entries though. This doesn't happen for arrays. You can read more
+about different hash table implementations [here][14].
 
 ## Graphs and Trees
 Now that we have dicked around with variations on a theme (that theme was arrays if you were in doubt),
 let's look at a different fundamental data structure. Graphs! Not the kind with the lines...
 wait these have lines too, uuuh, not the kind that has an x and a y axis, but the kind that has some circles with
 some arrows between them. "But wait!" you say, "The heading says 'Graphs and Trees'" you say, well,
-trees can be seen as a subset of graphs, while all graphs are not necessarily trees.
+trees can be seen as a subset of graphs, while graphs are not necessarily trees.
 
 Graphs and trees are some of the absolutely fundamental data structures which you need to be acquainted with.
 Along with arrays, queues, stacks and hash tables, they are the fundamental
@@ -497,20 +498,20 @@ them with relative ease, but implementing graphs and trees without cyclical refe
 (which can cause memory leaks), without data races, without dangling pointers and other robustness issues, is
 actually quite hard. Sometimes even fundamentally unsafe.
 
-I have used Rust as one of the primary languages for demonstrating and benchmarking things for you.
+So far I have used Rust as one of the primary languages for demonstrating and benchmarking things for you.
 The examples under this header will be more along the lines of toy examples as Rust code for graphs
 and trees can get quite hairy if you don't want to just sprinkle ```Arc``` everywhere. And even then you
 might end up having to battle cyclical references.
 It's really nice that the compiler puts on guard rails for you and herds you towards safe behavior.
 Implementing graphs and trees in Rust is notoriously difficult for this exact reason.
 Which is not to say that it is easier in C/C++, the compiler just doesn't stop you from doing
-something problematic.
+something problematic without being aware of it.
 
 Anyways... the rest of the module will be about how using data structures like computational graphs,
 which is essentially what is created when you define your entire neural network on a single object in
 PyTorch, can speed up your code immensely as the structure allows the library/framework/compiler to reason
 about your program. Essentially, computational graphs communicate the intention of your program ahead of time
-before you start running everything in a loop. It can help the library/framework/compiler to optimize your code,
+before you start running everything in a loop. It can help the library/framework/compiler optimize your code,
 optimize where the data should be located, when the data should be moved to/from the GPU, when two operations
 can be fused and so on.
 
@@ -519,8 +520,8 @@ graphics or computer vision, the octree is recommended reading.
 
 ### Graphs
 Ok, so let's get this show on the road. Graphs are primarily made up of two things, nodes and edges.
-Edges are references from one node to another. In a diagram they are usually represented by a line, some
-times with one more arrows on the ends. Edges can be represented by indices, pointers, smart pointers or
+Edges are references from one node to another. In a diagram they are usually represented by a line,
+sometimes with one more arrows on the ends. Edges can be represented by indices, pointers, smart pointers or
 something else that I can't think of right now. The node on the other hand, can be ✨ whatever you want ✨.
 It can even be just a number or an index to the corresponding data payload if you have seperated
 the graph structure from the data payloads.
@@ -536,7 +537,7 @@ Graphs come in lots of different flavors, but the three most important, and fund
 unidirectional and DAGs. Bidirectional means that the edges go both ways. If node A points to node B, node B
 also points to node A. Unidirectional graphs, you guessed it, means that the edges only point one way. That
 does not dictate that node A and B can't point to each other, but that it's not the default and it requires
-inserting two edges into the graph. Note that edges can also have weights or other values themselves.
+inserting two edges into the graph. Note that edges can also have weights, costs or other values themselves.
 
 <figure markdown>
 ![Image](../figures/unidirectional_graph.png){ width="500" }
@@ -545,13 +546,12 @@ A unidirectional graph. Each edge points one way. Note that edges can also have 
 </figcaption>
 </figure>
 
-Finally, the DAG, which stands for directional acyclical graph, is a
-unidirectional graph which does not contain cycles. A cycle is not just node A pointing to node B, which points
-to node A, it can also be node A pointing to node B pointing to node C pointing to node A, and so on an so forth
-until we have an infinite number of nodes to traverse until we get back to node A again, like going all the
-way to Mordor just to go back to the friggin Shire. No eagles will save you. You will just have to walk home.
-As you can imagine this can be a costly property to assert, unless we devise mechanisms to prevent this
-from happening in the first place.
+Finally, the DAG, which stands for directional acyclical graph, is a unidirectional graph which does not contain
+cycles. A cycle is not just node A pointing to node B, which points to node A, it can also be node A pointing to
+node B pointing to node C pointing to node A, and so on an so forth until we have an infinite number of nodes to
+traverse until we get back to node A again, like going all the way to Mordor just to go back to the friggin Shire.
+No eagles will save you. You will just have to walk home. As you can imagine this can be a costly property to
+identify, unless we devise mechanisms to prevent this from happening in the first place.
 
 <figure markdown>
 ![Image](../figures/directed_acyclic_graph.png){ width="500" }
@@ -562,7 +562,7 @@ The unidirectional graph is verified as being a DAG through a topological sortin
 
 In the diagram, I have sorted the previous graph topologically. As long as none of the edges go backwards, we have
 a DAG. In general, if you are reading this, you should try to avoid graphs with cycles.
-It's a headache and you'll end up down a headscratching rabbit hole. It's also a good source
+It's a headache and you'll end up going down a headscratching rabbit hole. It's also a good source
 of memory leaks if you haven't implemented your graph or tree in a certain way.
 
 <figure markdown>
@@ -606,8 +606,7 @@ in minimum and maximum height (distance from root node).
 One key difference which makes trees very powerful, compared to the more open definition of graphs, is that we
 need rules to define what makes a tree. Once we know these explicit rules, we can sometimes take advantage to make
 implicit assumptions of the structure, which can save quite a lot of space, reduce the amount of indirections we
-need to follow in order to traverse the structure and make it easier to serialize (write it to a file on disk)
-the tree.
+need to follow in order to traverse the structure and make it easier to serialize (write it to a file on disk).
 
 <figure markdown>
 ![Image](../figures/bidirectional_tree.png){ width="500" }
@@ -621,8 +620,12 @@ the tree is rife with cyclical references.
 Binary trees are some of the simplest trees. Any node has at most two children. These are usually called
 ```left``` and ```right```. In C and C++, they could be raw pointers or smart pointers, and you would have to
 check whether they were ```NULL``` or ```nullptr``` whenever you were considering whether child nodes were
-available. In Rust, you might have something like ```Option<Arc<Node>>``` and you would have to check whether the
-child was ```None``` or ```Some(child)```.
+available. Or use a type like ```optional<unique_ptr<Node>>```. In Rust, you might have something like
+```Option<Arc<Node>>``` and you would have to check whether the child was ```None``` or ```Some(child)```.
+The ```optional<T>``` in C++, and ```Option<T>``` type in Rust denotes a variable that might not currently
+have a value. This is usally a better way to communicate your intent for the variable instead of using
+special guard values like ```nullptr``` or ```-1``` to indicate that the variable is inactive.
+
 
 === "Rust"
 
@@ -672,23 +675,23 @@ node C. Easy peasy. We do have to trawl which nodes point to which if we want to
 additional connectivity list for node A, specifying all edges pointing to node A, but again, let's
 just keep to the case where we have a construction phase, and then a reading phase- where lots of actors can
 read from the graph. In that case, if lots of functions would otherwise pass around pointers to a node, they can
-just pass around the node index. They can then ask the graph object for access to node N.
+just pass around the node index. They can then ask the graph object for access to node N, which it is then free
+to deny or require that the inquirer wait for access to.
 
 Finally with trees, if the structure and rules are well defined, we can use implicit rules and just skip
 connectivity. In the case of the binary search tree, we can simply use an array and the knowledge of its doubling
 nature. In that case we know index 0 will always be the root. Index 1 will always be the left child, index 2 will
 always be the right child. To access any node's (index N) children, we merely have to read from index
 ```N*2+1``` for the left child and ```N*2+2``` for the right. We can handle a node not being
-present in this otherwise dense structure, by having a
-means of representing an empty value, but the greater the sparseness, the more inefficient this *linearized*
-tree structure becomes. The implicit/predictable structure makes the linearized treeqv easily serializeable
-(writing it to a file on disk) or transferable to and useable on GPU's.
+present in this otherwise dense structure, by having a means of representing an empty value, but the greater
+the sparseness, the more inefficient this *linearized* tree structure becomes. The implicit/predictable
+structure makes the linearized treeq easily serializeable (writing it to a file on disk) or transferable to
+and useable on GPUs.
 
 A better explanation of [graphs in Rust][15] and graphs in Rust using [indices][16].
 
 ### 🧬 Octrees
-Octrees are elevant for all of the specializations that aren't deep learning, especially *computer graphics*.
-But it might be relevant for deep learning too if you do stuff related to geometry or spatial data.
+Octrees are elevant for all of the specializations if you do stuff related to geometry or spatial data.
 
 Octrees are mostly concerned with sorting space. For every node, there are 8 children. If it is sparse, there are
 *up to* 8 children. What cannot change however, is the regular structure. Every node covers a certain space.
@@ -703,8 +706,7 @@ other children or other slots. One nice property of the octree is that we can de
 by a sequence numbers from 0 to 7.
 
 Now let's talk about payloads. A typical use case within graphics is to use an octree to reason about which scene
-geometry to render or to use for nearest neighbor queries. Let's start with the simpler payload,
-[point clouds][17].
+geometry to render or to use for nearest neighbor queries. Let's start with the simpler payload, [point clouds][17].
 We have a list of three dimensional points. We want to find the nearest one relative to our query point.
 This is quite useful for algorithms like [ICP][18].
 We start with the whole array of points and then continually go through our points sending them to one of the 8
@@ -729,8 +731,9 @@ neighbors.
 
 For nearest neighbor queries having a single point per leaf node is wildly inefficient though, and you should
 consider fattening up the leaf nodes to contain more points, and in some cases points in the interior nodes as
-well. These could be efficiently searched by sorting them into linearized octrees. More on those in a future
-module. Quite often a point is not much more than 4x32-bits, in which case it is wildly inefficent to have more
+well. These could be efficiently searched by sorting them into linearized octrees. Which are octress linearized
+in the same manner as linearized binary trees were described earlier.
+Quite often a point is not much more than 4x32-bits, in which case it is wildly inefficent to have more
 than 1 pointer per node. You might also end up with a stack overflow if you try to build the octree recursively.
 Last time I tried that in C++ I got a stack overflow at a depth of 1000. If you absolutely need a pointer based
 tree, try to add nodes of interest to a queue instead and just process that queue. E.g. you arrive at node X, it
@@ -741,11 +744,11 @@ across more than one node, ending up with some geometry being evaluated more tha
 You win some, you lose some. But it's all the same to me. It's the eighth of space.
 
 Another use case where the octree is very useful is when deciding what to render and at what level-of-detail.
-It also makes for a useful abstraction over virtualized geometry. More on that in a later module.
+It also makes for a useful abstraction over virtualized geometry.
 
 ## Garbage collectors
-Garbage collection is a way of freeing the programmer of having to deal with which memory is and isn't
-relevant. It is usually implemented by most variables (especially the heap allocated ones) being
+Garbage collection is a way of freeing the programmer from having to deal with which memory is and isn't
+relevant anymore. It is usually implemented by most variables (especially the heap allocated ones) being
 reference counted or otherwise tracked, which we will see later in the tracing section.
 Once a variable is found to no longer be referenced it is either immediately cleaned up or cleaned up
 during a garbage collection pass. A full garbage collection pass can be quite expensive, and if the implementation
@@ -755,10 +758,10 @@ just been cleaned up referenced anew.
 Garbage collectors aren't really that relevant to the rest of the guide,
 but if you are coming from Python, C#, Go or Java this section will use some of the concepts
 previously introduced on this page to give you a quick perspective to how garbage collectors work.
-This post takes a look at [how python handles garbage collection][19] although, a bit light on the
-details for the generational garbage collection. In the following
-sections I will introduce three different types of garbage collectors, and finally
-set you up with a few tricks for working with the garbage collector.
+This post takes a look at [how Python handles garbage collection][19] although, a bit light on the
+details for the generational garbage collection. In the following sections I will introduce three
+different types of garbage collectors, and finally set you up with a few tricks for working
+with the garbage collector.
 
 ### Reference Counted Garbage Collectors
 [Reference counting garbage collection][20] is one of the simplest forms of dealing with garbage collection.
@@ -811,14 +814,14 @@ seamlessly behind the scenes to be able to continue to allocate more memory for 
 does not have to do anything as the virtualization is hidden. Usually, there will be hardware support for the
 virtualization with components such as a dedicated memory management unit.
 
-Each process, your program would be its own process, is given its own virtual memory space. Meaning that your
+Each process (your program would be its own process) is given its own virtual memory space. Meaning that your
 program might see its addresses start in very low numbers despite a number of other processes running concurrently
 on your computer. In face, while the address space given to your process might look continuous it is probably
 fragmented, scattered across diffent physical locations, but the virtualization makes it appear continuous.
 In general, it is a major security risk for programs to read memory outside of the memory
 allocated for it. This is also known as a *segmentation fault*. The operating system dislikes this concept
 so much that it is likely to just kill your program entirely. If you have ever programmed C or C++,
-you have probably tried this making this mistake and your error has been met with swift and uncompromising
+you have probably tried this making this mistake and your error was met with swift and uncompromising
 reprisals. The virtual memory space allocated for your process, for stuff like heap and stack will
 typically look as below.
 
@@ -853,11 +856,11 @@ three weeks of [Algorithmic Techniques for Modern Data Models][25].
 
 ### 🧬 Virtualized Rendering
 Another use of this is the rendering of data sets too large to fit in a users computer. You preprocess
-all of the data you need to visualize into a tree structure and then just keep the tree in memory at all times.
-You can then render render progressively, which is where as soon as the camera stands still you render across
-multiple frames into the same uncleared buffers, letting the user see progress while the system downloads, unpacks
-and renders the entire scene. This also allows for rendering of scenes which are too big to fit in GPU memory or
-even main memory.
+all of the data you need to visualize into a tree structure and then just keep the tree without the payloads in
+memory at all times. You can then render render progressively, which is where as soon as the camera stands
+still you render across multiple frames into the same uncleared buffers, letting the user see progress while
+the system downloads, unpacks and renders the entire scene. This also allows for rendering of scenes which are
+too big to fit in GPU memory or even main memory.
 
 ## Additional Reading
 For even more [virtual memory][26].
