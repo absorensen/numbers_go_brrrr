@@ -2294,9 +2294,9 @@
 
 
 <h1 id="less-basic-data-structures">Less Basic Data Structures</h1>
-<p>In this section, things will start getting a spicier and more experimental. We'll look at concepts
+<p>In this section, things will start getting spicier and more experimental. We'll look at concepts
 like smart pointers, which can keep track of deallocating memory for us, how to play around with
-vectors and matrices, how hash maps (dictiornaries) are implemented, graph- and tree structures,
+vectors and matrices, how hash maps (dictionaries) are implemented, graph- and tree structures,
 garbage collectors (which you need graphs and smart pointers to understand), and virtualized memory,
 which is when you build your own memory abstractions.</p>
 <h2 id="smart-pointers">Smart pointers</h2>
@@ -2314,14 +2314,14 @@ deal with assigning one variable to another. If you recall the previous example 
 <p>We start by making a list and assigning a reference to <code>x</code>. In this case <code>x</code> is not the actual owner
 of the list. Instead, the system takes ownership of the list, and <code>x</code> is a live reference to that list.
 The system keeps track of how many live references there are to the list. Once <code>x</code> goes out of scope,
-the live reference count for the list decreases by one. Once the live reference count reaches 0, it is
+the live reference count for the list decreases by one. Once the live reference count reaches <code>0</code>, it is
 deallocated or marked available for future deallocation.</p>
 <p>Until we hit the end of the scope, and <code>x</code> and <code>y</code> disappear, there are two live references to the
 list created at line 1. While a fine enough solution at first glance, sometimes, answering the question
 "what is alive" can be quite difficult. More on that in the <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#garbage-collectors">garbage collector section</a>.</p>
 <p>When dealing with raw pointers, like we saw earlier, once a system grows beyond absolute simplicity,
 sharing multiple pointers to the same object becomes a bit complex. If you have 5 pointers to the same
-object floating about how do you ensure it isn't used after freeing? Who deallocates the pointer and who
+object floating about, how do you ensure it isn't used after freeing? Who deallocates the pointer and who
 ensures that the pointers are no longer valid? This at the absolute crux of safety and your program not
 blowing up in C and C++.</p>
 <p>In C++11+ and Rust, we can elect to use something called smart pointers. Which can handle some of the
@@ -2348,7 +2348,7 @@ the object on the heap that it is pointing to is deallocated automatically.  </p
 <p>Next up are the shared pointers. They are essentially what Python is using in the example from earlier. In C++
 it is called <a href="https://en.cppreference.com/w/cpp/memory/shared_ptr">shared_ptr<T></a>, in Rust it comes in two versions; <a href="https://doc.rust-lang.org/std/rc/index.html">Rc<T></a> and <a href="https://doc.rust-lang.org/std/sync/struct.Arc.html">Arc<T></a>. <code>Rc</code>
 stands for reference counted. It is only made for single threaded usage as the reference count itself is
-susceptible to a data race, which you may recall, is several reads and/or writes to the same value.
+susceptible to a data race, which you may recall, is reads and writes happening to the same value.
 This could result in the count of live references being incorrect and the underlying value never being deallocated.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Rust</label></div>
 <div class="tabbed-content">
@@ -2372,12 +2372,12 @@ This could result in the count of live references being incorrect and the underl
 </span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span><span class="p">::</span><span class="n">strong_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference_d</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 4</span>
 </span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a>
 </span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">        </span><span class="c1">// shared_reference_c and shared_reference_d are now dropped</span>
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span><span class="p">::</span><span class="n">strong_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference_b</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 2</span>
+</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="w">    </span><span class="c1">// shared_reference_c and shared_reference_d are now dropped</span>
+</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">Rc</span><span class="p">::</span><span class="n">strong_count</span><span class="p">(</span><span class="o">&amp;</span><span class="n">shared_reference_b</span><span class="p">));</span><span class="w"> </span><span class="c1">// prints 2</span>
 </span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">        </span><span class="c1">// Live references = 2</span>
-</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_a</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
-</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">        </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_b</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a><span class="w">    </span><span class="c1">// Live references = 2</span>
+</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_a</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_b</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
 </span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a><span class="p">}</span>
 </span></code></pre></div>
 </div>
@@ -2402,21 +2402,21 @@ reference counting is thread-safe, but a bit slower.</p>
 </span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_c</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
 </span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_d</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
 </span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="p">}</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="c1">// shared_reference_c and shared_reference_d are now dropped</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="c1">// shared_reference_c and shared_reference_d are now dropped</span>
 </span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="w">    </span><span class="c1">// Live references = 2</span>
-</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_a</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
-</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_b</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="c1">// Live references = 2</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_a</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
+</span><span id="__span-3-18"><a id="__codelineno-3-18" name="__codelineno-3-18" href="#__codelineno-3-18"></a><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;{}&quot;</span><span class="p">,</span><span class="w"> </span><span class="o">*</span><span class="n">shared_reference_b</span><span class="p">);</span><span class="w"> </span><span class="c1">// prints 42</span>
 </span><span id="__span-3-19"><a id="__codelineno-3-19" name="__codelineno-3-19" href="#__codelineno-3-19"></a>
 </span><span id="__span-3-20"><a id="__codelineno-3-20" name="__codelineno-3-20" href="#__codelineno-3-20"></a><span class="p">}</span>
 </span></code></pre></div>
 </div>
 </div>
 </div>
-<p>While <code>shared_ptr</code> from C++ allows you to mutate the value it refers to <code>Rc</code> and <code>Arc</code> do not.
-They require a synchronization primitive wrapped around your underlying value, like <code>Arc&lt;RwLock&lt;i32&gt;&gt;</code>,
-but that is more advanced usage, and don't worry about it right now. Other than the atomicity, and being
-shareable between threads, <code>Rc</code> and <code>Arc</code> work more or less the same.</p>
+<p>While <code>shared_ptr</code> from C++ allows you to mutate (modify) the value it refers to <code>Rc</code> and <code>Arc</code>
+do not. They require a synchronization primitive wrapped around your underlying value,
+like <code>Arc&lt;RwLock&lt;i32&gt;&gt;</code>, but that is more advanced usage, and don't worry about it right now. Other
+than the atomicity, and being shareable between threads, <code>Rc</code> and <code>Arc</code> work more or less the same.</p>
 <p>Finally, we have the weak pointer. This basically exists to weaken cyclical references. If object A refers
 to another object, object B, with an <code>Rc</code>, while the object B refers to object A, we have a problem.
 When either, or both go out of scope, they will not be deallocated as there is live references to both.</p>
@@ -2451,7 +2451,7 @@ both object A and object B can safely be deallocated.</p>
 about <a href="https://doc.rust-lang.org/book/ch15-06-reference-cycles.html">reference cycles</a>, which is what we needed weak pointers for.</p>
 <h2 id="the-vector-reloaded">The Vector Reloaded</h2>
 <p>This isn't meant to be a one-to-one representation of how tensors work in <code>numpy</code> or <code>PyTorch</code>,
-but combined with creating different views on the same underlying one dimensional memory as we learned
+but combined with creating different views on the same underlying one dimensional memory, as we learned
 about earlier, we can look at a few other fun concepts in different ways to arrange tensors.</p>
 <h3 id="strided-access-and-transposition">Strided Access and Transposition</h3>
 <p>One of the most used operations is the matrix multiplication. If we assume two 2D matrices as input and
@@ -2491,7 +2491,7 @@ Difference gets bigger as the matrices get bigger.
 pipeline (don't worry about it) being really good at guessing these very uniform workloads, but most importantly,
 the caches doing a lot of the heavy lifting for us. Once the caches run out of space we begin to see a gap
 between the two ways of doing it. This might be more pronounced on the GPU. In most cases you should probably
-start with making the simplest and easy comprehendable code and try out, and measure, potential
+start with making the simplest and most easily comprehendable code and try out, and measure, potential
 optimizations before spending your time going down rabbit holes. This is will be a bit of a theme
 in the next few sections. There won't be much of a difference between techniques until the caches
 begin running out of space.
@@ -2565,7 +2565,7 @@ Create a jagged array by using a vector of vectors.
 <p>If the difference between the smallest row and the largest row isn't too big,
 we can sacrifice a bit of additional memory for allocating all rows as if they had
 the same length and keep track of the length of the active sections in each row
-in a separate vector.</p>
+in a separate vector. This only works well if the rows aren't growing.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/jagged_array_size_constrained_aux.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/jagged_array_size_constrained_aux.png" width="500" /></a></p>
 <figcaption>
@@ -2629,8 +2629,8 @@ There we go, we ran out of cache!.
 <p>Note that the only version which is not extremely slow for inserting values is the naive one. But in most other
 cases our final optimized version JaggedArraySizeCompactedAux seems to be the winner. It doesn't take a lot of
 memory compared to the other solutions and it seems to be in some cases on-par with the fastest
-(with a reasonable variance) or the fastest. In most other cases the NaiveJaggedArray seems just fine.
-Again, don't overcomplicate things and measure the differences for your case. In any case, you should
+(with a reasonable variance) or the fastest. In most other cases the NaiveJaggedArray seems just fine.</p>
+<p>Again, don't overcomplicate things and measure the differences for your case. In any case, you should
 avoid a jagged array if you can. And especially the CompactedJaggedArray, which costs the least memory, but
 has a catastrophic access time due to needing to accumulate the indices needed to find the row index. Plus,
 having the indices be interleaved with the values is problematic as we mix control flow and data, as well
@@ -2687,7 +2687,7 @@ hash map could dynamically expand to accomodate inserted data. Once we are done 
 we might have a fragmented performance. If we know we are done and have a significant amount of
 elements which need to be queried a lot, we can usually ask the data structure to
 <code>.shrink_to_fit()</code> or <code>.rehash()</code>. Rehashing will reconstruct the structure to be
-made as if it had only been the elements currently stored, all along.</p>
+made as if it had only been the elements currently stored all along.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/hash_map_find_key.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/hash_map_find_key.png" width="500" /></a></p>
 <figcaption>
@@ -2709,7 +2709,7 @@ distinguish between. For example, if you needed to keep track of different layer
 neural network with random access, you can just create a new string "Linear0" and use
 that as a key for the first linear layer and its contents, and then "ReLU0", "Linear1",
 "ReLU1", "Softmax0" and so on. If possible, it is more efficient to use small types as
-your key. Such as an integer.</p>
+your key. Such as a <code>u32</code> or <code>u64</code>.</p>
 <p>Now for a simple performance benchmark. Checkout the code at <code>m1_memory_hierarchies::code::hash_maps</code>
 or check it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/hash_maps/src/main.rs">online</a>.</p>
 <p>As you can see the hash map using integers clearly outperforms Strings. To be fair, every insertion in the
@@ -2722,15 +2722,15 @@ and then the id. We could relegate them to different parts of an integer. This c
 bits reserved for the layer type and the last 44, or perhaps just 12, bits reserved for the layer id. This
 does however incur a significant amount of extra code and the code will become more complex and implicit,
 so it's probably only worth it if you are doing A LOT of accesses for each layer.</p>
-<p>Generally, hash maps have an alright performance. C#'s dictionary lookup performance will usually go down
-hill at around 30k entries though. This doesn't happen for arrays. You can read more about different hash table
-implementations <a href="https://www.cs.princeton.edu/courses/archive/fall06/cos226/lectures/hash.pdf">here</a>.</p>
+<p>Generally, hash maps have an alright performance. The last time I examined a C# dictionary's lookup performance
+it would start to go down hill at around 30k entries though. This doesn't happen for arrays. You can read more
+about different hash table implementations <a href="https://www.cs.princeton.edu/courses/archive/fall06/cos226/lectures/hash.pdf">here</a>.</p>
 <h2 id="graphs-and-trees">Graphs and Trees</h2>
 <p>Now that we have dicked around with variations on a theme (that theme was arrays if you were in doubt),
 let's look at a different fundamental data structure. Graphs! Not the kind with the lines...
 wait these have lines too, uuuh, not the kind that has an x and a y axis, but the kind that has some circles with
 some arrows between them. "But wait!" you say, "The heading says 'Graphs and Trees'" you say, well,
-trees can be seen as a subset of graphs, while all graphs are not necessarily trees.</p>
+trees can be seen as a subset of graphs, while graphs are not necessarily trees.</p>
 <p>Graphs and trees are some of the absolutely fundamental data structures which you need to be acquainted with.
 Along with arrays, queues, stacks and hash tables, they are the fundamental
 building blocks with which you can make pretty much anything. Graphs and trees are a bit special, however, in them
@@ -2738,27 +2738,27 @@ being potentially easy to implement, but also very easy to mess up. Languages li
 them with relative ease, but implementing graphs and trees without cyclical references
 (which can cause memory leaks), without data races, without dangling pointers and other robustness issues, is
 actually quite hard. Sometimes even fundamentally unsafe.</p>
-<p>I have used Rust as one of the primary languages for demonstrating and benchmarking things for you.
+<p>So far I have used Rust as one of the primary languages for demonstrating and benchmarking things for you.
 The examples under this header will be more along the lines of toy examples as Rust code for graphs
 and trees can get quite hairy if you don't want to just sprinkle <code>Arc</code> everywhere. And even then you
 might end up having to battle cyclical references.
 It's really nice that the compiler puts on guard rails for you and herds you towards safe behavior.
 Implementing graphs and trees in Rust is notoriously difficult for this exact reason.
 Which is not to say that it is easier in C/C++, the compiler just doesn't stop you from doing
-something problematic.</p>
+something problematic without being aware of it.</p>
 <p>Anyways... the rest of the module will be about how using data structures like computational graphs,
 which is essentially what is created when you define your entire neural network on a single object in
 PyTorch, can speed up your code immensely as the structure allows the library/framework/compiler to reason
 about your program. Essentially, computational graphs communicate the intention of your program ahead of time
-before you start running everything in a loop. It can help the library/framework/compiler to optimize your code,
+before you start running everything in a loop. It can help the library/framework/compiler optimize your code,
 optimize where the data should be located, when the data should be moved to/from the GPU, when two operations
 can be fused and so on.</p>
 <p>Additionally, I will take a look at one of the simpler trees, the binary tree, and if you are interested in
 graphics or computer vision, the octree is recommended reading.</p>
 <h3 id="graphs">Graphs</h3>
 <p>Ok, so let's get this show on the road. Graphs are primarily made up of two things, nodes and edges.
-Edges are references from one node to another. In a diagram they are usually represented by a line, some
-times with one more arrows on the ends. Edges can be represented by indices, pointers, smart pointers or
+Edges are references from one node to another. In a diagram they are usually represented by a line,
+sometimes with one more arrows on the ends. Edges can be represented by indices, pointers, smart pointers or
 something else that I can't think of right now. The node on the other hand, can be ✨ whatever you want ✨.
 It can even be just a number or an index to the corresponding data payload if you have seperated
 the graph structure from the data payloads.</p>
@@ -2772,20 +2772,19 @@ A bidirectional graph. Each edge points both ways.
 unidirectional and DAGs. Bidirectional means that the edges go both ways. If node A points to node B, node B
 also points to node A. Unidirectional graphs, you guessed it, means that the edges only point one way. That
 does not dictate that node A and B can't point to each other, but that it's not the default and it requires
-inserting two edges into the graph. Note that edges can also have weights or other values themselves.</p>
+inserting two edges into the graph. Note that edges can also have weights, costs or other values themselves.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/unidirectional_graph.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/unidirectional_graph.png" width="500" /></a></p>
 <figcaption>
 A unidirectional graph. Each edge points one way. Note that edges can also have weights.
 </figcaption>
 </figure>
-<p>Finally, the DAG, which stands for directional acyclical graph, is a
-unidirectional graph which does not contain cycles. A cycle is not just node A pointing to node B, which points
-to node A, it can also be node A pointing to node B pointing to node C pointing to node A, and so on an so forth
-until we have an infinite number of nodes to traverse until we get back to node A again, like going all the
-way to Mordor just to go back to the friggin Shire. No eagles will save you. You will just have to walk home.
-As you can imagine this can be a costly property to assert, unless we devise mechanisms to prevent this
-from happening in the first place.</p>
+<p>Finally, the DAG, which stands for directional acyclical graph, is a unidirectional graph which does not contain
+cycles. A cycle is not just node A pointing to node B, which points to node A, it can also be node A pointing to
+node B pointing to node C pointing to node A, and so on an so forth until we have an infinite number of nodes to
+traverse until we get back to node A again, like going all the way to Mordor just to go back to the friggin Shire.
+No eagles will save you. You will just have to walk home. As you can imagine this can be a costly property to
+identify, unless we devise mechanisms to prevent this from happening in the first place.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/directed_acyclic_graph.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/directed_acyclic_graph.png" width="500" /></a></p>
 <figcaption>
@@ -2794,7 +2793,7 @@ The unidirectional graph is verified as being a DAG through a topological sortin
 </figure>
 <p>In the diagram, I have sorted the previous graph topologically. As long as none of the edges go backwards, we have
 a DAG. In general, if you are reading this, you should try to avoid graphs with cycles.
-It's a headache and you'll end up down a headscratching rabbit hole. It's also a good source
+It's a headache and you'll end up going down a headscratching rabbit hole. It's also a good source
 of memory leaks if you haven't implemented your graph or tree in a certain way.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/computational_graph.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/computational_graph.png" width="500" /></a></p>
@@ -2831,8 +2830,7 @@ in minimum and maximum height (distance from root node).
 <p>One key difference which makes trees very powerful, compared to the more open definition of graphs, is that we
 need rules to define what makes a tree. Once we know these explicit rules, we can sometimes take advantage to make
 implicit assumptions of the structure, which can save quite a lot of space, reduce the amount of indirections we
-need to follow in order to traverse the structure and make it easier to serialize (write it to a file on disk)
-the tree.</p>
+need to follow in order to traverse the structure and make it easier to serialize (write it to a file on disk).</p>
 <figure>
 <p><a class="glightbox" href="../../figures/bidirectional_tree.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/bidirectional_tree.png" width="500" /></a></p>
 <figcaption>
@@ -2844,8 +2842,11 @@ the tree is rife with cyclical references.
 <p>Binary trees are some of the simplest trees. Any node has at most two children. These are usually called
 <code>left</code> and <code>right</code>. In C and C++, they could be raw pointers or smart pointers, and you would have to
 check whether they were <code>NULL</code> or <code>nullptr</code> whenever you were considering whether child nodes were
-available. In Rust, you might have something like <code>Option&lt;Arc&lt;Node&gt;&gt;</code> and you would have to check whether the
-child was <code>None</code> or <code>Some(child)</code>.</p>
+available. Or use a type like <code>optional&lt;unique_ptr&lt;Node&gt;&gt;</code>. In Rust, you might have something like
+<code>Option&lt;Arc&lt;Node&gt;&gt;</code> and you would have to check whether the child was <code>None</code> or <code>Some(child)</code>.
+The <code>optional&lt;T&gt;</code> in C++, and <code>Option&lt;T&gt;</code> type in Rust denotes a variable that might not currently
+have a value. This is usally a better way to communicate your intent for the variable instead of using
+special guard values like <code>nullptr</code> or <code>-1</code> to indicate that the variable is inactive.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Rust</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2894,20 +2895,20 @@ node C. Easy peasy. We do have to trawl which nodes point to which if we want to
 additional connectivity list for node A, specifying all edges pointing to node A, but again, let's
 just keep to the case where we have a construction phase, and then a reading phase- where lots of actors can
 read from the graph. In that case, if lots of functions would otherwise pass around pointers to a node, they can
-just pass around the node index. They can then ask the graph object for access to node N.</p>
+just pass around the node index. They can then ask the graph object for access to node N, which it is then free
+to deny or require that the inquirer wait for access to.</p>
 <p>Finally with trees, if the structure and rules are well defined, we can use implicit rules and just skip
 connectivity. In the case of the binary search tree, we can simply use an array and the knowledge of its doubling
 nature. In that case we know index 0 will always be the root. Index 1 will always be the left child, index 2 will
 always be the right child. To access any node's (index N) children, we merely have to read from index
 <code>N*2+1</code> for the left child and <code>N*2+2</code> for the right. We can handle a node not being
-present in this otherwise dense structure, by having a
-means of representing an empty value, but the greater the sparseness, the more inefficient this <em>linearized</em>
-tree structure becomes. The implicit/predictable structure makes the linearized treeqv easily serializeable
-(writing it to a file on disk) or transferable to and useable on GPU's.</p>
+present in this otherwise dense structure, by having a means of representing an empty value, but the greater
+the sparseness, the more inefficient this <em>linearized</em> tree structure becomes. The implicit/predictable
+structure makes the linearized treeq easily serializeable (writing it to a file on disk) or transferable to
+and useable on GPUs.</p>
 <p>A better explanation of <a href="https://github.com/nrc/r4cppp/blob/master/graphs/README.md">graphs in Rust</a> and graphs in Rust using <a href="http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/">indices</a>.</p>
 <h3 id="octrees">🧬 Octrees</h3>
-<p>Octrees are elevant for all of the specializations that aren't deep learning, especially <em>computer graphics</em>.
-But it might be relevant for deep learning too if you do stuff related to geometry or spatial data.</p>
+<p>Octrees are elevant for all of the specializations if you do stuff related to geometry or spatial data.</p>
 <p>Octrees are mostly concerned with sorting space. For every node, there are 8 children. If it is sparse, there are
 <em>up to</em> 8 children. What cannot change however, is the regular structure. Every node covers a certain space.
 The space covered by the child nodes are strictly within this space and are halved on each axis based on the
@@ -2920,8 +2921,7 @@ definition of child 0 is what I wrote earlier, that range ALWAYS needs to reside
 other children or other slots. One nice property of the octree is that we can describe any path from root to leaf
 by a sequence numbers from 0 to 7.</p>
 <p>Now let's talk about payloads. A typical use case within graphics is to use an octree to reason about which scene
-geometry to render or to use for nearest neighbor queries. Let's start with the simpler payload,
-<a href="https://en.wikipedia.org/wiki/Point_cloud">point clouds</a>.
+geometry to render or to use for nearest neighbor queries. Let's start with the simpler payload, <a href="https://en.wikipedia.org/wiki/Point_cloud">point clouds</a>.
 We have a list of three dimensional points. We want to find the nearest one relative to our query point.
 This is quite useful for algorithms like <a href="https://en.wikipedia.org/wiki/Iterative_closest_point">ICP</a>.
 We start with the whole array of points and then continually go through our points sending them to one of the 8
@@ -2944,8 +2944,9 @@ neighbors.
 </figure>
 <p>For nearest neighbor queries having a single point per leaf node is wildly inefficient though, and you should
 consider fattening up the leaf nodes to contain more points, and in some cases points in the interior nodes as
-well. These could be efficiently searched by sorting them into linearized octrees. More on those in a future
-module. Quite often a point is not much more than 4x32-bits, in which case it is wildly inefficent to have more
+well. These could be efficiently searched by sorting them into linearized octrees. Which are octress linearized
+in the same manner as linearized binary trees were described earlier.
+Quite often a point is not much more than 4x32-bits, in which case it is wildly inefficent to have more
 than 1 pointer per node. You might also end up with a stack overflow if you try to build the octree recursively.
 Last time I tried that in C++ I got a stack overflow at a depth of 1000. If you absolutely need a pointer based
 tree, try to add nodes of interest to a queue instead and just process that queue. E.g. you arrive at node X, it
@@ -2955,10 +2956,10 @@ For spatially larger payloads, like meshes, you might also need to keep a refere
 across more than one node, ending up with some geometry being evaluated more than once.
 You win some, you lose some. But it's all the same to me. It's the eighth of space.</p>
 <p>Another use case where the octree is very useful is when deciding what to render and at what level-of-detail.
-It also makes for a useful abstraction over virtualized geometry. More on that in a later module.</p>
+It also makes for a useful abstraction over virtualized geometry.</p>
 <h2 id="garbage-collectors">Garbage collectors</h2>
-<p>Garbage collection is a way of freeing the programmer of having to deal with which memory is and isn't
-relevant. It is usually implemented by most variables (especially the heap allocated ones) being
+<p>Garbage collection is a way of freeing the programmer from having to deal with which memory is and isn't
+relevant anymore. It is usually implemented by most variables (especially the heap allocated ones) being
 reference counted or otherwise tracked, which we will see later in the tracing section.
 Once a variable is found to no longer be referenced it is either immediately cleaned up or cleaned up
 during a garbage collection pass. A full garbage collection pass can be quite expensive, and if the implementation
@@ -2967,10 +2968,10 @@ just been cleaned up referenced anew.</p>
 <p>Garbage collectors aren't really that relevant to the rest of the guide,
 but if you are coming from Python, C#, Go or Java this section will use some of the concepts
 previously introduced on this page to give you a quick perspective to how garbage collectors work.
-This post takes a look at <a href="https://stackify.com/python-garbage-collection/">how python handles garbage collection</a> although, a bit light on the
-details for the generational garbage collection. In the following
-sections I will introduce three different types of garbage collectors, and finally
-set you up with a few tricks for working with the garbage collector.</p>
+This post takes a look at <a href="https://stackify.com/python-garbage-collection/">how Python handles garbage collection</a> although, a bit light on the
+details for the generational garbage collection. In the following sections I will introduce three
+different types of garbage collectors, and finally set you up with a few tricks for working
+with the garbage collector.</p>
 <h3 id="reference-counted-garbage-collectors">Reference Counted Garbage Collectors</h3>
 <p><a href="https://en.wikipedia.org/wiki/Reference_counting">Reference counting garbage collection</a> is one of the simplest forms of dealing with garbage collection.
 Imagine that there is an <code>Rc&lt;T&gt;</code>, like we saw earlier, wrapped around every heap-allocated variable.
@@ -3015,14 +3016,14 @@ allocates temporary space on the disk to swap in and out of main memory. This is
 seamlessly behind the scenes to be able to continue to allocate more memory for your program. The programmer
 does not have to do anything as the virtualization is hidden. Usually, there will be hardware support for the
 virtualization with components such as a dedicated memory management unit.</p>
-<p>Each process, your program would be its own process, is given its own virtual memory space. Meaning that your
+<p>Each process (your program would be its own process) is given its own virtual memory space. Meaning that your
 program might see its addresses start in very low numbers despite a number of other processes running concurrently
 on your computer. In face, while the address space given to your process might look continuous it is probably
 fragmented, scattered across diffent physical locations, but the virtualization makes it appear continuous.
 In general, it is a major security risk for programs to read memory outside of the memory
 allocated for it. This is also known as a <em>segmentation fault</em>. The operating system dislikes this concept
 so much that it is likely to just kill your program entirely. If you have ever programmed C or C++,
-you have probably tried this making this mistake and your error has been met with swift and uncompromising
+you have probably tried this making this mistake and your error was met with swift and uncompromising
 reprisals. The virtual memory space allocated for your process, for stuff like heap and stack will
 typically look as below.</p>
 <figure>
@@ -3054,11 +3055,11 @@ process. For more on working with data outside of your computers memory, like on
 three weeks of <a href="https://www2.compute.dtu.dk/courses/02289/2022/">Algorithmic Techniques for Modern Data Models</a>.</p>
 <h3 id="virtualized-rendering">🧬 Virtualized Rendering</h3>
 <p>Another use of this is the rendering of data sets too large to fit in a users computer. You preprocess
-all of the data you need to visualize into a tree structure and then just keep the tree in memory at all times.
-You can then render render progressively, which is where as soon as the camera stands still you render across
-multiple frames into the same uncleared buffers, letting the user see progress while the system downloads, unpacks
-and renders the entire scene. This also allows for rendering of scenes which are too big to fit in GPU memory or
-even main memory.</p>
+all of the data you need to visualize into a tree structure and then just keep the tree without the payloads in
+memory at all times. You can then render render progressively, which is where as soon as the camera stands
+still you render across multiple frames into the same uncleared buffers, letting the user see progress while
+the system downloads, unpacks and renders the entire scene. This also allows for rendering of scenes which are
+too big to fit in GPU memory or even main memory.</p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p>For even more <a href="http://csapp.cs.cmu.edu/2e/ch9-preview.pdf">virtual memory</a>.</p>
 <p>For an example of coding a <a href="https://sean.cm/a/tricolor-garbage-collector">tri-color marking garbage collector</a>.</p>
@@ -3089,7 +3090,7 @@ even main memory.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 19, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 18, 2025</span>
   </span>
 
     
