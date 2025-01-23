@@ -2031,17 +2031,18 @@
 
 <h1 id="computational-graphs">Computational Graphs</h1>
 <p>Formulating your program, or merely pieces thereof, as a graph allows your program, or a library you are using,
-to analyze and optimize your program. A graph represents a flow of data and control, which are types of the
+to analyze and optimize your program. A graph can represent a flow of data and control, which are the types of
 limitations we so crave to optimize our programs. Formulating programs as graphs also allows us to check the
-validity of our program before running it. It can be confirmed that all dimensions fit, that one computation
-will run before the result is needed, it can be seen ahead of time that some nodes can be fused (combined)
-into a single node in order to remove redundancies. It can also be checked whether all results are used. If a
-result is never used we can eliminate all computations that are exclusively used to generate that result.</p>
+validity of our programs before running them, just like a compiler would. It can be confirmed that all dimensions
+fit, that one computation will run before the result is needed, it can be seen ahead of time that some nodes
+can be fused (combined) into a single node in order to remove redundancies. It can also be checked whether
+all results are used. If a result is never used we can eliminate all computations that are exclusively used to
+generate that result.</p>
 <p>Few languages have direct support for computational graphs as they often require domain-specific knowledge to
 analyze and create. Again, limitations are a good thing. Specificity is a good thing. A computational graph
 which has been created specifically for a domain, such as graphics or machine learning, can make assumptions
 and optimizations that a generalized version might not be able to. They will also likely be significantly less
-complex to code and use if they only cater to a single case.</p>
+complex to code and use if they only cater to a few cases.</p>
 <p>Let's take a look at this defined network from PyTorch's own <a href="https://pytorch.org/tutorials/recipes/recipes/defining_a_neural_network.html">documentation</a>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Python</label></div>
 <div class="tabbed-content">
@@ -2089,7 +2090,7 @@ GPU by calling <code>x.to_device()</code> all of the functions will be executed 
 output is transferred back to the CPU. This reactive paradigm might be part of why the first
 complete iteration of a PyTorch training loop will be signifcantly slower than the subsequent
 loop. Not to mention all of the allocations behind the scenes for backpropagation.</p>
-<p>If you use <code>torch.compile()</code> it will do something called tracing behind the scenes.
+<p>If you use <code>torch.compile(x)</code> it will probably do something called tracing behind the scenes.
 You don't need to worry about the specifics, but just know that it creates a computational graph
 from the Python code above and then optimizes that code to run faster and/or use less memory.</p>
 <p>So why does it need the graph? That is something the rest of this module will try to answer,
@@ -2126,15 +2127,16 @@ An example computational graph.
 </figcaption>
 </figure>
 <p>The code for the rest of the module can be found at <code>m1_memory_hierarchies::code::computational_graphs</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/computational_graphs">online</a>. It's quite long (more than 6k lines of code). You don't need to read the whole thing, you can just
-skim the most relevant sections which will typically be named specifically.</p>
+<a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/computational_graphs">online</a>. It's quite long (more than 6k lines of code). You don't need to read the whole thing, maybe you can
+just give it a quick skim. The most relevant sections which will typically be named specifically, but you probably
+won't gain too much from anything other than the CPU and GPU implementations of the nodes themselves.</p>
 <h2 id="whats-in-a-tensor2d">What's in a Tensor2D?</h2>
 <p>First of all we are going to start on the CPU.
 We are going to create a data type which will hold the data our operators consume on the CPU.
 Let's call it <code>Tensor2D</code>. Our 2D tensor will actually be a simple piece of one dimensional memory under the
 hood and we will keep track of the number of rows and columns to find out how to access each piece of data.
-If you are in the root directory for <code>computational_graphs</code> go to <code>src::shared::tensor_2d.rs</code> or
-<a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d.rs">online</a>.</p>
+If you are in the root directory for <code>computational_graphs</code> go to <code>src::shared::tensor_2d.rs</code> or check
+it out <a href="https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d.rs">online</a>.</p>
 <p>Start by taking a look at the definition of the <code>Tensor2D</code> struct at the very top. The <code>derive</code> stuff
 is asking some macros to automatically implement (derive) some traits (interfaces and behavior).
 <code>Clone</code> means we can call a Tensor2D element as below -</p>
@@ -2149,14 +2151,14 @@ is asking some macros to automatically implement (derive) some traits (interface
 <p>This creates a complete and total copy of <code>some_tensor</code>. If we manipulate or move <code>some_tensor</code>,
 <code>copy_of_some_tensor</code> will not be affected as they no longer have anything to do with each other.</p>
 <p>Next, take a look at the <code>new</code> function. In it, we create a new <code>Tensor2D</code> by creating a new
-<code>Vec&lt;f32&gt;</code> with size <code>row_count*column_count</code>. Each element is given a value of <code>scale*index</code>.
+<code>Vec&lt;f32&gt;</code> with size <code>row_count * column_count</code>. Each element is given a value of <code>scale * index</code>.
 This is just for testing purposes so I found it useful for this to not be all zeros and not all random numbers.
 This allows us to verify that the GPU implementations are functionally equivalent to the CPU implementations.</p>
 <p>We don't need to otherwise relate to the values of <code>row_count</code> and <code>column_count</code>. Even if we implement
 a two dimensional structure on top of a piece of one dimensional memory, when we are iterating through all
 elements, such as we do when setting all of the elements to some value or accumulating the sum of all elements
-we can do away with the two dimensional stuff. Keeping up that illusion unneccesarily induces extra cost
-in the form of more time and code spent on control flow statements like <code>for-loops</code> and <code>if-statements</code>.</p>
+we can do away with the two dimensional stuff. Keeping up that illusion unneccesarily incurs additional
+costs in the form of more time and code spent on control flow statements like <code>for-loops</code> and <code>if-statements</code>.</p>
 <h2 id="implementing-operators">Implementing Operators</h2>
 <p>In this section I will be going through various implementations of the three operators and their fused variants
 and perform benchmarks to show you how big of a performance impact these sort of first guess optimizations can have
@@ -2172,8 +2174,8 @@ you should be using the preallocated version to not have memory allocations in y
 <p>Let's go down to the <code>linear_preallocated</code> function. There are three main sections. One is
 the call to the <code>debug_assert</code> function from earlier, to check for valid input and output dimensions, the
 second is the matrix multiplication which needs three whole for-loops and finally the bias section. Note
-the use of linearized accesses, if you need a reminder what that is all about, go back to
-<a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#the-vector">The Vector</a> section.</p>
+the use of linearized accesses, if you need a reminder what that is all about, go back to the
+<a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s1_basic_data_structures/#enter-the-matrix">Enter the Matrix</a> section.</p>
 <p>It's not too bad, but we could do better, although we won't do more efficient implementations of matrix
 multiplication, note that the read accesses of the weights tensor is strided. We could have implemented that some
 tensors could be transposed, but you get the point. So we have a triple for-loop and a double for-loop in our
@@ -2182,7 +2184,7 @@ optimizations for this function?</p>
 <p>While you think about that in the back of your mind, I'll take a quick detour to introduce a very simple but
 finnicky concept - inlining!</p>
 <p>Inlining in Rust, and most other languages, is done via an annotation to the compiler. It is usually more of a hint
-or request than an actual instruction. In Rust, it looks like the derivation of traits we saw earlier -
+or request than an actual instruction to the compiler. In Rust, it looks like the derivation of traits we saw earlier -
 <code>#[inline(always)]</code>. In that case it actually is more of a command. There's other variants you can put inside
 the parantheses like <code>#[inline]</code>, which is more of a suggestion, or <code>#[inline(never)]</code>. Inlining
 is basically taking all calls to that function and replacing it with the actual code from the function.
@@ -2201,6 +2203,11 @@ the output and bias tensors match, and there are no transformations to be made. 
 through all elements. I also elected to not accumulate the result of each output element directly in the output
 tensor. Instead, I accumulate in a local variable, which will hopefully be kept in a register.</p>
 <p>Think back! Where is the register located? And why can it be problematic to accumulate the sum in the output tensor?</p>
+<details class="note">
+<summary>Registers</summary>
+<p>Registers are located right next to the ALU (arithmetic logic unit). The ALU does math, whereas the register supplies
+the data. A register is the memory located physically closest to the ALU and is thus the fastest memory we can use.</p>
+</details>
 <p>The bias is the same. But that does mean we are writing to the same output element twice. Let's move the bias
 calculation into the matrix multiplication loop. <code>linear_optimized</code> moves the bias to just
 before the writing of the accumulated result to the output tensor. If the bias calculation was a lot larger, this
@@ -2225,12 +2232,15 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 <p>The x-axis is the size of the tensors. Only NxN matrices are used. The y-axis is time in nanoseconds. Note how the
 lines are piecewise linear. There are two points where all of the lines get quite a bit slower and scale worse
 with the size of the tensors. Why do you think that is?</p>
+<details class="note">
+<summary>Why does it get a lot slower twice?</summary>
 <p>You guessed it! You are seeing the size of the tensor becoming too big for the different caches! It looks like the
 last bend happens at 4096 elements. This corresponds to a 64x64 matrix. 4096 elements of 32-bits, or 4 bytes, each
 corresponds to 16384 bytes, or 16 KB. We have 4 of these tensor structs, so we should have total allocations of
 64 KB just for that data and then add in all of the other memory used by the application and everything else
 running on the laptop at the time. But then again, the sampling is quite sparse. You can try and add more data
 points and see if you can narrow down the sizes of your caches.</p>
+</details>
 <p>This might be a good time to experiment with changing the values in <code>lib.rs</code> for</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Rust</label></div>
 <div class="tabbed-content">
@@ -2278,6 +2288,8 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figure>
 <p>Note the huge difference between the naive version and the other ones. Why do you think there is
 this huge difference?</p>
+<details class="note">
+<summary>Why is there a big difference?</summary>
 <p>You guessed it! All of the other functions have either preallocated the output matrix, or do the
 operations inplace. Since the ReLU operation is so simple, it becomes easily dominated by allocation
 and memory costs. The difference between the preallocated version and the inplace version is not as big, but
@@ -2285,7 +2297,8 @@ still substantial enough to warrant the optimization. Inlining on the other hand
 in this case. It is still doing one read and one write after all.
 Go back and look at how much was gained by inlining the much more complex linear operator
 in the previous benchmark! Go on!</p>
-<p>Inplace operations are also available in PyTorch. The ReLU actually has a flag for the
+</details>
+<p>Inplace operations are also available in PyTorch. The ReLU functon actually has a flag for the
 <a href="https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html">inplace version</a>.</p>
 <h3 id="softmax">Softmax</h3>
 <p>Now let's look at the softmax operator. It isn't that complicated, except, as we'll see when we talk about
@@ -2321,7 +2334,7 @@ in their own distinct loop (loop fission). In the optimized variant, they are in
 matrix multiplication.</p>
 <p>Now let's add in the softmax operator. Take a look at <code>linear_relu_softmax_fused_fission</code> and
 <code>linear_relu_softmax_fused</code>. In the fission version, the max value is found in the same loop as
-the bias and ReLU computation. In fused version, bias, ReLU and max are all moved into the ending of the
+the bias and ReLU computation. In the fused version, bias, ReLU and max are all moved into the ending of the
 matrix multiplication loop.</p>
 <p>Finally, checkout the results in your output folder! Or if you couldn't run them locally I have
 some here -</p>
@@ -2339,9 +2352,7 @@ outside of the matrix loop seems to be outperformed in this one. Of course the l
 as they don't do softmax, but between the two of them it is again the version without the bias calculation
 at the end of the matrix loop which wins ever so slightly.</p>
 <p>It's hard to make a general conclusion based on that, without going a lot deeper, but in any case,
-you should always test and measure! Now, you can either continue on reading the material
-or go to the next section to get a general introduction to GPUs. We will be using the GPU on
-your laptop, with no CUDA involved, to see if we can make this even faster.</p>
+you should always test and measure!</p>
 <hr />
 <h2 id="testing-operators">Testing Operators</h2>
 <p>All of the operators have been tested to be numerically equivalent. Rust has some nice
@@ -2381,7 +2392,7 @@ compute shader driven.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 15, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">January 23, 2025</span>
   </span>
 
     
