@@ -202,7 +202,6 @@ Think back! Where is the register located? And why can it be problematic to accu
     Registers are located right next to the ALU (arithmetic logic unit). The ALU does math, whereas the register supplies
     the data. A register is the memory located physically closest to the ALU and is thus the fastest memory we can use.
 
-
 The bias is the same. But that does mean we are writing to the same output element twice. Let's move the bias
 calculation into the matrix multiplication loop. ```linear_optimized``` moves the bias to just
 before the writing of the accumulated result to the output tensor. If the bias calculation was a lot larger, this
