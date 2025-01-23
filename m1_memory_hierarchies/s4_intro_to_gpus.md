@@ -1,46 +1,49 @@
 # Intro to GPU's
 GPU's are fairly ubiquitous at this point. They started off as purely for graphics, but
 around 2008, enough researchers had tinkered with workarounds to use them for general
-computing, that Nvidia put out CUDA, opening up GPU's for more general usage. GPU's still do lots
-of graphics, but the opaque black box parts are increasingly opened and even graphics API's such as OpenGL, Vulkan,
-Metal and DirectX have opened up. With modern graphics API's you don't even necessarily need a graphics output
-to use them. You can just use the pure compute capabilities. This guide won't get into graphics, except
-for the graphics specialization.
+computing that Nvidia put out CUDA, opening up GPU's for more general usage. GPU's still do lots
+of graphics, but the opaque black box parts are increasingly opened and even graphics API's such as OpenGL,
+Vulkan, Metal and DirectX have opened up. With modern graphics API's you don't even necessarily need
+a graphics output to use them. You can just use the pure compute capabilities. This guide won't get
+into graphics, except for the sections specialized for graphics of course.
 
 Ok, so anyways, GPU's are pretty hot stuff right now as the software support becomes deeper and deeper,
 the hardware increasingly has hardware support for specific operations in deep learning, ray tracing and
-optical flow, and deep learning has hit the mainstream.
+optical flow, and deep learning has hit the mainstream in a big way.
 
-You can think of the GPU as an expansion of the memory hierarchies we have been examining earlier.
-It is not running in lock step, and you have to program more things explicitly, while also changing
-your mindset about how programming works. Memory transfers to and from the CPU and GPU will be
-relatively explicit, you have explicit control of a part of the L1 cache, you have to start programming
-in a work group oriented fashion and if-statements become quite dangerous.
+You can think of the GPU as an expansion of the memory hierarchies we examined earlier.
+It is not running in lock step with the CPU, and you have to program more things explicitly, while
+also changing your mindset about how programming works. Memory transfers to and from the CPU and GPU will be
+relatively explicit, you have explicit control of a part of the L1 cache (on Nvidia architectures at least),
+you have to start programming in a work group oriented fashion and if-statements become quite dangerous.
 
 If the CPU, with its numerous cores is like a team of highly skilled specialists building a car, sure,
 they can build an amazing car, they can adapt to changing circumstances quite well, they can act independently,
 then the GPU is like a factory. Each path and process has to be carefully optimized, they might each only deal with
-a very small piece each and people have to work in lockstep. But. Their throughput is unmatched.
+a very small piece of the process each and people have to work in lockstep. But. Their throughput is unmatched.
 
 I will go into more detail as to how to actually write GPU code, but the guide is set up using
 Rust and a GPU API abstraction layer called [wgpu](https://wgpu.rs/). You don't need to understand how it works
-right now, but it means that you should be able to run all code, including GPU code, on your platform, even if
-it's made by Apple or AMD.
+right now, but it means that you should be able to run all code, including GPU code, on your platform, no matter
+whether it's made by Apple, Nvidia, AMD or Intel.
 
 In general, I will be using terminology specific to the compute part of the graphics API's and I will
 keep to ```wgpu``` and ```wgsl``` terminology. You might see significant differences in terminology
-if you follow up this guide while having previous ```CUDA``` programming experience.
+if you follow up this guide while having previous ```CUDA``` programming experience. In terms of how the
+hardware is designed, my knowledge is mainly based on Nvidia architecture.
 
 ## GPU Hardware
 First off, when dealing with the GPU, you will have to manipulate the GPU from the CPU with commands
 like "allocate this much memory", "transfer this memory from the CPU to GPU", "execute this shader/kernel" and
 "synchronize". These are all done in whatever language you are writing in on the CPU side, except for the
-actual program the GPU has to run. This is distinct from the GPU API, some GPU APIs even accept shaders
+actual program the GPU has to run. This is distinct for the GPU API, some GPU APIs even accept shaders
 written in multiple shading languages, as they can either be transpiled (translated) from one language to
 another, or they can be compiled to an intermediate representation, such as SPIR-V, which they can then ingest.
+What actually happens is they have a compiler hidden behind the scenes and compile it to other representations.
+Don't worry about that.
 
-But once we have built up all of these commands, at least if they are non-blocking, as in the CPU program won't
-advance until the command has completed, we have to actually submit them to the GPU. We do this with a
+But once we have built up all of these commands, at least if they are non-blocking, as in the CPU program will
+advance regardless of the command having completed, we have to actually submit them to the GPU. We do this with a
 synchronization. The commands may/may not have already been submitted, but if you call a synchronization
 function, the CPU-side code will block and wait until any and all submitted commands have executed on the GPU
 and the GPU sends the all-clear signal in return. Imagine you are at a horse track. You have to give instructions
@@ -56,9 +59,11 @@ When transferring memory, you should have the following model in mind, nothing g
 area. When transferring from CPU to GPU, at least in the CUDA programming model, it will pin an area in memory.
 That memory won't be movable until it is unpinned. You basically transfer some memory from say, a vector you
 want transferred to the GPU, to this pinned memory staging area. That pinned memory area means the GPU
-can work in peace without interruptions. In CUDA, if you don't explicitly do it, CUDA will create a pinned memory
-area and do it for you. If you do it yourself and optimize this process you are likely to see around 2x improvement
-in transfer speed. The same thing happens on the GPU, a staging area visible from the CPU is where the transferred
+can work in peace without interruptions and without risking that the memory can be deallocated before the transfer
+is complete. Not doing this could result in reading from memory which does not belong to our program.
+In CUDA, if you don't explicitly do it, CUDA will create a pinned memory area and do it for you. If you do it
+yourself and optimize this process you are likely to see around 2x improvement in transfer speed. The same
+thing happens on the GPU, a staging area visible to the CPU is where the transferred
 memory is stored, and then moved from the controlled area to the rest of GPU memory, where the GPU is free to do
 what it wants with it, without interruptions and guarantees.
 
@@ -86,23 +91,24 @@ Anyways. Once you decided to write a matrix multiplication shader, you need to f
 are gonna go where. In that case, I would begin by launching 1 thread for every output element.
 
 When programming for a GPU you have some maximum amount of threads you can launch. This is usually
-defined in three dimensions. Yes! You can define these threads in three dimensions. It doesn't actually
-have much of an effect, but it makes sense to tailor how you launch threads to your problem area.
-If you are performing image processing or matrix multiplication, by all means, launch a 2D grid.
+defined in three dimensions. Yes! You define how many threads to launch in three dimensions. It doesn't
+actually have much of an effect, but it makes sense to tailor how you launch threads to the shape of your
+problem. If you are performing image processing or matrix multiplication, by all means, launch a 2D grid.
 If you are summing an abitrary list of numbers, a single dimension will probably suffice.
 
 So, we should launch a 2D grid, matching the output elements of our problem. Next up,
 how do know which thread does what work? Each thread will usually begin its program
-by asking built-in variables, which thread it is. This can be which thread it is within its
+by asking built-in variables which ID it has. This can be which thread it is within its
 own workgroup, or it could be globally. Once it knows that, it should usually check whether
 it is within legal bounds of the problem. We almost always want n^2 threads in our workgroup,
 and it wouldn't be very flexible if the problem size always had to match exactly.
 So usually, you should launch too many threads and then have an if-statement following
 the thread ID calculation. If within acceptable range, do work, otherwise, don't do work.
 
-It cannot be assumed that all work groups are running concurrently. The GPU might need to launch
-waves of work groups because there aren't enough physical execution units.
-As such, we can only synchronize between threads inside the warp.
+It cannot be assumed that all work groups are running at the same time. The GPU might need to launch
+waves of work groups because there aren't enough physical execution units. As such, we can only
+synchronize between threads inside the warp. Some GPU's, especially very recent ones actually support
+synchronization further out in the hierarchy than a work group.
 
 ### GPU Memory Hierarchy
 The memory hierarchy on a GPU looks a lot like the memory hierarchy on the CPU. Here it is exemplified by the
@@ -143,32 +149,33 @@ It's not always as clear cut, though. If you are using a laptop, you probably ha
 The CPU and GPU coexist and share the same memory. There may be sections where there is higher bandwidth than
 just normal CPU-based memory, but overall the integrated GPU has access to the same memory the CPU has.
 This makes for faster transfers, but probably slower overall computation. This has become quite useful
-recently with most consumer grade GPU's having around 8 GB of memory and locally run neural networks
-like diffusion models easily being able to use more than that. A desktop GPU with more than 16GB of RAM would
-probably still outperform an integrated graphics card with 16GB of RAM available, but it would be very expensive.
+recently with as most consumer grade GPU's have around 8 GB of memory, maybe slightly more, but your computer should
+at least have 16 GB of RAM. Buying more and upgrading, a desktop at least, is quite easy. This can allow you to
+run neural networks locally, even if your GPU isn't big enough to fit everything needed.
+A desktop GPU with more than 16GB of RAM would probably still outperform an integrated graphics card with 16GB
+of RAM available, but it would be very expensive.
 
 _________________
 
 ## Introducing wgpu and wgsl
-The guide will for all GPU purposes make use of the graphics library wgpu, but only the compute parts.
-wgpu is based on the WebGPU spec, which is supposed to be the new web GPU API, as well as not being particularly
-creative with their naming, the actual support in browsers for WebGPU is nascent. Chrome supports if you fiddle
-with some settings, but for most systems, especially if you aren't actually running in a browser, wgpu
+I will for all GPU purposes make use of the graphics library wgpu, but only the compute parts.
+wgpu is based on the WebGPU spec, which is supposed to be the new GPU API for your browser, as well as not
+being particularly creative with their naming, the actual support in browsers for WebGPU is not great, but definitely
+progressing. For most systems, especially if you aren't actually running in a browser, wgpu
 will default to using different, more powerful backends. For example, at the time of writing this,
 I am using an HP laptop, with an Intel integrated graphics card running Windows 10. Whenver I run a program
 with wgpu, wgpu tells me it has chosen Vulkan as my current backend. We could of course just write Vulkan,
 but it would be a bit more complicated, as Vulkan is slightly more low-level than wgpu, but it would also
-be more powerful. But attaining ultimate performance isn't the purpose of the guide. It's to get as many
+be more powerful. But attaining ultimate performance isn't the purpose of this guide. It's to get as many
 people as possible started as soon as possible. It has to run on an Apple computer and it has to be easy to
 install. So, wgpu it is. While any API which has to cover as many platforms as wgpu does will usually be hampered
 by the lowest common denominator, it is possible to query wgpu for hardware support for various features, such
-as fp16. While wgpu is still quite new, it has some exciting features on the way, such as a hardware accelerated
-ray tracing extension.
+as fp16 support.
 
 The default shading language (the language you use to write the code the GPU will run) is wgsl, which
 was defined along with the WebGPU specification. It is possible to use other shading languages, such
-as glsl and hlsl, which also have more info and general documentation, but because of the increased code
-complexity in building the files to SPIR-V and then ingesting them, I elected to just use what was simplest.
+as glsl, hlsl, Slang or rust-gpu, which also have more info and general documentation, but because of the increased code
+complexity in building the files to SPIR-V and then ingesting the SPIR-V, I elected to just use what was simplest.
 
 We can add wgpu to a project by going into the ```Cargo.toml``` file in the root directory,
 and under ```[dependencies]``` write the line ```wgpu = "*"```. It will pull down the latest version of wgpu.
@@ -176,14 +183,14 @@ You can of course also get a specific version of it, such as ```wgpu = "0.16.3"`
 
 ## Basic GPU Programming
 GPU programming, as has previously been mentioned, has two major elements. Host (CPU) code and device (GPU)
-code. We'll start off with the basics of the host code and then move on the GPU code. Just enough
+code. We'll start off with the basics of the host code and then move on the device code. Just enough
 for you to be able to read the following sections and understand what is going on in this entire module,
 as it doesn't go into the finer details of GPU programming, but is centered around a GPU-oriented paradigm.
 
 The rest of this section will be make use of the code location at ```m1_memory_hierarchies::code::gpu_add``` or
-[online](https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_add).
+[online][12].
 Make sure to go and actually read the code. It is full of comments! And they're made just for you!
-If you want to learn more about wgpu you can visit [Learn Wgpu](https://sotrh.github.io/learn-wgpu/).
+If you want to learn more about wgpu you can visit [Learn Wgpu][13].
 
 Be sure to read through the code! Do this before you read the rest of this section, which will go into greater
 detail.
@@ -204,7 +211,7 @@ If we are in a normal function and we call an ```async``` function, we have to w
 on the function call, which is of course ```pollster::block_on()```. Inside the ```async``` function itself it can
 either block on async function calls by using ```await``` - such as ```let result = async_function().await;``` or
 you can store what is known as a future. We could set in motion the loading of a number of files, and then once we
-were done and actually genuinely NEEDED to use the files for something, ```await``` on the future. The ```async```
+were done and actually genuinely NEEDED to use the files for something, ```await``` on the futures. The ```async```
 function, when called from a normal function also returns a future, but we can't use ```.await``` on it.
 
 === "Rust"
@@ -233,17 +240,17 @@ will be involved. At least in Rust.
 
 Let's move on. We set up our CPU-side data. This is a simple vector addition, and I elected to make the data
 in a way that was easily verifiable as correct for humans. Input A and B are just vectors of 32-bit floats
-with values equal to their index. The correct result in the output vector should of course be double the
-index value then.
+with values equal to their index. The correct result in the output vector should of course be approximately double
+the index value then.
 
 Finally, we call ```initialize_gpu()``` and block on it. Let's go into that function!
 
 First we get an ```Instance```. The ```Instance``` is a wgpu context which we will use to get ```Adapter``` and
 ```Surface```. The ```Adapter``` corresponds to your GPU. We specifically request the adapter with high performance.
 If you are on a system with more than one GPU, such as a laptop with an integrated GPU, which shares memory with
-the CPU and a more powerful dedicated GPU, it should try to get access to the dedicated GPU. We also request
+the CPU, and a more powerful dedicated GPU, it should try to get access to the dedicated GPU. We also request
 ```None``` for ```compatible_surface```. Surfaces are what you would render to if you were doing graphics. Think
-of an image with extra steps, which you could show on your display. If we don't need to do graphics, not having one
+of an image which you could show on your display. If we don't need to do graphics, not having one
 is less work. It also means we can run on data center GPU's, which might not even have a display port. So we just
 get the ```Adapter```. We use the ```Adapter``` to get ```Device```, which will be our handle to the GPU
 from now on. Whereas the ```Adapter``` is more of a raw connection, which we can't do much with. The
@@ -265,7 +272,7 @@ problem size. ```let element_count: usize = 100;```, so we need to launch AT LEA
 only processes one element of our problem. Which it does, in our simplified case. Given that we would like to fill
 up our work groups, I have elected to use 32 threads per work group. ```let block_size: usize = 32;```.
 Given that the register pressure is likely very low for our shader, this should be no problem. Finally, we
-calculate how many blocks to launch. This simple calculation is found all of the place when doing
+calculate how many blocks to launch. This simple calculation is found all over the place when doing
 GPGPU programming. ```let launch_blocks: u32 = ((element_count + block_size - 1) / block_size) as u32;```.
 The basic premise is that we add one element less than the full work group size and then use integer division
 to make sure we always have at least as many threads as we need. In the worst case of a work group size of 32,
@@ -290,7 +297,7 @@ sets of bindings in the same shader. These are called bind groups and each has N
 When I created the ```GPUVector```s earlier, the ```new``` function allocated a storage buffer, which is visible
 to the shader and transferred the contents of the given vector to the GPU. This can be done more effectively, but
 it's a nice and easy way to start things off. We don't have to keep track of whether we remembered to transfer
-our data to the GPU or not, which makes sure we don't use initialized data. In the case of the output vector, we
+our data to the GPU or not, which makes sure we don't use uninitialized data. In the case of the output vector, we
 have also allocated a ```staging_buffer``` to more explicitly transfer data back to the CPU. This ```Buffer```
 has also been flagged as readable from the CPU.
 
@@ -327,7 +334,7 @@ Adding our two vectors, it should be easily verifiable that it is correct.
 </figcaption>
 </figure>
 
-Maybe now might be a good time to go back to the code and try to run through it again.
+Maybe now might be a good time to go back to the code and try to run through it again on your own.
 
 ## Remove the loop where, you say?
 When writing GPU programs, you should usually start writing a CPU-based version. Once that works, you have
@@ -384,8 +391,8 @@ Then we change the shader to have each thread work on a single element -
     }
     ```
 
-If there had been more dimensions we could have continued expanding and removing dimensionality. We can continue
-until the third dimension, usually you can launch less threads in the third dimension than in the first two. You
+If there had been more dimensions, we could have continued expanding and removing dimensionality. We can continue
+until the third dimension, usually you can launch less work groups in the third dimension than in the first two. You
 also have to remember to check whether the thread is outside of the valid range for each dimension. You
 should always look up your graphics cards and GPU API to see how many threads you can launch. You might have to
 break it into several passes. It's not actually quite this simple, as, well you remember how we learned stride
@@ -396,7 +403,7 @@ Because of the way threads and work groups share memory on a GPU, and each threa
 code at the same time, if thread A calls for memory at indices 0, 1, 2, 3 and thread B, which is right next to it
 in the same work group, calls for indices 4, 5, 6, 7, they will be asking for two different cache lines at the
 same time. Imagine the whole work group doing this at the same time. They will all be waiting, while
-requesting different cache lines. What is normally faster, is if, given a work group size of 32,
+requesting different cache lines. What is normally faster, is, if given a work group size of 32,
 thread A calls for indices 0, 32, 64 and 96, with thread B calling for indices 1, 33, 65 and 97. This allows for
 the work group to call for a minimum of cache lines in lock step and each getting a piece of the cache line.
 This is called *coalesced accessing* and if you ever say that to a GPGPU programmer, you will see a faint smile on
@@ -1407,3 +1414,5 @@ GPGPU programming can be found [here][9].
 [9]: https://shop.elsevier.com/books/programming-massively-parallel-processors/hwu/978-0-323-91231-0
 [10]: https://www.researchgate.net/publication/220781807_Efficient_gather_and_scatter_operations_on_graphics_processors
 [11]: https://www.nuss-and-bolts.com/p/optimizing-a-webgpu-matmul-kernel
+[12]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_add
+[13]: https://sotrh.github.io/learn-wgpu/
