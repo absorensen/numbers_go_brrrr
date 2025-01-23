@@ -1,17 +1,18 @@
 # Computational Graphs
 Formulating your program, or merely pieces thereof, as a graph allows your program, or a library you are using,
-to analyze and optimize your program. A graph represents a flow of data and control, which are types of the
+to analyze and optimize your program. A graph can represent a flow of data and control, which are the types of
 limitations we so crave to optimize our programs. Formulating programs as graphs also allows us to check the
-validity of our program before running it. It can be confirmed that all dimensions fit, that one computation
-will run before the result is needed, it can be seen ahead of time that some nodes can be fused (combined)
-into a single node in order to remove redundancies. It can also be checked whether all results are used. If a
-result is never used we can eliminate all computations that are exclusively used to generate that result.
+validity of our programs before running them, just like a compiler would. It can be confirmed that all dimensions
+fit, that one computation will run before the result is needed, it can be seen ahead of time that some nodes
+can be fused (combined) into a single node in order to remove redundancies. It can also be checked whether
+all results are used. If a result is never used we can eliminate all computations that are exclusively used to
+generate that result.
 
 Few languages have direct support for computational graphs as they often require domain-specific knowledge to
 analyze and create. Again, limitations are a good thing. Specificity is a good thing. A computational graph
 which has been created specifically for a domain, such as graphics or machine learning, can make assumptions
 and optimizations that a generalized version might not be able to. They will also likely be significantly less
-complex to code and use if they only cater to a single case.
+complex to code and use if they only cater to a few cases.
 
 Let's take a look at this defined network from PyTorch's own [documentation][6].
 
@@ -61,7 +62,7 @@ output is transferred back to the CPU. This reactive paradigm might be part of w
 complete iteration of a PyTorch training loop will be signifcantly slower than the subsequent
 loop. Not to mention all of the allocations behind the scenes for backpropagation.
 
-If you use ```torch.compile()``` it will do something called tracing behind the scenes.
+If you use ```torch.compile(x)``` it will probably do something called tracing behind the scenes.
 You don't need to worry about the specifics, but just know that it creates a computational graph
 from the Python code above and then optimizes that code to run faster and/or use less memory.
 
@@ -106,16 +107,17 @@ An example computational graph.
 </figure>
 
 The code for the rest of the module can be found at ```m1_memory_hierarchies::code::computational_graphs``` or
-[online][8]. It's quite long (more than 6k lines of code). You don't need to read the whole thing, you can just
-skim the most relevant sections which will typically be named specifically.
+[online][8]. It's quite long (more than 6k lines of code). You don't need to read the whole thing, maybe you can
+just give it a quick skim. The most relevant sections which will typically be named specifically, but you probably
+won't gain too much from anything other than the CPU and GPU implementations of the nodes themselves.
 
 ## What's in a Tensor2D?
 First of all we are going to start on the CPU.
 We are going to create a data type which will hold the data our operators consume on the CPU.
 Let's call it ```Tensor2D```. Our 2D tensor will actually be a simple piece of one dimensional memory under the
 hood and we will keep track of the number of rows and columns to find out how to access each piece of data.
-If you are in the root directory for ```computational_graphs``` go to ```src::shared::tensor_2d.rs``` or
-[online][9].
+If you are in the root directory for ```computational_graphs``` go to ```src::shared::tensor_2d.rs``` or check
+it out [online][9].
 
 Start by taking a look at the definition of the ```Tensor2D``` struct at the very top. The ```derive``` stuff
 is asking some macros to automatically implement (derive) some traits (interfaces and behavior).
@@ -133,15 +135,15 @@ This creates a complete and total copy of ```some_tensor```. If we manipulate or
 ```copy_of_some_tensor``` will not be affected as they no longer have anything to do with each other.
 
 Next, take a look at the ```new``` function. In it, we create a new ```Tensor2D``` by creating a new
-```Vec<f32>``` with size ```row_count*column_count```. Each element is given a value of ```scale*index```.
+```Vec<f32>``` with size ```row_count * column_count```. Each element is given a value of ```scale * index```.
 This is just for testing purposes so I found it useful for this to not be all zeros and not all random numbers.
 This allows us to verify that the GPU implementations are functionally equivalent to the CPU implementations.
 
 We don't need to otherwise relate to the values of ```row_count``` and ```column_count```. Even if we implement
 a two dimensional structure on top of a piece of one dimensional memory, when we are iterating through all
 elements, such as we do when setting all of the elements to some value or accumulating the sum of all elements
-we can do away with the two dimensional stuff. Keeping up that illusion unneccesarily induces extra cost
-in the form of more time and code spent on control flow statements like ```for-loops``` and ```if-statements```.
+we can do away with the two dimensional stuff. Keeping up that illusion unneccesarily incurs additional
+costs in the form of more time and code spent on control flow statements like ```for-loops``` and ```if-statements```.
 
 ## Implementing Operators
 In this section I will be going through various implementations of the three operators and their fused variants
@@ -160,8 +162,8 @@ you should be using the preallocated version to not have memory allocations in y
 Let's go down to the ```linear_preallocated``` function. There are three main sections. One is
 the call to the ```debug_assert``` function from earlier, to check for valid input and output dimensions, the
 second is the matrix multiplication which needs three whole for-loops and finally the bias section. Note
-the use of linearized accesses, if you need a reminder what that is all about, go back to
-[The Vector][2] section.
+the use of linearized accesses, if you need a reminder what that is all about, go back to the
+[Enter the Matrix][2] section.
 
 It's not too bad, but we could do better, although we won't do more efficient implementations of matrix
 multiplication, note that the read accesses of the weights tensor is strided. We could have implemented that some
@@ -173,7 +175,7 @@ While you think about that in the back of your mind, I'll take a quick detour to
 finnicky concept - inlining!
 
 Inlining in Rust, and most other languages, is done via an annotation to the compiler. It is usually more of a hint
-or request than an actual instruction. In Rust, it looks like the derivation of traits we saw earlier -
+or request than an actual instruction to the compiler. In Rust, it looks like the derivation of traits we saw earlier -
 ```#[inline(always)]```. In that case it actually is more of a command. There's other variants you can put inside
 the parantheses like ```#[inline]```, which is more of a suggestion, or ```#[inline(never)]```. Inlining
 is basically taking all calls to that function and replacing it with the actual code from the function.
@@ -194,6 +196,12 @@ through all elements. I also elected to not accumulate the result of each output
 tensor. Instead, I accumulate in a local variable, which will hopefully be kept in a register.
 
 Think back! Where is the register located? And why can it be problematic to accumulate the sum in the output tensor?
+
+??? note "Registers"
+
+    Registers are located right next to the ALU (arithmetic logic unit). The ALU does math, whereas the register supplies
+    the data. A register is the memory located physically closest to the ALU and is thus the fastest memory we can use.
+
 
 The bias is the same. But that does mean we are writing to the same output element twice. Let's move the bias
 calculation into the matrix multiplication loop. ```linear_optimized``` moves the bias to just
@@ -223,12 +231,14 @@ The x-axis is the size of the tensors. Only NxN matrices are used. The y-axis is
 lines are piecewise linear. There are two points where all of the lines get quite a bit slower and scale worse
 with the size of the tensors. Why do you think that is?
 
-You guessed it! You are seeing the size of the tensor becoming too big for the different caches! It looks like the
-last bend happens at 4096 elements. This corresponds to a 64x64 matrix. 4096 elements of 32-bits, or 4 bytes, each
-corresponds to 16384 bytes, or 16 KB. We have 4 of these tensor structs, so we should have total allocations of
-64 KB just for that data and then add in all of the other memory used by the application and everything else
-running on the laptop at the time. But then again, the sampling is quite sparse. You can try and add more data
-points and see if you can narrow down the sizes of your caches.
+??? note "Why does it get a lot slower twice?"
+
+    You guessed it! You are seeing the size of the tensor becoming too big for the different caches! It looks like the
+    last bend happens at 4096 elements. This corresponds to a 64x64 matrix. 4096 elements of 32-bits, or 4 bytes, each
+    corresponds to 16384 bytes, or 16 KB. We have 4 of these tensor structs, so we should have total allocations of
+    64 KB just for that data and then add in all of the other memory used by the application and everything else
+    running on the laptop at the time. But then again, the sampling is quite sparse. You can try and add more data
+    points and see if you can narrow down the sizes of your caches.
 
 This might be a good time to experiment with changing the values in ```lib.rs``` for
 
@@ -283,15 +293,17 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 Note the huge difference between the naive version and the other ones. Why do you think there is
 this huge difference?
 
-You guessed it! All of the other functions have either preallocated the output matrix, or do the
-operations inplace. Since the ReLU operation is so simple, it becomes easily dominated by allocation
-and memory costs. The difference between the preallocated version and the inplace version is not as big, but
-still substantial enough to warrant the optimization. Inlining on the other hand didn't make a big difference
-in this case. It is still doing one read and one write after all.
-Go back and look at how much was gained by inlining the much more complex linear operator
-in the previous benchmark! Go on!
+??? note "Why is there a big difference?"
 
-Inplace operations are also available in PyTorch. The ReLU actually has a flag for the
+    You guessed it! All of the other functions have either preallocated the output matrix, or do the
+    operations inplace. Since the ReLU operation is so simple, it becomes easily dominated by allocation
+    and memory costs. The difference between the preallocated version and the inplace version is not as big, but
+    still substantial enough to warrant the optimization. Inlining on the other hand didn't make a big difference
+    in this case. It is still doing one read and one write after all.
+    Go back and look at how much was gained by inlining the much more complex linear operator
+    in the previous benchmark! Go on!
+
+Inplace operations are also available in PyTorch. The ReLU functon actually has a flag for the
 [inplace version][4].
 
 ### Softmax
@@ -335,7 +347,7 @@ matrix multiplication.
 
 Now let's add in the softmax operator. Take a look at ```linear_relu_softmax_fused_fission``` and
 ```linear_relu_softmax_fused```. In the fission version, the max value is found in the same loop as
-the bias and ReLU computation. In fused version, bias, ReLU and max are all moved into the ending of the
+the bias and ReLU computation. In the fused version, bias, ReLU and max are all moved into the ending of the
 matrix multiplication loop.
 
 Finally, checkout the results in your output folder! Or if you couldn't run them locally I have
@@ -357,9 +369,7 @@ as they don't do softmax, but between the two of them it is again the version wi
 at the end of the matrix loop which wins ever so slightly.
 
 It's hard to make a general conclusion based on that, without going a lot deeper, but in any case,
-you should always test and measure! Now, you can either continue on reading the material
-or go to the next section to get a general introduction to GPUs. We will be using the GPU on
-your laptop, with no CUDA involved, to see if we can make this even faster.
+you should always test and measure!
 
 _________________
 
@@ -384,7 +394,7 @@ compute shader driven.
 
 [0]: https://devblogs.microsoft.com/directx/d3d12-work-graphs-preview/
 [1]: https://gpuopen.com/gpu-work-graphs-in-vulkan/
-[2]: https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#the-vector
+[2]: https://absorensen.github.io/the-guide/m1_memory_hierarchies/s1_basic_data_structures/#enter-the-matrix
 [3]: https://en.wikipedia.org/wiki/Loop_optimization
 [4]: https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html
 [5]: https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#graphs-and-trees
