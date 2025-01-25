@@ -621,6 +621,7 @@ section to make you feel worse.
 <figcaption>
 Ready for more?
 <a href="https://i.kym-cdn.com/photos/images/original/001/745/106/e66.jpg">
+Image credit </a>
 </figcaption>
 </figure>
 
