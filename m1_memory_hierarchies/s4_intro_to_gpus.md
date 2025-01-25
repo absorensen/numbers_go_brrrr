@@ -487,7 +487,7 @@ of a hit due to each thread havin their own program counter. The program counter
 of which line of code is currently being executed. Thus the GPU no longer has to divide the work group
 into execution paths. Now the individual threads might just be moving down different paths at the same time,
 which is just bad performance. They could for example be sampling from different data, at which point we
-are back at the whole "threads should maximally share cache lines" thing. 
+are back at the whole "threads should maximally share cache lines" thing.
 
 Once you have most of your work groups not diverging, are you sure your threads aren't just sitting around
 waiting? Whenever a thread wants to load a piece of data all the way from memory, it can take quite a long
