@@ -403,9 +403,9 @@ Because of the way threads and work groups share memory on a GPU, and each threa
 code at the same time, if thread A calls for memory at indices 0, 1, 2, 3 and thread B, which is right next to it
 in the same work group, calls for indices 4, 5, 6, 7, they will be asking for two different cache lines at the
 same time. Imagine the whole work group doing this at the same time. They will all be waiting, while
-requesting different cache lines. What is normally faster, is, if given a work group size of 32,
+requesting *different cache lines*. What is normally faster, if given a work group size of 32,
 thread A calls for indices 0, 32, 64 and 96, with thread B calling for indices 1, 33, 65 and 97. This allows for
-the work group to call for a minimum of cache lines in lock step and each getting a piece of the cache line.
+the work group to call for a minimum of cache lines in lock step and each thread getting a piece of each cache line.
 This is called *coalesced accessing* and if you ever say that to a GPGPU programmer, you will see a faint smile on
 their face. Think of a jigsaw puzzle, where the pieces are slowly being adjusted.
 Eventually, they all snap into place. All of the pieces fit exactly right.
@@ -461,7 +461,7 @@ along the rows instead.
 In other cases, using a stride of the work group size can work as well. In this case, stepping along the rows
 made better sense, but keep thinking in these terms, implement different versions and test them! It's the
 only way to be sure! Once you have made a couple of different versions and done simple timing you can always
-add in a profiler, m4 has got you covered!
+try using a profiler.
 
 ## Divergence, Overlap and Occupancy
 One statement I tried to sweep under the rug in the last section was - "each thread in a work group executes
@@ -482,7 +482,12 @@ Image credit </a>
 
 As you can imagine, this expands the timeline of executing the code compared to a non-diverging execution.
 But if you were within a workgroup where all threads take the same branch there wouldn't be an issue.
-Thankfully, recent hardware takes less of a performance hit when work groups diverge.
+Thankfully, some recent hardware takes less of a performance hit when work groups diverge. They take less
+of a hit due to each thread havin their own program counter. The program counter is a variable keeping track
+of which line of code is currently being executed. Thus the GPU no longer has to divide the work group
+into execution paths. Now the individual threads might just be moving down different paths at the same time,
+which is just bad performance. They could for example be sampling from different data, at which point we
+are back at the whole "threads should maximally share cache lines" thing. 
 
 Once you have most of your work groups not diverging, are you sure your threads aren't just sitting around
 waiting? Whenever a thread wants to load a piece of data all the way from memory, it can take quite a long
@@ -496,22 +501,21 @@ the more time a physical execution unit spends on doing actual work and not just
 is ready. So you can either launch a lot of independent work, or use a lot of elements in your data.
 Like really big matrices!
 
-In machine learning terms, if you have pipelined and made your computational graph
-relatively independent, you might see a big increase in occupancy by using less layers and make the ones left very
-wide.
+In machine learning terms, if you have pipelined and made your computational graph relatively independent,
+you might see a big increase in occupancy by using fewer layers and make the ones left very wide.
 
 ## Shared Memory and Synchronization
 Just two final pieces are missing before we go back to memory hierarchies. Shared memory and synchronization.
 GPU's have more programmable pieces of the memory hiearchy, such as sharing directly between threads, sharing
-between work groups and more, but WGSL just has the primitives for shared memory, which is the only one
-I will present for you. Shared memory is a programmable section of the L1 cache. If a cache miss, resulting
-in retrieving data all the way from memory costs 100's of cycles, quite often somewhere around 250-300,
-accessing data from shared memory costs around 10 cycles. This is very useful if each piece of data is
-accessed more than once. It could for example be overlaps in convolutions or storing preliminary results
-in shared memory for the work group to finally reduce the results internally in the workgroup, before one
-of the threads writes the final result to global memory.
+between work groups and more, but I will just focus on the primitives for shared memory. Shared memory is a
+programmable section of the L1 cache on Nvidia architectures. This might differ on other GPUs like Intel and AMD.
+A cache miss, resulting in retrieving data all the way from memory, costs 100's of cycles. A rule of thumb used
+to be around 250-300 cycles. Accessing data from shared memory costs around 10 cycles. This is very useful if
+each piece of data is accessed more than once. It could for example be overlaps in convolutions or storing
+preliminary results in shared memory for the work group to finally reduce the results internally in the
+workgroup, before one of the threads writes the final result to global memory.
 
-Typically using shared memory, you will first see a section where each thread loads one or more pieces
+Typically when using shared memory, you will first see a section where each thread loads one or more pieces
 of data into shared memory, followed by a synchronization primitive. This synchronization primitive
 is available in wgsl and is called ```workgroupBarrier();```. It is available in most shader languages,
 although it will likely be named something else. It is a barrier ensuring that all threads in the
@@ -596,7 +600,7 @@ I hope convolution makes sense now. Scattering and gathering are two different w
 simple process which has quite an impact on performance. If we were doing 1D convolution on a GPU, from which
 point of view do we program the threads? If they are scattering, they take the point of view of each input element.
 Each element takes its own value, multiplies by a filter value and accumulates in the output array. Now we have a
-whole segment of threads which can all read from their own input element completely unobstructed, but which have
+whole segment of threads which can all read from their own input element only once, but which have
 a huge amount of contention as they have to synchronize their writes to either shared or global memory for the
 output. This also removes the ability for each thread to accumulate the result locally in a register. If they
 instead followed the gathering paradigm, each thread would take the point of view of their own output element.
@@ -606,10 +610,20 @@ should always prefer more reads than writes. Reads are very parallelizable, writ
 
 This can be extended to lots of different algorithms. For matrix multiplication, it's recommended to use
 gathering, from the point of view of the output element for each thread. For some more material on
-scattering and gathering, there is a paper on it
-[from '07][10].
+scattering and gathering, there is a paper on it [from '07][10].
 
 ## A Histogram of Violence
+If these concepts still feel a bit iffy, here's a rambling and slightly incoherent
+section to make you feel worse.
+
+<figure markdown>
+![Image](../figures/tisbutascratch.jpg){ width="700" }
+<figcaption>
+Ready for more?
+<a href="https://i.kym-cdn.com/photos/images/original/001/745/106/e66.jpg">
+</figcaption>
+</figure>
+
 Let's take things a bit further and look at shared memory, scattering, gathering,
 and programming for memory hierarchies with a case study of computing a histogram.
 
@@ -697,18 +711,18 @@ the corresponding bin. Why is this incorrect?
     This could happen continuously, resulting in invalid results.
 
 What we can do instead is to use a synchronization method called atomics.
-Atomics will be further introduced in the next module. But they're
+Atomics will be further introduced in the concurrency module. But they're
 basically very small locks which usually have hardware support, meaning
 they support a very limited set of operations, but they are quite fast
-and happen closer to the data. A rule of thumb is that the more generic
-locks you might want to use for areas of memory, whereas atomics are good
-for elements of data. Atomics ensure that all writes happen
-correctly, which has a different meaning based on your requirements,
-but ensuring this correctness, even with hardware support, is slower
-than not using it as only on incrementation can happen at a time.
+and happen closer to the data. Atomics are good for either single elements of
+data or however many data elements you can pack into 32- or 64-bit values.
+It is system, API and extension dependant what is supported. Atomics ensure
+that all writes happen correctly, which has a different meaning based on
+your requirements, but ensuring this correctness, even with hardware support,
+is slower than not using it, as only one incrementation can happen at a time.
 It can also be a lot slower if the atomic operation is not available
 in hardware and has to be software emulated instead.
-WGSL has atomics available, and they can be called as such -
+WGSL has atomics available, and they can be called on like this -
 
 === "WGSL"
 
@@ -716,7 +730,7 @@ WGSL has atomics available, and they can be called as such -
         atomicAdd(&output[index], 1u);   
     ```
 
-We also have declare the affected array as being atomic, and we have to
+We also have to declare the affected array as being atomic, and we have to
 provide a correct size at compile time.
 
 === "WGSL"
@@ -779,20 +793,19 @@ data is being shared between threads, and in order to ensure correctness we have
 to use synchronization methods, thus slowing each thread down that ends up waiting
 for access to the data through the synchronization mechanism.
 
-The greater the ratio between amount of bins and the amount of threads, the
-greater the contention. This is almost true. However, the data generated for
-this example is uniformly distributed. There is an even amount of data going
-into each bin. If the data had instead been skewed towards the smaller bin
-indices, the contention is greater for a few bins and smaller for the rest.
-However, for our function to complete all of them need to be finished, so
-we are likely to be bottlenecked by the most hotly contended bins.
+The greater the ratio between threads to bins, the greater the contention. This
+is almost true. However, the data generated for this example is uniformly distributed.
+There is a uniform amount of data going into each bin. If the data had instead been
+skewed towards the smaller bin indices, the contention is greater for a few bins
+and smaller for the rest. However, for our function to complete, all of them need
+to be finished, so we are likely to be bottlenecked by the most hotly contended bins.
 
 One way to mitigate this, is to move some of the contention to a faster
 layer in the memory hierarchy. As I wrote earlier, with GPU's we're allowed
-to explicitly program a section of the L1 cache named shared memory.
+to explicitly program a section of memory named shared memory.
 With shared memory, we also need to know the size at compile time. We basically
 treat this as a stack allocated array that is shared between all threads in a
-work group. We can also declare need to declare it as atomic in WGSL.
+work group. We can also need to declare it as atomic in WGSL.
 The code can be found in ```histogram_shared.wgsl``` -
 
 === "WGSL"
@@ -838,10 +851,10 @@ The code can be found in ```histogram_shared.wgsl``` -
     }
     ```
 
-Now the code has two new elements. First off, for each thread in the work group,
+Now the code has two new elements. First off, each thread in the work group,
 we really have to start thinking in terms of the work group now, has to load
 a data element from memory. Then we move some of the contention of the binning
-into shared memory. We now have a small, very fast array in L1 cache, where our
+into shared memory. We now have a small very fast array where our
 32 threads can create a sub histogram. We still need the atomic operations for
 synchronization, but contention is now much cheaper. A rule of thumb is the speed
 of access in RAM vs. L1 cache/shared memory is 30 to 1. So, each thread loads
@@ -859,7 +872,7 @@ of the shader, wherein different things will happen. You have to think of these
 sections as being distinct and as such what indices were used in the first section
 don't necessarily have a relation to the indices in the second section.
 The second thing, coalescing, is something I will get to once I have done the
-paedagogical wrong way to do things example below, also found in
+"paedagogically wrong way to do things"-example below, also found in
 ```histogram_non_coalesced.wgsl``` -
 
 === "WGSL"
@@ -990,7 +1003,7 @@ first parts. One thing we are missing in the first section is coalesced accessin
 As the threads in the work group share cache lines, threads should generally avoid reading
 from global memory completely incrementally. Instead we likely want a work group sized stride
 in order to get coalesced accesses. If you feel iffy about what that concept was, go back and
-read about it, it's very important. If the explanation in this guide isn't enough for you
+read about it. It's very important. If the explanation in this guide isn't enough for you
 to feel at ease with the concept, try looking it up on the interwebz.
 
 Now for the next iteration of the shader, which you can find in ```histogram_local.wgsl``` -
@@ -1067,7 +1080,7 @@ we could do to improve the scaling of the solution would be to use a dense array
 and global arrays, it is a bit complicated/expensive to make them sparse given that we are using
 atomics for synchronization, so I'll just focus on one easy way to lower our register pressure.
 Using a sparse array for our local histogram. This array will use every second array entry as
-a histogram bin index and the every second plus one entry as the count. In this case our scaling
+a histogram bin index and every second plus one entry as the count. In this case our scaling
 of the local array becomes two times the number of elements per thread, instead of the number
 of output bins. Our shared histogram still scales with with the number of output bins.
 You can find the shader in ```histogram_sparse_unoptimized.wgsl``` -
@@ -1238,7 +1251,7 @@ reminiscent of how hash maps are implemented.
 
 Some alterations were made. The what made the biggest difference was splitting up ```local_histogram[]``` into
 two arrays, which also meant I could just base their sizes on ```ELEMENTS_PER_THREAD```. This is quite in
-line with branchless program, which will be introduced in the module about real-time systems.
+line with branchless programming, which will be introduced in the module about real-time systems.
 I made some additional tweaks that gave a small, but reasonably consistent boost, trying to limit
 the amount of times the local data is looped by keeping track of the first unoccupied space.
 
@@ -1318,14 +1331,14 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 <figure markdown>
 ![Image](../figures/histogram_benchmark_true_10_4.png){ width="700" }
 <figcaption>
-Setting data size to 2000000, output bins to 10, 4 data elements per thread and random data.
+Setting data size to 2000000, output bins to 10, 4 data elements per thread and shuffled data.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
 
-As I'll remind you, the two middle shaders have a scaling issue when it comes to local memory. They HAVE
-to allocate a ```bin_count``` sized array as there are no guarantees in terms of data. The last two
+As I'll remind you, the two middle shaders have a scaling issue when it comes to local memory. They MUST
+allocate a ```bin_count``` sized array as there are no guarantees in terms of data. The last two
 scale their thread local memory with ```elements_per_thread```. So let's try upping both of those -
 
 <figure markdown>
@@ -1340,7 +1353,7 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 <figure markdown>
 ![Image](../figures/histogram_benchmark_true_64_32.png){ width="700" }
 <figcaption>
-Setting data size to 2000000, output bins to 64, 32 data elements per thread and random data.
+Setting data size to 2000000, output bins to 64, 32 data elements per thread and shuffled data.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
@@ -1363,22 +1376,22 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 <figure markdown>
 ![Image](../figures/histogram_benchmark_true_1024_8.png){ width="700" }
 <figcaption>
-Setting data size to 2000000, output bins to 1024, 8 data elements per thread and random data.
+Setting data size to 2000000, output bins to 1024, 8 data elements per thread and shuffled data.
 This benchmark was run on my laptop boasting an Intel i7-1185G7, 3.0 GHz with 32GB of RAM. The operating system was
 Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
 
-Here we can see the total collapse of the ```histogram_local.wgsl``` as it overloads its register file due to
+Here we can see the total collapse of the ```histogram_local.wgsl``` as it probably overloads its register file due to
 allocating too much thread local memory. ```histogram_shared.wgsl``` also does worse than expected due to the
 size of what it has to allocate in shared memory. Interestingly ```histogram_sparse.wgsl``` still performs
 well. It is worth noting that the naive version performs significantly better when the input data is random.
 This can sometimes be seen when implementations are bound by contention. Distributing the data evenly and
 randomly can mitigate contention. You are more than welcome to play around with these numbers yourselves and
-see what sort of behavior you can elicit. In the end, these different implementations are good at different
-scenarios. If you were building a library function for computing histograms, you might implement the four main
-ones and use some heuristic to select which one to run in order to get the optimal running time. If I were to
-just choose two I would go for the atomic and sparse. The simpler implementations are likely to be good
+see what sort of behavior you can elicit from your own system. In the end, these different implementations are
+good at different scenarios. If you were building a library function for computing histograms, you might implement
+the four main ones and use some heuristic to select which one to run in order to get the optimal running time. If
+I were to just choose two I would go for the atomic and sparse. The simpler implementations are likely to be good
 enough for a bunch of scenarios, whereas the sparse version seems to scale very well and uses a
 significantly smaller amount of threads. Having more threads available could allow us to run more inputs
 and invocations at the same time and assembling these subhistograms at the end.
