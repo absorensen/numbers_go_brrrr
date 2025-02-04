@@ -232,7 +232,6 @@ Why do you think that is?
     This would result in multiple threads having write access to the same data. Which in computer science circles
     is considered a big no-no.
 
-
 <figure markdown>
 ![Image](../figures/rayon_benchmark_level_3_convolution.png){ width="600" }
 <figcaption>
