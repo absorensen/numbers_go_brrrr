@@ -1,12 +1,12 @@
 # Building a Computational Graph
-Ok, so now we have the basic building blocks ready. I have introduced what computational graphs are, we have
-taken a quick look at what GPU's are and we also have a very simplifying set of constraints.
-Given our constraints we can represent our graph as a series of nodes in a list. This list needs to be
-runnable on both the CPU and the GPU, so we'll look at how we can make a CPU graph runner and a GPU
-graph runner which can interpret the same list of commands and still work just fine. First we are
-going to do this on the CPU, then the GPU. Then we are going to run the GPU graph in a loop instead
-of reconstructing it every iteration. This also the part where we really start to let loose, creating
-graphs of different sizes, creating arbitrary permutations of linear and ReLU nodes and seeing what
+Ok, so now we have the basic building blocks ready. I hope I sufficiently introduced what computational
+graphs are. We have taken a quick look at what GPU's are and we also have a very simplifying set of
+constraints. Given our constraints we can represent our graph as a series of nodes in a list. This
+list needs to be runnable on both the CPU and the GPU, so we'll look at how we can make a CPU graph
+runner and then a GPU graph runner which can interpret the same list of commands and still work just fine.
+First we are going to do this on the CPU, then the GPU. Then we are going to run the GPU graph in a loop
+instead of reconstructing it every iteration. This also the part where we really start to let loose,
+creating graphs of different sizes, creating arbitrary permutations of linear and ReLU nodes and see what
 the benchmarks can show us.
 
 ## Building the CPU Graph
@@ -30,15 +30,16 @@ Imagine a physics engine. Sure, you could just represent everything as a float o
 the absence of human errors, or we could create new types which makes sure that we don't mix up
 Newtons per second and meters per second. We can even ensure that only certain operations are available
 for a ```NewtonsPerSecond``` type. One of those operations could be a
-```GarbblediGook(&self, meters_per,_second: &MetersPerSecond) -> NewtonMetersPerSecondPerSecond```
-function (sorry, I'm not a physicist), which would nudge us towards correct type usage. Getting back to
-our graph system, in much the same way, our ```GraphRunner``` found in ```src::graph::graph_runner.rs```
-can take in a ```Vec<GraphOperator>``` and output a verified ```Vec<Node>``` which contains not only
-verified data and dimensions, but additional information. So what happens for the ```HostToDevice``` and
-```DeviceToHost``` on the CPU is basically just dimension verification. Just keeping track of which buffer
-goes where. You can almost think of it as a passthrough operation. It is used when verifying the
-dimensions and when creating the buffers needed to run the graph, but at run time, encountering an
-```Input``` or ```Output``` operator does nothing.
+```GarbblediGook(&self, meters_per_second: &MetersPerSecond) -> NewtonMetersPerSecondPerSecond```
+function (sorry, I'm not a physicist), which would nudge us towards correct type usage.
+
+Getting back to our graph system, in much the same way, our ```GraphRunner``` found in
+```src::graph::graph_runner.rs``` can take in a ```Vec<GraphOperator>``` and output a verified
+```Vec<Node>``` which contains not only verified data and dimensions, but additional information.
+What happens for the ```HostToDevice``` and ```DeviceToHost``` operators on the CPU is basically just
+dimension verification. Just keeping track of which buffer goes where. You can almost think of it
+as a passthrough operation. It is used when verifying the dimensions and when creating the buffers
+needed to run the graph, but at run time, encountering an ```Input``` or ```Output``` operator does nothing.
 
 === "Rust"
 
@@ -72,6 +73,11 @@ amount of buffers it needs to reference. Using indices like this also means we d
 smart pointers and the transfer of data from one operator to the next is handled by having indices to
 the same buffer, as well as our graph being executed sequentially, so we don't need to worry about
 only one access happening to a buffer at a time as only one operator will be running at a time.
+
+Another option could be to store all the buffers in a hash maps / dictionaries and use hashes as keys.
+This would however still requires us to keep track of how many references there was to each buffer
+before removing it. A hash map is also a fundamentally more difficult structure to maintain and
+index into than an array.
 
 Ok, so now we've rummaged around a little bit, try to go back to the files relevant to the CPU graph
 and see what they're doing. Don't worry about understanding the ```sorted_mutable_references```
@@ -110,7 +116,7 @@ It uses the indices to share data between operators.
     ```
 
 Note the ```DeviceToDevice``` operator is in there now. It is just a transfer of data from one
-operator to the next. It actually does nothing in itself, but it is used by operators to get the previous
+operator to the next. It actually does nothing in itself, but is used by operators to get the previous
 operators output and it outputs a ```DeviceToDevice``` itself to send its output to the next operator.
 This simplifies our handling of the inputs and outputs and makes the communication between
 operators explicit instead of depending on implicit communication. This isn't actually that much
@@ -125,7 +131,7 @@ and enqueued in a command buffer. Once all operators have been added to the queu
 not a synchronization, but the commands are submitted to the queue. The synchronization does not happen
 until the result are retrieved.
 
-In the next section, s5, we will look at how a system could take the computational graph and aside from
+In the next section we will look at how a system could take the computational graph and aside from
 verifying and translating, actually optimize, given the knowledge of the graph. I will also run
 a benchmark so you can see the differences in our assortment of implementations.
 
@@ -134,7 +140,8 @@ _________________
 ## Borrow Checking a Graph?
 Ok, so what if we actually wanted a more complex, and applicable in real-world circumstances?
 We ironically need to deal with the issues that Rust enforces through the borrow checker.
-If we have one node writing to multiple other nodes, that is fine.
+If we have one node writing to data read by multiple other nodes, that is fine. Under the hood
+wgpu handles synchronization such that the data is not read before written.
 
 <figure markdown>
 ![Image](../figures/graph_this_is_fine.png){ width="400" }
@@ -161,14 +168,14 @@ Multiple nodes writing to the same buffer is not fine.
 Multiple nodes writing to the same buffer is not correct, unless they either write only to
 specific sections, such as if concatenation takes place and node A might exclusively write
 to indices 0-16, with node B exclusively writing to indices 17-32. Either that or we
-have to use synchronization through mechanisms like atomics (more about that in m2)
-to ensure that the calculations are correct. This is essentially what the borrow
-checker enforces in Rust. You either hand off one part of memory to one writer
+have to use synchronization through mechanisms like atomics (more about that in the
+concurrency module) to ensure that the calculations are correct. This is essentially
+what the borrow checker enforces in Rust. You either hand off one part of memory to one writer
 and another part of memory to another writer (slice references) for exclusive access
 or you use the more expensive synchronization primitives to make the reads and writes
 to those elements sequential.
 
-Unfortunately, ```wgpu``` and ```WGSL``` don't have a borrow checker, and we have to do that
+Unfortunately, ```WGSL``` don't have a borrow checker, and we have to do that
 analysis ourselves. Sometimes it can make sense to actually do this contentious writing
 to a shared buffer anyway, as the synchronized version can be expensive enough that
 absolute correctness might not be worth the cost. But if you feel you need to introduce this

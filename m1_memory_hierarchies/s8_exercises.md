@@ -41,6 +41,9 @@ You have an array of dimensions ```MNK``` in a linearized array ```data```, writ
 through all data elements using three for-loops and triples the value in place.
 
 ## m1::e2 - Killing the Garbage Collector
+We learned about cyclical references earlier. These cycles can make it difficult for garbage collected
+languages, such as Python, to free up unused memory.
+
 <figure markdown>
 ![Image](../figures/harass_the_garbage_collector.png){ width="500" }
 <figcaption>
@@ -49,7 +52,7 @@ Where would you add a pointer to hurt garbage collection the most?
 </figure>
 
 Adding which pointer would result in the most nodes not being properly garbage collected?  
-If the garbage collector implements cycle detection to depth 2 adding which pointer would break it?
+If the garbage collector can detect cycles with up to three edges adding which pointer would break it?
 The nodes can't point to themselves.  
 
 <figure markdown>
@@ -62,6 +65,11 @@ How could you make this sort of general graph, with very few restrictions, safe 
 In the case of the multiply connected nodes, can you come up with a structural solution which allows
 us to make arbitrary graphs in a garbage collected setting or safe in a C++/Rust setting?
 
+??? note "Hints"
+
+    * Could you use a combination of strong and weak pointers?
+    * Could you make a version which depended on indices in an array instead?
+
 ## m1::e3 - Gathering Histograms
 Extend the program in ```code::gpu_histogram``` with a shader which uses the gathering paradigm, instead
 of scattering.
@@ -69,11 +77,13 @@ of scattering.
 ??? note "Hints"
 
     * If the data is unsorted, each thread or work group will need to run through the entire data set.
+    You can also only have one thread per histogram bin. Or if you got real spiffy, one work group per
+    histogram bin if you used a shared memory reduction.
 
 ## GPU Programming
 This serves as both one of the few instances where we can explicitly program parts of the memory hierarchy
-(shared memory resides in the L1 cache), but also as an introduction to parallel thinking, which you will
-need in the next module. A useful tool for calculating offsets in WGSL can be found [here][3]
+(shared memory resides in the L1 cache on Nvidia GPUs), but also as an introduction to parallel thinking,
+which you will need in the next module. A useful tool for calculating offsets in WGSL can be found [here][3]
 The exercises here are fitting as a hand-in if you are doing a course. From experience,
 just doing the 1D convolution is plenty complicated for someone coming from Python. You'll get the point of how
 to use shared memory doing it. Doing matrix multiplication as well is good practice, but not strictly necessary.
@@ -81,7 +91,8 @@ to use shared memory doing it. Doing matrix multiplication as well is good pract
 ??? note "Hints"
 
     * You have to hard code the size of the shared memory array, there are ways around it, but they are outside
-    the scope of the exercise. Just pick a size that is bigger than your work group size.
+    the scope of the exercise. Just pick a size that is bigger than your work group size or use the technique
+    introcued in the histogram computation section.
     * A common issue is for people to forget to set the correct size for shared memory arrays. In other
     languages, indexing outside of an array might get you a catastrophic error, such as a segmentation fault.
     In WGSL, it depends on the implementation. But one behavior spotted in the wild is replication of the
@@ -90,8 +101,8 @@ to use shared memory doing it. Doing matrix multiplication as well is good pract
     * Try to think of the part of your shader which loads values into shared memory as completely distinct
     from the part of your shader which is using that data. This includes which thread ID's corresponds to
     which piece of data.
-    * Don't be disheartened when the first version of your code isn't faster than the non-shared memory version
-    of your shader is faster once you've mitigated branching through padding. The 1D convolution problem
+    * Don't be disheartened when the first version of your code isn't faster than the non-shared memory version.
+    Your shader will be faster once you've mitigated branching through padding. The 1D convolution problem
     doesn't maximally expose memory bandwidth problems as well as the harder matrix multiplication
     (a 2D problem). You might see the shared memory version pull ahead once you have completed some of
     the improvements suggested in the next item.
@@ -113,7 +124,7 @@ For the second section, also in ```gpu_hand_in``` you need to do a matrix multip
 tiled matrix multiplication (using shared memory). You should also try out doing a padded version.
 
 ## GPU Puzzles
-Thankfully, WebGPU (the API which Wgpu tries to stick to) is gaining traction. Some very nice
+Thankfully, WebGPU (the API which wgpu tries to stick to) is gaining traction. Some very nice
 people have made some online learning tools for you to learn more paradigms with. It's a fun
 way to learn without having to deal with too much set up. You can find the puzzles [here][1]
 and [here][2].

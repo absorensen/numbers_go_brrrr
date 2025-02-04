@@ -1,6 +1,6 @@
 # Building a Computational Graph Compiler
-Ok, so we are almost done with this module. Let's put it all together and execute the graphs,
-except I have three more variations to explain before I present the benchmark plots. This is where everything
+Ok, so we are almost done with this module. Let's put it all together and execute the graphs.
+Except, I have three more variations to explain before I present the benchmark plots. This is where everything
 will pay off and we can see the performance improvements we get from formulating programs as graphs and
 optimize them.
 
@@ -61,13 +61,14 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figure>
 
 As we can see from the benchmarks, if you have small enough matrices, it can at some point be more efficient to just
-use the CPU. But the graph running in a loop seems to be better overall. If you were a machine learning
-researcher, these graphs are sort of an overview of why you should use a system that formulates a computational
-graph, and why you should use optimization on that graph if it is available. The difference in performance you pay
-for. Either with your time or your budget. So if you use something like PyTorch, do be sure to optimize, and be
-sure to check whether the ```torch.compile()``` function works for your setup. Next up is the concurrency module
-where you will be introduced, very superficially, to a couple of different concepts in concurrency. Hopefully,
-this will help you to understand stuff like model distributed parallelism and data distributed parallelism.
+use the CPU. But the graph running in a loop seems to be better overall. If you were programming machine learning,
+these graphs are sort of an overview of why you should use a system that formulates a computational
+graph, and why you should use optimization on that graph if it is available. The difference in performance is
+something you pay for. Either with your time or your compute budget. So if you use something like PyTorch, do be sure to
+optimize, and be sure to check whether the ```torch.compile()``` function works for your setup. Next up is the
+concurrency module where you will be introduced, very superficially, to a couple of different concepts in
+concurrency. Hopefully, this will help you to understand stuff like model distributed parallelism and data
+distributed parallelism.
 
 _________________
 
@@ -80,7 +81,7 @@ queue and then waiting for it to complete, we could just add all of the operatio
 So far so good. But what did the fused versions do?
 
 When calculating the linear operation, it kept the output in the threads register and applied the ReLU function
-once the data in register before storing it in the GPU's RAM and dispatching a new compute shader.
+on the data in register before storing it in the GPU's RAM and dispatching a new compute shader.
 One of the suggested exercises is to optimize the linear shader. In any case that should involve tiling and
 shared memory. That would mean that the matrix multiplication would need the work group to act in
 coordination and load in tiles of the matrices into shared memory (L1 cache) and synchronize, in order for
@@ -91,10 +92,9 @@ queue, submit and wait N times. If we found the correct tools to tell the GPU to
 
 ## The Results and the Caveats
 Ok, so we just saw some results previously. I am mostly concerned with showing you the relative timings, otherwise
-I probably wouldn't be benchmarking on a laptop, but there a number of caveats that might make the benchmarks
+I probably wouldn't be benchmarking on an underpowered laptop, but there a number of caveats that might make the benchmarks
 look slightly different. Some of these I might fix if/when I get the time, some are left as potential exercises,
 as again, this is more of an introduction to a bunch of concepts, and you get the point at this point hopefully.
-Point.
 
 Anyways, the ```Tensor2DGPU``` currently allocates a staging buffer, even for the ones that don't need it.
 If this was made optional, immediate mode computation would do an allocation less, so would all of the other
@@ -132,9 +132,9 @@ two buns, which technically qualifies as a burger. This will be delivered quite 
 frowned upon in a restaurant to play with your food so you have to eat the pickles as they come.
 But you do technically get your pickles. Another option is to realize that a burger is just a
 stack of ingredients, or a list of op codes, and it would be much easier to send the burger
-back to the kitchen (compilation) for them to just slide in a few pickles. Using op codes
-makes our code so much more complex, but it allows us a great amount of flexibility. If we
-found out we were running on a GPU with a much bigger L1 cache, we might change how we
+back to the kitchen (compilation) for them to just lift up some of the ingredients and slide in a
+few pickles. Using op codes makes our code so much more complex, but it allows us a great amount
+of flexibility. If we found out we were running on a GPU with a much bigger L1 cache, we might change how we
 handled shared memory programming. If we were doing a render graph with a number of image-based
 single pixel operations such as tone mapping, changing hues or saturation, we might use op codes
 to merge these several different calls, keeping the data as close to the registers as possible.
