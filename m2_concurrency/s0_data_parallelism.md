@@ -1,13 +1,13 @@
 # Data Parallelism
 Now let's get into working with parallelism, I won't start from basic to advanced, but from
 easiest to most difficult to use. The absolute easiest to use, in Rust at least, is data parallelism
-through iterators. This will sequence of methods, concluding in ```m2::s3```, will show you how formulating your
+through iterators. This sequence of methods, culminating in ```m2::s3```, will show you how formulating your
 problem as an iterator with no interdependence between the iterations can give you a nice CPU-based parallel
 speedup by changing a term or two.
 
 [Data parallelism][0] partitions the data into segments for each thread. The way we are going to look at it
-in Rust is very simple as it is a trivial extension of the idiomatic way of writing Rust,
-as in so trivial you need to import a library and prefix your iterator with ```par_```. The library will
+in Rust is very simple as it is a trivial extension of the idiomatic way of writing Rust.
+As in so trivial you need to import a library and prefix your iterator with ```par_```. The library will
 take care of the rest for you. However, as we'll see later, this isn't necessarily the fastest, but if we
 think about the amount of parallelism available in our system and the nature of our data, we can do
 something very very simple and easy to make data parallelism the fastest of the easy methods of
@@ -17,9 +17,9 @@ or that you make your input read-only and each thread can output to its own segm
 The next sections will be heavily inspired by the book "Programming Rust"'s multiple implementations of
 [Mandelbrot][1] image generation. If you don't know about the Mandelbrot image, you can see what that's
 all about [here][2]! Ok, so I will start off talking about the parallel part of things. First off,
-lets look at [Rayon][3], which is the easiest way of doing parallelism in Rust.
+lets look at [Rayon][3], which I find to be the easiest way of doing parallelism in Rust.
 
-To use Rayon, we just have to formulate our computations as iterators. Under the hood Rayon divvies up the work
+To use Rayon, we just have to formulate our computations as iterators. Under the hood, Rayon divvies up the work
 into chunks and distributes it to a fitting amount of threads. It also does something called work stealing where if
 one thread is done with its work sooner it gets work from one of the other threads. This is really good
 for very uneven workloads like generating Mandelbrot images or path tracing. Again, this is the easiest
@@ -108,14 +108,14 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 Ok, so what actually happened here? For the first three lines, we have an extremely small workload per element.
 We are very likely just limited by memory bandwidth. The simplest implementation seems to win out. Rayon needs to
 make sure it has the amount of threads ready and to distribute the work. Think of it like adding a for-loop. It's
-extra administration. Much like real life, simple processes rarely need complex administration. But once
+extra administration. Much like real life, simple processes and tasks rarely need complex administration. But once
 we add a more complex workload the simple for-loop and the iterator seem to converge to the same performance,
 whereas the ```.par_iter()``` from Rayon begins to win out. If we gave each element an even heavier workload,
 it is likely that the performance gain from Rayon would increase. Personally, I have used Rayon to parallelize
 a path tracer, starting with a range of all the pixels and then having Rayon distribute the workload of
 path tracing every pixel. In that case we have a VERY complex workload and I saw an almost linear scaling
 compared to the amount of threads available. I wouldn't recommend it, but if you want to see a larger system
-you can check it out [here][5]. The parallelization can be found in ```render_pixel()``` [here][6] and the
+you can check it out [here][5]. The parallelization can be found in ```render_pixel()``` [here][6] and
 ```render()``` [here][7].
 
 So, now that we can conclude that Rayon can be really good and easy to use for some things, let's move on
@@ -226,6 +226,12 @@ element at a time, we now use ```.windows()```, which takes an argument. This ar
 If we for example give it the size 3 it will return elements 0, 1 and 2 for the first iteration, then
 elements 1, 2 and 3 for the second iteration. This isn't available in a ```.windows_mut()``` like ```.iter_mut()```.
 Why do you think that is?
+
+??? success "Answer"
+
+    This would result in multiple threads having write access to the same data. Which in computer science circles
+    is considered a big no-no.
+
 
 <figure markdown>
 ![Image](../figures/rayon_benchmark_level_3_convolution.png){ width="600" }

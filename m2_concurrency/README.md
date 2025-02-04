@@ -1,11 +1,11 @@
 # Concurrency
-Ok, so in the memory hierarchies module we looked at parallelism in the form of GPU-parallelism. In many ways,
+Ok, so in the memory hierarchies module we looked at parallelism in the form of GPU parallelism. In many ways,
 I find it to be an easier introduction to the concept of parallelism. The threads need to be tightly coordinated
 and you need to make sure you have a clear model of which memory is available to all threads, which memory is
 available inside a work group and which memory is exclusive to the single thread. Programming GPU's can be a bit
 mind bending and as such I wanted to put it in early to allow you some time to get used to that way of thinking.
 
-Parallelism and concurrency are often used interchangably, but they aren't necessarily the same.
+Parallelism and concurrency are often used interchangably, but they aren't the same.
 [Concurrency][0] is when we run several calls at once, but they aren't necessarily running on two
 different physical cores. This could for example be the downloading of several files at once. Things are
 happening in the background, the process doesn't necessarily need to sit and wait for the first file
@@ -21,7 +21,7 @@ mechanisms. In creating longer running CPU-based parallel programs you will like
 a bunch of these mechanisms along with your accrued knowledge of data races, as enforced by the
 borrow checker in Rust. Additionally, I will introduce a few more concepts in GPU programming in ```m2::s6```.
 
-Anyways, why do we need parallelism in CPU's? Eventually, the clock frequencies, as in how many times
+Anyways, why do we need parallelism in CPUs? Eventually, the clock frequencies, as in how many times
 per second a processor can do something, more or less flattened out. We get increased performance by
 either doing things in a smarter way or by increasing the amount of processors, either through
 a massive amount of parallelism in an accelerator, such as a GPU or through adding more processors.
@@ -66,7 +66,7 @@ Image credit</a>.
 </figcaption>
 </figure>
 
-But in actuality, working with parallelism takes restraint and consideration. Like a watchmaker placing
+But in actuality, working with concurrency takes restraint and consideration. Like a watchmaker placing
 tiny gears with a pincette. If we look back at the way we constructed computational graphs in
 ```m1```, we were able to parallelize internally in each node/operator, but if we had very small
 matrices with a big depth, we would more or less be unable to do any parallelization, as the launching
@@ -92,7 +92,7 @@ All of these put one thing into the center of everything. Can you guess it?
     a [hierarchical hash map][https://www.researchgate.net/publication/354065094_Practical_Spatial_Hash_Map_Updates]
     performed siginifcantly better for some types of algorithms on the GPU.
 
-Once you have the correct CPU based implementation, you should start asking yourself, where is this going to
+Once you have the correct CPU-based implementation, you should start asking yourself, where is this going to
 run and how is the memory accessed in order to accomplish what I want to do?
 
 ## Here Be Dragons
@@ -101,7 +101,7 @@ interactions. Thread 1 won't necessarily execute before thread 8, and the way yo
 will have to take that into account.
 
 Along the way, you will encounter a number of hazards. Especially race hazards are prevalent. The race condition
-happens when at least one thread is writing while one or more are writing or reading. Typically, these types
+happens when at least one thread is writing while one or more threads are writing or reading. Typically, these types
 of bugs can be very hard to find due to some part of your code being serialized once you try to find the bug or
 due to the multithreading, the execution might be non-deterministic.
 
@@ -112,7 +112,8 @@ When you decide you want to parallelize your application, you almost always have
 will be running on. Do you expect to run it on users' laptops, will you have GPUs available, will it be running
 in a data center with powerful, very expensive GPUs, will you be using an integrated GPU on a laptop, will
 it run on the edge or in the cloud? I will assume you are running on your own laptop or desktop for following
-along, but running on multiple data center GPUs seems to be all the rage these days, so I will keep that in mind.
+along with this guide, but running on multiple data center GPUs seems to be all the rage these days,
+so I will keep that in mind.
 
 ## Rust and Concurrency
 Each language has its own implementations of concepts in concurrency, but I will focus on showing you the ones
