@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1943,27 +1943,27 @@
 
 
 <h1 id="floats">Floats</h1>
-<p>Where as signed integers have two distinct areas of the bits with a uniform precision, floats
-have 3 segments and a wildly varying precision. In the more-or-less standard
-IEEE-754 specification we also have a number of exceptions and specific behaviors such as in which situations
+<p>Whereas signed integers have two distinct areas of the bits with a uniform precision, floats
+have three segments and a wildly varying precision. In the more-or-less standard
+IEEE-754 specification we additionally have a number of exceptions and specific behaviors, such as in which situations
 a float locks to a NaN value. Given the use cases in machine learning new, smaller and less standard floating point
 formats have emerged such as bfloat16. A lot of these very small specialized types of floats, or very small integers
-are required to work with tensor core accelerators.</p>
+are required to work with tensor core accelerators, in other contexts they might be known as cooperative matrices.</p>
 <p>I can't explain exactly how a float works much better than the <a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic">wiki</a>. Ever so slightly browsing the
 page about <a href="https://en.wikipedia.org/wiki/IEEE_754">IEEE-754</a> also makes good sense.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/invincible_fraction.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/invincible_fraction.png" width="700" /></a></p>
 </figure>
-<p>So, now that you've browsed the websites and your are familliar with concepts such as exponent and fraction, I
+<p>So, now that you've browsed the websites and you are familliar with concepts such as exponent and fraction, I
 have a few key concepts for you to make note of. If you can at all keep your floats as close to being between
--1.0 and 1.0, you will keep as much of your precision as possible. 4.0 / 3.0 is not the same in terms of precision
-as 4.0 * (1.0 / 3.0), unless the inverse number that you are multiplying with is exactly 1/2^N. This is an often
-used optimization as a multiplication is much cheaper than a division. You will typically see this optimization
-if a division by a constant is happening in a loop -</p>
+-1.0 and 1.0 as possible, you will keep as much of your precision as possible. 4.0 / 3.0 is not the same numerically
+as 4.0 * (1.0 / 3.0), unless the reciprocal that you are multiplying with is exactly 1/2^N.
+Multiplication by the reciprocal is an oft used optimization as a multiplication is much cheaper than a division. 
+You will typically see this optimization if a division by a constant is happening in a loop -</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Rust</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_constant</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_constant</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="n">f</span><span class="p">;</span>
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="k">for</span><span class="w"> </span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">    </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">some_constant</span><span class="p">;</span>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="p">}</span>
@@ -1975,8 +1975,8 @@ if a division by a constant is happening in a loop -</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Rust</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_constant</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="p">;</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">inverse_some_constant</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">some_constant</span><span class="p">;</span>
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kd">let</span><span class="w"> </span><span class="n">some_constant</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5.0</span><span class="n">f</span><span class="p">;</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">inverse_some_constant</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="n">f</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">some_constant</span><span class="p">;</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="k">for</span><span class="w"> </span><span class="n">element</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">data</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">*</span><span class="n">element</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">inverse_some_constant</span><span class="p">;</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">}</span>
@@ -1995,15 +1995,77 @@ get a smaller error by first adding the two smaller numbers and then adding the 
 number to the big number. Taking things further, if you had a large list of numbers, you could sort them
 and add them from smallest to biggest. But, the number in which you accumulate your sum might quickly
 become much bigger than the individual elements. An alternative method if you have a large list
-of numbers, is summing them pairwise, recursively (like a tree reduction). This will yield a
+of numbers, is sorting, then summing them pairwise, recursively (like a tree reduction). This will yield a
 smaller error. This is one of the reasons for the increased numerical precision in the
 <a href="https://en.wikipedia.org/wiki/Fast_Fourier_transform#Accuracy">butterfly FFT algorithm</a>, compared to naive summation.</p>
 <p>Another aspect of reducing errors in summation of floats is the precision at which you accumulate.
-This is quite important for working with cooperative matrics/tensor cores. You can reduce the memory
-requirements and the memory bandwidth usage, by storing your weights in 16-bit floats, but
+This is quite important for working with cooperative matrices/tensor cores. You can reduce the memory
+requirements and the memory bandwidth usage by storing your weights in 16-bit floats, but
 accumulating in 16-bit would yield poor results. Instead you can accumulate in a 32-bit float or even
 a 64-bit float, which will be kept locally in a register anyway, and then once accumulation is
-complete the accumulated sum, in 32-bits, can be cast down to 16-bits and written to memory.</p>
+complete, the accumulated sum, in 32-bits, can be cast down to 16-bits and stored in memory.</p>
+<p>Finally, one thing to be aware of is catastrophic cancellation. If you have two numbers with a very small difference
+the result of a subtraction can yield a number with a very high associated error. Try to avoid differences with results
+very close to 0 -</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">a</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.10001</span><span class="p">;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">c</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">15.0</span><span class="p">;</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">result</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;result           {:.32}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>One way to mitigate this is to reorder the operations to represent the same operations, but avoiding catastrophic cancellation.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Rust</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="language-rust highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">fn</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">a</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">;</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">b</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.10001</span><span class="p">;</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">c</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">15.0</span><span class="p">;</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">result</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;result           {:.32}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">reordered_result</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="p">;</span>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;reordered_result {:.32}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">reordered_result</span><span class="p">);</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">difference</span><span class="p">:</span><span class="w"> </span><span class="kt">f32</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kt">f32</span><span class="p">::</span><span class="n">abs</span><span class="p">(</span><span class="n">reordered_result</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">result</span><span class="p">);</span>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">    </span><span class="fm">println!</span><span class="p">(</span><span class="s">&quot;difference {:.32}&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">difference</span><span class="p">);</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="p">}</span>
+</span></code></pre></div>
+</div>
+</div>
+</div>
+<p>When you run the code however, the difference is 0. If we change the scale of b, however,
+we get to showcase a difference -</p>
+<div class="language-text highlight"><pre><span></span><code>```rust
+fn main() {
+    let a: f32 = 0.1;
+    let b: f32 = 0.101;
+    let c: f32 = 15.0;
+
+    let result: f32 = a + c - b;
+    println!(&quot;result           {:.32}&quot;, result);
+
+    let reordered_result: f32 = a - b + c;
+    println!(&quot;reordered_result {:.32}&quot;, reordered_result);
+
+    let difference: f32 = f32::abs(reordered_result - result);
+    println!(&quot;difference {:.32}&quot;, difference);
+}
+```
+</code></pre></div>
+<p>Now we get a difference of 0.00000095367431640625000000000000. This isn't a huge numeric impact,
+but it adds up if this additional error is accumulated across millions of calculations without
+ever being reset.</p>
 <h2 id="additional-reading-highly-recommended">Additional Reading - Highly Recommended</h2>
 <p>Every floating point operation incurs some form of error. But if you used specialized floating point operations
 such as the <a href="https://en.wikipedia.org/wiki/Multiply%E2%80%93accumulate_operation">fused multiply-add</a>, which can be found <a href="https://doc.rust-lang.org/std/primitive.f32.html#method.mul_add">in Rust as well</a>, you can get a
@@ -2036,7 +2098,7 @@ the now fairly common <a href="https://www.danielecarbone.com/reverse-depth-buff
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 15, 2025</span>
   </span>
 
     
@@ -2169,7 +2231,7 @@ the now fairly common <a href="https://www.danielecarbone.com/reverse-depth-buff
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});

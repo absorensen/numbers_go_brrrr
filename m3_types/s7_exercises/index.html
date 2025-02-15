@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -2061,7 +2061,7 @@ method of summation on GPU's. If you want to get nuts, we can get nuts, you can 
 <a href="https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf">iterative tree reduction</a> on the GPU.</p>
 <h2 id="sorting">Sorting</h2>
 <h3 id="m3e1-radix">m3::e1 - Radix</h3>
-<p>Simply but <a href="https://en.wikipedia.org/wiki/Radix_sort">Radix</a> -, or bucket-, sorting numbers sorts them one digit at a time. Eventually, once all digits
+<p>Simply but <a href="https://en.wikipedia.org/wiki/Radix_sort">Radix</a>-, or buckets sorting numbers sorts them one digit at a time. Eventually, once all digits
 have been sorted, all of the numbers will be sorted. There are some very advanced, very parallelizable, versions
 of Radix sort, but try to do <a href="https://brilliant.org/wiki/radix-sort/">a simple one</a>.</p>
 <p>Generate a list of integers. Start with a small one where you can visually verify that your sorting is correct.
@@ -2072,8 +2072,8 @@ with each other? Do you do it while iterating or at the end?</p>
 verify programmatically, that every element is equal to or bigger than its predecessor. Unless it is element 0,
 of course.</p>
 <h3 id="m3e2-morton">m3::e2 - Morton</h3>
-<p>Morton coding not quite sorting, but we can generate a new number which gives better spatial coherence to data.
-Which can then be sorted by the <a href="https://en.wikipedia.org/wiki/Z-order_curve">Morton code</a>. Briefly put, in the 2 dimensional case, we interleave the bits of
+<p><a href="https://en.wikipedia.org/wiki/Z-order_curve">Morton coding</a> is not quite sorting, but we can generate a new number which gives better spatial coherence to data.
+Which can then be sorted by the <a href="https://en.wikipedia.org/wiki/Radix_sort">Radix sort</a>. Briefly put, in the two dimensional case, we interleave the bits of
 two 4 bit numbers, <code>x</code> and <code>y</code>, as <code>y3x3y2x2y1x1y0x0</code>. This results in a z-order curve as described in
 <a href="https://absorensen.github.io/the-guide/m3_types/s4_bit_tricks/">bit tricks</a>. Note that you have a maximum amount of precision in your input numbers. If you are generating
 a 64-bit Morton code at most for 3 dimensions, you have at most 64-bits to spare. If you want an isotropic
@@ -2090,11 +2090,11 @@ just a few numbers you verify yourself, but then generate a couple of million nu
 get the <code>Vec3</code> from libraries like <a href="https://www.nalgebra.org/">nalgebra</a> and <a href="https://docs.rs/ultraviolet/latest/ultraviolet/">ultraviolet</a>.
 Find the minimum and maximum values in the ranges. Use spatial hashing as described in <a href="https://absorensen.github.io/the-guide/m3_types/s4_bit_tricks/">bit tricks</a> to sort the
 points into buckets in a <code>HashMap&lt;u32, Vec&lt;Vec3&lt;f32&gt;&gt;</code>. Use 10 bits of precision for each coordinate.</p>
-<p>Once you have done this, perhaps too literal, bucket sort, quantize each point in each buckets collection of points
+<p>Once you have done this, perhaps too literal, bucket sort, quantize each point in each bucket's collection of points
 relative to the placement of the bucket in which it resides. From there turn the quantized points into
 Morton codes. Do you need to adjust the resolution of your quantization to accomodate the range of the Morton codes?</p>
-<p>Once you have the Morton code version of your points, use Radix sort on each bucket's list of morton codes.</p>
-<p>Now, use delta encoding to limit the variety of numbers present in each list. Now, find a compression crate to
+<p>Once you have the Morton code version of your points, use Radix sorting on each bucket's list of Morton codes.</p>
+<p>Now, use delta encoding to limit the variety of numbers present in each list. Next, find a compression crate to
 write the lists to disk in zipped format. Write one file for each bucket and name each file the corresponding
 spatial hash of the bucket.</p>
 <p>Load all of the buckets from disk, de-delta encode all points, un-interleave them and finally de-quantize all of the
@@ -2122,7 +2122,7 @@ numbers.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 15, 2025</span>
   </span>
 
     
@@ -2255,7 +2255,7 @@ numbers.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});

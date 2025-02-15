@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1967,15 +1967,16 @@
 
 
 <h1 id="threads">Threads</h1>
-<p>Now I will introduce how to explicitly define a thread and give it some work to do. This can be very good for
-workloads which are long running and data largely independent.</p>
+<p>Now let's look at how you can explicitly define a thread and give it some work to do. This can be very good for
+workloads which are long running and with each thread's data being largely independent.</p>
 <p>This section is somewhat based on <a href="https://doc.rust-lang.org/book/ch16-00-concurrency.html">The Book</a>.
 In the last section we looked at what a parallelization library like Rayon can do. Under the hood, it does
 quite a lot of stuff. It subdivides a collection, in the examples I showed you, these collections were all
 <code>Vec&lt;T&gt;</code>, and it then allocates these chunks of the collection to some threads it gets from <em>somewhere</em>.
 This allows us to create small pockets of parallelism, or if your formulate it slightly differently, even
 quite long running programs.</p>
-<p>But what if we wanted to control threads explicitly? Each thread might do something differently, do something
+<p>But what if we wanted to control threads explicitly? Each thread might do something completely differently,
+and not just run the same program on subdivisions of the same data. The threads might do something
 long running, only act in reaction to an event or some data being sent, in that case, Rayon might get a bit
 confusing, and we don't necessarily want the thread to terminate until the very end of our program.</p>
 <h2 id="what-is-a-thread">What is a Thread</h2>
@@ -1987,8 +1988,8 @@ the same thing as the amount of cores in your CPU. More physical cores on the ot
 multiple threads in parallel, where as a single physical core can only run multiple threads concurrently.</p>
 <p>I really hope that makes sense. You should probably read it again...</p>
 <p>Lots of threads are running on your computer at any time. At the time of writing, I can open up Task Manager in
-Windows 10 and click the Performance tab too see that I have a whopping 4693 threads and 303 processes running.
-The number keeps changing, it won't stand still. I certainly don't have 4693 cores in my laptop.
+Windows 10 and click the Performance tab to see that I have a whopping 4693 threads and 303 processes running.
+The number keeps changing, it just won't stand still. I certainly don't have 4693 cores in my laptop.
 It is actually 4 cores with 8 logical processors, so if I were to partition my program into N number of
 threads, I would probably default to suggest the program to use 8 threads, maybe more.</p>
 <p>These threads can execute, wait for a bit, be swapped in and out for other threads. In our programs we can both
@@ -2001,8 +2002,8 @@ thread pool. A thread pool is some data structure which keeps a bunch of threads
 running free or returning to the operating system, to quickly wake them up and give them some work to do, before
 they can be returned to the thread pool again.</p>
 <h2 id="launching-a-thread">Launching a Thread</h2>
-<p>For this section I have a project ready in <code>m2_concurrency::code::threads</code> or you can find it
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/threads">online</a>.</p>
+<p>For this section I have a project ready in
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/threads">m2_concurrency::code::threads</a>.</p>
 <p>Go to the <code>basic_threading</code> function. In it we launch some threads using the standard libraries
 <code>thread::spawn()</code> and give it a closure to execute. Each thread, including the main thread
 will print their name in a loop, waiting for a bit after each print. I get the following output -</p>
@@ -2021,7 +2022,7 @@ The threads might still be alive when the main thread is done executing.</p>
 <h2 id="joining-wishing-waiting">Joining, Wishing, Waiting</h2>
 <p>Another thing we could do, is to hold on to each thread handle. That would allow us to make sure that
 all threads were done before exiting. Go to the function <code>basic_threading_with_termination</code> and see how that can
-done.</p>
+be done.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/threads_basic_threading_with_termination.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_basic_threading_with_termination.png" width="200" /></a></p>
 <figcaption>
@@ -2042,8 +2043,8 @@ or its execution path joins the main threads execution path.</p>
 <p>Now, try and answer the following - why do we do the <code>.join()</code> calls in that order, and why is the program
 correct despite the threads being done with their small programs in random order?</p>
 <p>Next, go to the function <code>basic_threading_with_scope</code>. In this function I use the library <code>crossbeam</code>.
-It is one of the defacto standard libraries for parallelism in Rust. To launch the threads I use crossbeams
-spawner, which lets it keep track of the threads for me.
+It is one of the defacto standard libraries for parallelism in Rust. To launch the threads I use crossbeam's
+spawner, which lets it keep track of the threads for us.
 I then proceeed to use a scope. It is just like the scope we normally have in Rust, but for executing threads
 until the end. This is equivalent to the loop of <code>.join()</code>s we just had.</p>
 <figure>
@@ -2061,19 +2062,19 @@ track of the lifetimes of our threads.</p>
 sections I will get into ways you can share data between threads and synchronize.</p>
 <hr />
 <h2 id="crossbeam-instead-of-rayon">Crossbeam Instead of Rayon</h2>
-<p>For this section I have a project ready in <code>m2_concurrency::code::parallelism</code> or you can find it
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">online</a>.
-Once again, just like in the <code>data_parallelism</code> section,
+<p>For this section I have a project ready in
+<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">m2_concurrency::code::parallelism</a>.</p>
+<p>Once again, just like in the <code>data_parallelism</code> section,
 we are looking at a homogenous workload in two different versions, a VERY simple version that just doubles
 all numbers in a vector and one that does something slightly more complicated, but it is still very
 homogenous. Later on you will be asked to look at the presented techniques in a more heterogeneous context
 where stuff like work stealing has a much bigger effect.</p>
-<p>I will be looking at what happens if we know more about the problem than our library.
+<p>We will be looking at what happens if we know more about the problem than our library.
 We can both help Rayon along to become faster, and use facilities from crossbeam to improve our performance.</p>
 <p>So what is it we are doing?</p>
-<p>We are just going to split the workload ourselves. <code>parallelism()</code> contains 2 sections of with a number
+<p>We are just going to split the workload ourselves. <code>parallelism()</code> contains 2 sections with a number
 of benchmarks each. Each benchmark of the different approaches is hidden behind a flag in <code>main()</code>.
-The data is split into chunks, that is a vector of reference slices of size
+The data is split into chunks, that is, a vector of reference slices of size
 <code>chunk_size</code>. The last chunk will not have the same size as the others.
 The first section is the double function and the second section is the slightly more complex functions.
 Once again, the workloads are completely homogenous. It should take the same amount of time to execute any
@@ -2081,11 +2082,11 @@ randomly chosen segment of size N, except the last one.
 The first benchmark is completely vanilla single threaded execution.
 The second benchmark is using Rayon to parallelize the execution of chunks.
 The third benchmark is using Rayon to parallelize execution of the original dataset, with no chunks.
-This is the normal way we would use Rayon.
+This is the default way we would use Rayon.
 Finally, the fourth benchmark uses <code>crossbeam::scope()</code> to launch <code>thread_count</code> jobs with low administrative
 overhead. To enable these bencharks, set the following flags to <code>true</code> in <code>main()</code> - <code>single_thread</code>,
-<code>rayon</code> and <code>crossbeam_scope</code>.
-Let's look at the results -</p>
+<code>rayon</code> and <code>crossbeam_scope</code>.</p>
+<p>Let's look at the results -</p>
 <figure>
 <p><a class="glightbox" href="../../figures/threads_crossbeam.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/threads_crossbeam.png" width="600" /></a></p>
 <figcaption>
@@ -2127,7 +2128,7 @@ a number of threads is more free to optimize however it wants.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 15, 2025</span>
   </span>
 
     
@@ -2260,7 +2261,7 @@ a number of threads is more free to optimize however it wants.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});

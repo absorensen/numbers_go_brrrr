@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1914,14 +1914,14 @@
 
 <h1 id="energy-efficiency">Energy Efficiency</h1>
 <p>From experience, not a lot of people who daily write quite long-running code, necessarily
-connect the two dots - computing and energy consumption/CO<sub>2</sub> emissions. Anything you
+connect the dots - computing, energy consumption and CO<sub>2</sub> emissions. Anything you
 do with a computer consumes some form of electricity. Including whatever you do on the internet.
 Like downloading the contents of this page for you to read. Generally, if your code is faster, it is greener.
 If your code downloads less, it is likely to be greener. If you use a lower precision, generally, it is likely
 to be greener. If you accumulate work to do, as in batching, instead of firing up the system for every
 single request, it is likely to be greener. If you preprocess the data at the edge before sending it to the
 cloud, it is likely to be greener. If your code is faster, it is likely to greener. If your code is faster,
-it is likely to be cheaper.</p>
+it is likely to be monetarily cheaper.</p>
 <p>I will primarily focus on the energy efficiency of things you have direct control over. Once you
 have learned that, you should be able to infer the rest. Why not make this a more advanced or optional topic?</p>
 <p>Because quite a few people don't seem to be making the aforementioned connection, and I find it
@@ -1954,14 +1954,14 @@ Image credit </a>
 </figure>
 <p>As you can see, retrieving a value all the way from RAM instead of a cache is vastly more expensive. If you
 think back to the cache lines from <code>m1</code> imagine lowering the precision of your data from 32-bit floats
-to 16-bit or even 8-bit. Imagine many additional data elements you could fit in a single cache line.
+to 16-bit or even 8-bit. Imagine how many additional data elements you could fit in a single cache line.
 Elements which could be reused and kept in cache.</p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p><a href="https://arxiv.org/pdf/1703.09039.pdf">Efficient Processing of Deep Neural Networks</a> is a highly
 recommended tour through various concerns and techniques in reducing the energy footprint of
 neural networks. <a href="https://www.youtube.com/watch?v=WbLQqPw_n88">A recorded lecture of Vivienne Sze about energy efficiency in AI</a> is also available.
 Other forays into energy efficiency includes <a href="https://ieeexplore.ieee.org/document/5598316">characterizing energy consumption of CPUs</a>,
-<a href="https://en.wikipedia.org/wiki/Green_computing">green Computing</a> and <a href="https://geekflare.com/green-coding/">what is green coding?</a>. The somewhat controversial paper -
+<a href="https://en.wikipedia.org/wiki/Green_computing">green computing</a> and <a href="https://geekflare.com/green-coding/">what is green coding?</a>. The somewhat controversial paper -
 <a href="https://www.sciencedirect.com/science/article/pii/S0167642321000022">Ranking programming languages by energy efficiency</a> compares different programming languages on the basis
 of energy consumption, speed and memory consumption.</p>
 
@@ -1986,7 +1986,7 @@ of energy consumption, speed and memory consumption.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 15, 2025</span>
   </span>
 
     
@@ -2119,7 +2119,7 @@ of energy consumption, speed and memory consumption.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});

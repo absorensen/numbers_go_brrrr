@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1857,26 +1857,31 @@
 
 <h1 id="bitwise-operations">Bitwise Operations</h1>
 <p>Bitwise operations are operations we do on individual bits of integers. In general, doing bitwise operations on
-floats are frowned upon, if not undefined behavior. Doing individual bit operations allows us to squeeze lots
-of data into very little space which means we can keep more data cached. As we'll see later on, bitwise operations
-pose an alternative to standard binary operations such as &amp;&amp; and ||, which is a huge boon when optimizing code
-with <a href="https://absorensen.github.io/the-guide/m4_real_time_systems/s4_branchless_programming/">branchless programming</a>.</p>
+floats are frowned upon, if not undefined behavior.</p>
+<figure>
+<p><a class="glightbox" href="../figures/bitwise_float_to_jail" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../figures/bitwise_float_to_jail" width="700" /></a></p>
+</figure>
+<p>Doing individual bit operations allows us to squeeze lots of data into very little space which means we can
+keep more data cached and cache lines better utilized. As we'll see later on, bitwise operations pose an
+alternative to standard binary operations such as &amp;&amp; and ||, which is a huge boon when optimizing code with
+<a href="https://absorensen.github.io/the-guide/m4_real_time_systems/s4_branchless_programming/">branchless programming</a>.</p>
 <p>After that little aside, let's get back to a more direct description of how we work with types.
 We don't just have the mathematical operators which we can use on integers and floats, taken
 directly from mathematics, like *, /, +, -, %, but we can operate directly on the bits themselves, which
 is specific to the underlying implementation of types. Before we start, I should probably say (write?) that
-it is at minimum bad practice, if not outright triggering a compiler error, to do bitwise operations on
+it is, at minimum, bad practice, if not outright triggering a compiler error, to do bitwise operations on
 floating point numbers. In most cases it is recommended to use integers, and if you do not view the
 variable as a number at all but as an array of bits, also known as a
 <a href="https://en.wikipedia.org/wiki/Bit_array">bit array</a>, a bit mask, bit map, bit set, bit string or bit vector
 (make up your minds people!), it is recommended to use unsigned integers, or sometimes languages will have
-specific types just for better ergonomics when directly manipulating bits. In that case they might mimick
+specific types just for better ergonomics when directly manipulating bits. In that case they might mimic
 the vector operations quite closely, such as indexing the bit array, like <code>bit_vector[3]</code> to get the fourth
 bit. This is quite inefficient if you are manipulating more than a single bit at a time though. A bit vector type
-might also add some other operations, like counting the number of zeros and ones.</p>
+might also add some other operations, like counting the number of zeros and ones. In fact, the Rust <code>uxx</code>
+types like <code>u32</code>, have functions like <code>.count_ones()</code> and <code>.count_zeros()</code> available.</p>
 <p>Anyways. We have 5 of the most common bitwise operations right here: &gt;&gt; &lt;&lt; &amp; | ^ ~.</p>
 <p>The &gt;&gt; and &lt;&lt; operators are known as bit shifts. You might hastily assume that that <code>let shifted = input &gt;&gt; 2;</code>
-merely shifts all of the bits 2 steps to the right. This CAN be equivalent to integer division by 4 as the
+merely shifts all of the bits 2 places to the right. This CAN be equivalent to integer division by 4 as the
 bits fall off to the right. But what if <code>input</code> is a signed integer? In that case it can vary. Does
 it shift the sign along with it or does ignore the sign bit? The same with <code>let shifted = input &lt;&lt; 2;</code>.
 If input was <code>-2</code>, with a bit representation of <code>0b1111_1110</code> and we shift two places to the right we
@@ -1887,18 +1892,18 @@ and if you are playing around with bits for signed integers you should always lo
 are using's definitions of shifts on various types. That got a bit headscratchy, because one number
 representation had a special bit and 2's complement. Now imagine this, but with floating point numbers with
 three segments of bits instead. That's why we don't do bitwise operations on floats!</p>
-<p>The type of shift where the sign bit gets special treatment is
-called an arithmetic shift, where as the one treating the whole thing as just bits, is called logical shift. You
-can read more about it <a href="https://open4tech.com/logical-vs-arithmetic-shift/">here</a>, but I would recommend you stick
-to unsigned integers for bit manipulating stuff. It's less stuff to keep in your head.</p>
-<p>Next, let's look at the bitwise and, usually written as bitwise AND, probably to ensure you don't mistake it for
+<p>The type of shift where the sign bit gets special treatment is called an <em>arithmetic shift</em>, where as the one
+treating the whole thing as just bits, is called <em>logical shift</em>. You can read more about it <a href="https://open4tech.com/logical-vs-arithmetic-shift/">here</a>, but
+I would recommend you stick to unsigned integers for bit manipulating stuff. It's less stuff to keep in your head.</p>
+<p>Next, let's look at the bitwise and (&amp;), usually written as bitwise AND, probably to ensure you don't mistake it for
 linguistic addition. Bitwise AND has the same logical implications as the boolean &amp;&amp;. Two trues, or two 1's, result
 in a true or a 1. All other cases result in false or 0. But, the common &amp;&amp; does something else. It short circuits.
-If we take the statement <code>let is_correct = eval_a() &amp;&amp; eval_b();</code> and <code>eval_a()</code> returns false,
+If we take the statement <code>let is_correct: bool = eval_a() &amp;&amp; eval_b();</code> and <code>eval_a()</code> returns false,
 <code>eval_b()</code> is never called. This can be a boon for performance if <code>eval_b()</code> is very expensive, but
-can actually lead to worse performance in the case of <code>let is_correct = 0 &lt; some_number &amp;&amp; some_number &lt; max;</code>.
-I'll get back to that in <code>m2::s8</code>, which is about branchless programming. It's an advanced topic, which requires
-understanding some stuff about branch prediction, and especially bitwise- and conditional operations.</p>
+can actually lead to worse performance in the case of two cheap evaluations such as
+<code>let is_correct: b = 0 &lt; some_number &amp;&amp; some_number &lt; max;</code>. I'll get back to that in
+the section on branchless programming. It's an advanced topic, which requires understanding some stuff about
+branch prediction, and especially bitwise- and conditional operations.</p>
 <p>Anyways. When we do the bitwise AND we don't supply two booleans, we supply two integers or other bit
 representations. Don't do it with floats, even if the language allows you, it is needlessly complicated. The
 other number we supply is usually called a mask. We could for example have a number where we wanted to
@@ -1920,7 +1925,7 @@ isolate the first 8 bits and not be bothered by the rest. In that case we might 
 <div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">// Damn you 64-bits!</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">initial_value</span><span class="p">:</span><span class="w"> </span><span class="kt">u64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mb">0b10101010_10101010_10101010_10101010_10101010_10101010_10101010_11110101</span><span class="p">;</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kd">let</span><span class="w"> </span><span class="n">mask</span><span class="p">:</span><span class="w"> </span><span class="kt">u64</span><span class="w"> </span><span class="o">=</span><span class="w">          </span><span class="mb">0b11111111_00000000_00000000_00000000_00000000_00000000_00000000_00000000</span><span class="p">;</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kd">let</span><span class="w"> </span><span class="n">mask</span><span class="p">:</span><span class="w"> </span><span class="kt">u64</span><span class="w"> </span><span class="o">=</span><span class="w">          </span><span class="mb">0b00000000_00000000_00000000_00000000_00000000_00000000_00000000_11111111</span><span class="p">;</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kd">let</span><span class="w"> </span><span class="n">masked_value</span><span class="p">:</span><span class="w"> </span><span class="kt">u64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initial_value</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span><span class="w"> </span><span class="c1">// masked value should now be 0b11110101</span>
 </span></code></pre></div>
 </div>
@@ -1931,7 +1936,7 @@ isolate the first 8 bits and not be bothered by the rest. In that case we might 
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="language-rust highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1">// Damn you 64-bits!</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">initial_value</span><span class="p">:</span><span class="w"> </span><span class="kt">u64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3_074_457_345_618_258_677</span><span class="p">;</span><span class="w"> </span><span class="c1">// or 0x2AAA_AAAA_AAAA_AAF5</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kd">let</span><span class="w"> </span><span class="n">initial_value</span><span class="p">:</span><span class="w"> </span><span class="kt">u64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0x2AAA_AAAA_AAAA_AAF5</span><span class="p">;</span><span class="w"> </span><span class="c1">// or 3_074_457_345_618_258_677 </span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kd">let</span><span class="w"> </span><span class="n">mask</span><span class="p">:</span><span class="w"> </span><span class="kt">u64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mh">0xFF00</span><span class="w"> </span><span class="mi">0000</span><span class="w"> </span><span class="mi">0000</span><span class="w"> </span><span class="mi">0000</span><span class="p">;</span><span class="w"> </span><span class="c1">// FF is the same as turning 8 bits completely on. So 0xF == 0xb1111.</span>
 </span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kd">let</span><span class="w"> </span><span class="n">masked_value</span><span class="p">:</span><span class="w"> </span><span class="kt">u64</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">initial_value</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">mask</span><span class="p">;</span><span class="w"> </span><span class="c1">// Masked value should be 0x2A00 0000 0000 0000</span>
 </span></code></pre></div>
@@ -1965,7 +1970,8 @@ bandwidth and/or space, like "the router is in an error state" or "package recei
 have 64 flags in 64 bits! Or if we wanted to have a bunch of 3d voxels or an occupancy map which only carried
 a is there/is not there value, we could vastly reduce memory consumption by using bit operations. | and ^
 are the same except with a different logic table. || is sort of like |, or bitwise OR. One or more values
-need to be true. Where as with bitwise XOR it only returns 1 if a single bit is 1.</p>
+need to be true. Where as with bitwise XOR (^) it only returns 1 if a single bit is 1, but not if both are
+1's.</p>
 <p>Finally, we have the bitwise NOT. Usually written as ~. It is the bitwise version of !. It just flips all bits
 from 0 to 1 or from 1 to 0.</p>
 <hr />
@@ -2007,7 +2013,7 @@ reference for <a href="https://doc.rust-lang.org/reference/expressions/operator-
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 2, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 15, 2025</span>
   </span>
 
     
@@ -2140,7 +2146,7 @@ reference for <a href="https://doc.rust-lang.org/reference/expressions/operator-
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});

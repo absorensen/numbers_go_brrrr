@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1950,20 +1950,21 @@
 
 <h1 id="atomics">Atomics</h1>
 <p>If a lock, such as a mutex, is a horse, an atomic is a pony. Except, it's like a pony that's much faster than
-a horse. The smaller a region serialized through synchronization, the more potential concurrency we can have
+a horse. I'm not sure that metaphore worked...
+The smaller a region serialized through synchronization, the more potential concurrency we can have
 and the less likely things will go wrong. So what is an atomic?</p>
 <p>Atomic operations are a special kind of very small lock. Atomics are specific to certain data types
-and certain operations because there is sometimes hardware support for them. Now, whenever you see
-the term "hardware support" you should think "SPEED". This means that you can work quite fast using
+and certain operations because there is often hardware support for them. Now, whenever you see
+the term "hardware support" you should think ⚡ SPEED ⚡. This means that you can work quite fast using
 atomics, not as fast as not having any synchronization, but relative to the more cumbersome
 mutex, it is quite fast. You can even use atomics in GPU programming. One tricky thing can be if
 your language supports atomics, but your hardware doesn't. In that case the atomic operation will
-be emulated in software which will make your code inexplicably slower.</p>
+be emulated in software which will make your code slower.</p>
 <p>First off, let's look at the concept of memory ordering. Afterwards I'll describe a few different
 atomic functions you can use, and then finally look at what atomics are like in WGSL.</p>
 <p>Anyways, memory ordering.</p>
 <p>Various hardware platforms have different types of support for atomics. If we for
-example had a counter variable, it could for be used to sum an array, we could make sure that
+example had a counter stored in a variable, it could for be used to sum an array, we could make sure that
 the sum was correct while still being manipulated and accessed in a multithreaded setting by placing
 the counter inside an atomic. The nature of how the counter is incremented is then dictated by the
 memory ordering.</p>
@@ -2003,7 +2004,7 @@ the same time, but no locks have to be acquired. But this way of using atomics t
 from an array is made possible with all these functions which don't just swap, compare or fetch, but also
 do one more thing. We can increment and fetch to get our new data chunk!</p>
 <h2 id="crossbeam-and-atomics">Crossbeam and Atomics</h2>
-<p>Back to the storyline! Once again, go to <code>m2_concurrency::code::parallelism</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">online</a>.
+<p>Back to the storyline! Once again, go to <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">m2_concurrency::code::parallelism</a>.
 Set the <code>crossbeam_atomic_chunks</code> flag to true.</p>
 <p>So, I pulled in the <code>atomic_chunks_mut</code> crate from the mandelbrot example you will see later.
 It is a chunks iterator which uses atomics to increment an index. This allows each thread, whenever
@@ -2044,7 +2045,7 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figcaption>
 </figure>
 <p>Now try and spend some time playing around with the variables in <code>main()</code>.
-Especially stuff like chunk size, escape probability and complexity. In which cases does which techniques get
+Especially stuff like chunk size, escape probability and complexity. In which cases do which techniques get
 better or worse? Try and think about the types of workloads that are the most relevant to you and to reason
 about the differences in performance.</p>
 <h2 id="additional-reading">Additional Reading</h2>
@@ -2074,7 +2075,7 @@ which is even better.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 15, 2025</span>
   </span>
 
     
@@ -2207,7 +2208,7 @@ which is even better.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});

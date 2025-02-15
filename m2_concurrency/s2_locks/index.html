@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1934,29 +1934,27 @@
 <p>In this section we will take a look at a mechanism, the lock, for synchronizing when something is being worked on.
 This allows synchronization between threads. More than one thread can access the same piece of data as long as
 it is only the thread which holds the lock which can access it.</p>
-<p>We just took a look at how to launch and distribute some work to multiple threads.
-But we did some extra work to separate the data into neat chunks, with no overlap
-between which thread read and wrote to which data. So, how would we ensure
-correctness and performance (in that order!) if we had data which more than
-a single thread had access to? This requires working with the
-<a href="https://en.wikipedia.org/wiki/Shared_memory">shared memory model</a>.</p>
+<p>We just took a look at how to launch and distribute some work to multiple threads. But we did some extra
+work to separate the data into neat chunks, with no overlap between which thread read and wrote to which
+data. So, how would we ensure correctness and performance (in that order!) if we had data which more than
+a single thread had access to? This requires working with the <a href="https://en.wikipedia.org/wiki/Shared_memory">shared memory model</a>.</p>
 <p>As we saw earlier we can easily share read-only data between threads with the
 atomically reference counted construct in Rust, <code>Arc&lt;T&gt;</code>. But <code>Arc</code>
 cannot handle if even just one of the threads accessing some shared data
 needs write access. What we can do is to wrap our data in a lock. Locks can
 be used for all sorts of things, but this is just one example.</p>
-<p><a href="https://en.wikipedia.org/wiki/Lock_(computer_science)">Locks</a> come in different shapes and sizes,
-an often seen variant is the Mutex, short for mutual exclusion. A lock is used to ensure that only
-one thread can access a given region of code or data at a time. One potential implementation of this
-could be a lock using a binary
-<a href="https://en.wikipedia.org/wiki/Semaphore_(programming)">semaphore</a> protecting a piece of data.
-Any thread that wants to modify or read that piece of data will need to try to acquire the lock.
-If it is a spin lock, the thread will actively wait until it can acquire the lock. Once a thread
-has acquired a lock it is free to act inside the critical region guarded by the lock. Once it
-is finished it should release the lock. If this fails to happen, the threads who are waiting
-to acquire said lock will continue to wait indefinitely. If the thread currently holding the lock
-is stuck waiting to acquire a different lock, which it also won't ever acquire, one or more threads
-will be in a <code>deadlock</code>.</p>
+<p><a href="https://en.wikipedia.org/wiki/Lock_(computer_science)">Locks</a> come in different shapes and sizes, an often seen variant is the Mutex, short for mutual
+exclusion. A lock is used to ensure that only one thread can access a given region of code or
+data at a time. One potential implementation of this could be a lock using a binary <a href="https://en.wikipedia.org/wiki/Semaphore_(programming)">semaphore</a>
+protecting a piece of data.</p>
+<p>Any thread that wants to modify or read that piece of data will need to try to acquire the lock.
+If it is a spin lock, the thread will actively wait (spinning) until it can acquire the lock.
+Once a thread has acquired a lock it is free to act inside the critical region guarded by the
+lock. Once it is finished it should release the lock. If this fails to happen, the threads
+who are waiting to acquire said lock will continue to wait indefinitely. If the
+thread currently holding the lock is stuck waiting to acquire a different lock, which
+it also won't ever acquire, one or more threads will be in a <code>deadlock</code>. A deadlock
+entails one or more threads waiting to acquire a lock which will never be released.</p>
 <p>Any time we use a lock around a small piece of data or any kind of region, we incur a cost. Both in
 terms of allocating more memory, but also in terms of all of the time spent waiting to acquire and
 release locks. A lock is effectively a serialization of a region of code. Think back to Amdahl's
@@ -1969,18 +1967,17 @@ increases the chance of incurring a deadlock.</p>
 the basic conclusion is, you should understand what they do, you should be able to use elements from
 libraries that use them, but if you find yourself thinking you should use a lock for something...
 reconsider. Be absolutely sure that that is what you need, and if you do, you need to spend some more time
-thinking about how to implement it and you need to minimize your exposure by minimizing the regions where locks
-are used.</p>
+thinking about how to implement it and you need to minimize your exposure by minimizing the regions where
+locks are used.</p>
 <h2 id="locks-in-rust">Locks in Rust</h2>
-<p>I tried to come up with my own explanation for locks in Rust, but this page
-from <a href="https://doc.rust-lang.org/book/ch16-03-shared-state.html">The Book</a> is quite good.</p>
+<p>I tried to come up with my own explanation for locks in Rust, but this page from <a href="https://doc.rust-lang.org/book/ch16-03-shared-state.html">The Book</a> is
+quite good.</p>
 <hr />
 <h2 id="work-queue">Work Queue</h2>
 <p>So let's try to go back to how we could improve the performance of crossbeam when splitting our data
 into chunks and having threads work on a chunk each. This time we will use a mutex to create
 a <a href="https://github.com/ProgrammingRust/mandelbrot/blob/task-queue/src/main.rs">task queue</a>.</p>
-<p>You can find the code in <code>m2_concurrency::code::parallelism</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">online</a>.</p>
+<p>You can find the code in <a href="https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism">m2_concurrency::code::parallelism</a>.</p>
 <p>This time you need to set the flag <code>crossbeam_task_queue</code> to true.</p>
 <p>As you can see, the two added functions have gotten <em>slightly</em> more complex -</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Rust</label></div>
@@ -2068,7 +2065,7 @@ which conditions.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 18, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 15, 2025</span>
   </span>
 
     
@@ -2201,7 +2198,7 @@ which conditions.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});

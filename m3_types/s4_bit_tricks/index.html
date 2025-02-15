@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -1970,10 +1970,10 @@
 <p>Seeing numbers as individual bits can result in highly compressible data and a much simpler relation to data structures.
 If you also only need a single bits worth of information, you can really save some memory bandwidth by working within
 the confines of a single 32- or 64-bit element. There's a number of different tricks you can do with bits, and I won't
-even attempt to more than a few of them. But I'll briefly introduce three different things you can do. Spatial hashing,
+even attempt to explain more than a few of them. But I'll briefly introduce three different things you can do. Spatial hashing,
 Morton codes and the legendary fast inverse square root.</p>
 <h2 id="spatial-hashing">Spatial Hashing</h2>
-<p>Ok, so first off let's look at what we can do with encoding multidimensional data into a single number.
+<p>Ok, so first off let's look at what we can do with encoding multidimensional data into a single integer.
 This can be really useful for encoding 2- or 3D information. In fact, so nice that my thesis was basically about
 how to extend this concept into how we could design point cloud rendering systems.</p>
 <p>First off let's try just encoding three integers into a single integer. <code>x</code> will reside in bits 40-59,
@@ -1994,9 +1994,9 @@ how to extend this concept into how we could design point cloud rendering system
 </div>
 </div>
 <p>So we have three usages of bitwise operators here. We shift, AND and OR. First we shift our initial number to start
-from the correct bits. We mask with the bitwise AND to ensure that we stick within the allotted bits. This also
+from the correct bits. We mask with the bitwise AND to ensure that coordinates stay within the allotted bits. This also
 has the effect of truncating the 44 most significant bits of <code>x</code>, <code>y</code> and <code>z</code>. So we have to keep
-track of what it is we trying to hash. Finally, we bitwise OR the whole thing.</p>
+track of what it is we are trying to hash. Finally, we bitwise OR the whole thing.</p>
 <p>We could also do the masking before the shift for something even cleaner -</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Rust</label></div>
 <div class="tabbed-content">
@@ -2030,9 +2030,9 @@ track of what it is we trying to hash. Finally, we bitwise OR the whole thing.</
 </div>
 </div>
 <p>Since we have ensured we do not have any overlaps between our shifted and masked numbers, the ORs can be replaced
-by additions. We are also always free to use multiplication instead of the shifts, but the intent is less clear
-and you have to be sure that it is still doing the same as the corresponding shift, which again, is defined
-differently depending on the stype, direction and language.</p>
+by additions. We are also always free to use multiplication instead of the shifts, but the intent is communicated
+less clearly and you have to be sure that it is still doing the same as the corresponding shift, which again,
+is defined differently depending on the type, direction and language.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Rust</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2071,9 +2071,10 @@ the three numbers by just doing the opposite operations.</p>
 </div>
 </div>
 <p>Easy peasy. We could easily split this code into encode and decode functions. Linearization of 3D coordinates
-would be good for encoding sparse data. If you used this for actual indices into an array you would have to allocate
-more memory than your machine could possibly have. Instead, you can use the u64, or you could even do a 32-bit
-or 16-bit encoding using less bits from the original data, as keys into a hash map.</p>
+would be good for encoding sparse data. If you wanted to preallocate an array that covered the entire domain
+you would have to allocate more memory than your machine could possibly have. Instead, you can use the u64,
+or you could even do a 32-bit or 16-bit encoding using less bits from the original data, as keys into a
+hash map/dictionary.</p>
 <p>Now, let's do this with floats instead! This requires us to use quantization. With quantization we want to take
 a float and adapt it to the domain of an integer. We need to know WHERE our domain resides and how BIG it is.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="6:1"><input checked="checked" id="__tabbed_6_1" name="__tabbed_6" type="radio" /><div class="tabbed-labels"><label for="__tabbed_6_1">Rust</label></div>
@@ -2108,7 +2109,7 @@ a float and adapt it to the domain of an integer. We need to know WHERE our doma
 </div>
 </div>
 </div>
-<p>We use an offset to move all of the values to have the smallest represented value start at 0. We then scale
+<p>We use an offset to move all of the values to have the smallest representable value start at 0. We then scale
 our float to have the maximum float value be the biggest integer we want to use. Usually this will involve finding
 the maximum float value in our data set and knowing how many indices we at most want in our grid. I have
 made a small example below -</p>
@@ -2127,16 +2128,16 @@ instead chosen to round our numbers to the nearest integer. If we use this spati
 we could keep a vector of points as the value, like <code>HashMap&lt;u64, Vec&lt;[3; f32]&gt;&gt;</code>. In that case we could have a
 3D point like above. Find the spatial hash key for the 3D point, and then push our 3D point onto the Vec. This
 would essentially be binning. We would eventually have buckets of every point within some 3D space which we defined
-through our spatial hash function.</p>
+through our spatial hash function. This bucket could itself have its own domain which could allow for quantizing
+all of the points held in the bucket (<code>Vec&lt;[3; f32]&gt;</code>).</p>
 <p>If we wanted to get really nasty about it, we could use principal component analysis of the covariance matrix of
-the points to figure out a new rotated coordinate system. Then we would have to introduce a transformation term,
-in which case we might as well replace the scale and offset with a full 4D matrix, but it would allow for us to
-maximize the precision of our representation.</p>
+the points in a bucket to figure out a new rotated coordinate system. Then we would have to introduce a
+transformation term, in which case we might as well replace the scale and offset with a full 4D matrix, but
+it would allow for us to maximize the precision of our representation. But I digress.</p>
 <h2 id="morton-codes-z-order-curves">Morton Codes / Z-Order Curves</h2>
-<p><a href="https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/">Morton encoding</a>
-is the natural extension of spatial hashing. We just saw a grid resulting from segmenting one number to represent more
-numbers. But what if interleaved the bits instead? This results in what is known as a
-<a href="https://en.wikipedia.org/wiki/Z-order_curve">Z-Order Curve</a>, encoded and decoded through Morton coding.</p>
+<p><a href="https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/">Morton encoding</a> is the natural extension of spatial hashing. We just saw a grid resulting from
+segmenting one number to represent more numbers. But what if we interleaved the bits instead? This results
+in what is known as a <a href="https://en.wikipedia.org/wiki/Z-order_curve">z-order curve</a>, encoded and decoded through Morton coding.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="7:1"><input checked="checked" id="__tabbed_7_1" name="__tabbed_7" type="radio" /><div class="tabbed-labels"><label for="__tabbed_7_1">Rust</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2158,11 +2159,9 @@ numbers. But what if interleaved the bits instead? This results in what is known
 </div>
 </div>
 </div>
-<p>Some mad lads looked at
-<a href="https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/">optimization</a>
-of Morton codes. The above code snippet was just a Rust version of what was written in the aforementioned
-blog post under the "For-loop based method"-heading. The blog post also has a nice visualization of what
-Morton codes look like, as opposed to the grid.</p>
+<p>Some mad lads looked at <a href="https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/">optimization</a> of Morton codes. The above code snippet was just a Rust version
+of what was written in the aforementioned blog post under the "For-loop based method"-heading. The blog
+post also has a nice visualization of what Morton codes look like, as opposed to the grid.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/small_morton_code.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/small_morton_code.png" width="800" /></a></p>
 <figcaption>
@@ -2171,11 +2170,11 @@ A four bit, two-dimensional Morton code.
 Image credit </a>
 </figcaption>
 </figure>
-<p>In the blog post there is even a lookup table (LUT) version mentioned which removes all of the loops.
+<p>In the blog post there is even a lookup table (LUT) version mentioned, which removes all of the loops.
 Using LUTs yields an advantage which increases with the size of the numbers as the number of iterations
-in the for-loops increases. It does however require you to copy paste or generate a LUT which you can reuse.
-You tradeoff a lot of for-loops for doing a few
-memory look-ups instead. It seems to be the favoured way of doing it when you search for Mortorn encoding libraries.</p>
+in the for-loops increases. It does however require you to copy-paste or generate a LUT which you can reuse.
+You tradeoff a lot of for-loops for doing a few memory look-ups instead. It seems to be the favoured way
+of doing it when you search for Morton encoding libraries.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/morton_vs_hilbert.jpg" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/morton_vs_hilbert.jpg" width="800" /></a></p>
 <figcaption>
@@ -2185,12 +2184,13 @@ Image credit </a>
 </figcaption>
 </figure>
 <p>We can use Morton codes to do stuff like creating spatial data structures and interestingly, this is how
-textures are stored on GPU's. This allows for better cache coherence when working with textures. Imagine
-you want to draw some point between 4 different pixels of an image. You can either just go to the nearest
-pixel in the texture, or you can do some filtering function between the 4 nearest pixels, like bilinear
-interpolation. Then we need good locality to get the 4 pixels as quickly as possible. If you go back and look at the
-spatial ordering of the Morton layout, you'll see that if you get lucky, the four pixels can be either
-very close to each other in memory, or pretty close. They aren't an entire row apart.</p>
+textures are stored on some GPU's. This allows for better cache coherence through a more spatially coherent
+data layout when working with textures. Imagine you want to draw some point between four different pixels of
+an image. You can either just go to the nearest pixel in the texture, or you can do some filtering function
+between the 4 nearest pixels, like bilinear interpolation. Then we need good locality, to get the four pixels
+as quickly as possible. If you go back and look at the spatial ordering of the Morton layout, you'll see
+that if you get lucky, the four pixels can be either very close to each other in memory, or pretty close.
+They aren't an entire row apart.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/nearest_linear_texture_filtering.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/nearest_linear_texture_filtering.png" width="800" /></a></p>
 <figcaption>
@@ -2201,12 +2201,12 @@ Image credit </a>
 </figure>
 <h2 id="fast-inverse-square-root">Fast Inverse Square Root</h2>
 <p>Previously, I wrote that you should never do bitwise operations on floating point numbers. Well, now we're
-gonna look at a, if not the most, famous black magic methods directly manipulating the bits of a floating
+gonna look at a, if not the most, famous black magic method directly manipulating the bits of a floating
 point number. This method comes from computer graphics where the normalization of vectors (changing their
 magnitudes to 1), is constantly used to ensure that the directions are correct. To do this you divide each
 element of the vector by the length. To find this length we need the square root of the sum of each element squared.
 The square root is quite expensive to compute and as you may recall, multiplication is much faster than
-division. In most graphics, the loss of precision in multiplying by the inverse value instead of division
+division. In most computer graphics, the loss of precision in multiplying by the inverse value instead of division
 by the value, is acceptable. And thus if we could find the inverse square root of the sum of squared elements,
 it would be faster.</p>
 <p>This is where this gem known from the development of Quake 3 enters the scene -</p>
@@ -2233,23 +2233,21 @@ it would be faster.</p>
 </div>
 </div>
 </div>
-<p>It even has its <a href="https://en.wikipedia.org/wiki/Fast_inverse_square_root">own wikipedia page</a>. To be honest,
-I watched <a href="https://www.youtube.com/watch?v=p8u_k2LIZyo">this video</a> about it some years ago, and can't quite
-remember how it works. It casts the float to an integer (long), and then manipulates the underlying bits through
-knowledge of the mantissa. It casts it back to a float, and then uses a single iteration of Newton's method for
-reducing the error. If you read the rest of the wiki, you will see there have been subsequent improvements to
-the accuracy, elimination of undefined behavior, and so on. The algorithm resulted in a four times faster execution
-than just calling the square root directly and dividing.
-Short after, hardware implementations started cropping up which
-outperformed it both in performance and in accuracy. You can even find it in WGSL through calling
-<code>inverseSqrt(data)</code>.</p>
+<p>It even has its <a href="https://en.wikipedia.org/wiki/Fast_inverse_square_root">own wikipedia page</a>. To be honest, I watched <a href="https://www.youtube.com/watch?v=p8u_k2LIZyo">this video</a> about it some years ago, and
+can't quite remember how it works. It casts the float to an integer (long), and then manipulates the underlying
+bits through knowledge of the mantissa. It casts it back to a float, and then uses a single iteration of
+Newton's method for reducing the error. If you read the rest of the wiki, you will see there have been
+subsequent improvements to the accuracy, elimination of undefined behavior, and so on. The algorithm
+resulted in a four times faster execution than just calling the square root directly and dividing.
+Shortly after, hardware implementations started cropping up which outperformed it both in performance
+and in accuracy. You can even find it in WGSL through calling <code>inverseSqrt(data)</code>.</p>
 <p>Often you can find hardware implementations of often needed mathematical functions. Especially for GPU programming
 this can yield a performance boost. These are called intrinsic functions. Usually, they will have a lower precision.
 The instrinsic cosine might be computed in 24-bits for example, but will probably outperform the software version
-by a large margin, if the hardware support is available.</p>
+in terms of speed by a large margin, if the hardware support is available.</p>
 <h2 id="additional-reading">Additional Reading</h2>
-<p>If you've read all of this, you should now be ready to look at quantization and quantization aware training
-<a href="https://pytorch.org/blog/introduction-to-quantization-on-pytorch/">in PyTorch</a> and <a href="https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-quantization">in general</a>.</p>
+<p>If you've read all of this and you are interested in machine learning, you should now be ready to look at
+quantization and quantization aware training <a href="https://pytorch.org/blog/introduction-to-quantization-on-pytorch/">in PyTorch</a> and <a href="https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-quantization">in general</a>.</p>
 
 
 
@@ -2272,7 +2270,7 @@ by a large margin, if the hardware support is available.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 7, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 15, 2025</span>
   </span>
 
     
@@ -2405,7 +2403,7 @@ by a large margin, if the hardware support is available.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});

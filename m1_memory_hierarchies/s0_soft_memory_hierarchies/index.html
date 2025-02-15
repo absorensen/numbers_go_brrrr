@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.2">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.d7758b05.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -2163,8 +2163,8 @@ now asks the CPU to write to the address 42, the number 0. So far so good. But t
 42, to get the next integer element, we don't go to the address 43, which would just be the second byte of the
 first element. No, we want to go to the address 46, where the second element in the array begins. Since
 <code>integer_array</code> has the type <code>int*</code>, we have defined that each element is 4 bytes and we now have a
-<em>stride</em> of 4 bytes.
-We also need to keep track of the size of our allocation close to the pointer itself,
+<em>stride</em> of 4 bytes.<a href="https://en.wikipedia.org/wiki/Segmentation_fault">here</a> respectively.</p>
+<p>We also need to keep track of the size of our allocation close to the pointer itself,
 as trying to access an element outside of our allocation will be catastrophic, and likely result in a
 <a href="https://en.wikipedia.org/wiki/Segmentation_fault">segmentation fault</a>. When we ask the operating system for memory it keeps track of which memory belongs
 to our program, and which memory belongs to other programs. Our program is not allowed to read from other
@@ -2387,8 +2387,7 @@ Better cache alignment.
 <p>and we now only retrieve a single cache line. Which in this made up scenario is quite a bit smaller than
 the more standard 64 byte cache line.</p>
 <p>Now that we have learned a bit about cache lines, we are equipped to actually talk about access patterns.
-I have made some Rust code for you, which is located at <code>m1_memory_hierarchies::code::access_patterns</code> or
-<a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/access_patterns">online</a>.</p>
+I have made some Rust code for you, which is located at <a href="https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/access_patterns">m1_memory_hierarchies::code::access_patterns</a>.</p>
 <p>First off is sequential access. It is the one we usually strive for. We start at one end and go through every
 element until the end, from index 0 to the end. If everything is cache aligned, great! If not, the cost of
 not being aligned will probably be as low as it can be, when we aren't reusing any retrieved elements. If a
@@ -2497,7 +2496,7 @@ the memory hierarchy.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 15, 2025</span>
   </span>
 
     
@@ -2630,7 +2629,7 @@ the memory hierarchy.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f13b1293.min.js"></script>
+      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
