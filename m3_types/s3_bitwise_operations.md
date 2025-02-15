@@ -42,7 +42,7 @@ representation had a special bit and 2's complement. Now imagine this, but with 
 three segments of bits instead. That's why we don't do bitwise operations on floats!
 
 The type of shift where the sign bit gets special treatment is called an *arithmetic shift*, where as the one
-treating the whole thing as just bits, is called *logical shift*. You can read more about it [here][5], but
+treating the whole thing as just bits, is called *logical shift*. You can read more about it [here][4], but
 I would recommend you stick to unsigned integers for bit manipulating stuff. It's less stuff to keep in your head.
 
 Next, let's look at the bitwise and (&), usually written as bitwise AND, probably to ensure you don't mistake it for
@@ -144,5 +144,4 @@ reference for [operators][2].
 [1]: https://en.wikipedia.org/wiki/Bitwise_operation
 [2]: https://doc.rust-lang.org/reference/expressions/operator-expr.html
 [3]: https://absorensen.github.io/the-guide/m4_real_time_systems/s4_branchless_programming/
-[4]: https://en.wikipedia.org/wiki/Fast_inverse_square_root
-[5]: https://open4tech.com/logical-vs-arithmetic-shift/
+[4]: https://open4tech.com/logical-vs-arithmetic-shift/

@@ -126,8 +126,8 @@ is rejected, is added to a list of subsampled points. Once we are done with this
 One list we keep in the node, the other list we send to the next level-of-detail. The second list will then be
 distributed among the up to 8 child nodes. The child nodes are implicitly linked by their places in the list of
 hash maps and not by pointers. Once we have done this for all nodes and we no longer have either new or subsampled
-points to be processed, we can finalize the structure. We do this by now enforcing a maximum amount of points and continue adding
-and subsampling until each node holds at most N points.
+points to be processed, we can finalize the structure. We do this by now enforcing a maximum amount of points and
+continue adding and subsampling until each node holds at most N points.
 
 Phew, that was a lot, but now we are ready to do some compression! Throughout this process we have kept all of the
 points in floating point coordinates. Ideally, as close to their original precision as possible. But, once we
@@ -204,4 +204,3 @@ Lots of interesting things are happening in real-time decompression [using neura
 [10]: https://en.wikipedia.org/wiki/Brotli
 [11]: https://en.wikipedia.org/wiki/Gzip
 [12]: https://www.cg.tuwien.ac.at/research/publications/2021/SCHUETZ-2021-PCC/
-

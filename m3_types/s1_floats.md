@@ -17,7 +17,7 @@ So, now that you've browsed the websites and you are familliar with concepts suc
 have a few key concepts for you to make note of. If you can at all keep your floats as close to being between
 -1.0 and 1.0 as possible, you will keep as much of your precision as possible. 4.0 / 3.0 is not the same numerically
 as 4.0 * (1.0 / 3.0), unless the reciprocal that you are multiplying with is exactly 1/2^N.
-Multiplication by the reciprocal is an oft used optimization as a multiplication is much cheaper than a division. 
+Multiplication by the reciprocal is an oft used optimization as a multiplication is much cheaper than a division.
 You will typically see this optimization if a division by a constant is happening in a loop -
 
 === "Rust"

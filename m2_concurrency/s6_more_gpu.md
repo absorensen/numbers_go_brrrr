@@ -85,7 +85,7 @@ or it was last time I checked. Work group shuffling, is sharing
 directly between the registers of each thread in a work group. It was 1 cycle to
 access last time I checked. This is immensely useful in reductions and prefix sums.
 You would still need to write data to global memory in order to share data between
-work groups. Unless you are using a GPU supporting [distributed shared memory][7].
+work groups. Unless you are using a GPU supporting [distributed shared memory][5].
 At the time of writing, the Nvidia H100 is the only card supporting it.
 Distributed shared memory allows accessing memory residing in the shared memory of
 other work groups, as if it was one big shared memory. Hopefully, this feature
@@ -99,6 +99,4 @@ To learn more about the graphics pipeline you can check out [Learn OpenGL][0] or
 [2]: https://www.youtube.com/watch?v=eviSykqSUUw
 [3]: https://learnopengl.com/Getting-started/Hello-Triangle
 [4]: https://docs.rs/wgpu/latest/wgpu/enum.ShaderSource.html#
-[5]: https://github.com/gfx-rs/wgpu/tree/trunk/naga
-[6]: https://developer.nvidia.com/blog/using-cuda-warp-level-primitives/
-[7]: https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/
+[5]: https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/
