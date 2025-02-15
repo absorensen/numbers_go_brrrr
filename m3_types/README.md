@@ -9,21 +9,22 @@ You can reduce the strain on your memory bandwidth by using smaller types (think
 cache lines) and get more data elements per cache line resulting in being less memory bound
 which might in turn increase the speed of your program. If you are on a GPU, your performance
 might improve significantly (factor 32) by going from 64-bit floats to 32-bits, you can
-even get access to tensor cores, by reducing precision even further, allowing an even greater
-improvement to the speed of your program. Knowing more about types allows you to sort, order
-and quantize your processed data in a way that has as small an impact on precision as possible
-while decreasing the size of your data. This could result in faster download times or you could stream
-your data from disk directly to the GPU, where the GPU itself might be able to unpack the data.
+even get access to tensor cores by reducing precision even further. Knowing more about types
+allows you to sort, order and quantize your processed data in a way that has as small an
+impact on precision as possible while decreasing the size of your data. This could result
+in faster download times or you could stream your data from disk directly to the GPU,
+where the GPU itself might be able to unpack the data.
 
-Knowing which transformations of your data are alright can also allow you to minimize the total
+Knowing which transformations of your data are acceptable can also allow you to minimize the total
 size of your data at run time, allowing you to fit everything into memory which will greatly
-decrease the amount of disk activity.
+decrease the amount of disk activity and pressure on memory bandwidth.
 
-Which types you are using have an impact not just on speed and size, but also the energy
+Which types you are using has an impact not just on speed and size, but also the energy
 consumption of your programs. In general, less bits mean less energy consumed. You don't
 have to micromanage every single variable all the time, but one of the first places to
-look when optimizing should be arrays. ```u8``` rarely matters, but ```[u8]``` sure does.
+look when optimizing should be arrays. ```f64``` rarely matters, but ```[f64]``` sure does.
 
 Finally, knowing about types allows us to operate directly on the underlying bits, casting
 from one type to another, to create tightly packed information, which we couldn't otherwise
-have, such as packing three dimensional indices into just 32- or 64-bit integers.
+have, such as packing three dimensional indices into a single integer or 32 boolean values
+into a 32 bit integer.

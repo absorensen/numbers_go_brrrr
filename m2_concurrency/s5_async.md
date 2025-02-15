@@ -23,14 +23,14 @@ a handful of threads. Scheduling and keeping track of when work needs to be perf
 that a request has been made and what will be the result, will require an async runtime. This runtime
 can itself be relatively big, so you have to imagine a linear function with a bias of the size of the runtime
 plus the amount of futures. Big runtime, small futures. Thus a big, if fast runtime, like the very
-popular [tokio](https://tokio.rs/), only makes sense if we are in a minimum of 10's of requests per second.
+popular [tokio][4], only makes sense if we are in a minimum of 10's of requests per second.
 Otherwise, use a lighter runtime or whatever comes with Rust by default.
 
 _________________
 
 ## Async in Rust
 Async is still relatively new in Rust and is likely to see significant changes. The documentation reflects that,
-despite there being an async Rust book, it is not complete.
+despite there being an async Rust book, it is not complete at the time of writing.
 
 In order to call functions denoted ```async``` we either need to use a ```block_on(my_async_function())```
 call in our synchronous code and the call, as surprising as that may be, blocks on the asynchronous
@@ -50,13 +50,13 @@ mentioned earlier. You can either use ```.await``` immmediately like so
 If you think back to the earlier page ```m2::s1``` about threads, you can imagine the same scenario as threading.
 You launch a bunch of jobs, store their handles, then when you are done launching jobs, you might even have some
 other work to do in the mean time, you await all of your handles until you are ready to move on. But, allow
-me to quote Rust's [async book](https://rust-lang.github.io/async-book/) -
+me to quote Rust's [async book][5] -
 
 > The most common way to run a Future is to .await it. When .await is called on a Future, it will attempt to run it
 > to completion. If the Future is blocked, it will yield control of the current thread. When more progress can be
 > made, the Future will be picked up by the executor and will resume running, allowing the .await to resolve.
 
-if a future, for example representing download of a file, in which case there maybe be multiple other factors than
+if a future, for example representing download of a file, in which case there may be multiple other factors than
 just the system we are in control of, calling ```.await``` may result in the current thread yielding. Another thing
 we could do is the ```join!()``` macro. This is sort of like calling ```.await``` on a bunch of futures at the same
 time. Like so -
@@ -73,8 +73,7 @@ time. Like so -
     println!("Successfully downloaded files from {}, {} and {}, url_a, url_b, url_c);
     ```
 
-You can read more about ```join!()```
-[here](https://rust-lang.github.io/async-book/06_multiple_futures/02_join.html). Async is its own paradigm and
+You can read more about ```join!()``` [here][6]. Async is its own paradigm and
 again, in this course you are most likely to see it when interacting with the GPU and a GUI system. In the
 real world you might see it very pervasibely in web servers and anything to do with stuff that happens
 outside of your computer. In any case, you should try to limit how big the async portions of your code are,
@@ -91,10 +90,12 @@ thinking about stuff like web servers, or something else making lots of web requ
 [async-std][2] is a newer library which seeks to act as an async extension of Rust. It is also
 mostly interesting if you need to handle lots of networking.
 
-[Green Threads][3] are like virtualized threads, like threads emulated in
-software, to make them extremely lightweight.
+[Green Threads][3] are like virtualized threads, like threads emulated in software, to make them extremely lightweight.
 
 [0]: https://rust-lang.github.io/async-book/
 [1]: https://tokio.rs/
 [2]: https://async.rs/
 [3]: https://en.wikipedia.org/wiki/Green_thread
+[4]: https://tokio.rs/
+[5]: https://rust-lang.github.io/async-book/
+[6]: https://rust-lang.github.io/async-book/06_multiple_futures/02_join.html

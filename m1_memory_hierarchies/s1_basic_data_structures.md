@@ -273,7 +273,7 @@ for you to simply access it like it was a multi-dimensional array.
 
 To wrap it up I have made a performance test of these approaches. The code
 doesn't match completely as we need bigger dimensions to get a good test.
-The code is at ```m1_memory_hierarchies/code/the_vector/``` or [online][2].
+The code is at [m1_memory_hierarchies::code::the_vector][2].
 
 Implementing all of the methods described above in both row-major and column-major form,
 as well as an element-wise version, where we flatten the multidimensionality to save

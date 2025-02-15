@@ -2,11 +2,11 @@
 Seeing numbers as individual bits can result in highly compressible data and a much simpler relation to data structures.
 If you also only need a single bits worth of information, you can really save some memory bandwidth by working within
 the confines of a single 32- or 64-bit element. There's a number of different tricks you can do with bits, and I won't
-even attempt to more than a few of them. But I'll briefly introduce three different things you can do. Spatial hashing,
+even attempt to explain more than a few of them. But I'll briefly introduce three different things you can do. Spatial hashing,
 Morton codes and the legendary fast inverse square root.
 
 ## Spatial Hashing
-Ok, so first off let's look at what we can do with encoding multidimensional data into a single number.
+Ok, so first off let's look at what we can do with encoding multidimensional data into a single integer.
 This can be really useful for encoding 2- or 3D information. In fact, so nice that my thesis was basically about
 how to extend this concept into how we could design point cloud rendering systems.
 
@@ -27,9 +27,9 @@ First off let's try just encoding three integers into a single integer. ```x``` 
     ```
 
 So we have three usages of bitwise operators here. We shift, AND and OR. First we shift our initial number to start
-from the correct bits. We mask with the bitwise AND to ensure that we stick within the allotted bits. This also
+from the correct bits. We mask with the bitwise AND to ensure that coordinates stay within the allotted bits. This also
 has the effect of truncating the 44 most significant bits of ```x```, ```y``` and ```z```. So we have to keep
-track of what it is we trying to hash. Finally, we bitwise OR the whole thing.
+track of what it is we are trying to hash. Finally, we bitwise OR the whole thing.
 
 We could also do the masking before the shift for something even cleaner -
 
@@ -62,9 +62,9 @@ We can of course also just start with a 0 and continually OR with the shifted an
     ```
 
 Since we have ensured we do not have any overlaps between our shifted and masked numbers, the ORs can be replaced
-by additions. We are also always free to use multiplication instead of the shifts, but the intent is less clear
-and you have to be sure that it is still doing the same as the corresponding shift, which again, is defined
-differently depending on the stype, direction and language.
+by additions. We are also always free to use multiplication instead of the shifts, but the intent is communicated
+less clearly and you have to be sure that it is still doing the same as the corresponding shift, which again,
+is defined differently depending on the type, direction and language.
 
 === "Rust"
 
@@ -101,9 +101,10 @@ the three numbers by just doing the opposite operations.
     ```
 
 Easy peasy. We could easily split this code into encode and decode functions. Linearization of 3D coordinates
-would be good for encoding sparse data. If you used this for actual indices into an array you would have to allocate
-more memory than your machine could possibly have. Instead, you can use the u64, or you could even do a 32-bit
-or 16-bit encoding using less bits from the original data, as keys into a hash map.
+would be good for encoding sparse data. If you wanted to preallocate an array that covered the entire domain
+you would have to allocate more memory than your machine could possibly have. Instead, you can use the u64,
+or you could even do a 32-bit or 16-bit encoding using less bits from the original data, as keys into a
+hash map/dictionary.
 
 Now, let's do this with floats instead! This requires us to use quantization. With quantization we want to take
 a float and adapt it to the domain of an integer. We need to know WHERE our domain resides and how BIG it is.
@@ -138,7 +139,7 @@ a float and adapt it to the domain of an integer. We need to know WHERE our doma
     let hash: u64 = x_hash | y_hash | z_hash;
     ```
 
-We use an offset to move all of the values to have the smallest represented value start at 0. We then scale
+We use an offset to move all of the values to have the smallest representable value start at 0. We then scale
 our float to have the maximum float value be the biggest integer we want to use. Usually this will involve finding
 the maximum float value in our data set and knowing how many indices we at most want in our grid. I have
 made a small example below -
@@ -159,18 +160,18 @@ instead chosen to round our numbers to the nearest integer. If we use this spati
 we could keep a vector of points as the value, like ```HashMap<u64, Vec<[3; f32]>>```. In that case we could have a
 3D point like above. Find the spatial hash key for the 3D point, and then push our 3D point onto the Vec. This
 would essentially be binning. We would eventually have buckets of every point within some 3D space which we defined
-through our spatial hash function.
+through our spatial hash function. This bucket could itself have its own domain which could allow for quantizing
+all of the points held in the bucket (```Vec<[3; f32]>```).
 
 If we wanted to get really nasty about it, we could use principal component analysis of the covariance matrix of
-the points to figure out a new rotated coordinate system. Then we would have to introduce a transformation term,
-in which case we might as well replace the scale and offset with a full 4D matrix, but it would allow for us to
-maximize the precision of our representation.
+the points in a bucket to figure out a new rotated coordinate system. Then we would have to introduce a
+transformation term, in which case we might as well replace the scale and offset with a full 4D matrix, but
+it would allow for us to maximize the precision of our representation. But I digress.
 
 ## Morton Codes / Z-Order Curves
-[Morton encoding](https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/)
-is the natural extension of spatial hashing. We just saw a grid resulting from segmenting one number to represent more
-numbers. But what if interleaved the bits instead? This results in what is known as a
-[Z-Order Curve](https://en.wikipedia.org/wiki/Z-order_curve), encoded and decoded through Morton coding.
+[Morton encoding][2] is the natural extension of spatial hashing. We just saw a grid resulting from
+segmenting one number to represent more numbers. But what if we interleaved the bits instead? This results
+in what is known as a [z-order curve][3], encoded and decoded through Morton coding.
 
 === "Rust"
 
@@ -191,11 +192,9 @@ numbers. But what if interleaved the bits instead? This results in what is known
     }
     ```
 
-Some mad lads looked at
-[optimization](https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/)
-of Morton codes. The above code snippet was just a Rust version of what was written in the aforementioned
-blog post under the "For-loop based method"-heading. The blog post also has a nice visualization of what
-Morton codes look like, as opposed to the grid.
+Some mad lads looked at [optimization][4] of Morton codes. The above code snippet was just a Rust version
+of what was written in the aforementioned blog post under the "For-loop based method"-heading. The blog
+post also has a nice visualization of what Morton codes look like, as opposed to the grid.
 
 <figure markdown>
 ![Image](../figures/small_morton_code.png){ width="800" }
@@ -206,11 +205,11 @@ Image credit </a>
 </figcaption>
 </figure>
 
-In the blog post there is even a lookup table (LUT) version mentioned which removes all of the loops.
+In the blog post there is even a lookup table (LUT) version mentioned, which removes all of the loops.
 Using LUTs yields an advantage which increases with the size of the numbers as the number of iterations
-in the for-loops increases. It does however require you to copy paste or generate a LUT which you can reuse.
-You tradeoff a lot of for-loops for doing a few
-memory look-ups instead. It seems to be the favoured way of doing it when you search for Mortorn encoding libraries.
+in the for-loops increases. It does however require you to copy-paste or generate a LUT which you can reuse.
+You tradeoff a lot of for-loops for doing a few memory look-ups instead. It seems to be the favoured way
+of doing it when you search for Morton encoding libraries.
 
 <figure markdown>
 ![Image](../figures/morton_vs_hilbert.jpg){ width="800" }
@@ -222,12 +221,13 @@ Image credit </a>
 </figure>
 
 We can use Morton codes to do stuff like creating spatial data structures and interestingly, this is how
-textures are stored on GPU's. This allows for better cache coherence when working with textures. Imagine
-you want to draw some point between 4 different pixels of an image. You can either just go to the nearest
-pixel in the texture, or you can do some filtering function between the 4 nearest pixels, like bilinear
-interpolation. Then we need good locality to get the 4 pixels as quickly as possible. If you go back and look at the
-spatial ordering of the Morton layout, you'll see that if you get lucky, the four pixels can be either
-very close to each other in memory, or pretty close. They aren't an entire row apart.
+textures are stored on some GPU's. This allows for better cache coherence through a more spatially coherent
+data layout when working with textures. Imagine you want to draw some point between four different pixels of
+an image. You can either just go to the nearest pixel in the texture, or you can do some filtering function
+between the 4 nearest pixels, like bilinear interpolation. Then we need good locality, to get the four pixels
+as quickly as possible. If you go back and look at the spatial ordering of the Morton layout, you'll see
+that if you get lucky, the four pixels can be either very close to each other in memory, or pretty close.
+They aren't an entire row apart.
 
 <figure markdown>
 ![Image](../figures/nearest_linear_texture_filtering.png){ width="800" }
@@ -240,12 +240,12 @@ Image credit </a>
 
 ## Fast Inverse Square Root
 Previously, I wrote that you should never do bitwise operations on floating point numbers. Well, now we're
-gonna look at a, if not the most, famous black magic methods directly manipulating the bits of a floating
+gonna look at a, if not the most, famous black magic method directly manipulating the bits of a floating
 point number. This method comes from computer graphics where the normalization of vectors (changing their
 magnitudes to 1), is constantly used to ensure that the directions are correct. To do this you divide each
 element of the vector by the length. To find this length we need the square root of the sum of each element squared.
 The square root is quite expensive to compute and as you may recall, multiplication is much faster than
-division. In most graphics, the loss of precision in multiplying by the inverse value instead of division
+division. In most computer graphics, the loss of precision in multiplying by the inverse value instead of division
 by the value, is acceptable. And thus if we could find the inverse square root of the sum of squared elements,
 it would be faster.
 
@@ -272,25 +272,28 @@ This is where this gem known from the development of Quake 3 enters the scene -
     }
     ```
 
-It even has its [own wikipedia page](https://en.wikipedia.org/wiki/Fast_inverse_square_root). To be honest,
-I watched [this video](https://www.youtube.com/watch?v=p8u_k2LIZyo) about it some years ago, and can't quite
-remember how it works. It casts the float to an integer (long), and then manipulates the underlying bits through
-knowledge of the mantissa. It casts it back to a float, and then uses a single iteration of Newton's method for
-reducing the error. If you read the rest of the wiki, you will see there have been subsequent improvements to
-the accuracy, elimination of undefined behavior, and so on. The algorithm resulted in a four times faster execution
-than just calling the square root directly and dividing.
-Short after, hardware implementations started cropping up which
-outperformed it both in performance and in accuracy. You can even find it in WGSL through calling
-```inverseSqrt(data)```.
+It even has its [own wikipedia page][5]. To be honest, I watched [this video][6] about it some years ago, and
+can't quite remember how it works. It casts the float to an integer (long), and then manipulates the underlying
+bits through knowledge of the mantissa. It casts it back to a float, and then uses a single iteration of
+Newton's method for reducing the error. If you read the rest of the wiki, you will see there have been
+subsequent improvements to the accuracy, elimination of undefined behavior, and so on. The algorithm
+resulted in a four times faster execution than just calling the square root directly and dividing.
+Shortly after, hardware implementations started cropping up which outperformed it both in performance
+and in accuracy. You can even find it in WGSL through calling ```inverseSqrt(data)```.
 
 Often you can find hardware implementations of often needed mathematical functions. Especially for GPU programming
 this can yield a performance boost. These are called intrinsic functions. Usually, they will have a lower precision.
 The instrinsic cosine might be computed in 24-bits for example, but will probably outperform the software version
-by a large margin, if the hardware support is available.
+in terms of speed by a large margin, if the hardware support is available.
 
 ## Additional Reading
-If you've read all of this, you should now be ready to look at quantization and quantization aware training
-[in PyTorch][0] and [in general][1].
+If you've read all of this and you are interested in machine learning, you should now be ready to look at
+quantization and quantization aware training [in PyTorch][0] and [in general][1].
 
 [0]: https://pytorch.org/blog/introduction-to-quantization-on-pytorch/
 [1]: https://newsletter.maartengrootendorst.com/p/a-visual-guide-to-quantization
+[2]: https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/
+[3]: https://en.wikipedia.org/wiki/Z-order_curve
+[4]: https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/
+[5]: https://en.wikipedia.org/wiki/Fast_inverse_square_root
+[6]: https://www.youtube.com/watch?v=p8u_k2LIZyo

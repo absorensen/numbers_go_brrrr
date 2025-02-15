@@ -36,7 +36,7 @@ method of summation on GPU's. If you want to get nuts, we can get nuts, you can 
 
 ## Sorting
 ### m3::e1 - Radix
-Simply but [Radix][7] -, or bucket-, sorting numbers sorts them one digit at a time. Eventually, once all digits
+Simply but [Radix][7]-, or buckets sorting numbers sorts them one digit at a time. Eventually, once all digits
 have been sorted, all of the numbers will be sorted. There are some very advanced, very parallelizable, versions
 of Radix sort, but try to do [a simple one][8].
 
@@ -50,8 +50,8 @@ verify programmatically, that every element is equal to or bigger than its prede
 of course.
 
 ### m3::e2 - Morton
-Morton coding not quite sorting, but we can generate a new number which gives better spatial coherence to data.
-Which can then be sorted by the [Morton code][9]. Briefly put, in the 2 dimensional case, we interleave the bits of
+[Morton coding][9] is not quite sorting, but we can generate a new number which gives better spatial coherence to data.
+Which can then be sorted by the [Radix sort][7]. Briefly put, in the two dimensional case, we interleave the bits of
 two 4 bit numbers, ```x``` and ```y```, as ```y3x3y2x2y1x1y0x0```. This results in a z-order curve as described in
 [bit tricks][10]. Note that you have a maximum amount of precision in your input numbers. If you are generating
 a 64-bit Morton code at most for 3 dimensions, you have at most 64-bits to spare. If you want an isotropic
@@ -70,13 +70,13 @@ get the ```Vec3``` from libraries like [nalgebra][12] and [ultraviolet][13].
 Find the minimum and maximum values in the ranges. Use spatial hashing as described in [bit tricks][10] to sort the
 points into buckets in a ```HashMap<u32, Vec<Vec3<f32>>```. Use 10 bits of precision for each coordinate.
 
-Once you have done this, perhaps too literal, bucket sort, quantize each point in each buckets collection of points
+Once you have done this, perhaps too literal, bucket sort, quantize each point in each bucket's collection of points
 relative to the placement of the bucket in which it resides. From there turn the quantized points into
 Morton codes. Do you need to adjust the resolution of your quantization to accomodate the range of the Morton codes?
 
-Once you have the Morton code version of your points, use Radix sort on each bucket's list of morton codes.
+Once you have the Morton code version of your points, use Radix sorting on each bucket's list of Morton codes.
 
-Now, use delta encoding to limit the variety of numbers present in each list. Now, find a compression crate to
+Now, use delta encoding to limit the variety of numbers present in each list. Next, find a compression crate to
 write the lists to disk in zipped format. Write one file for each bucket and name each file the corresponding
 spatial hash of the bucket.
 

@@ -1,15 +1,16 @@
 # Atomics
 If a lock, such as a mutex, is a horse, an atomic is a pony. Except, it's like a pony that's much faster than
-a horse. The smaller a region serialized through synchronization, the more potential concurrency we can have
+a horse. I'm not sure that metaphore worked...
+The smaller a region serialized through synchronization, the more potential concurrency we can have
 and the less likely things will go wrong. So what is an atomic?
 
 Atomic operations are a special kind of very small lock. Atomics are specific to certain data types
-and certain operations because there is sometimes hardware support for them. Now, whenever you see
-the term "hardware support" you should think "SPEED". This means that you can work quite fast using
+and certain operations because there is often hardware support for them. Now, whenever you see
+the term "hardware support" you should think ⚡ SPEED ⚡. This means that you can work quite fast using
 atomics, not as fast as not having any synchronization, but relative to the more cumbersome
 mutex, it is quite fast. You can even use atomics in GPU programming. One tricky thing can be if
 your language supports atomics, but your hardware doesn't. In that case the atomic operation will
-be emulated in software which will make your code inexplicably slower.
+be emulated in software which will make your code slower.
 
 First off, let's look at the concept of memory ordering. Afterwards I'll describe a few different
 atomic functions you can use, and then finally look at what atomics are like in WGSL.
@@ -17,7 +18,7 @@ atomic functions you can use, and then finally look at what atomics are like in 
 Anyways, memory ordering.
 
 Various hardware platforms have different types of support for atomics. If we for
-example had a counter variable, it could for be used to sum an array, we could make sure that
+example had a counter stored in a variable, it could for be used to sum an array, we could make sure that
 the sum was correct while still being manipulated and accessed in a multithreaded setting by placing
 the counter inside an atomic. The nature of how the counter is incremented is then dictated by the
 memory ordering.
@@ -65,7 +66,7 @@ from an array is made possible with all these functions which don't just swap, c
 do one more thing. We can increment and fetch to get our new data chunk!
 
 ## Crossbeam and Atomics
-Back to the storyline! Once again, go to ```m2_concurrency::code::parallelism``` or [online][7].
+Back to the storyline! Once again, go to [m2_concurrency::code::parallelism][7].
 Set the ```crossbeam_atomic_chunks``` flag to true.
 
 So, I pulled in the ```atomic_chunks_mut``` crate from the mandelbrot example you will see later.
@@ -112,7 +113,7 @@ Windows 10. The L1/L2/L3 caches were 320 KB, 5 MB and 12 MB respectively.
 </figure>
 
 Now try and spend some time playing around with the variables in ```main()```.
-Especially stuff like chunk size, escape probability and complexity. In which cases does which techniques get
+Especially stuff like chunk size, escape probability and complexity. In which cases do which techniques get
 better or worse? Try and think about the types of workloads that are the most relevant to you and to reason
 about the differences in performance.
 

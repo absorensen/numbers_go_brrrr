@@ -4,13 +4,14 @@ If your graph is read-only, and reasonably sized, you can optimize your performa
 pointer jumps you do and increase your cache coherence. One possible avenue is to construct your graph
 through indices.
 
-However, not only is it hard to construct graphs in Rust, but it's also hard to construct dynamic graphs. And even
-hard to construct massive graphs which can be dynamically manipulated in parallel. If you are working on a single
-node at a time, things become quite simple in parallel. You can wrap each node in a lock, such as a mutex. But,
-it is quite common to have to process bigger and bigger neighbourhoods around vertices. One way to do this
-is to alternative between read and write stages. In one stage, each thread reads a relevant neighbourhood, does
+Constructing graphs correctly and safely in Rust is difficult because the compiler forces you to confront issues you
+might not think about in other languages. Constructing dynamic graphs is even harder. It's even
+harder to construct massive graphs which can be dynamically manipulated in parallel.
+One approach can be to wrap subsections (subgraphs) of your graph in a lock, such as a mutex. But,
+it is quite common to have to process bigger and bigger neighbourhoods around vertices. One approach
+can be to alternative between read and write stages. In one stage, each thread reads a relevant neighbourhood, does
 some processing, and adds changes to a list. Once all changes have been proposed, one or more threads can execute
-the changes, resulting in a new graph. One such solution is described [here][2].
+the changes from the list, resulting in a modified or new graph. One such solution is described [here][2].
 
 Sampling and repacking extremely huge graphs for training graph neural networks on GPUs is also a
 research topic [on its own][1]. Meshes, widely used in graphics, is another type of graph. In order

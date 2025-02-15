@@ -27,7 +27,7 @@ way of doing parallelism in Rust, both because it is such a small change from id
 and the cognitive load, if there is no communication between threads, is so very small.
 
 ## A Parallel Iterator Benchmark
-You can find the code for this section in ```m2_concurrency::code::data_parallelism``` or [online][4].
+You can find the code for this section in [m2_concurrency::code::data_parallelism][4].
 
 First we define our data, how many elements we want, and how many iterations we will iterate through
 the data to do our benchmarks.
@@ -115,8 +115,8 @@ it is likely that the performance gain from Rayon would increase. Personally, I 
 a path tracer, starting with a range of all the pixels and then having Rayon distribute the workload of
 path tracing every pixel. In that case we have a VERY complex workload and I saw an almost linear scaling
 compared to the amount of threads available. I wouldn't recommend it, but if you want to see a larger system
-you can check it out [here][5]. The parallelization can be found in ```render_pixel()``` [here][6] and
-```render()``` [here][7].
+you can check it out [here][5]. The parallelization can be found in [render_pixel()][6] and
+[render()][7].
 
 So, now that we can conclude that Rayon can be really good and easy to use for some things, let's move on
 to more explicitly define our own parallel system with, perhaps, longer running threads.
@@ -124,7 +124,7 @@ to more explicitly define our own parallel system with, perhaps, longer running 
 _________________
 
 ## Examples with Rayon
-You can find the code for this section in ```m2_concurrency::code::data_parallelism``` or [online][8].
+You can find the code for this section in [m2_concurrency::code::data_parallelism][8].
 
 Ok, so I made two additional examples. There's lots of different adaptors for iterators and I'll just show two.
 ```.filter()``` and ```.window()```. If you go back to the file from earlier and change the bool in the

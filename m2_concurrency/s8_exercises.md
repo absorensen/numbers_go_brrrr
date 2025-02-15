@@ -1,6 +1,7 @@
 # 👨🏼‍💻 Exercises
 These exercises aren't necessarily about getting the best performance, but about trying combinations
-of the concepts introduced in the module. It can still be interesting to time and compare the different strategies.
+of the concepts introduced in the module. It can still be interesting to time and compare the different strategies
+to get a better feel for which strategies function best with which problems.
 
 ## Parallel Sums and Histograms
 For this series of exercises we'll look at using some parallelization mechanisms

@@ -17,7 +17,7 @@ In base 10 the number 18 can be represented as the following -
 1x10<sup>1</sup> + 8x10<sup>0</sup>
 
 There is of course an infinite amount of 0's in front of 18, which we don't see because they
-are implied. Base 2 would represent the number as 0b10010 (note the 0b prefix).
+are implied.
 
 Let's try and represent the number 18 in base 2.
 
@@ -57,7 +57,7 @@ us having to learn hexadecimal representations. Stress on the representation,
 whether you write base 2, 10 or 16, in hardware it is all base 2. But where
 hexadecimal really shines is when we want to manipulate individual bytes or bits.
 
-There is something called bitwise operators, don't worry about it, it is one of
+There is something called bitwise operators, don't worry about it, it is coming in one of
 the next sections (s3). We could use the bitwise operator & (AND) on two numbers.
 & would compare every bit of the two numbers one at a time and output a 1 if
 both bits were 1. It would output a 0 in all other cases. So if we gave it
@@ -66,13 +66,12 @@ like 0b01010010001001101011010110010110, we would get an output value of
 0b00000000000000000011010100000000. This allows us to just isolate the active bits
 in the second byte from the right.
 
-This is really hard to read. If we had instead encoded our mask in hexadecimal,
-we would write 0xFF00 for our mask. We rarely have to write out our inputs, but
-in this case it can be represented as 0x5226B596. If you are on Windows, you can
-find the Calculator app. If you click in the upper left corner, you can find the view
-called "Programmer". On the left side you will see various numerical representations
-like HEX, DEC, OCT and BIN. Having these sorts of calculators can be very handy
-to quickly transfer from one representation to another.
+This is really hard to read and involves a lot of annoying counting. If we had instead
+encoded our mask in hexadecimal, we would write 0xFF00 for our mask and omit the leading
+0's. We rarely have to write out our inputs, but in this case it can be represented as
+0x5226B596. Some Calculator apps have a view called "Programmer". On the left side you
+will see various numerical representations like HEX, DEC, OCT and BIN. Having these sorts
+of calculators can be very handy to quickly transfer from one representation to another.
 
 <figure markdown>
 ![Image](../figures/windows_calculator.png){ width="800" }
@@ -94,16 +93,15 @@ but undefined for signed integers. Signed means it can also represent
 negative numbers, where as unsigned integers can exclusively represent
 non-negative numbers.
 
-Overflow in unsigned integers is defined as being the remaineder of dividing
+Overflow in unsigned integers is defined as being the remainder of dividing
 the desired number by the maximum representable number. So if you are adding
 128 to 157, both using 8-bit unsigned integers, which has a maximum value of
 255, the desired number is 285. This results in an overflowed value of 30.
-Read [this link](https://www.learncpp.com/cpp-tutorial/unsigned-integers-and-why-to-avoid-them/)
-about some of the considerations regarding unsigned integers. The author
-carries the opinion that you should mainly use unsigned integers for
-stuff like array indices (which are all required to be ```usize``` in Rust)
-or as variables which you know are being manipulated as bitfields instead of
-numbers.
+Read [this link][6] about some of the considerations regarding unsigned
+integers. The author carries the opinion that you should mainly use unsigned
+integers for stuff like array indices (which are all required to be
+```usize``` in Rust) or as variables which you know are being manipulated
+as bitfields instead of numbers.
 
 A special type of unsigned integer is the ```usize```. On a 32-bit operating system,
 where you might recall we can only address around 2 GB of memory, the ```usize``` will
@@ -159,3 +157,4 @@ or even a video by your favourite [performance YouTuber][5].
 [3]: https://en.wikipedia.org/wiki/Integer_(computer_science)
 [4]: https://www.cs.utexas.edu/users/witchel/429H/lectures/02-bits-ints.pdf
 [5]: https://www.youtube.com/watch?v=fYMeYrIWnOc
+[6]: https://www.learncpp.com/cpp-tutorial/unsigned-integers-and-why-to-avoid-them/

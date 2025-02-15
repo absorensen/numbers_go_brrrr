@@ -1,6 +1,6 @@
 # Threads
-Now I will introduce how to explicitly define a thread and give it some work to do. This can be very good for
-workloads which are long running and data largely independent.
+Now let's look at how you can explicitly define a thread and give it some work to do. This can be very good for
+workloads which are long running and with each thread's data being largely independent.
 
 This section is somewhat based on [The Book](https://doc.rust-lang.org/book/ch16-00-concurrency.html).
 In the last section we looked at what a parallelization library like Rayon can do. Under the hood, it does
@@ -9,7 +9,8 @@ quite a lot of stuff. It subdivides a collection, in the examples I showed you, 
 This allows us to create small pockets of parallelism, or if your formulate it slightly differently, even
 quite long running programs.
 
-But what if we wanted to control threads explicitly? Each thread might do something differently, do something
+But what if we wanted to control threads explicitly? Each thread might do something completely differently,
+and not just run the same program on subdivisions of the same data. The threads might do something
 long running, only act in reaction to an event or some data being sent, in that case, Rayon might get a bit
 confusing, and we don't necessarily want the thread to terminate until the very end of our program.
 
@@ -24,8 +25,8 @@ multiple threads in parallel, where as a single physical core can only run multi
 I really hope that makes sense. You should probably read it again...
 
 Lots of threads are running on your computer at any time. At the time of writing, I can open up Task Manager in
-Windows 10 and click the Performance tab too see that I have a whopping 4693 threads and 303 processes running.
-The number keeps changing, it won't stand still. I certainly don't have 4693 cores in my laptop.
+Windows 10 and click the Performance tab to see that I have a whopping 4693 threads and 303 processes running.
+The number keeps changing, it just won't stand still. I certainly don't have 4693 cores in my laptop.
 It is actually 4 cores with 8 logical processors, so if I were to partition my program into N number of
 threads, I would probably default to suggest the program to use 8 threads, maybe more.
 
@@ -40,8 +41,8 @@ running free or returning to the operating system, to quickly wake them up and g
 they can be returned to the thread pool again.
 
 ## Launching a Thread
-For this section I have a project ready in ```m2_concurrency::code::threads``` or you can find it
-[online](https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/threads).
+For this section I have a project ready in
+[m2_concurrency::code::threads](https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/threads).
 
 Go to the ```basic_threading``` function. In it we launch some threads using the standard libraries
 ```thread::spawn()``` and give it a closure to execute. Each thread, including the main thread
@@ -64,7 +65,7 @@ The threads might still be alive when the main thread is done executing.
 ## Joining, Wishing, Waiting
 Another thing we could do, is to hold on to each thread handle. That would allow us to make sure that
 all threads were done before exiting. Go to the function ```basic_threading_with_termination``` and see how that can
-done.
+be done.
 
 <figure markdown>
 ![Image](../figures/threads_basic_threading_with_termination.png){ width="200" }
@@ -89,8 +90,8 @@ Now, try and answer the following - why do we do the ```.join()``` calls in that
 correct despite the threads being done with their small programs in random order?
 
 Next, go to the function ```basic_threading_with_scope```. In this function I use the library ```crossbeam```.
-It is one of the defacto standard libraries for parallelism in Rust. To launch the threads I use crossbeams
-spawner, which lets it keep track of the threads for me.
+It is one of the defacto standard libraries for parallelism in Rust. To launch the threads I use crossbeam's
+spawner, which lets it keep track of the threads for us.
 I then proceeed to use a scope. It is just like the scope we normally have in Rust, but for executing threads
 until the end. This is equivalent to the loop of ```.join()```s we just had.
 
@@ -113,22 +114,23 @@ sections I will get into ways you can share data between threads and synchronize
 _________________
 
 ## Crossbeam Instead of Rayon
-For this section I have a project ready in ```m2_concurrency::code::parallelism``` or you can find it
-[online](https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism).
+For this section I have a project ready in
+[m2_concurrency::code::parallelism](https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism).
+
 Once again, just like in the ```data_parallelism``` section,
 we are looking at a homogenous workload in two different versions, a VERY simple version that just doubles
 all numbers in a vector and one that does something slightly more complicated, but it is still very
 homogenous. Later on you will be asked to look at the presented techniques in a more heterogeneous context
 where stuff like work stealing has a much bigger effect.
 
-I will be looking at what happens if we know more about the problem than our library.
+We will be looking at what happens if we know more about the problem than our library.
 We can both help Rayon along to become faster, and use facilities from crossbeam to improve our performance.
 
 So what is it we are doing?
 
-We are just going to split the workload ourselves. ```parallelism()``` contains 2 sections of with a number
+We are just going to split the workload ourselves. ```parallelism()``` contains 2 sections with a number
 of benchmarks each. Each benchmark of the different approaches is hidden behind a flag in ```main()```.
-The data is split into chunks, that is a vector of reference slices of size
+The data is split into chunks, that is, a vector of reference slices of size
 ```chunk_size```. The last chunk will not have the same size as the others.
 The first section is the double function and the second section is the slightly more complex functions.
 Once again, the workloads are completely homogenous. It should take the same amount of time to execute any
@@ -136,10 +138,11 @@ randomly chosen segment of size N, except the last one.
 The first benchmark is completely vanilla single threaded execution.
 The second benchmark is using Rayon to parallelize the execution of chunks.
 The third benchmark is using Rayon to parallelize execution of the original dataset, with no chunks.
-This is the normal way we would use Rayon.
+This is the default way we would use Rayon.
 Finally, the fourth benchmark uses ```crossbeam::scope()``` to launch ```thread_count``` jobs with low administrative
 overhead. To enable these bencharks, set the following flags to ```true``` in ```main()``` - ```single_thread```,
 ```rayon``` and ```crossbeam_scope```.
+
 Let's look at the results -
 
 <figure markdown>

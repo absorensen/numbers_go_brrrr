@@ -193,7 +193,7 @@ Matrix multiplication with the second matrix transposed.
 </figure>
 
 Now, lets try out a simple example! Checkout the code at
-```m1_memory_hierarchies::code::strided_access_and_transposition``` or check it out [online][10].
+[m1_memory_hierarchies::code::strided_access_and_transposition][10].
 
 Interestingly, when running the code there doesn't seem to be much of a difference until
 the matrix sizes become quite big. Why do you think that is?
@@ -259,8 +259,7 @@ Offset some of the cost of permutations, by just permuting rows.
 </figcaption>
 </figure>
 
-Now, lets try out a simple example! Checkout the code at ```m1_memory_hierarchies::code::permuted_arrays```
-or check it out [online][11]
+Now, lets try out a simple example! Checkout the code at [m1_memory_hierarchies::code::permuted_arrays][11]
 
 <figure markdown>
 ![Image](../figures/permuted_arrays_benchmark_0.png){ width="500" }
@@ -357,8 +356,7 @@ As we compacted the data, we can keep track of the starting index of each row in
 </figcaption>
 </figure>
 
-Now for a simple performance benchmark. Checkout the code at ```m1_memory_hierarchies::code::jagged_arrays```
-or check it out [online][12].
+Now for a simple performance benchmark. Checkout the code at [m1_memory_hierarchies::code::jagged_arrays][12].
 
 <figure markdown>
 ![Image](../figures/jagged_arrays_benchmark_0.png){ width="500" }
@@ -465,8 +463,7 @@ that as a key for the first linear layer and its contents, and then "ReLU0", "Li
 "ReLU1", "Softmax0" and so on. If possible, it is more efficient to use small types as
 your key. Such as a ```u32``` or ```u64```.
 
-Now for a simple performance benchmark. Checkout the code at ```m1_memory_hierarchies::code::hash_maps```
-or check it out [online][13].
+Now for a simple performance benchmark. Checkout the code at [m1_memory_hierarchies::code::hash_maps][13].
 
 As you can see the hash map using integers clearly outperforms Strings. To be fair, every insertion in the
 string based map, requires a clone of the original string, the read and update only requires a reference.

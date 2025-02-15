@@ -115,7 +115,7 @@ to use shared memory doing it. Doing matrix multiplication as well is good pract
     is doing.
 
 ### m1::e4 - 1D Convolution
-Go to ```m1_memory_hierarchies::code::gpu_hand_in``` or [online][0] and follow the instructions.
+Go to [m1_memory_hierarchies::code::gpu_hand_in][0] and follow the instructions.
 You need to do 3 different version of 1D convolution, a naive version, one with zero padding of the input
 signal and one with optimal usage of shared memory.
 

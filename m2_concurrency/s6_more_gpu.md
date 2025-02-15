@@ -1,6 +1,6 @@
 # More GPU
-This section is about giving a bit of additional context around GPUs. It isn't a prerequisite for understanding any
-of the material after it.
+This section is about giving a bit of additional context around GPUs. It isn't a prerequisite for
+understanding any of the material after it.
 
 ## The Graphics Pipeline
 Originally, GPU's were made just for graphics. They were intiially quite closed in their
@@ -50,9 +50,9 @@ to its coordinate on the output surface? Take a second to think about it.
 
 The fragment shader is the precursor to the compute shader. Knowing where you are on
 the 2D output surface is tantamount to finding your thread ID. Allowing the fragment
-shader to write to buffers and not just send the fragment to be renddered allows
+shader to write to buffers and not just send the fragment to be rendered allows
 you to save the calculations. Once upon a time, scientists thought it would be kind
-of nice if you could use the GPU, which is a massively parallel device for scientific
+of nice if you could use the GPU, which is a massively parallel device, for scientific
 computing. So they used fragment shaders in the early 2000's to do stuff like
 matrix multiplication and FFT's. There were a number of research projects
 in how to do GPGPU, eventually culminating in the official release of CUDA in 2007.
@@ -60,42 +60,32 @@ Nowadays compute shaders are a standard part of graphics APIs and workloads, wit
 an increasing amount of rendering pipelines using one or more compute shaders in their
 pipelines. These compute shaders can happen at any point. In fact, in launching
 the new Nanite system for Unreal Engine 5, one of the tech leads on the project,
-Brian Karis, [revealed](https://www.youtube.com/watch?v=eviSykqSUUw) that for
-select triangles, they would prevent them from being hardware rasterized and
-instead write their own software based rasterizer which could outperform hardware
-rasterization for very small triangles.
+Brian Karis, [revealed][2] that for select triangles, they would prevent them from
+being hardware rasterized and instead write their own software based rasterizer
+which could outperform hardware rasterization for very small triangles.
 
 For a more thorough explanation of the graphics pipeline you can read this page
-from [Learn OpenGL](https://learnopengl.com/Getting-started/Hello-Triangle).
+from [Learn OpenGL][3].
 
 ## SPIR-V & GLSL
 WGSL is somewhat limited in what it can do. If you would like access to more features
-or to have a greater codebase you can copy from directly, WGPU has
-[increasing support](https://docs.rs/wgpu/latest/wgpu/enum.ShaderSource.html#) for
-both the GPU intermediate representation SPIR-V and the shading language GLSL (which can be
-compiled to SPIR-V), without necessitation additional build scaffolding.
-It also looks like it will make use of [naga](https://github.com/gfx-rs/wgpu/tree/trunk/naga)
-directly. If you are sure your system has support for it (think back to extensions),
-a more mature shading language like GLSL, might let you make use of more features. I
-haven't had time to check it out yet, but if it can used without additional build steps
-and administration, this might be a nice way to get access to more features.
+or to have a greater codebase you can copy from directly, WGPU [supports][4] the GPU
+intermediate representation SPIR-V. The shading languages GLSL, HLSL or Slang can all be
+compiled to SPIR-V.
 
 ## Additional Levels in the Memory Hierarchy
 Last time I introduced concepts in GPU memory to you, we had two options.
 A thread could either write its data to global memory (VRAM) from which
 other threads could read the data, or it could share data with other
-threads in the same workgroup, by writing to the user programmable
-shared memory, residing in the L1 cache. There are two other options.
-I know the first one is available in CUDA, it might be in some shader
-languages and OpenCL, but it's certainly not in WGSL. In CUDA it is known as
-[warp shuffling](https://developer.nvidia.com/blog/using-cuda-warp-level-primitives/).
+threads in the same work group, by writing to the user programmable
+shared memory, residing in the L1 cache (on Nvidia systems). There are two other options.
+
 When sharing data through shared memory, the cost to access shared memory is 10 cycles,
-or it was last time I checked. Warp shuffling, or work group shuffling, is sharing
+or it was last time I checked. Work group shuffling, is sharing
 directly between the registers of each thread in a work group. It was 1 cycle to
 access last time I checked. This is immensely useful in reductions and prefix sums.
 You would still need to write data to global memory in order to share data between
-work groups. Unless you are using a GPU supporting
-[distributed shared memory](https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/).
+work groups. Unless you are using a GPU supporting [distributed shared memory][7].
 At the time of writing, the Nvidia H100 is the only card supporting it.
 Distributed shared memory allows accessing memory residing in the shared memory of
 other work groups, as if it was one big shared memory. Hopefully, this feature
@@ -106,3 +96,9 @@ To learn more about the graphics pipeline you can check out [Learn OpenGL][0] or
 
 [0]: https://learnopengl.com/
 [1]: https://sotrh.github.io/learn-wgpu/
+[2]: https://www.youtube.com/watch?v=eviSykqSUUw
+[3]: https://learnopengl.com/Getting-started/Hello-Triangle
+[4]: https://docs.rs/wgpu/latest/wgpu/enum.ShaderSource.html#
+[5]: https://github.com/gfx-rs/wgpu/tree/trunk/naga
+[6]: https://developer.nvidia.com/blog/using-cuda-warp-level-primitives/
+[7]: https://developer.nvidia.com/blog/nvidia-hopper-architecture-in-depth/

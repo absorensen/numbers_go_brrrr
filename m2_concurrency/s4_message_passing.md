@@ -1,10 +1,12 @@
 # Message Passing
-Message passing is one of the easiest ways to share data between multiple threads is not to use locks,
-but to just send data from one thread to another. Whoever has the data gets to use it. Once that thread is done
-using it, it can send it to another thread. Synchronization through ownership. Easy peasy.
-
 Now let's look at a different way of doing parallelism. What if we didn't share memory at all and just sent it
 between threads? That would make things so much easier! We will do that with [message passing][2]!
+
+Message passing is one of the easiest ways to share data between multiple threads. Message passing does not
+not use locks but sends data from one thread to another. Whoever owns the data gets to use it.
+Once that thread is done using it, it can send it to another thread. Synchronization through
+ownership. Easy peasy.
+
 It might also make things slower, but I will just assume that it is slower than the data parallelism, threads,
 locks and atomics we just looked at. On the other hand it allows us to work simply while maintaining a very high
 degree of freedom between threads, allowing us to take that to the extreme with [task parallelism][3].
@@ -19,7 +21,7 @@ such as "multiply all data by 2" along with the data to be processed.
 
 This is quite a simple way of doing things and we don't have to worry about a single lock. The implementation takes
 care of that. There are some other caveats, however. The specific version of message passing we will be looking at
-is called channels in Rust. What happens is that the message is basically moved into a queue from which the receiver
+is called ```channels``` in Rust. What happens is that the message is basically moved into a queue from which the receiver
 can dequeue messages. The Rust's borrow checker would no longer need to worry about who or what owns what, as the
 data is now fully owned by the receiving thread.
 But what happens if the queue is full? We can have multiple threads enqueueing messages to
@@ -30,7 +32,7 @@ space opens up in the channel? If you are designing an efficient system using me
 something you should think about.
 
 Two potential solutions are the synchronous and the asynchronous channels. With the asynchronous channel the
-transmitting thread will send the message to the channel and then move on, as in not block, remember blocking
+transmitting thread will send the message to the channel and then move on, as in not block. Remember blocking
 behavior? The asynchronous channel then has two methods of handling message overflow. It can either resize the
 queue (think back to dynamically sized arrays) or begin dropping messages. The synchronous channel on the other
 hand requires the transmitter to wait until either the message has been successfully transmitted or received,
@@ -38,7 +40,7 @@ depending on the interpretation.
 
 Another hazard is what happens if one side of the channel stops interacting with the channel?
 If you imagine one thread holding a transmitter to the channel. It sends data every once in a while to be processed.
-On the other end a thread might have nothing to do but receive messages from the channel and process them. If then
+On the other end a thread might have nothing to do but receive messages from the channel and process them. If
 the transmitting thread moves on and no longer transmits data to the channel, we need to be aware of that
 possibility and handle it. It could either be the channel itself communicating that one end of the channel had been
 dropped or it could be the transmission of an exit message. This only works if it is the transmitting thread
@@ -46,9 +48,9 @@ moving on. If the receiving thread will move on, or end, it cannot transmit an e
 send an exit message to the transmitting thread. The channel itself handling whether both ends are still alive is
 probably the way to go in most cases.
 
-Another main use of message passing is sharing data between computers. If you have multiple computers working on the
-same problem, they don't have any physical memory to share, so instead they can send messages to each other. This
-is the basis of the MPI standard.
+Another main use of message passing is sharing data between computers/nodes/servers. If you have
+multiple computers working on the same problem, they don't have any physical memory to share,
+so instead they can send messages to each other. This is the basis of the MPI standard.
 
 _________________
 
@@ -66,7 +68,7 @@ will have to block until the message as been sent successfully. This might be be
 speeds and can't drop packages. You could very quickly accummulate a massive amount of memory.
 
 ## Real-Time Message Passing
-I made a code example for you. You can either go to ```m2_concurrency::code::message_passing``` or [online][6].
+I made a code example for you. You can either go to [m2_concurrency::code::message_passing][6].
 
 In this example I use Rust's ```mpsc::channel``` to get two pairs of senders/receivers. The main thread
 generates some data and sends the ```Vec<f32>``` to a processing thread, which performs some in-place

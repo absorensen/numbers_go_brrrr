@@ -37,7 +37,7 @@ trait Alpha + trait Beta + trait Omega. This is known as composition. Now for th
 Doing this exercise will be quite challenging if you don't know how to read C++. To better practice
 structure, smart pointers, dynamic dispatch and traits, I recommend moving on to doing
 [Ray Tracing in One Weekend][2] in Rust. There is a code snippet which shows your image on screen
-instead of writing it to file in ```m0_introduction::code::image_on_screen``` or [online][3].
+instead of writing it to file in [m0_introduction::code::image_on_screen][3].
 
 Once you have completed this part 1 out of 3, I suggest modifying the resulting code in the following ways -
 

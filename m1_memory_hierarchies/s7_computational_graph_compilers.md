@@ -120,7 +120,7 @@ Programs are just strings!
 
 We can decimate all of our neatly written shaders into something called op codes. You start by defining
 all of the data that goes in, you have a few lines of the thread figuring out its own ID and so on.
-Peruse the directory ```src::op_code_compiler::runner.rs``` or [online][6]. This is just a toy example,
+Peruse the directory [src::op_code_compiler::runner.rs][6]. This is just a toy example,
 it didn't make sense to make the whole thing and I won't be benchmarking it since the results will be the exact
 same as the operator version. Each op code is just a string. Each operator is just a list of op codes.
 In this op code example we do operator fusion by adding our ReLU op-code to the list.

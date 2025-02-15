@@ -106,9 +106,10 @@ An example computational graph.
 </figcaption>
 </figure>
 
-The code for the rest of the module can be found at ```m1_memory_hierarchies::code::computational_graphs``` or
-[online][8]. It's quite long (more than 6k lines of code). You don't need to read the whole thing, maybe you can
-just give it a quick skim. The most relevant sections which will typically be named specifically, but you probably
+The code for the rest of the module can be found at
+[m1_memory_hierarchies::code::computational_graphs][8]. It's quite long (more than 6k
+lines of code). You don't need to read the whole thing, maybe you can just give it a
+quick skim. The most relevant sections which will typically be named specifically, but you probably
 won't gain too much from anything other than the CPU and GPU implementations of the nodes themselves.
 
 ## What's in a Tensor2D?
@@ -116,8 +117,7 @@ First of all we are going to start on the CPU.
 We are going to create a data type which will hold the data our operators consume on the CPU.
 Let's call it ```Tensor2D```. Our 2D tensor will actually be a simple piece of one dimensional memory under the
 hood and we will keep track of the number of rows and columns to find out how to access each piece of data.
-If you are in the root directory for ```computational_graphs``` go to ```src::shared::tensor_2d.rs``` or check
-it out [online][9].
+If you are in the root directory for ```computational_graphs``` go to [src::shared::tensor_2d.rs][9].
 
 Start by taking a look at the definition of the ```Tensor2D``` struct at the very top. The ```derive``` stuff
 is asking some macros to automatically implement (derive) some traits (interfaces and behavior).

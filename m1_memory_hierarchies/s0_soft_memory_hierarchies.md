@@ -127,7 +127,8 @@ This is one of the myriad reasons why we needed to have an ```int*```. If the ad
 42, to get the next integer element, we don't go to the address 43, which would just be the second byte of the
 first element. No, we want to go to the address 46, where the second element in the array begins. Since
 ```integer_array``` has the type ```int*```, we have defined that each element is 4 bytes and we now have a
-*stride* of 4 bytes.
+*stride* of 4 bytes.[here][2] respectively.
+
 We also need to keep track of the size of our allocation close to the pointer itself,
 as trying to access an element outside of our allocation will be catastrophic, and likely result in a
 [segmentation fault][2]. When we ask the operating system for memory it keeps track of which memory belongs
@@ -350,8 +351,7 @@ and we now only retrieve a single cache line. Which in this made up scenario is 
 the more standard 64 byte cache line.
 
 Now that we have learned a bit about cache lines, we are equipped to actually talk about access patterns.
-I have made some Rust code for you, which is located at ```m1_memory_hierarchies::code::access_patterns``` or
-[online][7].
+I have made some Rust code for you, which is located at [m1_memory_hierarchies::code::access_patterns][7].
 
 First off is sequential access. It is the one we usually strive for. We start at one end and go through every
 element until the end, from index 0 to the end. If everything is cache aligned, great! If not, the cost of

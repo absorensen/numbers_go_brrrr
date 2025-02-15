@@ -23,10 +23,8 @@ anyways! Don't worry about the 'how' too much, I'll go into greater detail furth
 Okay, so let's try building the linear operator again, but this time on the GPU! Don't worry too much about
 the particulars. The setup is quite a bit like what is described in [Intro to GPU's][6].
 
-There are three central files for this. ```src::shared::tensor2d_gpu.rs```,
-```src::shared::shaders::linear.wgsl``` and ```src::immediate::nodes.rs```.
-If you don't have them locally you can check them out [here][0], [here][1] and
-[here][2] respectively.
+There are three central files for this. [src::shared::tensor2d_gpu.rs][0],
+[src::shared::shaders::linear.wgsl][1] and [src::immediate::nodes.rs][2].
 
 First of all, let's go directly to the shader (GPU) code in ```linear.wgsl```.
 The version of the two functions we are interested in is ```main```.
@@ -101,8 +99,8 @@ implement a more optimal version using tiling and shared memory.
 
 ## Building ReLU
 We then implement ReLU, Softmax and the fused operators in the same way. ReLU you can just check out yourself
-in ```shaders::relu.wgsl``` or [online][3] along with an inline implementation in
-```shaders::relu_inline.wgsl``` or [online][4].
+in [shaders::relu.wgsl][3] along with an inline implementation in
+[shaders::relu_inline.wgsl][4].
 
 <figure markdown>
 ![Image](../figures/immediate_relu_benchmark.png){ width="800" }
@@ -119,7 +117,7 @@ is in any way faster.
 
 ## Building Softmax
 Next up, we have the softmax operator. You will find the three shaders
-needed for the softmax operator in ```shaders::softmax.wgsl``` or [online][5].
+needed for the softmax operator in [shaders::softmax.wgsl][5].
 
 In this case, finding and communicating the maximum value and the sum is a lot more complicated on a GPU.
 This operation is called a reduction. It is hard because it requires that we communicate and synchronize
