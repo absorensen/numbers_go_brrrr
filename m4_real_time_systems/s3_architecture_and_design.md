@@ -1,7 +1,7 @@
 # Architecture and Design
 I won't be introducing the entire field of software architecture in this section, but I'd like to throw a
 few concepts your way to get you started. For some more design patterns you can check out [this book][0].
-Hopefully, you'll see the idea entertaining those ideas and experiment with them yourself.
+Hopefully, you'll see the idea in entertaining those ideas and experiment with them yourself.
 There should be plenty of material available on all of them. So anyways, minimizing statefulness,
 components, and data-oriented design.
 
@@ -19,9 +19,19 @@ Ideally, however, we could constrain this render context to a single entity, eve
 contention for the context would be lower. If we had a big context which suffered from lots of contention
 we might be able to split it into a couple of smaller contexts to distribute contention. One concept that could
 help us clearly formulate our code into parts which will hopefully limit any shared state. Shared state. Bad!
+
+If you are defining an object, you can also try to maximize your usage of pure functions. Pure functions
+are functions which do not rely on any state outside of the function arguments. Even if that function
+belongs to an object, and has access to the same data, formulating as many of your functions as possible
+as pure allows you to freely move around your functions and refactor your code. It also makes your code
+significantly more testable. A rule of thumb is - only public functions and functions at the very top of
+the call tree inside of a function should be accessing member values directly. Any calls these functions
+make to other functions should be passing members state to pure functions. It's one of those concepts
+that might not seem THAT appealing now, but once you try it, I doubt you'll want to go back.
+
 Anyways, let's talk about components.
 
-An intuitive way to limit what state is shared and what isn't is to clearly define which parts of your
+An intuitive way to limit what state is shared and what isn't, is to clearly define which parts of your
 code is easily divisible into a single coherent entity. Define an interface. How do components interact with each
 other? Which components have ownership of which data at which step in the pipeline? What needs to happen for a
 component to be configured and ready to run? What is each components' relation to parallelism?
@@ -30,12 +40,12 @@ Having your code divvied up into components also allows several people to develo
 try out various implementations while keeping the functionality the same. This only really works if we mitigate the
 side effects of each component. Mitigating statelessness, and certainly shared state, is also greatly helped
 by formulating your code as components. If you really wanted to keep statelessness to the absolute minimum, you
-could keep the state necessary to for each component to run it outside of the component and give it as an argument
+could keep the state necessary for each component to run outside of the component and give it as an argument
 to each function call. In my opinion, stress on opinion, this would be, in most cases, an example of a dogmatic
 adherence to a principle. Just keep the necessary state inside the components. Still as little as possible, though.
 
 [Data-oriented design][1] and branchless programming are important enough concepts that they have gotten their own
-section which is the very next one. It basically boils down to this, instead of having an array of particles,
+section which is the very next one. It basically boils down to this: instead of having an array of particles,
 let's have a particle system which has arrays of each component in those particles, as it has to manipulate all
 the particles anyway. Formulating your system as components is a good way to get started with this as you
 can implement this new way of thinking about data under the hood without any changes in the interface. This
@@ -43,7 +53,7 @@ reformatting of your data can also be seen as a transposition of your data. Bran
 move the potential branches outside of loops and reduce potential branching for better performance. Doing this
 is helped along by using data-oriented design, which was in turn helped along by encapsulation through components.
 
-[Entity component systems][2], are a type of system, most often used in games programming, wherein relevant data
+[Entity component systems][2] are a type of system, most often used in games programming, wherein relevant data
 is composited to do what seems to be a more flexible version of the classic first pass encapsulated
 data-oriented design. In general it is something you most likely use a library to implement,
 like [Legion][3]. Alternatively, here's a blog post about building [your own ECS][4].
@@ -61,7 +71,7 @@ different threads.
 </figure>
 
 As you can see we keep a main thread, orchestrating, moving data and launching other work. It takes commands through
-a channel (communication mechanism) everytime something in the UI changes. The UI renders to screen using the GPU.
+a channel (communication mechanism) every time something in the UI changes. The UI renders to screen using the GPU.
 In turn the UI also gets messages through a channel from the main thread. It could for example be to show a new
 image or change the status message. The main thread sends a list of data files to retrieve for each iteration
 of a neural network training loop to a thread safe queue. Four threads dequeue the names of files to load. Each
@@ -79,10 +89,10 @@ administrating the loading and preprocessing threads only needs to worry about t
 a bunch of global state manipulation or anything. It gets a list of commands and then iteratively gets new commands,
 then it executes those things. We keep the extra threads inside that. This sort of encapsulation allows us to
 keep our sanity while playing around with concurrency. The cognitive load is lowered as the scope and
-consequences of changes are kept small. This of course also means that we have a smaller pocket of
-parallelism bookended by communication in the thread safe queue and the channel. As such we have to make
-sure the N threads doing loading and preprocessing have enough work. We should of course make sure that
-the amount of work incoming is balanced with the amount of data getting dequeued from the output channel.
+consequences of changes are kept small and we move up in abstraction level. This of course also means that we
+have a smaller pocket of parallelism bookended by communication in the thread safe queue and the channel.
+As such we have to make sure the N threads doing loading and preprocessing have enough work. We should of course
+make sure that the amount of work incoming is balanced with the amount of data getting dequeued from the output channel.
 
 <figure markdown>
 ![Image](../figures/example_architecture_2.png){ width="800" }
@@ -93,7 +103,7 @@ a different implementation.
 </figure>
 
 All of these reasons about "what if, load balancing, thread this and thread that" are arguments why that component
-should be encapsulated. You could try out preprocessing the entire dataset into one big file, or several big pages
+should be encapsulated. You could try out preprocessing the entire dataset into one big file, or several big pages,
 and have the data loader administrate that entire process, or you could try increasing the load on the worker
 threads through coroutines. You could even implement both and then switch between them based on which system your
 application was running on. In any case, encapsulating your code into a data loader component might prohibit you
