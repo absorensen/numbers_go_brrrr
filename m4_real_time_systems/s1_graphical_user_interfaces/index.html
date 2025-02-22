@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
@@ -1856,23 +1856,25 @@
 
 
 <h1 id="graphical-user-interfaces">Graphical User Interfaces</h1>
-<p>Creating good graphical user interfaces is a huge topic on its own, and can be a bit complex. But I want you to
-think of the following 3 paths for you. Visualization frameworks, immediate mode and retained mode. Each of
-these are entire frameworks that you will have to learn as a tool to use and grow your code around.</p>
+<p>Creating good graphical user interfaces (GUI) is a huge topic on its own, and can be a bit complex. But I
+want you to think of the following 3 paths for you. Visualization frameworks, immediate mode and retained
+mode. Each of these are entire frameworks that you will have to learn as a tool to use and grow your code
+around.</p>
 <p>The absolute quickest way to get started is probably to use existing visualization frameworks. They might
 not be an exact fit for what you want, and through the lack of limitations (remember, we like limitations),
 it might be unable to match the performance of other solutions, and it might be overly complicated for you to
 make custom changes. You might get lucky though, and the world class experts who wrote the visualization framework,
-might have optimized it like there's no tomorrow, yielding awsome performance. You can find one such framework
+might have optimized it like there's no tomorrow, yielding awesome performance. You can find one such framework
 <a href="https://www.rerun.io/">here</a>.</p>
 <p>Immediate mode is the type you are most likely to use for learning and prototyping. In the general case, every
-single element will be redrawn every single frame. This can take up quite a bit of your performance. What you
-gain instead, is a vastly simpler way of generating your UI. In most cases, you can get the immediate mode GUI
-library to render on its own. If you are prototyping a 3D application, it might be a bit tricky to render your
-own output if you are also in the process of learning the ropes of graphics programming. A quite nice immediate
-mode GUI library written in Rust and having WGPU as a potential backend is <a href="https://github.com/emilk/egui">egui</a>. The documentation isn't
-very comprehensive, but you can find out how to use the various widgets through the <a href="https://www.egui.rs/#demo">egui demo</a>.</p>
-<p>For a small code example, check out the <a href="https://github.com/absorensen/the-guide/blob/main/m4_real_time_systems/code/egui-winit-wgpu-template/src/gui.rs">template</a> I have linked multiple times. The code is too long to
+single GUI element will be redrawn every single frame. This can take up quite a bit of your performance if you
+have a lot of different GUI elements. What you gain instead, is a vastly simpler way of generating your UI.
+In most cases, you can get the immediate mode GUI library to render on its own. If you are prototyping a
+3D application, it might be a bit tricky to render your own output if you are also in the process of learning
+the ropes of graphics programming. A quite nice immediate mode GUI library written in Rust and having WGPU as
+a potential backend is <a href="https://github.com/emilk/egui">egui</a>. The documentation isn't very comprehensive, but you can find out how to use
+the various widgets through the <a href="https://www.egui.rs/#demo">egui demo</a>.</p>
+<p>For a small code example, check out the <a href="https://github.com/absorensen/the-guide/blob/main/m4_real_time_systems/code/egui-winit-wgpu-template/src/gui.rs">template</a> I've linked before. The code is too long to
 paste here, but it should be fairly easy to see how the widgets are declared in the function <code>ui()</code> and
 results in the following control panel -</p>
 <figure>
@@ -1881,13 +1883,14 @@ results in the following control panel -</p>
 A GUI element which was easily declared with an Immmediate Mode GUI, egui.
 </figcaption>
 </figure>
-<p>Retained mode on the other hand, is more complex and will likely involve using a framework enforcing a certain type
+<p>Retained mode, on the other hand, is more complex and will likely involve using a framework enforcing a certain type
 of structure in your code. It allows for better performance and is a better tool for GUI's which are user-facing.
 What makes retained GUI's faster is keeping track of all of the GUI elements like a tree. Then once an element (A)
 needs to be redrawn, all of its child elements (B...) also need to be redrawn. If you have an accumulated image from
 drawing the last frame, you only need to redraw all of the pixels where A and children used to be, and all of
 the pixels where they will be in the new frame. Some of the most popular retained GUI libraries for Rust are
 <a href="https://iced.rs/">Iced</a> and <a href="https://dioxuslabs.com/">Dioxus</a>.</p>
+<p>You can find a list of GUI-relevant libraries <a href="https://areweguiyet.com/">here</a>.</p>
 
 
 
@@ -1910,7 +1913,7 @@ the pixels where they will be in the new frame. Some of the most popular retaine
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 20, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 22, 2025</span>
   </span>
 
     

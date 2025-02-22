@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
@@ -1915,7 +1915,7 @@
 <h1 id="architecture-and-design">Architecture and Design</h1>
 <p>I won't be introducing the entire field of software architecture in this section, but I'd like to throw a
 few concepts your way to get you started. For some more design patterns you can check out <a href="https://gameprogrammingpatterns.com/">this book</a>.
-Hopefully, you'll see the idea entertaining those ideas and experiment with them yourself.
+Hopefully, you'll see the idea in entertaining those ideas and experiment with them yourself.
 There should be plenty of material available on all of them. So anyways, minimizing statefulness,
 components, and data-oriented design.</p>
 <p>When constructing your systems you should try to minimize, if not completely elimitate global state.
@@ -1931,9 +1931,17 @@ render context was mutable we could give them each a <code>Arc&lt;Mutex&lt;Rende
 Ideally, however, we could constrain this render context to a single entity, everything would be simpler and the
 contention for the context would be lower. If we had a big context which suffered from lots of contention
 we might be able to split it into a couple of smaller contexts to distribute contention. One concept that could
-help us clearly formulate our code into parts which will hopefully limit any shared state. Shared state. Bad!
-Anyways, let's talk about components.</p>
-<p>An intuitive way to limit what state is shared and what isn't is to clearly define which parts of your
+help us clearly formulate our code into parts which will hopefully limit any shared state. Shared state. Bad!</p>
+<p>If you are defining an object, you can also try to maximize your usage of pure functions. Pure functions
+are functions which do not rely on any state outside of the function arguments. Even if that function
+belongs to an object, and has access to the same data, formulating as many of your functions as possible
+as pure allows you to freely move around your functions and refactor your code. It also makes your code
+significantly more testable. A rule of thumb is - only public functions and functions at the very top of
+the call tree inside of a function should be accessing member values directly. Any calls these functions
+make to other functions should be passing members state to pure functions. It's one of those concepts
+that might not seem THAT appealing now, but once you try it, I doubt you'll want to go back.</p>
+<p>Anyways, let's talk about components.</p>
+<p>An intuitive way to limit what state is shared and what isn't, is to clearly define which parts of your
 code is easily divisible into a single coherent entity. Define an interface. How do components interact with each
 other? Which components have ownership of which data at which step in the pipeline? What needs to happen for a
 component to be configured and ready to run? What is each components' relation to parallelism?
@@ -1942,18 +1950,18 @@ Having your code divvied up into components also allows several people to develo
 try out various implementations while keeping the functionality the same. This only really works if we mitigate the
 side effects of each component. Mitigating statelessness, and certainly shared state, is also greatly helped
 by formulating your code as components. If you really wanted to keep statelessness to the absolute minimum, you
-could keep the state necessary to for each component to run it outside of the component and give it as an argument
+could keep the state necessary for each component to run outside of the component and give it as an argument
 to each function call. In my opinion, stress on opinion, this would be, in most cases, an example of a dogmatic
 adherence to a principle. Just keep the necessary state inside the components. Still as little as possible, though.</p>
 <p><a href="https://en.wikipedia.org/wiki/Data-oriented_design">Data-oriented design</a> and branchless programming are important enough concepts that they have gotten their own
-section which is the very next one. It basically boils down to this, instead of having an array of particles,
+section which is the very next one. It basically boils down to this: instead of having an array of particles,
 let's have a particle system which has arrays of each component in those particles, as it has to manipulate all
 the particles anyway. Formulating your system as components is a good way to get started with this as you
 can implement this new way of thinking about data under the hood without any changes in the interface. This
 reformatting of your data can also be seen as a transposition of your data. Branchless programming seeks to
 move the potential branches outside of loops and reduce potential branching for better performance. Doing this
 is helped along by using data-oriented design, which was in turn helped along by encapsulation through components.</p>
-<p><a href="https://en.wikipedia.org/wiki/Entity_component_system">Entity component systems</a>, are a type of system, most often used in games programming, wherein relevant data
+<p><a href="https://en.wikipedia.org/wiki/Entity_component_system">Entity component systems</a> are a type of system, most often used in games programming, wherein relevant data
 is composited to do what seems to be a more flexible version of the classic first pass encapsulated
 data-oriented design. In general it is something you most likely use a library to implement,
 like <a href="https://github.com/amethyst/legion">Legion</a>. Alternatively, here's a blog post about building <a href="https://ianjk.com/ecs-in-rust/">your own ECS</a>.</p>
@@ -1968,7 +1976,7 @@ different threads.
 </figcaption>
 </figure>
 <p>As you can see we keep a main thread, orchestrating, moving data and launching other work. It takes commands through
-a channel (communication mechanism) everytime something in the UI changes. The UI renders to screen using the GPU.
+a channel (communication mechanism) every time something in the UI changes. The UI renders to screen using the GPU.
 In turn the UI also gets messages through a channel from the main thread. It could for example be to show a new
 image or change the status message. The main thread sends a list of data files to retrieve for each iteration
 of a neural network training loop to a thread safe queue. Four threads dequeue the names of files to load. Each
@@ -1984,10 +1992,10 @@ administrating the loading and preprocessing threads only needs to worry about t
 a bunch of global state manipulation or anything. It gets a list of commands and then iteratively gets new commands,
 then it executes those things. We keep the extra threads inside that. This sort of encapsulation allows us to
 keep our sanity while playing around with concurrency. The cognitive load is lowered as the scope and
-consequences of changes are kept small. This of course also means that we have a smaller pocket of
-parallelism bookended by communication in the thread safe queue and the channel. As such we have to make
-sure the N threads doing loading and preprocessing have enough work. We should of course make sure that
-the amount of work incoming is balanced with the amount of data getting dequeued from the output channel.</p>
+consequences of changes are kept small and we move up in abstraction level. This of course also means that we
+have a smaller pocket of parallelism bookended by communication in the thread safe queue and the channel.
+As such we have to make sure the N threads doing loading and preprocessing have enough work. We should of course
+make sure that the amount of work incoming is balanced with the amount of data getting dequeued from the output channel.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/example_architecture_2.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/example_architecture_2.png" width="800" /></a></p>
 <figcaption>
@@ -1996,7 +2004,7 @@ a different implementation.
 </figcaption>
 </figure>
 <p>All of these reasons about "what if, load balancing, thread this and thread that" are arguments why that component
-should be encapsulated. You could try out preprocessing the entire dataset into one big file, or several big pages
+should be encapsulated. You could try out preprocessing the entire dataset into one big file, or several big pages,
 and have the data loader administrate that entire process, or you could try increasing the load on the worker
 threads through coroutines. You could even implement both and then switch between them based on which system your
 application was running on. In any case, encapsulating your code into a data loader component might prohibit you
@@ -2025,7 +2033,7 @@ lets you experiment with potential performance improvements.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 27, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 22, 2025</span>
   </span>
 
     

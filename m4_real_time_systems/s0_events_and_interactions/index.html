@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
@@ -1856,44 +1856,44 @@
 
 
 <h1 id="events-and-interactions">Events and Interactions</h1>
-<p><a href="https://en.wikipedia.org/wiki/Event_(computing)">Events</a> are, well, an event. Something happens, and the event is processed somehow, by one or more actors,
+<p><a href="https://en.wikipedia.org/wiki/Event_(computing)">Events</a> are, well, events. Something happens, and the event is processed somehow, by one or more actors,
 reacting to that event. Usually, events are asynchronous in origin. Distributed architectures can also be
-based on events with different reacting to and generating their own events. There is even a type of systems
+based on events with different elements reacting to, and generating their own, events. There is even a type of systems
 architecture based around events, called <a href="https://en.wikipedia.org/wiki/Event-driven_architecture">event driven architecture</a>, which I won't be going into at all. I
-will be focusing on events in the context of the kind of real-time systems you can easily make for your final
-projects, usually a desktop application.</p>
-<p>If we import some event library, we could generate events, for example every time a user clicks the left mouse
-button, and then any actor subscribing to that event would receive the signal that that event had happened.
-Then each actor might each have their own way of handling such an event. Multiple actors can be subscribed to the
-same event, sort of like the reverse of the multiple producer, single consumer channel we looked at earlier.
-A single producer for an event, with potentially multiple not consumers, but listeners.
-This is a very reactive way of handling events. Essentially, every time you subscribed to an event,
-such as the left mouse button click, you would supply a callback function to be called, whenever
-that event was fired. Say you have 3 components, A, B and C. Component A generates some type of event a.
-In order to react to event a, components B and C each subscribe to all occurences of event a. B and C each
-supply their own callback to handle whenever event a is emitted. This can be quite complicated,
-especially if you don't really need it and you might find yourself swimming in a hard-to-debug sea of callbacks
-and asynchronicity. How many components did you sign up for callbacks and what are the side effects of all those
-callbacks? If all of this is handled in a single threaded manner, isn't the order in which your code is executed
-getting yanked around quite a lot? See the branchless programming section for more on how the order of execution
-can improve performance.</p>
+will be focusing on events in the context of the kind of real-time systems you can easily make for your own
+projects.</p>
+<p>If we import some event library, we could generate events. An example could be every time a user clicks the
+left mouse button an event could be emitted. Subsequently, any actor subscribing to that event would receive
+the signal that that event had happened. Then each actor might have their own way of handling such an event.
+Multiple actors can be subscribed to the same event, sort of like the reverse of the multiple producer,
+single consumer channel we looked at earlier. A single producer for an event, with potentially multiple
+not consumers, but listeners. This is a very reactive way of handling events. Essentially, every time you
+subscribed to an event, such as the left mouse button click, you would supply a callback function to be
+called, whenever that event was fired. Say you have 3 components, <code>A</code>, <code>B</code> and <code>C</code>. Component
+<code>A</code> generates some type of event <code>a</code>. In order to react to event <code>a</code>, components <code>B</code> and
+<code>C</code> each subscribe to all occurences of event <code>a</code>. <code>B</code> and <code>C</code> each supply their own callback
+to handle whenever event <code>a</code> is emitted.</p>
+<p>This can be quite complicated, especially if you don't really need it and you might find yourself swimming in
+a hard-to-debug sea of callbacks and asynchronicity. How many components did you sign up for callbacks and
+what are the side effects of all those callbacks? If all of this is handled in a single threaded manner,
+isn't the order in which your code is executed getting yanked around quite a lot? See the branchless
+programming section for more on how the order of execution can improve performance.</p>
 <p>Often you can define your own events, or a framework you might be using, such as <a href="https://github.com/rust-windowing/winit">winit</a> for window handling,
 might have its own version of events. As such it can be hard to say anything specifically about events, except
-that it depends. What framework you use will define how you have to work with events.
-Events are usually integral to interactive systems, if you do not have interactivity, you might want to stick
-to async.</p>
+that it depends. What framework you use will define how you have to work with events. Events are usually integral
+to interactive systems, if you do not have interactivity, you might want to stick to async.</p>
 <p>See the event loop section below for a much easier way of handling events, which is easier when you have a smaller
 amount of components.</p>
 <h1 id="interactions">Interactions</h1>
 <p>Interactivity can be a major source of events, especially in the types of systems I'll focus on here.
 You might get emitted events every time you hover a mouse over something, moving your mouse, typing on your
-keyboard, etc. But it could also be an external sensor communicating that it is ready with a new sample, such as
+keyboard, etc. It could also be an external sensor communicating that it is ready with a new sample, such as
 a webcam. It might send an event everytime it has another image for you to process, or a microphone might
 have another audio signal ready. When these types of events come in, which have a substantial amount of associated
-data, you'll have to take carefully into account where that data is coming in and how to handle it.</p>
+data, you'll have to carefully take into account where that data is coming in and how to handle it.</p>
 <p>In the case of a webcam, hopefully that data is coming in very close to the method with which you will process it.
 If you are using wgpu for instance, you might hope that the incoming images are given to you in WGPU-compatible
-buffers allowing you to not have to transfer or copy the data, either to another buffer or back to the CPU.</p>
+buffers allowing you to not have to transfer, manipulate or copy the data, either to another buffer or back to the CPU.</p>
 <h1 id="event-loops">Event Loops</h1>
 <p>An easier way of handling events, compared to emitters and listeners is an event loop. The event loop will handle
 all incoming events and how to distribute them. It allows the event loop to direct the flow of the program directly.</p>
@@ -1906,12 +1906,13 @@ of the example for later on is that given a event for a mouse button press, the 
 which window the mouse was hovering over and which event handler should receive a signal.
 This is a lot easier to debug and follow with a clear separation of flow and state.</p>
 <p>I made some code for showing how you can work with events in practice. You can find the code in
-<code>m4_real_time_systems::code::egui-winit-wgpu-template</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/egui-winit-wgpu-template">online</a>. Note that the events stem from
+<a href="https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/egui-winit-wgpu-template"><code>m4_real_time_systems::code::egui-winit-wgpu-template</code></a>. Note that the events stem from
 Rust's more-or-less defacto window handling library, <a href="https://github.com/rust-windowing/winit">winit</a>. Try and make sense of what is happening
 and run the code!</p>
 <p>When handling events like this, it can sometimes be worth it to ensure that a user holding down a button
 doesn't generate thousands of events, but a couple of events in order to not completely flood your system. If you
 are using bounded channels to distribute your events, you might also incur the risk of overflowing your channels.</p>
+<p>Is that acceptable behavior in the case of taking in mouse drag events?</p>
 
 
 
@@ -1934,7 +1935,7 @@ are using bounded channels to distribute your events, you might also incur the r
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 20, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">February 22, 2025</span>
   </span>
 
     
