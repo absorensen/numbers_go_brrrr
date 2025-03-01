@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.6">
     
     
       
@@ -1969,22 +1969,23 @@
 <h1 id="tips-and-tricks">Tips and Tricks</h1>
 <p>Wrapping up this module I have a random bag of tips and tricks that I didn't know where else to put.
 Real-time systems are often complex heterogenous things. Not everything will fit neatly into a box.
-But as always, we should at least try to sort them into clusters...</p>
+But as always, we should at least try to group them into clusters...</p>
 <h2 id="software-engineering">Software Engineering</h2>
 <p>I'll get to the performance stuff in a second. But one way for performance analysis to get easier, is for your
 code and your process to get simpler. Not simple in the way where you just hard code everything or name every
-single variable <code>i</code>, but simpler in the sense that your code is simpler to read for other people. Other people
-also includes future you. Try to minimize the amount of abbreviations you use. Sure, people can figure out
-that <code>img</code> means an image, but it isn't easier to write <code>img</code> than <code>image</code> and you get used to
-making these concessions everywhere instead of making code that is as easy to understand as possible.</p>
+single variable <code>i</code>, but simpler in the sense that your code is simpler to read and understand for other
+people. Other people also includes future you. Try to minimize the amount of abbreviations you use. Sure,
+people can figure out that <code>img</code> means an image, but it isn't easier to write <code>img</code> than <code>image</code>
+and you get used to making these concessions everywhere instead of making code that is as easy to understand
+as possible.</p>
 <p>If you are doing equations, it is ok to name the variables something else, but in that case you should put
 a link in the comment that makes it absolutely clear what you are doing. Making other people have to do detective
 work to understand your code doesn't make you anything other than a target for a coffee fueled grievance rant.
 The computer doesn't care what you name your variables. Of course you can go overboard and have overly verbose
 naming, but that's something that you'll have to work on. Naming variables can be a difficult process. We do
 have to make concessions in other areas though, like reformating our code to follow data oriented design instead.
-But you should only do so when seeing a clear value gained from deviating from the simple and
-the easily comprehendible.</p>
+But you should only do so when seeing a clear value gained from deviating from the simple and the easily
+comprehendable.</p>
 <p>Another software engineering-y tip is to always use version control, even for solo development. Once you finally
 get all of your code working correctly, make sure to commit it. As soon as you start optimizing and refactoring
 your code, you are likely to introduce bugs, get exasperated and lost. Then once you've given up, you can just
@@ -1994,13 +1995,13 @@ version control! Or, even better, create branches when you try out new features 
 you're assured that they didn't introduce errors.</p>
 <h2 id="minimizing-interaction-with-the-operating-system">Minimizing Interaction with the Operating System</h2>
 <p>Previously I have mentioned concepts such as object pools and green threads. Often times a key performance
-improvement can be simply to make less, but bigger interactions with the operating system. In the simplest form,
-the object pool, once we allocate an object and we are done using it, we can move it to some data structure instead
-of freeing it. Then when we need another instance of the object we can just reset it and put it into play.
-Occasionally, we might have to make sure the object pool doesn't grow too big and deallocate enough to just
-hold on to a reasonable number of objects. This can save quite a lot of memory allocations and frees. The simplicity
-of the object pool is allowed by the specific pool holding one specific type of object. All objects are the same
-size and can be interpreted as (hopefully) valid instances of that object.</p>
+improvement can be simply to make fewer, but bigger interactions with the operating system. A simple form of that
+is the object pool. Once we allocate an object and we are done using it, we can move it to some data structure instead
+of freeing it. Then when we need another instance of the object we can just remove an instance from the object pool
+structure, reset it and put it into play. Occasionally, we might have to make sure the object pool doesn't grow too
+big and deallocate enough to just hold on to a reasonable number of objects. This can save quite a lot of memory
+allocations and frees. The simplicity of the object pool is allowed by the specific pool holding one specific
+type of object. All objects are the same size and can be interpreted as (hopefully) valid instances of that object.</p>
 <p>If we had to keep an object pool of every single type of object we might need, we would probably use a lot
 of memory. A different approach, especially seen in game engines, is to implement your own custom memory allocator.
 That memory allocator asks the operating system for a huge chunk of memory at a time and keeps track of them. Which
@@ -2018,13 +2019,13 @@ boost to have a few, or one, really big files, load them into memory and get you
 instead of having &gt; 100 files and loading them individually.</p>
 <h2 id="hot-loops">Hot Loops</h2>
 <p>Once you have built up enough features that you feel you have a working prototype, and you are ready to move on
-to improve things on the performance side you should check your system monitor whether you are disk bound. Once
-you have removed being disk bound, if you were that is, you should move on to finding your hot loop.</p>
+to improve things on the performance side, you should check your system monitor whether you are disk bound. Once
+you have removed being disk bound, if you were, that is, you should move on to finding your hot loop.</p>
 <p>In most systems this is a while loop doing something until you terminate your program. You can verify this
 with a profiler. A rule of thumb is, you should be doing as few interactions with the operating system as possible
-in your hot loop. Are you allocating in side the loop? Could you just figure out what is the maximum size needed
-and preallocate it before the loop? In the case of too much data in coming, you could decide that your containers
-should net resize and decide whether to write over existing data or just drop incoming data.</p>
+in your hot loop. Are you allocating inside the loop? Could you just figure out what is the maximum size needed
+and preallocate it before the loop? In the case of too much data incoming, you could decide that your containers
+should resize and decide whether to write over existing data or just drop incoming data.</p>
 <p>You should also remember that printing to the terminal is a system call. Don't do it in a loop unless you really
 really need to. Likewise reading from files should be minimized, or done asynchronously on other threads.
 You also want to minimize synchronization. If you are sending lots of work to the GPU, don't wait and synchronize
@@ -2065,7 +2066,7 @@ or get a simpler version you can just copy paste into a file.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 27, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 1, 2025</span>
   </span>
 
     
@@ -2198,7 +2199,7 @@ or get a simpler version you can just copy paste into a file.</p>
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});

@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.6">
     
     
       
@@ -2017,23 +2017,25 @@
 <h1 id="branchless-programming">Branchless Programming</h1>
 <p>The following sections are about to get a bit technical, so let's start things off with a very high level
 summary.</p>
-<p>Branchless programming is a way of making your code faster. It becomes faster by structuring our data in a certain
-way, through refactoring lists of structs, each with their own fields into fewer structs with multiples of
-each field, through sorting data to execute all of elements requiring one type of jobs, then all elements
-of the next type of job and through either minimizing the amount of if statements, through minimizing how
-many different paths code can go down and moving if statements outside of our loops. As you might recall,
-loops often dictate the run time of your code.</p>
+<p>Branchless programming is a way of making your code faster. Your code becomes faster through
+a restructuring of data and control flow logic to do more of the same. Instead of going ABCABCABC,
+practicing branchless programming you might try to change your program execution to be more in line with
+AAABBBCCC. This can for example be through restructuring lists of structs, each with their own fields into
+fewer structs with multiples of each field, through sorting data to execute all of elements requiring one
+type of job, then all elements of the next type of job and through either minimizing the amount of if
+statements, through minimizing how many different paths code can go down and moving if statements
+outside of our loops. As you might recall, loops often dictate the run time of your code.</p>
 <p>The reason this becomes faster is that we can optimize what data we get in <a href="https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#access-patterns">our cache line</a> through a
 paradigm called data-oriented design and because of a hardware concept called branch prediction. Despite
 being single threaded, a thread can still do somethings concurrently. A line of code can contain more
 instructions than we think of at first glance. Fetching a data element, changing something and then storing
 it contains several parts. If the next line is also fetching a data element, but a different element, and
 there are no data or execution dependencies between them, as in, what we do with the first element has no
-effect on how we process the second element, we can initiate loading of the second element, once we are
+bearing on how we process the second element, we can initiate loading of the second element once we are
 done loading the first element. While the first element is being processed, the second element is being
 loaded. Once the second element is loaded, a third element can be loaded. This is implemented in hardware
 and results in significant performance boosts. The pipeline is a lot deeper than my example.</p>
-<p>If the execution of the second element is can go down two different paths (think if-else), the hardware will predict
+<p>If the execution of the second element can go down two different paths (think if-else), the hardware will predict
 which path will need to be executed and pre-load the needed data and instructions. But if the other path ends up
 being needed, all the work that has been accumulated ahead of time is thrown away and the other branch needs to be
 executed. This is known as a pipeline flush. Designing around this is a universal concept which can speed up your
@@ -2043,7 +2045,7 @@ loops or reducing your usage of short circuiting boolean operators like <code>||
 <h2 id="branch-prediction">Branch Prediction</h2>
 <p>While the speed at which CPUs and memory can execute hasn't risen aggresively in these last few years, that doesn't
 mean they can't get smarter. One such effort is the hardware supporting branch prediction. Loading a value
-from memory can take quite a while, in the mean time the CPU can easily do other stuff or find our which piece
+from memory can take quite a while, in the mean time the CPU can easily do other stuff or find out which piece
 of memory to load next. Below you'll see a small example of a pipelined architecture -</p>
 <figure>
 <p><a class="glightbox" href="../../figures/pipeline_architecture.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/pipeline_architecture.png" width="600" /></a></p>
@@ -2085,7 +2087,8 @@ Image credit </a>
 from University of California, Irvine for a cursory glance at the fairly complex topic of the hardware involved in
 branch prediction.  </p>
 <p>Going back to the code from earlier, you can see, any branch predictor worth its salt would predict that path
-B would be executed. In a few cases path A will be executed instead, but will be vastly more expensive.</p>
+B, the else section, would be executed. In a few cases path A will be executed instead, but will be vastly more
+expensive, resulting in a pipeline flush.</p>
 <h2 id="branchless-programming_1">Branchless Programming</h2>
 <p>"Branchless programming", is perhaps too big a promise, in all but the simplest cases, it will be
 "branch mitigating programming". Branching in code is expensive, so let's look at how we can help the computer,
@@ -2094,7 +2097,7 @@ for an overview of various hazards with code examples. But a few of the basic hi
 short circuiting, unrolling of for-loops (your compiler will often do this automatically), reformulation of
 branching through arithmetic. Another problem can be data hazards. If line A is writing to some variable in an
 array, which line B depends on, line B cannot commence processing until line A has completed.</p>
-<p>The circuiting boolean operators <code>a &amp;&amp; b</code> and <code>a || b</code> are used everywhere. The short circuiting part
+<p>The short circuiting boolean operators <code>a &amp;&amp; b</code> and <code>a || b</code> are used everywhere. The short circuiting part
 means that because both <code>a</code> and <code>b</code> need to be true in order for <code>&amp;&amp;</code> to evaluate as <code>true</code>, if
 <code>a</code> evaluates as false, <code>b</code> need not be evaluated. Do you see the problem?</p>
 <p>It's a branch! Supposing that <code>a</code> and <code>b</code> aren't too expensive to evaluate we can reduce the amount of
@@ -2194,12 +2197,13 @@ take a quick look at a loop unroll transformation, with an unroll of 4.</p>
 </div>
 </div>
 </div>
-<p>Of course, the tail iterations in the second for-loop won't be as fast the main loop, but again, this usually
-something the compiler will do for you in release mode.</p>
+<p>Of course, the tail iterations in the second for-loop won't be as fast the first loop, but again, this
+is usually something the compiler can/will do for you in release mode. In some languages you can annotate
+a request for the compiler to do so, just like we saw you could with inlining.</p>
 <h2 id="data-oriented-design">Data-oriented Design</h2>
-<p>We can take the branchless thinking, and add in optimization for cache lines, from the micro to the macro and
-make it part of the way we formulate our data structures and code. This we will use things like sorting and
-structuring our data into bigger single objects, while at the same time pulling them apart field by field.
+<p>We can take the branchless thinking, and add optimization for cache lines, from the micro to the macro and
+make it part of the way we formulate our data structures and code. To do this we will use things like sorting
+and structuring our data into bigger single objects, while at the same time pulling them apart field by field.
 For this, we will take a look at data-oriented design.</p>
 <p>A path tracer is sort of like a physics simulation for generating, sometimes physically accuracte, high
 quality images. From the cameras point of view, a multitude of rays are sent through each pixel. They travel
@@ -2207,11 +2211,20 @@ forward until they intersect a reason to stop traveling directly forward. Most o
 the surface of an object. Geometry is not the same as material. Once a ray intersects geometry, it needs to know
 what is the color of the surface that was just hit, and in which direction should it bounce next. This is
 dependant on the material. If it hits a perfect mirror, it will change direction much like a billiard ball hitting
-the side of a billiards table. If the surface was perfectly diffuse it might change to a direction in a completely
+the rim of a billiards table. If the surface was perfectly diffuse it might change to a direction in a completely
 random direction. This calculation is not just a simple lookup, but two entirely different mathematical functions.
 They ray will continue to bounce until it either reaches a maximum depth, hits a light source or is otherwise
 terminated. If that doesn't make sense, try out <a href="https://www.youtube.com/watch?v=frLwRLS_ZR0">this video</a>.</p>
 <p>So why spend your and my time describing path tracers?</p>
+<figure>
+<p><a class="glightbox" href="../../figures/shader_execution_reordering.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/shader_execution_reordering.png" width="800" /></a></p>
+<figcaption>
+Sorting and compacting diverging rays is even implemented in hardware. Nvidia calls this Shader Execution
+Reordering.
+<a href="https://developer.nvidia.com/blog/improve-shader-performance-and-in-game-frame-rates-with-shader-execution-reordering/">
+Image credit </a>
+</figcaption>
+</figure>
 <p>They are the perfect case for not just performant heterogeneous systems, but wildly divergent
 performant heterogeneous systems. If you launch 100 rays from different starting origins inside the area
 covered by a single pixel, even if they all hit the same surface, based on the material, they might scatter in
@@ -2222,7 +2235,7 @@ scatter round and round in the scene. But we can mitigate the effects of this st
 by making sure to package, sort, reorder and compact our rays. Instead of looking at a ray at a time, we might
 structure our program in various pipeline steps. We might for example try to intersect all rays against the scene,
 which is quite expensive, but more on that later, followed by a material/scattering interaction, where we could
-group rays by material, allowing us to execute all rays needed a material A scattering event, followed by
+group rays by material, allowing us to execute all rays needing a material A scattering event, followed by
 executing all rays needing a material B scattering event. It gets worse, but let's take a step back and just
 look at how we might handle a whole bunch of rays.</p>
 <p>The typical way we might handle a bunch of rays in a path tracer, would be to define each ray as a struct, such as -</p>
@@ -2248,7 +2261,7 @@ about geometry and intersections, we won't care about material and color. We wou
 We could reformulate the way we kept track of rays to process several data elements at the same time, when in
 a relevant part of the code. If we kept a <code>Vec&lt;Ray&gt;</code> to do this, sending the <code>Vec&lt;Ray&gt;</code> around from function
 to function, we would call this an Array-of-Structs (AoS).</p>
-<p>What we could do instead, to only cache exactly what we needed is called Struct-of-Arrays (SoA). We keep all of
+<p>What we could do instead, to only cache exactly what we need is called Struct-of-Arrays (SoA). We keep all of
 our rays in a deconstructed fashion -</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="10:1"><input checked="checked" id="__tabbed_10_1" name="__tabbed_10" type="radio" /><div class="tabbed-labels"><label for="__tabbed_10_1">Rust</label></div>
 <div class="tabbed-content">
@@ -2289,8 +2302,8 @@ a series of loops for each step in the function and requires a bit of refactorin
 we increase the probability of the compiler autovectorizing our code. More on that in a little bit.</p>
 <p>This all seems a bit cumbersome however. If you remember earlier, I told you that these rays might scatter, bounce,
 hit different materials and be terminated. Either successfully or unsuccessfully. We need some flexibility back
-to make it possible to intersect a bunch of threads, terminate some of them, move others to one queue for material
-A, move others to a queue for material B and so on.</p>
+to make it possible to intersect a bunch of threads, terminate some of them (compaction), move others to one queue
+for material A, move others to a queue for material B and so on.</p>
 <p>Enter... drumroll please... Arrays-of-Structs-of-Arrays (AoSoA).</p>
 <p>We could instead use a coarser granularity by storing a number of rays in a shared struct and keep a list of
 those structs -</p>
@@ -2321,18 +2334,18 @@ types like <code>Vec3x8</code> and <code>f32x4</code>.</p>
 <p>We could even take things a step further and separate our ray structs.
 The fields that are necessary for intersection aren't the same as for propagating colors through bounce
 paths. Normally, we might connect disconnected parts of the same underlying object by indices, but as
-rays are a transient object which we might bounce between functions it might work better with something
+rays are a transient objects which we might bounce between functions it might work better with something
 more static like geometry and materials.</p>
 <h2 id="the-road-to-simd">The Road to SIMD</h2>
 <p>SIMD stands for single instruction multiple data. Basically this whole section has been building to it. SIMD
 is a single instruction that operates on an entire <code>lane</code>. A <code>lane</code> is defined by the architecture
 of your CPU. The name to look for is typically named something like SSE or AVX. The CPU of the system used
 for benchmarking this section, has multiple SIMD instruction sets - Intel® SSE4.1, Intel® SSE4.2,
-Intel® AVX2, Intel® AVX-512. You can program for each specific instruction set or find a cross-platform such as
-<a href="https://docs.rs/ultraviolet/latest/ultraviolet/">ultraviolet</a> to program for multiple architectures.
-What I found most important is that my SIMD lanes max out at 512 bits. If I am doing <code>f32</code>-based SIMD
-operations I can fit up to 16 floats into a lane. For a general introduction to the terminology and basics of
-SIMD, you can check out <a href="https://github.com/rust-lang/portable-simd/blob/master/beginners-guide.md">this post</a>.</p>
+Intel® AVX2, Intel® AVX-512. You can program for each specific instruction set or find a cross-platform
+library such as <a href="https://docs.rs/ultraviolet/latest/ultraviolet/">ultraviolet</a> to act as an abstraction layer, allwing you to program for multiple
+architectures. What I found most important is that my SIMD lanes max out at 512 bits. If I am doing
+<code>f32</code>-based SIMD operations I can fit up to 16 floats into a lane. For a general introduction to
+the terminology and basics of SIMD, you can check out <a href="https://github.com/rust-lang/portable-simd/blob/master/beginners-guide.md">this post</a>.</p>
 <p>SIMD programming is a genre unto itself and learning to program it can take a while. If you look at the figure
 from earlier showing pipelined instructions, picture each box as being wider. Imagine you are doing the
 same operations on N rays at a time. If we have a diverging workload such as in a path tracer, we have to have
@@ -2343,7 +2356,7 @@ or if it is possible, you probably shouldn't force it to do, is executing differ
 different, very basic, functions. Note that the memory-to-compute ratio is quite high, as the functions are quite
 simple compared to the amount of load operations. SIMD doesn't magically make your program any less memory bound, as
 such you have to try and optimize your code before going fully SIMD.</p>
-<p>Find the code in <code>m4_real_time_systems::code::sorting_functions</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/sorting_functions">online</a>.  </p>
+<p>Find the code in <a href="https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/sorting_functions">m4_real_time_systems::code::sorting_functions</a>.  </p>
 <figure>
 <p><a class="glightbox" href="../../figures/sorting_functions_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sorting_functions_benchmark.png" width="500" /></a></p>
 <figcaption>
@@ -2354,10 +2367,10 @@ Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
 </figcaption>
 </figure>
 <p>As you can see, if we generate a huge list of different functions to call, we can gain an immense amount of
-performance simply by sorting our data. We can either sort it ourselves, or sit it as it accumulates, by putting
-it in different lists. The other major performance gain we get is by introducing SIMD. Note that the performance
-gain isn't huge when changing to SIMD. This is a case where each function is small enough that we are mostly
-memory bound. SIMD does nothing to alleviate that, except try to draw on even more of the memory bandwidth.</p>
+performance simply by sorting our data. We can either sort it ourselves, or sort it as it accumulates, by putting
+it in different lists/queues/buckets. The other performance gain we get is by introducing SIMD. Note that
+the performance gain isn't huge when changing to SIMD. This is a case where each function is small enough that
+we are mostly memory bound. SIMD does nothing to alleviate that, except try to draw on even more of the memory bandwidth.</p>
 <p>If we instead look at code which uses an actual function from path tracing, in this case sphere intersection,
 we are doing much more compute per memory load and can see a significant increase in performance. Here's
 a sample of the code to show you what SIMD programming looks like -</p>
@@ -2397,7 +2410,7 @@ a sample of the code to show you what SIMD programming looks like -</p>
 <p>In this case I only use functions implemented directly by utraviolet's <code>uv::Vec3x8</code> and
 <code>uv::f32x8</code> types.</p>
 <p>Be sure to check out the 4 references at the top of the code.
-Find the code in <code>m4_real_time_systems::code::sphere_intersection</code> or <a href="https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/sphere_intersection">online</a>.</p>
+Find the code in <a href="https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/sphere_intersection">m4_real_time_systems::code::sphere_intersection</a>.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/sphere_intersection_benchmark.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/sphere_intersection_benchmark.png" width="500" /></a></p>
 <figcaption>
@@ -2409,11 +2422,12 @@ Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
 </figure>
 <p>In this case, the vanilla struct-of-arrays code performed worse. In some cases you can hope for autovectorization,
 where the compiler, in the case where you have factored your data in a way that allows it, will create a SIMD
-version of your code. This is usually more likely if you turn on your compilers native targetting flag.</p>
+version of your code. This is usually more likely if you turn on your compilers native architecture targeting flag.</p>
 <p>With compilers you can tell it which platforms to compile for. If you tell it to compile exclusively for YOUR
 platform it can make use of optimizations and commands specific to your system. This might make it perform
 significantly worse on other systems though.</p>
-<p>I will leave you with one thing if you are memory bound, SIMD won't magically make your memory bandwidth increase.  </p>
+<p>I will just reiterate the most important point
+<em>if you are memory bound, SIMD won't magically make your memory bandwidth increase</em>.  </p>
 <p>Also, here's <a href="https://www.rustsim.org/blog/2020/03/23/simd-aosoa-in-nalgebra/">a nice blog post</a> about the performance implications of AOS, SOA and AOSOA.</p>
 <h2 id="additional-reading">Additional Reading</h2>
 <p>To learn more about instruction pipelining, here is a <a href="https://en.wikipedia.org/wiki/Instruction_pipelining">wiki</a> and some <a href="https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf">slides</a>. Also, there's a
@@ -2452,7 +2466,7 @@ This is even being rolled out and described in this <a href="https://developer.n
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 14, 2024</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">March 1, 2025</span>
   </span>
 
     
@@ -2585,7 +2599,7 @@ This is even being rolled out and described in this <a href="https://developer.n
     <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.indexes", "content.code.copy", "navigation.footer", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      <script src="../../assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   <script id="init-glightbox">const lightbox = GLightbox({"touchNavigation": true, "loop": false, "zoomable": true, "draggable": true, "openEffect": "zoom", "closeEffect": "zoom", "slideEffect": "slide"});
