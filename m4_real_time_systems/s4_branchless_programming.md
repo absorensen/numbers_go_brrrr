@@ -2,12 +2,14 @@
 The following sections are about to get a bit technical, so let's start things off with a very high level
 summary.
 
-Branchless programming is a way of making your code faster. It becomes faster by structuring our data in a certain
-way, through refactoring lists of structs, each with their own fields into fewer structs with multiples of
-each field, through sorting data to execute all of elements requiring one type of jobs, then all elements
-of the next type of job and through either minimizing the amount of if statements, through minimizing how
-many different paths code can go down and moving if statements outside of our loops. As you might recall,
-loops often dictate the run time of your code.
+Branchless programming is a way of making your code faster. Your code becomes faster through
+a restructuring of data and control flow logic to do more of the same. Instead of going ABCABCABC,
+practicing branchless programming you might try to change your program execution to be more in line with
+AAABBBCCC. This can for example be through restructuring lists of structs, each with their own fields into
+fewer structs with multiples of each field, through sorting data to execute all of elements requiring one
+type of job, then all elements of the next type of job and through either minimizing the amount of if
+statements, through minimizing how many different paths code can go down and moving if statements
+outside of our loops. As you might recall, loops often dictate the run time of your code.
 
 The reason this becomes faster is that we can optimize what data we get in [our cache line][15] through a
 paradigm called data-oriented design and because of a hardware concept called branch prediction. Despite
@@ -15,12 +17,12 @@ being single threaded, a thread can still do somethings concurrently. A line of 
 instructions than we think of at first glance. Fetching a data element, changing something and then storing
 it contains several parts. If the next line is also fetching a data element, but a different element, and
 there are no data or execution dependencies between them, as in, what we do with the first element has no
-effect on how we process the second element, we can initiate loading of the second element, once we are
+bearing on how we process the second element, we can initiate loading of the second element once we are
 done loading the first element. While the first element is being processed, the second element is being
 loaded. Once the second element is loaded, a third element can be loaded. This is implemented in hardware
 and results in significant performance boosts. The pipeline is a lot deeper than my example.
 
-If the execution of the second element is can go down two different paths (think if-else), the hardware will predict
+If the execution of the second element can go down two different paths (think if-else), the hardware will predict
 which path will need to be executed and pre-load the needed data and instructions. But if the other path ends up
 being needed, all the work that has been accumulated ahead of time is thrown away and the other branch needs to be
 executed. This is known as a pipeline flush. Designing around this is a universal concept which can speed up your
@@ -31,7 +33,7 @@ loops or reducing your usage of short circuiting boolean operators like ```||```
 ## Branch Prediction
 While the speed at which CPUs and memory can execute hasn't risen aggresively in these last few years, that doesn't
 mean they can't get smarter. One such effort is the hardware supporting branch prediction. Loading a value
-from memory can take quite a while, in the mean time the CPU can easily do other stuff or find our which piece
+from memory can take quite a while, in the mean time the CPU can easily do other stuff or find out which piece
 of memory to load next. Below you'll see a small example of a pipelined architecture -
 
 <figure markdown>
@@ -77,7 +79,8 @@ from University of California, Irvine for a cursory glance at the fairly complex
 branch prediction.  
 
 Going back to the code from earlier, you can see, any branch predictor worth its salt would predict that path
-B would be executed. In a few cases path A will be executed instead, but will be vastly more expensive.
+B, the else section, would be executed. In a few cases path A will be executed instead, but will be vastly more
+expensive, resulting in a pipeline flush.
 
 ## Branchless Programming
 "Branchless programming", is perhaps too big a promise, in all but the simplest cases, it will be
@@ -88,7 +91,7 @@ short circuiting, unrolling of for-loops (your compiler will often do this autom
 branching through arithmetic. Another problem can be data hazards. If line A is writing to some variable in an
 array, which line B depends on, line B cannot commence processing until line A has completed.
 
-The circuiting boolean operators ```a && b``` and ```a || b``` are used everywhere. The short circuiting part
+The short circuiting boolean operators ```a && b``` and ```a || b``` are used everywhere. The short circuiting part
 means that because both ```a``` and ```b``` need to be true in order for ```&&``` to evaluate as ```true```, if
 ```a``` evaluates as false, ```b``` need not be evaluated. Do you see the problem?
 
@@ -183,13 +186,14 @@ And now for the unrolled version -
         }
     ```
 
-Of course, the tail iterations in the second for-loop won't be as fast the main loop, but again, this usually
-something the compiler will do for you in release mode.
+Of course, the tail iterations in the second for-loop won't be as fast the first loop, but again, this
+is usually something the compiler can/will do for you in release mode. In some languages you can annotate
+a request for the compiler to do so, just like we saw you could with inlining.
 
 ## Data-oriented Design
-We can take the branchless thinking, and add in optimization for cache lines, from the micro to the macro and
-make it part of the way we formulate our data structures and code. This we will use things like sorting and
-structuring our data into bigger single objects, while at the same time pulling them apart field by field.
+We can take the branchless thinking, and add optimization for cache lines, from the micro to the macro and
+make it part of the way we formulate our data structures and code. To do this we will use things like sorting
+and structuring our data into bigger single objects, while at the same time pulling them apart field by field.
 For this, we will take a look at data-oriented design.
 
 A path tracer is sort of like a physics simulation for generating, sometimes physically accuracte, high
@@ -198,12 +202,22 @@ forward until they intersect a reason to stop traveling directly forward. Most o
 the surface of an object. Geometry is not the same as material. Once a ray intersects geometry, it needs to know
 what is the color of the surface that was just hit, and in which direction should it bounce next. This is
 dependant on the material. If it hits a perfect mirror, it will change direction much like a billiard ball hitting
-the side of a billiards table. If the surface was perfectly diffuse it might change to a direction in a completely
+the rim of a billiards table. If the surface was perfectly diffuse it might change to a direction in a completely
 random direction. This calculation is not just a simple lookup, but two entirely different mathematical functions.
 They ray will continue to bounce until it either reaches a maximum depth, hits a light source or is otherwise
 terminated. If that doesn't make sense, try out [this video][14].
 
 So why spend your and my time describing path tracers?
+
+<figure markdown>
+![Image](../figures/shader_execution_reordering.png){ width="800" }
+<figcaption>
+Sorting and compacting diverging rays is even implemented in hardware. Nvidia calls this Shader Execution
+Reordering.
+<a href="https://developer.nvidia.com/blog/improve-shader-performance-and-in-game-frame-rates-with-shader-execution-reordering/">
+Image credit </a>
+</figcaption>
+</figure>
 
 They are the perfect case for not just performant heterogeneous systems, but wildly divergent
 performant heterogeneous systems. If you launch 100 rays from different starting origins inside the area
@@ -215,7 +229,7 @@ scatter round and round in the scene. But we can mitigate the effects of this st
 by making sure to package, sort, reorder and compact our rays. Instead of looking at a ray at a time, we might
 structure our program in various pipeline steps. We might for example try to intersect all rays against the scene,
 which is quite expensive, but more on that later, followed by a material/scattering interaction, where we could
-group rays by material, allowing us to execute all rays needed a material A scattering event, followed by
+group rays by material, allowing us to execute all rays needing a material A scattering event, followed by
 executing all rays needing a material B scattering event. It gets worse, but let's take a step back and just
 look at how we might handle a whole bunch of rays.
 
@@ -242,7 +256,7 @@ We could reformulate the way we kept track of rays to process several data eleme
 a relevant part of the code. If we kept a ```Vec<Ray>``` to do this, sending the ```Vec<Ray>``` around from function
 to function, we would call this an Array-of-Structs (AoS).
 
-What we could do instead, to only cache exactly what we needed is called Struct-of-Arrays (SoA). We keep all of
+What we could do instead, to only cache exactly what we need is called Struct-of-Arrays (SoA). We keep all of
 our rays in a deconstructed fashion -
 
 === "Rust"
@@ -282,8 +296,8 @@ we increase the probability of the compiler autovectorizing our code. More on th
 
 This all seems a bit cumbersome however. If you remember earlier, I told you that these rays might scatter, bounce,
 hit different materials and be terminated. Either successfully or unsuccessfully. We need some flexibility back
-to make it possible to intersect a bunch of threads, terminate some of them, move others to one queue for material
-A, move others to a queue for material B and so on.
+to make it possible to intersect a bunch of threads, terminate some of them (compaction), move others to one queue
+for material A, move others to a queue for material B and so on.
 
 Enter... drumroll please... Arrays-of-Structs-of-Arrays (AoSoA).
 
@@ -316,7 +330,7 @@ types like ```Vec3x8``` and ```f32x4```.
 We could even take things a step further and separate our ray structs.
 The fields that are necessary for intersection aren't the same as for propagating colors through bounce
 paths. Normally, we might connect disconnected parts of the same underlying object by indices, but as
-rays are a transient object which we might bounce between functions it might work better with something
+rays are a transient objects which we might bounce between functions it might work better with something
 more static like geometry and materials.
 
 ## The Road to SIMD
@@ -324,11 +338,11 @@ SIMD stands for single instruction multiple data. Basically this whole section h
 is a single instruction that operates on an entire ```lane```. A ```lane``` is defined by the architecture
 of your CPU. The name to look for is typically named something like SSE or AVX. The CPU of the system used
 for benchmarking this section, has multiple SIMD instruction sets - Intel® SSE4.1, Intel® SSE4.2,
-Intel® AVX2, Intel® AVX-512. You can program for each specific instruction set or find a cross-platform such as
-[ultraviolet][13] to program for multiple architectures.
-What I found most important is that my SIMD lanes max out at 512 bits. If I am doing ```f32```-based SIMD
-operations I can fit up to 16 floats into a lane. For a general introduction to the terminology and basics of
-SIMD, you can check out [this post][18].
+Intel® AVX2, Intel® AVX-512. You can program for each specific instruction set or find a cross-platform
+library such as [ultraviolet][13] to act as an abstraction layer, allwing you to program for multiple
+architectures. What I found most important is that my SIMD lanes max out at 512 bits. If I am doing
+```f32```-based SIMD operations I can fit up to 16 floats into a lane. For a general introduction to
+the terminology and basics of SIMD, you can check out [this post][18].
 
 SIMD programming is a genre unto itself and learning to program it can take a while. If you look at the figure
 from earlier showing pipelined instructions, picture each box as being wider. Imagine you are doing the
@@ -342,7 +356,7 @@ different, very basic, functions. Note that the memory-to-compute ratio is quite
 simple compared to the amount of load operations. SIMD doesn't magically make your program any less memory bound, as
 such you have to try and optimize your code before going fully SIMD.
 
-Find the code in ```m4_real_time_systems::code::sorting_functions``` or [online][12].  
+Find the code in [m4_real_time_systems::code::sorting_functions][12].  
 
 <figure markdown>
 ![Image](../figures/sorting_functions_benchmark.png){ width="500" }
@@ -355,10 +369,10 @@ Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
 </figure>
 
 As you can see, if we generate a huge list of different functions to call, we can gain an immense amount of
-performance simply by sorting our data. We can either sort it ourselves, or sit it as it accumulates, by putting
-it in different lists. The other major performance gain we get is by introducing SIMD. Note that the performance
-gain isn't huge when changing to SIMD. This is a case where each function is small enough that we are mostly
-memory bound. SIMD does nothing to alleviate that, except try to draw on even more of the memory bandwidth.
+performance simply by sorting our data. We can either sort it ourselves, or sort it as it accumulates, by putting
+it in different lists/queues/buckets. The other performance gain we get is by introducing SIMD. Note that
+the performance gain isn't huge when changing to SIMD. This is a case where each function is small enough that
+we are mostly memory bound. SIMD does nothing to alleviate that, except try to draw on even more of the memory bandwidth.
 
 If we instead look at code which uses an actual function from path tracing, in this case sphere intersection,
 we are doing much more compute per memory load and can see a significant increase in performance. Here's
@@ -399,7 +413,7 @@ In this case I only use functions implemented directly by utraviolet's ```uv::Ve
 ```uv::f32x8``` types.
 
 Be sure to check out the 4 references at the top of the code.
-Find the code in ```m4_real_time_systems::code::sphere_intersection``` or [online][11].
+Find the code in [m4_real_time_systems::code::sphere_intersection][11].
 
 <figure markdown>
 ![Image](../figures/sphere_intersection_benchmark.png){ width="500" }
@@ -413,13 +427,14 @@ Intel® SSE4.1, Intel® SSE4.2, Intel® AVX2, Intel® AVX-512.
 
 In this case, the vanilla struct-of-arrays code performed worse. In some cases you can hope for autovectorization,
 where the compiler, in the case where you have factored your data in a way that allows it, will create a SIMD
-version of your code. This is usually more likely if you turn on your compilers native targetting flag.
+version of your code. This is usually more likely if you turn on your compilers native architecture targeting flag.
 
 With compilers you can tell it which platforms to compile for. If you tell it to compile exclusively for YOUR
 platform it can make use of optimizations and commands specific to your system. This might make it perform
 significantly worse on other systems though.
 
-I will leave you with one thing if you are memory bound, SIMD won't magically make your memory bandwidth increase.  
+I will just reiterate the most important point
+*if you are memory bound, SIMD won't magically make your memory bandwidth increase*.  
 
 Also, here's [a nice blog post][2] about the performance implications of AOS, SOA and AOSOA.
 

@@ -2,13 +2,13 @@
 In many cases you, as the dilligent systems programmer I am confident you are,
 might be perfectly happy to stay in low level languages like C++ or Rust. Sometimes, it might be more convenient
 to configure your real-time system in a higher level language before you verify all the settings, save them to
-a file and then give the file as an argument when you want to run just your super optimized pipeline. You might
-even be able to use some of the principles from the computational graph sections to optimize on the given
-configuration and then once you have prepared everything, allocated every single piece of memory you might need in
+a file and then give the file as an argument when you want to run just your super optimized pipeline of doom.
+You might even be able to use some of the principles from the computational graph sections to optimize on the given
+configuration and then once you have prepared everything and allocated every single piece of memory you might need in
 your hot loop, you are ready to run at hyper speed. This would also be a good way to handle having users of your
 system who might not be systems programmers.
 
-Another case could of course if we inverted the scenario. You might be able to use a low level language to
+Another case could of course be if we inverted the scenario. You might be able to use a low level language to
 accelerate whatever you are doing in a high level language such as Python. Other than writing entire
 libraries, like PyTorch, you could be writing your own custom data loader.
 
@@ -25,7 +25,8 @@ of using a crate like PyO3? First off, if you are creating bindings, what type o
 Commands with no inherent information like ```my_lib.terminate()```, calling a Rust library from Python, are easy
 to decode. A function was called, no other information needed. Ok, so what if we instead called a function in the
 same setup like this ```my_lib.do_something(5)```. Ok, that's fairly trivial, the representation of the number 5
-is likely to be the exact same in both Rust and Python (but what about ```String``` and your own custom structs?).
+is likely to be the exact same in both Rust and Python, as long as we know how many bits are needed and whether
+the integer is signed or unsigned. But what about ```String``` and your own custom structs?.
 Additionally, because we use a literal, the ownership of that 5 is not an issue. But then we go do something
 crazy like this -
 
@@ -37,10 +38,10 @@ crazy like this -
     ```
 
 In this scenario, we have created a variable, which in Python is reference counted so the garbage collector can
-free it later on, and then given that variable to a function. That function calls some Rust code. Does that Rust
+free it later on, and then we gave that variable to a function. That function calls some Rust code. Does that Rust
 code take ownership of ```element_count```? If it does, we have to be sure that Python no longer sees
 ```element_count``` as something it has to garbage collect. If the Rust library instead manipulates the value
-of ```element_count```, are sure that is unproblematic? As you might recall, Rust's borrow checker is quite strict
+of ```element_count```, are we sure that is unproblematic? As you might recall, Rust's borrow checker is quite strict
 that you cannot have multiple references to a piece of data to which you can write. Did we just violate that?
 What if, even worse, there were multiple references to ```element_count``` in Python, and we just gave that
 value to Rust to manipulate? Basically, you have to make sure to do all of the work that the borrow checker would
@@ -64,8 +65,8 @@ to stay in one domain, finish the job and transfer back, instead of hopping from
 How many calls from Python to Rust do you need to make to do something? Do you ever need to do it in a loop?
 As you might know, libraries like [Numpy][7] are written in C or C++. When using Numpy, you can do something
 with every element of a vector with a for-loop like anywhere else. But, it is a lot faster to remove the for-loop
-and use ```[:]```. In that case, you've just moved the for-loop from happening in Python, to happening in C,
-reducing the amount of switching from Python to C and back from N to 1, resulting in a large speedup.
+and use ```[:]```. In that case, you've just moved the for-loop from happening in Python to happening in C.
+This reduces the amount of switching from Python to C and back from N to 1, resulting in a large speedup.
 
 There's of course many more subtleties and nuances to creating bindings, but that should be enough to set you
 on your way and let you reuse some of the skills you have learned here in other contexts.

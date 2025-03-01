@@ -1,15 +1,16 @@
 # Tips and Tricks
 Wrapping up this module I have a random bag of tips and tricks that I didn't know where else to put.
 Real-time systems are often complex heterogenous things. Not everything will fit neatly into a box.
-But as always, we should at least try to sort them into clusters...
+But as always, we should at least try to group them into clusters...
 
 ## Software Engineering
 I'll get to the performance stuff in a second. But one way for performance analysis to get easier, is for your
 code and your process to get simpler. Not simple in the way where you just hard code everything or name every
-single variable ```i```, but simpler in the sense that your code is simpler to read for other people. Other people
-also includes future you. Try to minimize the amount of abbreviations you use. Sure, people can figure out
-that ```img``` means an image, but it isn't easier to write ```img``` than ```image``` and you get used to
-making these concessions everywhere instead of making code that is as easy to understand as possible.
+single variable ```i```, but simpler in the sense that your code is simpler to read and understand for other
+people. Other people also includes future you. Try to minimize the amount of abbreviations you use. Sure,
+people can figure out that ```img``` means an image, but it isn't easier to write ```img``` than ```image```
+and you get used to making these concessions everywhere instead of making code that is as easy to understand
+as possible.
 
 If you are doing equations, it is ok to name the variables something else, but in that case you should put
 a link in the comment that makes it absolutely clear what you are doing. Making other people have to do detective
@@ -17,8 +18,8 @@ work to understand your code doesn't make you anything other than a target for a
 The computer doesn't care what you name your variables. Of course you can go overboard and have overly verbose
 naming, but that's something that you'll have to work on. Naming variables can be a difficult process. We do
 have to make concessions in other areas though, like reformating our code to follow data oriented design instead.
-But you should only do so when seeing a clear value gained from deviating from the simple and
-the easily comprehendible.
+But you should only do so when seeing a clear value gained from deviating from the simple and the easily
+comprehendable.
 
 Another software engineering-y tip is to always use version control, even for solo development. Once you finally
 get all of your code working correctly, make sure to commit it. As soon as you start optimizing and refactoring
@@ -30,13 +31,13 @@ you're assured that they didn't introduce errors.
 
 ## Minimizing Interaction with the Operating System
 Previously I have mentioned concepts such as object pools and green threads. Often times a key performance
-improvement can be simply to make less, but bigger interactions with the operating system. In the simplest form,
-the object pool, once we allocate an object and we are done using it, we can move it to some data structure instead
-of freeing it. Then when we need another instance of the object we can just reset it and put it into play.
-Occasionally, we might have to make sure the object pool doesn't grow too big and deallocate enough to just
-hold on to a reasonable number of objects. This can save quite a lot of memory allocations and frees. The simplicity
-of the object pool is allowed by the specific pool holding one specific type of object. All objects are the same
-size and can be interpreted as (hopefully) valid instances of that object.
+improvement can be simply to make fewer, but bigger interactions with the operating system. A simple form of that
+is the object pool. Once we allocate an object and we are done using it, we can move it to some data structure instead
+of freeing it. Then when we need another instance of the object we can just remove an instance from the object pool
+structure, reset it and put it into play. Occasionally, we might have to make sure the object pool doesn't grow too
+big and deallocate enough to just hold on to a reasonable number of objects. This can save quite a lot of memory
+allocations and frees. The simplicity of the object pool is allowed by the specific pool holding one specific
+type of object. All objects are the same size and can be interpreted as (hopefully) valid instances of that object.
 
 If we had to keep an object pool of every single type of object we might need, we would probably use a lot
 of memory. A different approach, especially seen in game engines, is to implement your own custom memory allocator.
@@ -57,14 +58,14 @@ instead of having > 100 files and loading them individually.
 
 ## Hot Loops
 Once you have built up enough features that you feel you have a working prototype, and you are ready to move on
-to improve things on the performance side you should check your system monitor whether you are disk bound. Once
-you have removed being disk bound, if you were that is, you should move on to finding your hot loop.
+to improve things on the performance side, you should check your system monitor whether you are disk bound. Once
+you have removed being disk bound, if you were, that is, you should move on to finding your hot loop.
 
 In most systems this is a while loop doing something until you terminate your program. You can verify this
 with a profiler. A rule of thumb is, you should be doing as few interactions with the operating system as possible
-in your hot loop. Are you allocating in side the loop? Could you just figure out what is the maximum size needed
-and preallocate it before the loop? In the case of too much data in coming, you could decide that your containers
-should net resize and decide whether to write over existing data or just drop incoming data.
+in your hot loop. Are you allocating inside the loop? Could you just figure out what is the maximum size needed
+and preallocate it before the loop? In the case of too much data incoming, you could decide that your containers
+should resize and decide whether to write over existing data or just drop incoming data.
 
 You should also remember that printing to the terminal is a system call. Don't do it in a loop unless you really
 really need to. Likewise reading from files should be minimized, or done asynchronously on other threads.

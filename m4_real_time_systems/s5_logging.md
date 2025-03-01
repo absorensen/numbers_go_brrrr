@@ -37,7 +37,7 @@ As an example, at runtime, you might want the logger to only print critical erro
 to the terminal or to some other user facing display mechanism you have put in place,
 but once your application is done, you might want to clean up your program by checking
 that there are of course no errors, but fixing all the code that results in warnings.
-Logging is definitely a useful tool in most cases, and the performance implications
+Logging is definitely a useful tool in almost all cases, and the performance implications
 are likely to be neglible, but just like printing, unless you really need it, you
 probably shouldn't be calling it in a loop by default.
 

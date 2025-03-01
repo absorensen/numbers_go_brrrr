@@ -7,7 +7,7 @@ own area of interest.
 
 ## m4::e0 - Architectural Analysis
 Describe the base architecture of the egui-winit-wgpu template. Found in
-```m4_real_time_systems::code::egui-winit-wgpu-template``` or [online][0].
+[m4_real_time_systems::code::egui-winit-wgpu-template][0].
 
 * Which elements are in play?  
 * Who owns what data?  
