@@ -16,14 +16,13 @@ Let's assume we have a basic program like the following -
     }
     ```
 
-We have written the full program, you can check it out in ```m4_optimization::code::measuring_performance```.
+I have written the full program, you can check it out in [m5_optimization::code::measuring_performance][0].
 We have verified the correctness of our program. We have set up tests to continually ensure the continued
 correctness of our program. We are now ready to improve the runtime of our program. I haven't actually done
 this as I don't actually care about whether this specific program is correct. This is not the norm of course.
 The fastest thing right now would be to either put in timing and print statements or to open up
-our system wide performance monitor and see if anything glaringly wrong is happening. Because I have something
-else coming up later where the performance monitor will be the most relevant, let's go down the time and print
-path.
+our system wide performance monitor and see if anything glaringly wrong is happening. Let's go down
+the time and print path.
 
 In this case we will include some timing functionality from the standard library at the top of the file and
 time the whole program.
@@ -243,7 +242,7 @@ applications we can compare this to is a real-time system where we care about th
 measure the time it takes to process or render a single frame or we can measure how many frames per second we can
 sustain. One crucial bit in an interactive real-time system is the variance. If you are churning out 60 frames
 per second, but frame 0 takes 0.9999 seconds and the other frames each take 0.0000001 seconds, the user is getting a
-very choppy experience. Even if it results in a lower frames per second, like going from 60 to 50, distributing the
+very choppy experience. Even if it results in lower frames per second, like going from 60 to 50, distributing the
 processing time a bit would be a smoother experience. You could also measure the average frames per second in a moving
 window fashion while moving through a scene to see which areas of a scene might need tweaking performance wise.
 
@@ -346,7 +345,7 @@ Clearly, we should be getting the hint that something is irregular about the exe
 the execution times across various input data sizes and graph it. I won't do it in this function, it is a
 bit more involved. But it is how the graphs were generated in the framework for computational graphs.
 You can find the code for making the graph based on vectors of performance measurements in
-```m1_memory_hierarchies::code::computational_graphs::src::shared::benchmark_plot.rs```.
+[```m1_memory_hierarchies::code::computational_graphs::src::shared::benchmark_plot.rs```][1].
 
 <figure markdown>
 ![Image](../figures/graphs_size_benchmark.png){ width="600" }
@@ -356,6 +355,9 @@ An example of a timing plot, comparing different implementations across differen
 </figure>
 
 This way of benchmarking different implementations won't help us find bottlenecks in our specific system.
-To do that we can either keep timing and printing, going deeper and deeper. Or get a profiler to measure
+To do that we can either keep timing and printing, going deeper and deeper, or get a profiler to measure
 which functions in our code are the biggest hot spots. These profilers are system and hardware dependent, so I will
 suggest ones you can try out in the next section.
+
+[0]: https://github.com/absorensen/the-guide/tree/main/m5_optimization/code/measuring_performance
+[1]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/benchmark_plot.rs

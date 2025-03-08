@@ -4,16 +4,15 @@ systems performance monitor, although that would only allow you to guess about w
 processing time. Once you have tried both timing your code, and you've gotten what you could out of the
 system performance monitor, it might be time to install and use a profiler.
 
-If you are profiling Rust, make sure you leave in the
-[debug symbols](https://nnethercote.github.io/perf-book/profiling.html#debug-info) when compiling. Otherwise the
+If you are profiling Rust, make sure you leave in the [debug symbols][0] when compiling. Otherwise the
 profiler won't be able to tell you which function is which.
 
 ## System Monitors
 Let's start off looking at your system monitor to see where
 something might be obviously wrong. I will be using Task Manager on Windows to exemplify where you
 might look for the various bottlenecks. The quickest way to check is following the memory hierarchy.
-Disk, memory, CPU and then optionally GPU. If your disk is maxed out, then a good idea for your next optimization
-might be to focus on disk utilization.
+Disk, memory, CPU and then optionally CPU-GPU transfer and GPU. If your disk is maxed out, then a
+good idea for your next optimization might be to focus on disk utilization.
 
 ### Disk
 In the disk tab we can see the name of the disk, its maximum read and write speeds, usually read will be faster
@@ -77,10 +76,10 @@ monitor button in the bottom left.
 If we are using the GPU in our application, we can also go to the GPU tab. Once again, in the upper right we can
 see which GPU we are using. In the bottom, we can see the driver version. DirectX version refers to the version
 of DirectX (Windows graphics and compute API) that the system supports. The laptop I used to take the screenshot
-with has what is called an integrated GPU. It shares
-its memory with the CPU. But in this case, the entire system has 32 GB of memory, 16 of which is shared by the GPU.
-While this may result in higher transfer rates to the GPU, the bandwidth internally
-(when you access memory in a buffer you have already transferred) is usually less than a dedicated GPU.
+with has what is called an integrated GPU. It shares its memory with the CPU. But in this case, the entire
+system has 32 GB of memory, 16 of which is shared by the GPU. While this may result in higher transfer rates
+to the GPU, the bandwidth internally (when you access memory in a buffer you have already transferred)
+is usually less than a dedicated GPU.
 
 <figure markdown>
 ![Image](../figures/task_manager_gpu.png){ width="800" }
@@ -101,17 +100,17 @@ If your own system's performance monitor was not detailed enough, you can make u
 Profilers can be hard to install and something that depends on your use case. Below is a non-exhaustive list
 of profilers you can try out.
 
-* [A list of Rust profilers from the Rust Performance Book](https://nnethercote.github.io/perf-book/profiling.html)
+* [A list of Rust profilers from the Rust Performance Book][1]
 * Web Browser
-* [perf](https://en.wikipedia.org/wiki/Perf_(Linux))
-* [RenderDoc](https://renderdoc.org/)
-* [AMD Radeon GPU Profiler](https://gpuopen.com/rgp/)
-* [Nvidia Visual Profiler](https://developer.nvidia.com/nvidia-visual-profiler)
-* [Nsight Systems](https://developer.nvidia.com/nsight-systems)
-* [PyTorch profiler](https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html)
-* [tracy](https://github.com/wolfpld/tracy)
+* [perf][2]
+* [RenderDoc][3]
+* [AMD Radeon GPU Profiler][4]
+* [Nvidia Visual Profiler][5]
+* [Nsight Systems][6]
+* [PyTorch profiler][7]
+* [tracy][8]
 
-Profiling on Windows is a bad experience if you are outside Visual Studio. You can try using Linux tools like perf
+Profiling on Windows can be a bad experience if you are outside Visual Studio. You can try using Linux tools like perf
 through WSL2 on Windows. How to profile your specific GPU on Windows through WSL2, I am not quite sure. You might
 just be able to profile outside of WSL2 using the GPU profiler provided by the GPU vendor (AMD, Nvidia, Intel).
 
@@ -166,7 +165,17 @@ Here we are shown the utilization of different parts of the memory hierarchy. If
 way to get out of being compute bound, this, more visual, way of communicating profile statistics is a great way
 to see what you aren't using.
 
-I will leave you with this - at a celebration I was fortunate to sit next to the rendering lead of the renowned
-game company Playdead Games, Mikkel Gjøl. His go-to profiling advice was
+I will leave you with this - at a celebration I was fortunate to sit next to the (at the time) rendering lead of
+the renowned game company Playdead Games, Mikkel Gjøl. His go-to profiling advice was
 *"Always go straight for the L2 cache hits and misses"*.
 I don't embroider, but if I did... I would embroider that on a pillow.
+
+[0]: https://nnethercote.github.io/perf-book/profiling.html#debug-info
+[1]: https://nnethercote.github.io/perf-book/profiling.html
+[2]: https://en.wikipedia.org/wiki/Perf_(Linux)
+[3]: https://renderdoc.org/
+[4]: https://gpuopen.com/rgp/
+[5]: https://developer.nvidia.com/nvidia-visual-profiler
+[6]: https://developer.nvidia.com/nsight-systems
+[7]: https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html
+[8]: https://github.com/wolfpld/tracy
