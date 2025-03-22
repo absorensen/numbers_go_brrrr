@@ -16,7 +16,7 @@
       
       
       <link rel="icon" href="../../figures/nebula.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
     
     
       
@@ -24,7 +24,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.4af4bdda.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.06af60db.min.css">
@@ -2037,15 +2037,14 @@
 systems performance monitor, although that would only allow you to guess about what was taking most of the
 processing time. Once you have tried both timing your code, and you've gotten what you could out of the
 system performance monitor, it might be time to install and use a profiler.</p>
-<p>If you are profiling Rust, make sure you leave in the
-<a href="https://nnethercote.github.io/perf-book/profiling.html#debug-info">debug symbols</a> when compiling. Otherwise the
+<p>If you are profiling Rust, make sure you leave in the <a href="https://nnethercote.github.io/perf-book/profiling.html#debug-info">debug symbols</a> when compiling. Otherwise the
 profiler won't be able to tell you which function is which.</p>
 <h2 id="system-monitors">System Monitors</h2>
 <p>Let's start off looking at your system monitor to see where
 something might be obviously wrong. I will be using Task Manager on Windows to exemplify where you
 might look for the various bottlenecks. The quickest way to check is following the memory hierarchy.
-Disk, memory, CPU and then optionally GPU. If your disk is maxed out, then a good idea for your next optimization
-might be to focus on disk utilization.</p>
+Disk, memory, CPU and then optionally CPU-GPU transfer and GPU. If your disk is maxed out, then a
+good idea for your next optimization might be to focus on disk utilization.</p>
 <h3 id="disk">Disk</h3>
 <p>In the disk tab we can see the name of the disk, its maximum read and write speeds, usually read will be faster
 than write. You can also see whether you are mostly using read or write bandwidth.</p>
@@ -2099,10 +2098,10 @@ monitor button in the bottom left.</p>
 <p>If we are using the GPU in our application, we can also go to the GPU tab. Once again, in the upper right we can
 see which GPU we are using. In the bottom, we can see the driver version. DirectX version refers to the version
 of DirectX (Windows graphics and compute API) that the system supports. The laptop I used to take the screenshot
-with has what is called an integrated GPU. It shares
-its memory with the CPU. But in this case, the entire system has 32 GB of memory, 16 of which is shared by the GPU.
-While this may result in higher transfer rates to the GPU, the bandwidth internally
-(when you access memory in a buffer you have already transferred) is usually less than a dedicated GPU.</p>
+with has what is called an integrated GPU. It shares its memory with the CPU. But in this case, the entire
+system has 32 GB of memory, 16 of which is shared by the GPU. While this may result in higher transfer rates
+to the GPU, the bandwidth internally (when you access memory in a buffer you have already transferred)
+is usually less than a dedicated GPU.</p>
 <figure>
 <p><a class="glightbox" href="../../figures/task_manager_gpu.png" data-type="image" data-width="auto" data-height="auto" data-desc-position="bottom"><img alt="Image" src="../../figures/task_manager_gpu.png" width="800" /></a></p>
 <figcaption>
@@ -2130,7 +2129,7 @@ of profilers you can try out.</p>
 <li><a href="https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html">PyTorch profiler</a></li>
 <li><a href="https://github.com/wolfpld/tracy">tracy</a></li>
 </ul>
-<p>Profiling on Windows is a bad experience if you are outside Visual Studio. You can try using Linux tools like perf
+<p>Profiling on Windows can be a bad experience if you are outside Visual Studio. You can try using Linux tools like perf
 through WSL2 on Windows. How to profile your specific GPU on Windows through WSL2, I am not quite sure. You might
 just be able to profile outside of WSL2 using the GPU profiler provided by the GPU vendor (AMD, Nvidia, Intel).</p>
 <h2 id="how-to-work-with-profilers">How to work with Profilers</h2>
@@ -2176,8 +2175,8 @@ Image credit </a>
 <p>Here we are shown the utilization of different parts of the memory hierarchy. If you don't see the obvious
 way to get out of being compute bound, this, more visual, way of communicating profile statistics is a great way
 to see what you aren't using.</p>
-<p>I will leave you with this - at a celebration I was fortunate to sit next to the rendering lead of the renowned
-game company Playdead Games, Mikkel Gjøl. His go-to profiling advice was
+<p>I will leave you with this - at a celebration I was fortunate to sit next to the (at the time) rendering lead of
+the renowned game company Playdead Games, Mikkel Gjøl. His go-to profiling advice was
 <em>"Always go straight for the L2 cache hits and misses"</em>.
 I don't embroider, but if I did... I would embroider that on a pillow.</p>
 
@@ -2202,7 +2201,7 @@ I don't embroider, but if I did... I would embroider that on a pillow.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">December 11, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 8, 2025 12:06:15">March 8, 2025</span>
   </span>
 
     
@@ -2212,7 +2211,7 @@ I don't embroider, but if I did... I would embroider that on a pillow.</p>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">August 31, 2023</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="August 31, 2023 11:41:05">August 31, 2023</span>
   </span>
 
     
