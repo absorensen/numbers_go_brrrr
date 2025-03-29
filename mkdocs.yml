@@ -59,8 +59,6 @@ plugins:
 
 extra:
   social:
-    - icon: material/email
-      link: mailto:anders-soerensen@hotmail.com
     - icon: fontawesome/brands/github
       link: https://github.com/absorensen
     - icon: fontawesome/brands/linkedin
