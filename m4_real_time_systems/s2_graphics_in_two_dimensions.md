@@ -405,7 +405,7 @@ websites [LearnWGPU][0] and [LearnOpenGL][1] for the one thousandth time.
 [8]: https://en.wikipedia.org/wiki/Xiaolin_Wu%27s_line_algorithm
 [9]: https://en.wikipedia.org/wiki/Polygon_mesh
 [10]: https://en.wikipedia.org/wiki/Manifold
-[11]: https://absorensen.github.io/the-guide/m2_concurrency/s6_more_gpu/
+[11]: https://absorensen.github.io/numbers_go_brrrr/m2_concurrency/s6_more_gpu/
 [12]: https://en.wikipedia.org/wiki/Painter's_algorithm
 [13]: https://computergraphics.stackexchange.com/questions/10994/how-are-rounded-corners-of-user-interfaces-usually-rendered-in-modern-applicatio
 [14]: https://learnopengl.com/Advanced-OpenGL/Anti-Aliasing

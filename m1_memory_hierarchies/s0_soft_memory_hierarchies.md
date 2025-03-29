@@ -461,7 +461,7 @@ Check out the memory and cache specs for Apple's [M1 series][12].
 [3]: https://en.cppreference.com/w/c/memory/free
 [5]: https://en.wikipedia.org/wiki/Byte_addressing
 [6]: https://en.algorithmica.org/hpc/cpu-cache/alignment/
-[7]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/access_patterns
+[7]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m1_memory_hierarchies/code/access_patterns
 [8]: https://en.wikibooks.org/wiki/Data_Structures/Stacks_and_Queues
 [9]: https://courses.grainger.illinois.edu/cs225/fa2021/resources/stack-heap/
 [10]: https://cs2461-2020.github.io/lectures/dynamic.pdf

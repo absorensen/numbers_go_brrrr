@@ -18,7 +18,7 @@ is specific to the underlying implementation of types. Before we start, I should
 it is, at minimum, bad practice, if not outright triggering a compiler error, to do bitwise operations on
 floating point numbers. In most cases it is recommended to use integers, and if you do not view the
 variable as a number at all but as an array of bits, also known as a
-[bit array](https://en.wikipedia.org/wiki/Bit_array), a bit mask, bit map, bit set, bit string or bit vector
+[bit array][5], a bit mask, bit map, bit set, bit string or bit vector
 (make up your minds people!), it is recommended to use unsigned integers, or sometimes languages will have
 specific types just for better ergonomics when directly manipulating bits. In that case they might mimic
 the vector operations quite closely, such as indexing the bit array, like ```bit_vector[3]``` to get the fourth
@@ -143,5 +143,6 @@ reference for [operators][2].
 [0]: https://doc.rust-lang.org/std/primitive.u32.html#method.rotate_left
 [1]: https://en.wikipedia.org/wiki/Bitwise_operation
 [2]: https://doc.rust-lang.org/reference/expressions/operator-expr.html
-[3]: https://absorensen.github.io/the-guide/m4_real_time_systems/s4_branchless_programming/
+[3]: https://absorensen.github.io/numbers_go_brrrr/m4_real_time_systems/s4_branchless_programming/
 [4]: https://open4tech.com/logical-vs-arithmetic-shift/
+[5]: https://en.wikipedia.org/wiki/Bit_array

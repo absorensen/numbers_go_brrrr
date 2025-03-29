@@ -131,4 +131,4 @@ To read more about lock-free algorithms, go [here][2] and [here][3].
 [4]: https://doc.rust-lang.org/std/sync/atomic/
 [5]: https://doc.rust-lang.org/std/sync/atomic/struct.AtomicU32.html
 [6]: https://www.w3.org/TR/WGSL/#atomic-builtin-functions
-[7]: https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism
+[7]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m2_concurrency/code/parallelism

@@ -24,6 +24,21 @@ I owe the following people thanks for having given feedback and advice or (unkno
 * Mikkel Gjøl
 * Henning Christiansen
 
+The following people were participated in the course based on this website and gave a lot of useful feedback:
+
+* Lenka
+* Paul
+* Teresa
+* Tobias
+* Emil
+* Minh
+* Thompson
+* Simon
+* Thea
+* Johan
+* Stas
+* Kenny
+
 ## Icons
 * <a href="https://www.flaticon.com/free-icons/nebula" title="nebula icons">Nebula icons created by Eucalyp - Flaticon</a>
 

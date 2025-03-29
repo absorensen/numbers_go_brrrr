@@ -89,7 +89,7 @@ You are encouraged to find additional litterature on your own.
 * Real-Time Texture Decompression and Upsampling, such as [this][32]
 * [2:4 sparsity with Tensor Cores][35]
 
-[0]: https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/egui-winit-wgpu-template
+[0]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m4_real_time_systems/code/egui-winit-wgpu-template
 [1]: https://austinmorlan.com/posts/entity_component_system/
 [2]: https://www.simplilearn.com/entity-component-system-introductory-guide-article
 [3]: https://www.rustsim.org/blog/2020/03/23/simd-aosoa-in-nalgebra/

@@ -72,4 +72,4 @@ Is that acceptable behavior in the case of taking in mouse drag events?
 [0]: https://en.wikipedia.org/wiki/Event_(computing)
 [1]: https://en.wikipedia.org/wiki/Event-driven_architecture
 [2]: https://github.com/rust-windowing/winit
-[3]: https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/egui-winit-wgpu-template
+[3]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m4_real_time_systems/code/egui-winit-wgpu-template

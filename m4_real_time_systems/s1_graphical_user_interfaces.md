@@ -44,7 +44,7 @@ You can find a list of GUI-relevant libraries [here][6].
 [0]: https://github.com/emilk/egui
 [1]: https://www.egui.rs/#demo
 [2]: https://www.rerun.io/
-[3]: https://github.com/absorensen/the-guide/blob/main/m4_real_time_systems/code/egui-winit-wgpu-template/src/gui.rs
+[3]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m4_real_time_systems/code/egui-winit-wgpu-template/src/gui.rs
 [4]: https://iced.rs/
 [5]: https://dioxuslabs.com/
 [6]: https://areweguiyet.com/

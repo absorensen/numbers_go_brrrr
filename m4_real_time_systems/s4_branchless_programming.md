@@ -467,11 +467,11 @@ This is even being rolled out and described in this [blog post by Nvidia][1].
 [8]: https://web.eecs.utk.edu/~mbeck/classes/cs160/lectures/09_intruc_pipelining.pdf
 [9]: https://research.nvidia.com/sites/default/files/publications/laine2013hpg_paper.pdf
 [10]: https://jacco.ompf2.com/2019/07/18/wavefront-path-tracing/
-[11]: https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/sphere_intersection
-[12]: https://github.com/absorensen/the-guide/tree/main/m4_real_time_systems/code/sorting_functions
+[11]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m4_real_time_systems/code/sphere_intersection
+[12]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m4_real_time_systems/code/sorting_functions
 [13]: https://docs.rs/ultraviolet/latest/ultraviolet/
 [14]: https://www.youtube.com/watch?v=frLwRLS_ZR0
-[15]: https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#access-patterns
+[15]: https://absorensen.github.io/numbers_go_brrrr/m1_memory_hierarchies/s0_soft_memory_hierarchies/#access-patterns
 [16]: https://github.com/ispc/ispc
 [17]: https://unity.com/dots
 [18]: https://github.com/rust-lang/portable-simd/blob/master/beginners-guide.md

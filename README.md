@@ -38,8 +38,6 @@ I have tried to make the website as fun and light as possible, but to be honest.
 I may have gone overboard with the memes. The website is slowly becoming more like a collection of
 programming memes with some light educational content around it.
 
-🌌 [Queue Eric Idle!][1] 🌌
-
 Without further ado, let's get this show on the road!
 
 ## Contributions
@@ -64,11 +62,10 @@ If you use parts of this course in your work, please cite using:
 ```bibtex
 @misc{absorensen_the_guide,
     author       = {Anders Bo Sørensen},
-    title        = {The "Numbers Go Brrr" Guide},
-    howpublished = {\url{https://github.com/absorensen/the-guide}},
-    year         = {2024}
+    title        = {Numbers Go Brrr},
+    howpublished = {\url{https://github.com/absorensen/numbers_go_brrrr}},
+    year         = {2023-2025}
 }
 ```
 
 [0]: https://absorensen.github.io/real-time-visual-and-machine-learning-systems/
-[1]: https://www.youtube.com/watch?v=buqtdpuZxvk

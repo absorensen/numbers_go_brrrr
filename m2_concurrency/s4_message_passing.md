@@ -109,4 +109,4 @@ the most used method for sharing data between nodes is a standard called [MPI][1
 [3]: https://en.wikipedia.org/wiki/Task_parallelism
 [4]: https://doc.rust-lang.org/std/sync/mpsc/fn.channel.html
 [5]: https://doc.rust-lang.org/std/sync/mpsc/fn.sync_channel.html
-[6]: https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/message_passing
+[6]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m2_concurrency/code/message_passing

@@ -42,7 +42,7 @@ they can be returned to the thread pool again.
 
 ## Launching a Thread
 For this section I have a project ready in
-[m2_concurrency::code::threads](https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/threads).
+[m2_concurrency::code::threads](https://github.com/absorensen/numbers_go_brrrr/tree/main/m2_concurrency/code/threads).
 
 Go to the ```basic_threading``` function. In it we launch some threads using the standard libraries
 ```thread::spawn()``` and give it a closure to execute. Each thread, including the main thread
@@ -115,7 +115,7 @@ _________________
 
 ## Crossbeam Instead of Rayon
 For this section I have a project ready in
-[m2_concurrency::code::parallelism](https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism).
+[m2_concurrency::code::parallelism](https://github.com/absorensen/numbers_go_brrrr/tree/main/m2_concurrency/code/parallelism).
 
 Once again, just like in the ```data_parallelism``` section,
 we are looking at a homogenous workload in two different versions, a VERY simple version that just doubles

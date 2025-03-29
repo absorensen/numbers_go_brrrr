@@ -132,4 +132,4 @@ which conditions.
 [2]: https://en.wikipedia.org/wiki/Semaphore_(programming)
 [3]: https://doc.rust-lang.org/book/ch16-03-shared-state.html
 [4]: https://github.com/ProgrammingRust/mandelbrot/blob/task-queue/src/main.rs
-[5]: https://github.com/absorensen/the-guide/tree/main/m2_concurrency/code/parallelism
+[5]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m2_concurrency/code/parallelism

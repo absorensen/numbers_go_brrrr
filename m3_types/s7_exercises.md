@@ -92,7 +92,7 @@ Can you calculate the maximum induced loss of precision for the points?
 [7]: https://en.wikipedia.org/wiki/Radix_sort
 [8]: https://brilliant.org/wiki/radix-sort/
 [9]: https://en.wikipedia.org/wiki/Z-order_curve
-[10]: https://absorensen.github.io/the-guide/m3_types/s4_bit_tricks/
+[10]: https://absorensen.github.io/numbers_go_brrrr/m3_types/s4_bit_tricks/
 [11]: https://www.forceflow.be/2013/10/07/morton-encodingdecoding-through-bit-interleaving-implementations/
 [12]: https://www.nalgebra.org/
 [13]: https://docs.rs/ultraviolet/latest/ultraviolet/

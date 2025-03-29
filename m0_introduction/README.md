@@ -120,4 +120,4 @@ This website has since I taught the course seen quite a few changes based on stu
 [0]: https://towardsdatascience.com/chatgpts-electricity-consumption-7873483feac4
 [1]: https://towardsdatascience.com/environmental-impact-of-ubiquitous-generative-ai-9e061bac6800
 [2]: https://absorensen.github.io/real-time-visual-and-machine-learning-systems/
-[3]: https://absorensen.github.io/the-guide/m6_projects/
+[3]: https://absorensen.github.io/numbers_go_brrrr/m6_projects/

@@ -58,7 +58,7 @@ If you are more inclined towards neural networks, [Learning to Fly][4], which fo
 algorithms, might be more stimulating. The code is already in Rust and should be fairly easy to follow.
 
 [0]: https://adventofcode.com/
-[1]: https://github.com/absorensen/the-guide/tree/main/m0_introduction/code/image_on_screen
+[1]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m0_introduction/code/image_on_screen
 [2]: https://raytracing.github.io/books/RayTracingInOneWeekend.html
-[3]: https://github.com/absorensen/the-guide/tree/main/m0_introduction/code/image_on_screen
+[3]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m0_introduction/code/image_on_screen
 [4]: https://pwy.io/posts/learning-to-fly-pt1/

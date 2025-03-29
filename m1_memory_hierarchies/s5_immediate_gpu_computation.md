@@ -181,11 +181,11 @@ this for immediate mode operations. This works just fine when you have 4-10 shad
 compile and keep track of, but what if you had in the 1000's of combinations? In that
 case you might need some form of cache eviction mechanism, such as [LRU][7].
 
-[0]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d_gpu.rs
-[1]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/linear.wgsl
-[2]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/immediate/nodes.rs
-[3]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu.wgsl
-[4]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu_inline.wgsl
-[5]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/softmax.wgsl
-[6]: https://absorensen.github.io/the-guide/m1_memory_hierarchies/s4_intro_to_gpus/
+[0]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d_gpu.rs
+[1]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/linear.wgsl
+[2]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/computational_graphs/src/immediate/nodes.rs
+[3]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu.wgsl
+[4]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/relu_inline.wgsl
+[5]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/shaders/softmax.wgsl
+[6]: https://absorensen.github.io/numbers_go_brrrr/m1_memory_hierarchies/s4_intro_to_gpus/
 [7]: https://en.wikipedia.org/wiki/Cache_replacement_policies

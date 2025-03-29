@@ -1,7 +1,7 @@
-site_name: The "Numbers Go Brrr" Guide
+site_name: Numbers Go Brrrr
 docs_dir: .
 site_dir: ../site
-repo_url: https://github.com/absorensen/the-guide
+repo_url: https://github.com/absorensen/numbers_go_brrrr
 
 theme:
   language: en

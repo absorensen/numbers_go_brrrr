@@ -35,7 +35,7 @@ Once you have installed both, ensure they are properly installed by calling ```g
 At the least, the code in the guide won't function without support for the 2021 or newer version of Rust.  
 
 * git clone the guides repository
-```git clone https://github.com/absorensen/the-guide.git```
+```git clone https://github.com/absorensen/numbers_go_brrrr.git```
 * In your terminal navigate into the folder that just appeared
 * Navigate to ```m0_introduction::code::is_my_system_ready```
 * In the command line write ```cargo run```. This might take a while as cargo will now download and build some

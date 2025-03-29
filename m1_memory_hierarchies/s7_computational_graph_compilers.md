@@ -173,4 +173,4 @@ PyTorch compiler are [Torch.fx][3], [torch.compile][4] and
 [3]: https://pytorch.org/docs/stable/fx.html
 [4]: https://pytorch.org/docs/stable/generated/torch.compile.html
 [5]: https://pytorch.org/docs/stable/torch.compiler.html
-[6]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/op_code_compiler/runner.rs
+[6]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/computational_graphs/src/op_code_compiler/runner.rs

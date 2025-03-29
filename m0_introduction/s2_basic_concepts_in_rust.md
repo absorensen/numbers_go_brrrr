@@ -8,4 +8,4 @@ Go into the file corresponding to each function being called in the ```main``` f
 and read all of the comments in order.
 
 [0]: https://www.rust-lang.org/learn
-[1]: https://github.com/absorensen/the-guide/tree/main/m0_introduction/code/basic_concepts
+[1]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m0_introduction/code/basic_concepts

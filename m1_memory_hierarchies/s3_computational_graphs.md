@@ -393,11 +393,11 @@ compute shader driven.
 
 [0]: https://devblogs.microsoft.com/directx/d3d12-work-graphs-preview/
 [1]: https://gpuopen.com/gpu-work-graphs-in-vulkan/
-[2]: https://absorensen.github.io/the-guide/m1_memory_hierarchies/s1_basic_data_structures/#enter-the-matrix
+[2]: https://absorensen.github.io/numbers_go_brrrr/m1_memory_hierarchies/s1_basic_data_structures/#enter-the-matrix
 [3]: https://en.wikipedia.org/wiki/Loop_optimization
 [4]: https://pytorch.org/docs/stable/generated/torch.nn.ReLU.html
-[5]: https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#graphs-and-trees
+[5]: https://absorensen.github.io/numbers_go_brrrr/m1_memory_hierarchies/s0_soft_memory_hierarchies/#graphs-and-trees
 [6]: https://pytorch.org/tutorials/recipes/recipes/defining_a_neural_network.html
 [7]: https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)
-[8]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/computational_graphs
-[9]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d.rs
+[8]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m1_memory_hierarchies/code/computational_graphs
+[9]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/computational_graphs/src/shared/tensor2d.rs

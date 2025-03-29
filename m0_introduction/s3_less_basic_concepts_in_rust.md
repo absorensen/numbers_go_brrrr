@@ -134,6 +134,6 @@ Note however, that square bracket indexing is the defacto standard way of access
 languages. This showcases a core difference between the two languages. One being safety opt-out, and
 another being safety opt-in.
 
-[0]: https://github.com/absorensen/the-guide/tree/main/m0_introduction/code/less_basic_concepts
+[0]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m0_introduction/code/less_basic_concepts
 [1]: https://doc.rust-lang.org/nomicon/aliasing.html
 [2]: https://doc.rust-lang.org/nomicon/intro.html

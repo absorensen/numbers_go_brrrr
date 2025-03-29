@@ -870,20 +870,20 @@ If you are into spatial data structures and/or graphics, computer vision, etc he
 [octrees][31], [BVHs][32], [Kd-Trees][33], [a comparison between kD tree and octree][34],
 [levels-of-detail for point clouds (chapter 3)][35] and [levels-of-detail for meshes][36].
 
-[0]: https://absorensen.github.io/the-guide/m1_memory_hierarchies/s0_soft_memory_hierarchies/#garbage-collectors
+[0]: https://absorensen.github.io/numbers_go_brrrr/m1_memory_hierarchies/s0_soft_memory_hierarchies/#garbage-collectors
 [1]: https://en.cppreference.com/w/cpp/memory/unique_ptr
 [2]: https://doc.rust-lang.org/std/boxed/index.html
 [3]: https://en.cppreference.com/w/cpp/memory/shared_ptr
 [4]: https://doc.rust-lang.org/std/rc/index.html
 [5]: https://doc.rust-lang.org/std/sync/struct.Arc.html
-[6]: https://absorensen.github.io/the-guide/m2_concurrency/
+[6]: https://absorensen.github.io/numbers_go_brrrr/m2_concurrency/
 [7]: https://doc.rust-lang.org/std/rc/struct.Weak.html
 [8]: https://doc.rust-lang.org/book/ch15-00-smart-pointers.html
 [9]: https://doc.rust-lang.org/book/ch15-06-reference-cycles.html
-[10]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/strided_access_and_transposition/src/main.rs
-[11]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/permuted_arrays/src/main.rs
-[12]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/jagged_arrays/src/main.rs
-[13]: https://github.com/absorensen/the-guide/blob/main/m1_memory_hierarchies/code/hash_maps/src/main.rs
+[10]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/strided_access_and_transposition/src/main.rs
+[11]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/permuted_arrays/src/main.rs
+[12]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/jagged_arrays/src/main.rs
+[13]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/hash_maps/src/main.rs
 [14]: https://www.cs.princeton.edu/courses/archive/fall06/cos226/lectures/hash.pdf
 [15]: https://github.com/nrc/r4cppp/blob/master/graphs/README.md
 [16]: http://smallcultfollowing.com/babysteps/blog/2015/04/06/modeling-graphs-in-rust-using-vector-indices/

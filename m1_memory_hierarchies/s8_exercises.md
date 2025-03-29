@@ -129,7 +129,7 @@ people have made some online learning tools for you to learn more paradigms with
 way to learn without having to deal with too much set up. You can find the puzzles [here][1]
 and [here][2].
 
-[0]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_hand_in
+[0]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m1_memory_hierarchies/code/gpu_hand_in
 [1]: https://github.com/srush/GPU-Puzzles
 [2]: https://gpupuzzles.answer.ai/
 [3]: https://webgpufundamentals.org/webgpu/lessons/resources/wgsl-offset-computer.html#

@@ -488,7 +488,7 @@ For more on implementing a [heap with an array][5], [priority queues][6], [binar
 
 [0]: https://en.cppreference.com/w/cpp/container/vector
 [1]: https://doc.rust-lang.org/std/vec/struct.Vec.html
-[2]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/the_vector
+[2]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m1_memory_hierarchies/code/the_vector
 [3]: https://en.cppreference.com/w/cpp/utility/move
 [4]: https://blog.logrocket.com/disambiguating-rust-traits-copy-clone-dynamic/
 [5]: https://www.programiz.com/dsa/heap-data-structure

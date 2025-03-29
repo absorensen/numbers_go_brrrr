@@ -1424,9 +1424,9 @@ GPGPU programming can be found [here][9].
 [5]: https://engineering.purdue.edu/~smidkiff/ece563/NVidiaGPUTeachingToolkit/Mod14DataXfer/Mod14DataXfer.pdf
 [6]: https://sotrh.github.io/learn-wgpu/
 [7]: https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory
-[8]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_histogram
+[8]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m1_memory_hierarchies/code/gpu_histogram
 [9]: https://shop.elsevier.com/books/programming-massively-parallel-processors/hwu/978-0-323-91231-0
 [10]: https://www.researchgate.net/publication/220781807_Efficient_gather_and_scatter_operations_on_graphics_processors
 [11]: https://www.nuss-and-bolts.com/p/optimizing-a-webgpu-matmul-kernel
-[12]: https://github.com/absorensen/the-guide/tree/main/m1_memory_hierarchies/code/gpu_add
+[12]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m1_memory_hierarchies/code/gpu_add
 [13]: https://sotrh.github.io/learn-wgpu/

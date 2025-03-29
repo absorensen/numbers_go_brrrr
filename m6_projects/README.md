@@ -48,17 +48,19 @@ These have the "Arewe____yet" form. Examples like [Arewelearningyet][1] can also
 in [AreWeRustYet][2].
 
 An additional list of libraries and frameworks you might find useful for doing a project -  
-[rayon][3]  
-[ultraviolet][9]  
-[egui][4]  
-[winit][7]  
-[wonnx][5]  
-[tch][6]  
-[burn][10]  
-[cv][8]  
-[time][11]  
-[chrono][12]  
-[hifitime][13]  
+
+* [rayon][3]  
+* [ultraviolet][9]  
+* [egui][4]  
+* [winit][7]  
+* [wonnx][5]  
+* [tch][6]  
+* [burn][10]  
+* [cv][8]  
+* [time][11]  
+* [chrono][12]  
+* [hifitime][13]  
+* [kornia][15]
 
 [0]: https://blessed.rs/crates
 [1]: https://www.arewelearningyet.com/
@@ -75,3 +77,4 @@ An additional list of libraries and frameworks you might find useful for doing a
 [12]: https://docs.rs/chrono/latest/chrono/
 [13]: https://github.com/nyx-space/hifitime
 [14]: https://absorensen.github.io/the-guide/m6_projects/s0_project_ideas
+[15]: https://github.com/kornia/kornia-rs
