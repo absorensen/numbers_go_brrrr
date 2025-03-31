@@ -16,6 +16,7 @@ I owe the following people thanks for having given feedback and advice or (unkno
 * Mark Bo Jensen
 * Mathias Gammelmark
 * Anders Jess Pedersen
+* Dan Saattrup Nielsen
 * Jens Egholm Pedersen
 * Hans Henrik Brandenborg Sørensen
 * Bernd Damman
@@ -26,18 +27,23 @@ I owe the following people thanks for having given feedback and advice or (unkno
 
 The following people were participated in the course based on this website and gave a lot of useful feedback:
 
-* Lenka
-* Paul
-* Teresa
-* Tobias
-* Emil
-* Minh
-* Thompson
-* Simon
-* Thea
-* Johan
-* Stas
-* Kenny
+* Lenka Tetkova
+* Paul Jeha
+* Teresa Scheidt
+* Tobias Dorzchewski
+* Emil Gæde
+* Minh Duc Tran
+* TG Thompson
+* Simon Tarnow
+* Thea Brüsch
+* Johan Ye
+* Stas Syrota
+* Kenny Olsen
+* Fabian Mager
+
+For telling me "You're a real 'numbers go brrrr' kind of guy" and thus inspiring the name of this website:
+
+* Rasmus Hvid
 
 ## Icons
 * <a href="https://www.flaticon.com/free-icons/nebula" title="nebula icons">Nebula icons created by Eucalyp - Flaticon</a>
