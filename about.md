@@ -25,7 +25,7 @@ I owe the following people thanks for having given feedback and advice or (unkno
 * Mikkel Gjøl
 * Henning Christiansen
 
-The following people were participated in the course based on this website and gave a lot of useful feedback:
+The following people participated in the course based on this website and gave a lot of useful feedback:
 
 * Lenka Tetkova
 * Paul Jeha
