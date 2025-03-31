@@ -30,7 +30,7 @@ The following people were participated in the course based on this website and g
 * Lenka Tetkova
 * Paul Jeha
 * Teresa Scheidt
-* Tobias Dorzchewski
+* Tobias Dorszewski
 * Emil Gæde
 * Minh Duc Tran
 * TG Thompson
