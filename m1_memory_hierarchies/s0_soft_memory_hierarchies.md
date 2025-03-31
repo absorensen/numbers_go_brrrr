@@ -392,9 +392,17 @@ Why do you think that is?
     ```perf``` should confirm this.
 
 Most interestingly non-wrapping strided access, which actually accesses less elements than the others,
-is slower than sequential access for strides 2 and 3. With stride 4, where we are
-only accessing one fourth the elements of the sequential access pattern, we begin to
-get faster. But what do you know, sometimes the nice and predictable path,
+is slower than sequential access for strides 2 and 3.
+
+<figure markdown>
+![Image](../figures/surprised_pikachu.png){ width="700" }
+<figcaption>
+[Image Credit](https://knowyourmeme.com/memes/surprised-pikachu)
+</figcaption>
+</figure>
+
+With stride 4, where we are only accessing one fourth the elements of the sequential access pattern,
+we begin to get faster. But what do you know, sometimes the nice and predictable path,
 which might seem like we are doing more work actually runs faster. What a time to be alive!
 
 ## Stacking Heaps of Trouble

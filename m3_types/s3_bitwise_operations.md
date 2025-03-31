@@ -3,7 +3,7 @@ Bitwise operations are operations we do on individual bits of integers. In gener
 floats are frowned upon, if not undefined behavior.
 
 <figure markdown>
-![Image](../figures/bitwise_float_to_jail){ width="700" }
+![Image](../figures/bitwise_float_to_jail.jpg){ width="700" }
 </figure>
 
 Doing individual bit operations allows us to squeeze lots of data into very little space which means we can

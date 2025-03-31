@@ -184,6 +184,13 @@ of points in the shader.
 And here we are. This was a small example of how domain knowledge can help you compress your data, even if you
 aren't writing the compressor yourself.
 
+<figure markdown>
+![Image](../figures/jazz_hands.gif){ width="800" }
+<figcaption>
+<a href="https://tenor.com/view/archer-dr-krieger-jazz-hands-hands-robot-gif-4987862"> Image credit </a>
+</figcaption>
+</figure>
+
 ## Additional Reading
 [Data Compression][1] has its basis in [information theory][0]. The two seminal basis algorithms are
 [Lempel-Ziv 77 & 78][2] and [Huffman coding][3]. [Zip][4] is universally used and is natively supported in most

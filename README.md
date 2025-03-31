@@ -14,7 +14,9 @@ tailor to you, the reader! These specialization sections could for example have 
 interested in compute graphics and a different set of tasks for people interested in deep learning.
 These sections are indicated by this DNA emoji - 🧬. You will find additional sections marked with 👨🏼‍💻.
 These sections are meant as exercises or hand-ins for a course or if you want to explore the concepts
-in practice.
+in practice. I make frequent references to the following concepts [deep learning][4], [computer graphics][3],
+[ray/path tracing][1], [computer vision][5], [gpus][2] and other numerically based non-sense. Click any of the links
+for a spiffy video which should give you a quick introduction.
 
 I did a prototype course based on an earlier version of this website, which can be found [here][0]. The material
 was being written during the course, so I wouldn't follow everything 1-to-1.
@@ -39,6 +41,8 @@ I may have gone overboard with the memes. The website is slowly becoming more li
 programming memes with some light educational content around it.
 
 Without further ado, let's get this show on the road!
+
+_________________
 
 ## Contributions
 I don't have much time to work on this anymore, so issues, pull requests and updates to the code are very welcome. If you find a glitch, typo or bug, please
@@ -69,3 +73,8 @@ If you use parts of this course in your work, please cite using:
 ```
 
 [0]: https://absorensen.github.io/real-time-visual-and-machine-learning-systems/
+[1]: https://www.youtube.com/watch?v=iOlehM5kNSk
+[2]: https://www.youtube.com/watch?v=h9Z4oGN89MU
+[3]: https://www.youtube.com/watch?v=C8YtdC8mxTU&t=1125s
+[4]: https://www.youtube.com/watch?v=aircAruvnKk
+[5]: https://www.youtube.com/watch?v=-4E2-0sxVUM
