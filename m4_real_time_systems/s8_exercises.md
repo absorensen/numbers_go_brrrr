@@ -120,7 +120,7 @@ You are encouraged to find additional litterature on your own.
 [28]: https://arxiv.org/pdf/1502.00956.pdf
 [29]: https://arxiv.org/pdf/1610.06475v1.pdf
 [30]: https://arxiv.org/pdf/2007.11898.pdf
-[31]: https://www.uio.no/studier/emner/matnat/its/TEK5030/v20/forelesninger/lecture_10_3_orb-slam.pdf
+[31]: https://medium.com/@suvasism/orb-slam-2-under-the-hood-ad120049eff2
 [32]: https://research.nvidia.com/labs/rtr/neural_texture_compression/
 [33]: https://aras-p.info/texts/CompactNormalStorage.html
 [34]: http://johnsietsma.com/2019/12/05/morton-order-introduction/
