@@ -64,7 +64,7 @@ is not allowed. No bueno!
 If you use parts of this course in your work, please cite using:
 
 ```bibtex
-@misc{absorensen_the_guide,
+@misc{absorensen_numbers_go_brrrr,
     author       = {Anders Bo Sørensen},
     title        = {Numbers Go Brrr},
     howpublished = {\url{https://github.com/absorensen/numbers_go_brrrr}},
