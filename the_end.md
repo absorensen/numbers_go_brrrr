@@ -55,6 +55,13 @@ If you are more into video resources, the course [TinyML and Efficient Deep Lear
 by Song Han contains both exercises, slides and videos for a wide look at more
 efficient deep learning.
 
+## Tensara
+If you want to practice GPU programming from a pure compute perspective, you can try out
+[Tensara][7]. It is sort of like LeetCode, but for GPU's. You get a list of different
+tasks. You can see how many you can solve. But not only can you solve them, you can also
+optimize them and get on a leaderboard for fastest solution. You can code the solutions
+directly on the website in CUDA C/C++ or Triton (Python).
+
 [0]: https://www.youtube.com/watch?v=buqtdpuZxvk
 [1]: https://gfxcourses.stanford.edu/cs348k/spring24
 [2]: https://graphics.stanford.edu/~kayvonf/
@@ -62,3 +69,4 @@ efficient deep learning.
 [4]: https://mlsysbook.ai/
 [5]: https://skaftenicki.github.io/dtu_mlops/
 [6]: https://efficientml.ai
+[7]: https://tensara.org/
