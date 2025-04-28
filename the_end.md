@@ -62,6 +62,10 @@ tasks. You can see how many you can solve. But not only can you solve them, you 
 optimize them and get on a leaderboard for fastest solution. You can code the solutions
 directly on the website in CUDA C/C++ or Triton (Python).
 
+## HPC and ML
+If you want to get better at optimizing ML training check out Hugging Face's [guide][8] to training LLM's
+at scale, which you should now be able to go through!
+
 [0]: https://www.youtube.com/watch?v=buqtdpuZxvk
 [1]: https://gfxcourses.stanford.edu/cs348k/spring24
 [2]: https://graphics.stanford.edu/~kayvonf/
@@ -70,3 +74,4 @@ directly on the website in CUDA C/C++ or Triton (Python).
 [5]: https://skaftenicki.github.io/dtu_mlops/
 [6]: https://efficientml.ai
 [7]: https://tensara.org/
+[8]: https://huggingface.co/spaces/nanotron/ultrascale-playbook
