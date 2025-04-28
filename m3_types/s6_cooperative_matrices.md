@@ -53,7 +53,10 @@ PyTorch to make use of tensor cores by using [automatic mixed precision][8]
 You can check out some material on [tensor cores][2] and [programming tensor cores][3] in CUDA. Or you
 can check out [cooperative matrices][4] and [machine learning][5] in Vulkan. There's also some material on  
 Accelerating inference [with sparsity][6] and a series of videos regarding how to use tensor cores for
-[mixed precision training][7].
+[mixed precision training][7]. A matrix multiplication algorithm, the Okazi scheme, was proposed more than
+10 years ago. Now the second version has been published. It uses the Chinese remainder theorem to decompose
+matrices into submatrices, optimizing the numerical precision for tensor cores and lower precision. In the
+end it achieves greater numerical precision. ✨ [Pure magic][10]! ✨
 
 [0]: https://developer.nvidia.com/blog/programming-tensor-cores-cuda-9/
 [1]: https://developer.nvidia.com/blog/machine-learning-acceleration-vulkan-cooperative-matrices/
@@ -65,3 +68,4 @@ Accelerating inference [with sparsity][6] and a series of videos regarding how t
 [7]: https://developer.nvidia.com/blog/video-mixed-precision-techniques-tensor-cores-deep-learning/
 [8]: https://pytorch.org/tutorials/recipes/recipes/amp_recipe.html
 [9]: https://docs.vulkan.org/features/latest/features/proposals/VK_NV_cooperative_matrix2.html
+[10]: https://arxiv.org/pdf/2504.08009
