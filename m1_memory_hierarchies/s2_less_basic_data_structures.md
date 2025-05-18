@@ -156,7 +156,7 @@ both object A and object B can safely be deallocated.
     }
     ```
 
-For more information on smart pointers in Rust, there is a nice example [here][8] and another example
+For more information on smart pointers in Rust, [here is a nice example][8] and another example
 about [reference cycles][9], which is what we needed weak pointers for.
 
 ## The Vector Reloaded
@@ -478,7 +478,7 @@ so it's probably only worth it if you are doing A LOT of accesses for each layer
 
 Generally, hash maps have an alright performance. The last time I examined a C# dictionary's lookup performance
 it would start to go down hill at around 30k entries though. This doesn't happen for arrays. You can read more
-about different hash table implementations [here][14].
+about [different hash table implementations][14].
 
 ## Graphs and Trees
 Now that we have dicked around with variations on a theme (that theme was arrays if you were in doubt),
@@ -785,7 +785,7 @@ are possibly accessible from roots and are candidates for collection. Gray objec
 from roots and might have pointers to objects marked in white. Black marked objects are definitely accessible
 from roots and definitely do not have pointers to the white set.
 
-You can read more about tri-color marking [here][22].
+You can read more about [tri-color marking][22].
 
 ### Generational Garbage Collection
 Generational garbage collection is a different technique which sequesters allocated objects into different memory regions.

@@ -127,7 +127,7 @@ This is one of the myriad reasons why we needed to have an ```int*```. If the ad
 42, to get the next integer element, we don't go to the address 43, which would just be the second byte of the
 first element. No, we want to go to the address 46, where the second element in the array begins. Since
 ```integer_array``` has the type ```int*```, we have defined that each element is 4 bytes and we now have a
-*stride* of 4 bytes.[here][2] respectively.
+*stride* of 4 bytes.
 
 We also need to keep track of the size of our allocation close to the pointer itself,
 as trying to access an element outside of our allocation will be catastrophic, and likely result in a

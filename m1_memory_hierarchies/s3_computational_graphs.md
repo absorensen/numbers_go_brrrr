@@ -207,7 +207,7 @@ calculation into the matrix multiplication loop. ```linear_optimized``` moves th
 before the writing of the accumulated result to the output tensor. If the bias calculation was a lot larger, this
 might not be faster. In some cases for highly complex loops, it can instead make sense to separate them into
 more loops, which is a process called ```loop fission```. I have only used a small subset of loop optimizations,
-but you can read about more ways of optimzing a loop [here][3].
+but you can read about [more ways of optimzing a loop][3].
 
 Ok, so try and run the code locally! To begin with go to the file ```src::lib.rs```. Comment out all
 of the lines within and including the ```if configuration.compatible_gpu_found {``` line. Then in your terminal

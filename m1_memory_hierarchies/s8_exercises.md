@@ -83,7 +83,7 @@ of scattering.
 ## GPU Programming
 This serves as both one of the few instances where we can explicitly program parts of the memory hierarchy
 (shared memory resides in the L1 cache on Nvidia GPUs), but also as an introduction to parallel thinking,
-which you will need in the next module. A useful tool for calculating offsets in WGSL can be found [here][3]
+which you will need in the next module. There's a [useful tool][3] for calculating offsets in WGSL.
 The exercises here are fitting as a hand-in if you are doing a course. From experience,
 just doing the 1D convolution is plenty complicated for someone coming from Python. You'll get the point of how
 to use shared memory doing it. Doing matrix multiplication as well is good practice, but not strictly necessary.
@@ -126,8 +126,8 @@ tiled matrix multiplication (using shared memory). You should also try out doing
 ## GPU Puzzles
 Thankfully, WebGPU (the API which wgpu tries to stick to) is gaining traction. Some very nice
 people have made some online learning tools for you to learn more paradigms with. It's a fun
-way to learn without having to deal with too much set up. You can find the puzzles [here][1]
-and [here][2].
+way to learn without having to deal with too much set up. There's both the [original puzzles][1]
+and the [WebGPU puzzles][2].
 
 [0]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m1_memory_hierarchies/code/gpu_hand_in
 [1]: https://github.com/srush/GPU-Puzzles

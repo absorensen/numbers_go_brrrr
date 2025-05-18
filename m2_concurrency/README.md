@@ -105,7 +105,7 @@ happens when at least one thread is writing while one or more threads are writin
 of bugs can be very hard to find due to some part of your code being serialized once you try to find the bug or
 due to the multithreading, the execution might be non-deterministic.
 
-Take a few minutes to familiarize yourself with race conditions in software and data races [here][3].
+Take a few minutes to familiarize yourself with [race conditions in software and data races][3].
 
 ## Platforms
 When you decide you want to parallelize your application, you almost always have to consider the platform you
@@ -122,7 +122,7 @@ for concepts like ```async``` or ```channels```. What the other languages do not
 ensure the validity of your code. Often this results in parallelized Rust code looking or feeling slightly
 different, as the borrow checker forces you down a certain path. Also Rust has traits, such as ```Send```
 and ```Sync```, but these are specific to Rust and I have tried to avoid getting too far into traits,
-so I won't be explaining them. If interested you are most welcome to read about them [here][4].
+so I won't be explaining them. If interested you are most welcome to read about [Send and Sync][4].
 This is mostly relevant if implementing your own types which need to be shared by threads. In most
 cases, ```Send``` and ```Sync``` are automatically derived.
 
