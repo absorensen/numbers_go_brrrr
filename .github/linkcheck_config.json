@@ -57,6 +57,12 @@
         },
         {
             "pattern": "https://computergraphics.stackexchange.com/questions/10994/how-are-rounded-corners-of-user-interfaces-usually-rendered-in-modern-applicatio"
+        },
+        {
+            "pattern": "https://stackoverflow.com/questions/11227809/why-is-processing-a-sorted-array-faster-than-processing-an-unsorted-array"
+        },
+        {
+            "pattern": "https://stackoverflow.com/questions/59131262/rust-backtrace-on-windows"
         }
     ],
     "aliveStatusCodes": [
