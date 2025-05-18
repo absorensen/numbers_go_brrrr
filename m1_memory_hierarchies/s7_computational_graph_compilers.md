@@ -167,6 +167,9 @@ Here's a few blog posts on [GPU tensors][1] and how [to build neural networks][0
 PyTorch compiler are [Torch.fx][3], [torch.compile][4] and
 [getting started with PyTorch's compiler][5].
 
+A look at how to [train a GPT-like model][7], implemented from scratch, in Rust. Don't worry about the
+Rayon stuff. I'll introduce that a in the next module.
+
 [0]: https://getcode.substack.com/p/fun-and-hackable-tensors-in-rust
 [1]: https://getcode.substack.com/p/massively-parallel-fun-with-gpus
 [2]: https://github.com/googlefonts/compute-shader-101/blob/main/docs/glossary.md
@@ -174,3 +177,4 @@ PyTorch compiler are [Torch.fx][3], [torch.compile][4] and
 [4]: https://pytorch.org/docs/stable/generated/torch.compile.html
 [5]: https://pytorch.org/docs/stable/torch.compiler.html
 [6]: https://github.com/absorensen/numbers_go_brrrr/blob/main/m1_memory_hierarchies/code/computational_graphs/src/op_code_compiler/runner.rs
+[7]: https://towardsdatascience.com/training-llm-from-scratch-in-rust-03381bbd7204/

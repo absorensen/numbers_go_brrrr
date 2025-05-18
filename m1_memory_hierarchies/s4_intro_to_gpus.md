@@ -1407,7 +1407,7 @@ and invocations at the same time and assembling these subhistograms at the end.
 Now back to computational graphs and memory hierarchies!
 
 ## Additional Reading
-To learn more about GPU's and memory checkout these - [The GPU Memory Hierarchy][0],
+To learn more about GPU's and memory checkout these - [a GPU glossary][14], [The GPU Memory Hierarchy][0],
 [GPU Memory Hierarchy][1], [GPU Programming][2], [Hopper Architecture In-Depth][3] and
 [GPU architecture and CUDA Programming][4]. The last entry is highly recommended.
 
@@ -1430,3 +1430,4 @@ GPGPU programming can be found [here][9].
 [11]: https://www.nuss-and-bolts.com/p/optimizing-a-webgpu-matmul-kernel
 [12]: https://github.com/absorensen/numbers_go_brrrr/tree/main/m1_memory_hierarchies/code/gpu_add
 [13]: https://sotrh.github.io/learn-wgpu/
+[14]: https://modal.com/gpu-glossary

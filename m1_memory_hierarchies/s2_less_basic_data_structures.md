@@ -859,12 +859,15 @@ the system downloads, unpacks and renders the entire scene. This also allows for
 too big to fit in GPU memory or even main memory.
 
 ## Additional Reading
+A [blog post][37] about which operations cost what in terms of cycles. Be sure to read the comments too where
+lots of people criticize the post itself.
+
 For even more [virtual memory][26].
 
 For an example of coding a [tri-color marking garbage collector][27].
 
-For more about
-[garbage collection in Python][28], [more basic garbage collection in Pyton][29] or [garbage collection in Java][30].
+For more about [garbage collection in Python][28], [more basic garbage collection in Pyton][29]
+or [garbage collection in Java][30].
 
 If you are into spatial data structures and/or graphics, computer vision, etc here's some links for
 [octrees][31], [BVHs][32], [Kd-Trees][33], [a comparison between kD tree and octree][34],
@@ -907,3 +910,4 @@ If you are into spatial data structures and/or graphics, computer vision, etc he
 [34]: https://doc.cgal.org/latest/Orthtree/index.html
 [35]: https://publik.tuwien.ac.at/files/publik_252607.pdf
 [36]: https://www.evl.uic.edu/vchand2/thesis/papers/Marching%20Cubes.pdf
+[37]: http://ithare.com/infographics-operation-costs-in-cpu-clock-cycles/
