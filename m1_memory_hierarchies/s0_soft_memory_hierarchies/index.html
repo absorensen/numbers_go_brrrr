@@ -2222,7 +2222,7 @@ now asks the CPU to write to the address 42, the number 0. So far so good. But t
 42, to get the next integer element, we don't go to the address 43, which would just be the second byte of the
 first element. No, we want to go to the address 46, where the second element in the array begins. Since
 <code>integer_array</code> has the type <code>int*</code>, we have defined that each element is 4 bytes and we now have a
-<em>stride</em> of 4 bytes.<a href="https://en.wikipedia.org/wiki/Segmentation_fault">here</a> respectively.</p>
+<em>stride</em> of 4 bytes.</p>
 <p>We also need to keep track of the size of our allocation close to the pointer itself,
 as trying to access an element outside of our allocation will be catastrophic, and likely result in a
 <a href="https://en.wikipedia.org/wiki/Segmentation_fault">segmentation fault</a>. When we ask the operating system for memory it keeps track of which memory belongs
@@ -2561,7 +2561,7 @@ the memory hierarchy.</p>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="March 31, 2025 14:55:44">March 31, 2025</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date" title="May 18, 2025 10:39:41">May 18, 2025</span>
   </span>
 
     
