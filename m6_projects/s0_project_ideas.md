@@ -48,7 +48,7 @@ metrics you can extract.
 Try to classify whether how focused, tired or distracted the reader might be.
 Have the UI display when an intervention is needed.
 
-Some inspiration - [here][5], [here][6] and [here][7].
+Some inspiration - [Pistol][6], [saccades][7] and [Dr. Wolfgang Fuhl][5].
 
 Alternatively, you can try to classify whether the reader is dyslexic or extract features and
 visualize features of cognitive load. What happens if the system itself intervenes by playing sounds?

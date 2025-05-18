@@ -42,7 +42,7 @@ representation had a special bit and 2's complement. Now imagine this, but with 
 three segments of bits instead. That's why we don't do bitwise operations on floats!
 
 The type of shift where the sign bit gets special treatment is called an *arithmetic shift*, where as the one
-treating the whole thing as just bits, is called *logical shift*. You can read more about it [here][4], but
+treating the whole thing as just bits, is called [*logical shift*][4], but
 I would recommend you stick to unsigned integers for bit manipulating stuff. It's less stuff to keep in your head.
 
 Next, let's look at the bitwise and (&), usually written as bitwise AND, probably to ensure you don't mistake it for

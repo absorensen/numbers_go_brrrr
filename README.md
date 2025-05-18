@@ -18,7 +18,7 @@ in practice. I make frequent references to the following concepts [deep learning
 [ray/path tracing][1], [computer vision][5], [gpus][2] and other numerically based non-sense. Click any of the links
 for a spiffy video which should give you a quick introduction.
 
-I did a prototype course based on an earlier version of this website, which can be found [here][0]. The material
+I did a [prototype course][0] based on an earlier version of this website. The material
 was being written during the course, so I wouldn't follow everything 1-to-1.
 
 The material comprising the guide is divided into 7 modules.

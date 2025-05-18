@@ -382,7 +382,7 @@ This was a non-exhaustive list of ways to accomplish drawing circular lines on a
 more ways, but this was already fairly wordy.
 
 We can also find a simpler way to do things by relinquishing fine-grained control and use an app framework
-made for egui, called [eframe][15]. You can find a Hello World example [here][6]. Which significantly
+made for egui, called [eframe][15]. You can find [a Hello World example][6]. Which significantly
 shortens the time it takes to get some buttons on screen
 
 ## Additional Reading

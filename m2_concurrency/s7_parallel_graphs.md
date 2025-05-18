@@ -11,7 +11,7 @@ One approach can be to wrap subsections (subgraphs) of your graph in a lock, suc
 it is quite common to have to process bigger and bigger neighbourhoods around vertices. One approach
 can be to alternative between read and write stages. In one stage, each thread reads a relevant neighbourhood, does
 some processing, and adds changes to a list. Once all changes have been proposed, one or more threads can execute
-the changes from the list, resulting in a modified or new graph. One such solution is described [here][2].
+the changes from the list, resulting in a modified or new graph. Here's a [description of one such solution][2].
 
 Sampling and repacking extremely huge graphs for training graph neural networks on GPUs is also a
 research topic [on its own][1]. Meshes, widely used in graphics, is another type of graph. In order

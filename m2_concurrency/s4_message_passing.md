@@ -98,7 +98,7 @@ Now try and adjusting the wait times. How does it run when you reduce ```worker_
 that is?
 
 ## Additional Reading
-A longer, very friendly introduction to channels and message passing in Rust can be found [here][0].
+Here's a longer, very friendly introduction to [channels and message passing][0] in Rust.
 
 This is slightly larger scale, but when running code on multiple compute nodes in an HPC installation,
 the most used method for sharing data between nodes is a standard called [MPI][1].

@@ -26,7 +26,7 @@ Image credit </a>
 While the tensor cores support matrix-matrix multiplication, they are much more limited in the size of the
 multiplication. For a general linear operation, you might need to still use loops, but you would then
 be tiling your matrix instead, sending a 4x4 tile at a time of your matrices and keep track of your precisions,
-such as accumulating in a higher level of precision. You can read more about it [here][0] and for Vulkan [here][1].
+such as [accumulating in a higher level of precision][0] and [in Vulkan][1].
 
 If you keep the calculations numerically stable you can even keep all of your weights during the training of
 a neural network in 8-bit floating point, while accumulating in 16-bit floating point or greater,

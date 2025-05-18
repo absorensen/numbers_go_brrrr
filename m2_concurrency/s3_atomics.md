@@ -42,7 +42,7 @@ use atomics in a situation where a relaxed ordering is good enough. Otherwise we
 levels of complexity and you're gonna have a bad time.
 
 In terms of types you will be limited to integers and bools. Which types are available in Rust
-can be found [here][4]. Go to [the page][5] for ```AtomicU32``` and see which functions are available.
+[are described here][4]. Go to [the page][5] for ```AtomicU32``` and see which functions are available.
 There's some load, store and swap operations, followed by some compare/exchange operations and then
 a bunch of fetch and something operations. Try and read through them. In practice you would share
 the atomic variable between threads by wrapping it with an ```Arc<Atomic...>``` and cloning the ```Arc```.
@@ -50,8 +50,8 @@ the atomic variable between threads by wrapping it with an ```Arc<Atomic...>``` 
 WGSL, the language used to make GPU programs in this guide, only supports ```atomic<T>``` where ```T```
 is either ```i32``` or ```u32```. All atomic functions have ```relaxed``` memory ordering. It's really
 good for things like reduction operations. Once each work group has a local result computed, they can
-compare results, or add, across work groups through a global atomic variable. You can check out which
-functions are available, which is a bit more limited compared to what was available in Rust, [here][6].
+compare results, or add, across work groups through a global atomic variable. You can check out
+[which functions are available][6], which is a bit more limited compared to what was available in Rust.
 
 _________________
 
@@ -122,7 +122,7 @@ If you would like to learn more about atomics I can recommend you read about ato
 [Rustonomicon][0] or in the the atomics chapter in Jon Gjengset's book [Rust for Rustaceans][1]
 which is even better.
 
-To read more about lock-free algorithms, go [here][2] and [here][3].
+You can learn more about lock-free algorithms [from wikipedia][2] or from a [lecture][3].
 
 [0]: https://doc.rust-lang.org/nomicon/atomics.html
 [1]: https://nostarch.com/rust-rustaceans

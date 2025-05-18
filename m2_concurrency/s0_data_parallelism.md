@@ -15,8 +15,8 @@ parallelism. Using data parallelism requires that either there is no overlap bet
 or that you make your input read-only and each thread can output to its own segment of an output collection.
 
 The next sections will be heavily inspired by the book "Programming Rust"'s multiple implementations of
-[Mandelbrot][1] image generation. If you don't know about the Mandelbrot image, you can see what that's
-all about [here][2]! Ok, so I will start off talking about the parallel part of things. First off,
+[Mandelbrot][1] image generation. In case you're in doubt about what the Mandelbrot image is,
+[here's an introduction][2]! Ok, so I will start off talking about the parallel part of things. First off,
 lets look at [Rayon][3], which I find to be the easiest way of doing parallelism in Rust.
 
 To use Rayon, we just have to formulate our computations as iterators. Under the hood, Rayon divvies up the work
@@ -114,9 +114,9 @@ whereas the ```.par_iter()``` from Rayon begins to win out. If we gave each elem
 it is likely that the performance gain from Rayon would increase. Personally, I have used Rayon to parallelize
 a path tracer, starting with a range of all the pixels and then having Rayon distribute the workload of
 path tracing every pixel. In that case we have a VERY complex workload and I saw an almost linear scaling
-compared to the amount of threads available. I wouldn't recommend it, but if you want to see a larger system
-you can check it out [here][5]. The parallelization can be found in [render_pixel()][6] and
-[render()][7].
+compared to the amount of threads available. I wouldn't recommend it, but
+[here's a slightly larger system using Rayon][5]. The parallelization can be found in
+[render_pixel()][6] and [render()][7].
 
 So, now that we can conclude that Rayon can be really good and easy to use for some things, let's move on
 to more explicitly define our own parallel system with, perhaps, longer running threads.

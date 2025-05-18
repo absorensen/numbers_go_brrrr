@@ -73,7 +73,7 @@ time. Like so -
     println!("Successfully downloaded files from {}, {} and {}, url_a, url_b, url_c);
     ```
 
-You can read more about ```join!()``` [here][6]. Async is its own paradigm and
+You can read more about [join!()][6]. Async is its own paradigm and
 again, in this course you are most likely to see it when interacting with the GPU and a GUI system. In the
 real world you might see it very pervasibely in web servers and anything to do with stuff that happens
 outside of your computer. In any case, you should try to limit how big the async portions of your code are,

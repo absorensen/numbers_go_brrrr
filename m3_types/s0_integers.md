@@ -142,10 +142,10 @@ This is bad, and you shouldn't do it.
 ## Signed Integers
 Signed integers are a bit more complex. They can carry both positive and negative numbers.
 The outermost bit is reserved as a sign bit, denoting whether the number is positive or
-negative. Read about the range of signed integers as well as the concept two's complement [here][0].
+negative. Read about the range of signed integers as well as the concept [two's complement][0].
 
 In the case of signed integers, over- and underflow are undefined in general. However,
-overflow for signed integers is [defined in Rust Debug][1]. You can se more about the types in Rust [here][2].
+overflow for signed integers is [defined in Rust Debug][1]. You can read more about [types in Rust][2].
 
 ## Additional Reading
 You can take a look at the wiki for [integers][3], or you might prefer [lecture slides][4]

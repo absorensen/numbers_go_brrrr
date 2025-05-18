@@ -8,8 +8,7 @@ The absolute quickest way to get started is probably to use existing visualizati
 not be an exact fit for what you want, and through the lack of limitations (remember, we like limitations),
 it might be unable to match the performance of other solutions, and it might be overly complicated for you to
 make custom changes. You might get lucky though, and the world class experts who wrote the visualization framework,
-might have optimized it like there's no tomorrow, yielding awesome performance. You can find one such framework
-[here][2].
+might have optimized it like there's no tomorrow, yielding awesome performance. Here's [one such framework][2].
 
 Immediate mode is the type you are most likely to use for learning and prototyping. In the general case, every
 single GUI element will be redrawn every single frame. This can take up quite a bit of your performance if you
@@ -39,7 +38,7 @@ drawing the last frame, you only need to redraw all of the pixels where A and ch
 the pixels where they will be in the new frame. Some of the most popular retained GUI libraries for Rust are
 [Iced][4] and [Dioxus][5].
 
-You can find a list of GUI-relevant libraries [here][6].
+You can find a [list of GUI-relevant libraries][6].
 
 [0]: https://github.com/emilk/egui
 [1]: https://www.egui.rs/#demo

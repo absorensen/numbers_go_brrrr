@@ -36,18 +36,18 @@ edited and curated by Vijay Janapa Reddi looks to be a very extensive resource, 
 rapid development.
 
 ## Visual Computing Systems
-Kayvon Fatahalian has a wonderful course up on visual computing systems which combines topics
+Kayvon Fatahalian has a [wonderful course][1] up on visual computing systems which combines topics
 from graphics, computer vision, image analysis and deep learning. Specifically, focused on the
-systems used in those fields. You can the most recent version [here][1]. The topics included
-seem to change from year to year. It can definitely be worth it to go back and see which topics
+systems used in those fields. The topics included seem to change from year to year.
+It can definitely be worth it to go back and see which topics
 were included in earlier years, through his [teaching website][2]. It's worth noting however,
 that this course is fairly advanced and if you want to do the exercises you should probably
 be familiar with C++.
 
 ## Parallel Computing
-In the same vein, Kayvon Fatahalian and Kunle Olukotun have a course on parallel computing.
-If you want a more thorough and academically rigorous introduction to parallelism, GPU's
-and memory hierarchies it is available [here][3]. Do note that you probably need to be familiar
+In the same vein, Kayvon Fatahalian and Kunle Olukotun have a course on [parallel computing][3].
+It has a more thorough and academically rigorous introduction to parallelism, GPU's
+and memory hierarchies. Do note that you probably need to be familiar
 with C++ to do the exercises.
 
 ## TinyML and Efficient Deep Learning Computing
